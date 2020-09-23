@@ -1,0 +1,90 @@
+= Metanorma stepmod2mn
+
+image:https://github.com/metanorma/stepmod2mn/workflows/ubuntu/badge.svg["Build Status", link="https://github.com/metanorma/stepmod2mn/actions?workflow=ubuntu"]
+image:https://github.com/metanorma/stepmod2mn/workflows/macos/badge.svg["Build Status", link="https://github.com/metanorma/stepmod2mn/actions?workflow=macos"]
+image:https://github.com/metanorma/stepmod2mn/workflows/windows/badge.svg["Build Status", link="https://github.com/metanorma/stepmod2mn/actions?workflow=windows"]
+
+== Installing Build Tools
+
+You will need the `maven` build tool and `make`.
+
+* https://www.baeldung.com/install-maven-on-windows-linux-mac[How to install Maven on Windows, Linux, Mac]
+
+
+== Usage
+
+[source,sh]
+----
+java -jar target/stepmod2mn-1.0.jar <XML-FileName>
+----
+
+[source,sh]
+----
+java -jar target/stepmod2mn-1.0.jar <XML-FileName> --output <ADOC-FileName>
+----
+
+
+e.g.
+
+[source,sh]
+----
+java -jar target/stepmod2mn-1.0.jar data/resource_docs/draughting_elements/resource.xml 
+----
+
+
+== Building the package
+
+[source,sh]
+----
+make all
+----
+
+
+== Releasing a new version
+
+Update version in `pom.xml`, e.g.:
+
+[source,xml]
+----
+<groupId>com.metanorma</groupId>
+<artifactId>stepmod2mn</artifactId>
+<version>1.0</version>
+<name>STEPmod XML to Metanorma AsciiDoc converter</name>
+----
+
+Build the package using instructions above, the package will be created at:
+`target/stepmod2mn-{version}.jar`
+
+Tag the same version in Git:
+
+[source,xml]
+----
+git tag v1.0
+git push origin v1.0
+----
+
+Then the corresponding GitHub release will be automatically created at:
+https://github.com/metanorma/stepmod2mn/releases
+
+And downloadable at:
+`https://github.com/metanorma/stepmod2mn/releases/download/v{version}/stepmod2mn-{version}.jar`
+
+
+== Testing
+
+The testing environment utilizes these tools:
+
+* `make`
+
+
+Running the tests:
+
+[source,sh]
+----
+make test
+----
+
+
+== Copyright
+
+Ribose Inc.
