@@ -233,7 +233,7 @@
 									<xsl:value-of select="concat(@name,'.')"/>        
 								</xsl:otherwise>
 							</xsl:choose>
-							<xsl:text>&#xa;</xsl:text>
+							<xsl:text>&#xa;&#xa;</xsl:text>
 						</xsl:for-each>
 					</xsl:when>
 					<xsl:otherwise>
@@ -342,7 +342,7 @@
 						</xsl:choose>
 					</xsl:variable>
 					<xsl:value-of select="$text"/>
-					<xsl:text>&#xa;</xsl:text>
+					<xsl:text>&#xa;&#xa;</xsl:text>
 				</xsl:for-each>
 			</xsl:when>
 		</xsl:choose>
@@ -1562,9 +1562,10 @@
 		</P>
 	      </xsl:otherwise>
 	    </xsl:choose>
-	    <ul>
+	    <!-- <ul> -->
 	      <xsl:apply-templates select="./abstract/*"/>
-	    </ul>
+				<xsl:text>&#xa;</xsl:text>
+	    <!-- </ul> -->
 	  </xsl:when>
 	  <xsl:otherwise>
 	    <xsl:apply-templates select="./abstract/*"/>
@@ -1576,9 +1577,10 @@
 	  The following are within the scope of 
 	  <xsl:value-of select="substring-before($resdoc_stdnumber,'(E)')"/>:
 	</P>
-	<UL>
+	<!-- <UL> -->
 	  <xsl:apply-templates select="./inscope/li"/>
-	</UL>
+		<xsl:text>&#xa;</xsl:text>
+	<!-- </UL> -->
       </xsl:otherwise>
     </xsl:choose>
 
@@ -2307,7 +2309,7 @@
       defined in ISO 10303-11.
     </p>
 
-    <ul>
+    <!-- <ul> -->
       <xsl:for-each select="./schema/express-g/imgfile" >
 	<xsl:variable name="schema">
 	  <xsl:value-of 
@@ -2351,7 +2353,8 @@
 	  </xsl:choose>
 	</xsl:variable>
 
-	<li>
+	<xsl:text>* </xsl:text>
+	<!-- <li> -->
 	  <a href="{$schema_url}">
 	    <xsl:value-of 
 		select="concat('Figure D.',$clauseno, 
@@ -2366,10 +2369,12 @@
 	      <xsl:value-of select="'.'"/>        
 	    </xsl:otherwise>
 	  </xsl:choose>
-	</li>
-      </xsl:for-each>
-    </ul>
+	<!-- </li> -->
+		<xsl:text>&#xa;&#xa;</xsl:text>
 
+      </xsl:for-each>
+    <!-- </ul> -->
+		<xsl:text>&#xa;</xsl:text>
   </xsl:template>
 
 
@@ -3101,8 +3106,7 @@ the types, entity specializations, and functions that are specific to this part 
 			<xsl:sort select='part'/>			
 			<xsl:for-each select="string">
 				<xsl:text>* </xsl:text><xsl:value-of select="normalize-space(.)"/>
-				<xsl:text>&#xa;</xsl:text>
-				<xsl:text>&#xa;</xsl:text>
+				<xsl:text>&#xa;&#xa;</xsl:text>				
 			</xsl:for-each>
 		</xsl:for-each>
 
@@ -3647,28 +3651,33 @@ the types, entity specializations, and functions that are specific to this part 
        the resource
   -->
   <xsl:template name="output_abbreviations">
-    <xsl:param name="section"/>
-    <h2>
+    <xsl:param name="section"/>		
+    <!-- <h2>
       <a name="abbrv">3.2 Abbreviated terms</a>
-    </h2>
-
+    </h2> -->
+		<xsl:text>[[abbrv]]</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>=== Abbreviated terms</xsl:text>
+		<xsl:text>&#xa;&#xa;</xsl:text>
     <!-- output any issues -->
     <xsl:apply-templates select="." mode="output_clause_issue">
       <xsl:with-param name="clause" select="'abbreviations'"/>
     </xsl:apply-templates>
 
 
-    <p>
+    <!-- <p> -->
       <!-- RBN Changed due to request from ISO
 	   For the purposes of this part of ISO 10303, -->              
-      For the purposes of this document,
-      the following abbreviated terms apply:
-    </p>
+      <xsl:text>For the purposes of this document, the following abbreviated terms apply:</xsl:text>
+    <!-- </p> -->
+		<xsl:text>&#xa;&#xa;</xsl:text>
+		
+		
+		
     <table width="80%">
       <!-- get the default abbreviations out of the abbreviations_resdoc_defaultxml
 	   database -->
-      <xsl:apply-templates 
-	  select="document(concat($path, '../../../data/basic/abbreviations_resdoc_default.xml'))/abbreviations/abbreviation.inc"/>
+      <xsl:apply-templates select="document(concat($path, '../../../data/basic/abbreviations_resdoc_default.xml'))/abbreviations/abbreviation.inc"/>
       
       <xsl:apply-templates select="/resource/abbreviations" mode="output"/>    
     </table>
@@ -3711,23 +3720,26 @@ the types, entity specializations, and functions that are specific to this part 
   <!-- output the abbreviation. The term is defined in the normative
        references -->
   <xsl:template match="abbreviation">
-    <tr>
-      <td>
-	<xsl:value-of select="acronym"/>
-      </td>
-      <td>
-	<xsl:apply-templates select="./term" mode="abbreviation"/>
-	<xsl:apply-templates select="term.ref" mode="abbreviation"/>
-      </td>
-    </tr>
+    <!-- <tr>
+      <td> -->
+		<xsl:value-of select="acronym"/>
+		<xsl:text>:: </xsl:text>
+      <!-- </td>
+      <td> -->
+		<xsl:variable name="dd">
+			<xsl:apply-templates select="./term" mode="abbreviation"/>
+			<xsl:apply-templates select="term.ref" mode="abbreviation"/>
+		</xsl:variable>
+		<xsl:value-of select="normalize-space($dd)"/>
+      <!-- </td>
+    </tr> -->
+		<xsl:text>&#xa;</xsl:text>
   </xsl:template>
 
   <xsl:template match="term.ref" mode="abbreviation">
     <xsl:variable name="termref" select="./@linkend"/>
     <xsl:variable name="normref" select="./@normref"/>
-    <xsl:variable 
-	name="term"
-	select="document(concat($path, '../../../data/basic/normrefs.xml'))/normref.list/normref/term[@id=$termref]"/>
+    <xsl:variable name="term" select="document(concat($path, '../../../data/basic/normrefs.xml'))/normref.list/normref/term[@id=$termref]"/>
     <xsl:choose>
       <xsl:when test="$term">
 	<xsl:value-of select="normalize-space($term)"/>
@@ -3802,10 +3814,11 @@ the types, entity specializations, and functions that are specific to this part 
 				<xsl:with-param name="resource" select="/resource"/>
 				<xsl:with-param name="section" select="concat('3.1.',$def_section+1)"/>
 			</xsl:call-template>
+			
 			<!-- RBN Changed due to request from ISO
 		 For the purposes of this part of ISO 10303, -->              
-			For the purposes of this document,
-			the following terms and definitions apply:
+			<xsl:text>For the purposes of this document, the following terms and definitions apply:</xsl:text>
+			<xsl:text>&#xa;&#xa;</xsl:text>
 		</xsl:if>
 
 		<!-- increment the section number depending on whether a definition
@@ -3882,7 +3895,7 @@ the types, entity specializations, and functions that are specific to this part 
 							<xsl:text>&#xa;&#xa;</xsl:text>
 							
 							
-							<ul>
+							<!-- <ul> -->
 					<!-- now output the terms -->
 						<xsl:variable name="moreNormRefs" select="string-length(/resource/normrefs/normref.inc[@normref=$ref]/term.ref)+string-length(/resource/normrefs/normref.inc)"/>
 						<xsl:choose>
@@ -3907,7 +3920,8 @@ the types, entity specializations, and functions that are specific to this part 
 							<xsl:with-param name="current_resource" select="$current_resource"/>
 						</xsl:apply-templates>
 
-							</ul>
+							<!-- </ul> -->
+							<xsl:text>&#xa;</xsl:text>
 						</xsl:if>
 					</xsl:when>
 					
@@ -3955,10 +3969,11 @@ the types, entity specializations, and functions that are specific to this part 
 								<xsl:text>For the purposes of this document, the following terms defined in </xsl:text><xsl:value-of select="$stdnumber"/><xsl:text> apply:</xsl:text>
 								<xsl:text>&#xa;&#xa;</xsl:text>
 						
-						<ul>
+						<!-- <ul> -->
 							<!-- now output the terms -->
 							<xsl:apply-templates select="/resource/normrefs/normref.inc[@resource.name=$resource]/term.ref" mode="resource"/>
-						</ul>
+							<xsl:text>&#xa;</xsl:text>
+						<!-- </ul> -->
 					</xsl:if>
 							</xsl:when>
 							<xsl:otherwise>
@@ -4170,6 +4185,7 @@ the types, entity specializations, and functions that are specific to this part 
 		<xsl:text>&#xa;</xsl:text>
 		<xsl:text>==== Other terms and definitions</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
 		
   </xsl:template>
 	
@@ -4212,7 +4228,7 @@ the types, entity specializations, and functions that are specific to this part 
 					<xsl:text>;</xsl:text>
 	      </xsl:otherwise>
 	    </xsl:choose>
-			<xsl:text>&#xa;</xsl:text>		
+			<xsl:text>&#xa;&#xa;</xsl:text>		
 	  </xsl:when>
 	  <xsl:otherwise>	    
 				<xsl:text>* </xsl:text>
@@ -4221,7 +4237,7 @@ the types, entity specializations, and functions that are specific to this part 
 		    name="message"
 		    select="concat('Error 11: Can not find term referenced by: ',$ref)"/>
 	      </xsl:call-template>
-	    <xsl:text>&#xa;</xsl:text>		
+	    <xsl:text>&#xa;&#xa;</xsl:text>		
 	  </xsl:otherwise>
 	</xsl:choose>
       </xsl:when>
@@ -4292,18 +4308,18 @@ the types, entity specializations, and functions that are specific to this part 
 	    <xsl:choose>
 	      <xsl:when test="$moreNormRefs > 0">
 					<xsl:text>* </xsl:text><xsl:apply-templates select="$term"/><xsl:text>;</xsl:text>
-					<xsl:text>&#xa;</xsl:text>	    	
+					<xsl:text>&#xa;&#xa;</xsl:text>	    	
 	      </xsl:when>
 	      <xsl:otherwise>
 					<xsl:text>* </xsl:text><xsl:apply-templates select="$term"/><xsl:text>.</xsl:text>
-					<xsl:text>&#xa;</xsl:text>
+					<xsl:text>&#xa;&#xa;</xsl:text>
 	        <!-- <li><xsl:apply-templates select="$term"/>.</li> -->
 	      </xsl:otherwise>
 	    </xsl:choose>
 	  </xsl:when>
 	  <xsl:otherwise>
 			<xsl:text>* </xsl:text><xsl:apply-templates select="$term"/><xsl:text>;</xsl:text>
-			<xsl:text>&#xa;</xsl:text>	    	
+			<xsl:text>&#xa;&#xa;</xsl:text>	    	
 	    <!-- <li><xsl:apply-templates select="$term"/>;</li> -->
 	  </xsl:otherwise>
 	</xsl:choose>
@@ -4316,7 +4332,7 @@ the types, entity specializations, and functions that are specific to this part 
 						name="message"
 						select="concat('Error 12: Can not find term referenced by: ',$ref)"/>
 			</xsl:call-template>
-			<xsl:text>&#xa;</xsl:text>	    	
+			<xsl:text>&#xa;&#xa;</xsl:text>	    	
 	<!-- </li> -->
       </xsl:otherwise>
     </xsl:choose>
@@ -4329,7 +4345,13 @@ the types, entity specializations, and functions that are specific to this part 
 		<xsl:text>&#xa;</xsl:text>
 		<xsl:text>===== </xsl:text><xsl:apply-templates select="term"/>
 		<xsl:text>&#xa;</xsl:text>
-		<xsl:apply-templates select="def"/>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:variable name="text">
+			<xsl:apply-templates select="def"/>
+		</xsl:variable>
+		<xsl:value-of select="normalize-space($text)"/>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
 		<!-- <h4>			
 			<xsl:value-of select="concat($section,'.',position())"/><br/> 
 			<xsl:apply-templates select="term"/>
@@ -4434,9 +4456,10 @@ the types, entity specializations, and functions that are specific to this part 
 
 
   <xsl:template match="express-g">
-    <ul>
+    <!-- <ul> -->
       <xsl:apply-templates select="imgfile|img" mode="expressg"/>
-    </ul>
+			<xsl:text>&#xa;</xsl:text>
+    <!-- </ul> -->
   </xsl:template>
 
   <xsl:template match="imgfile" mode="expressg">
@@ -4666,276 +4689,139 @@ the types, entity specializations, and functions that are specific to this part 
 	
 	
 	<!-- output the clause heading -->
-
 	<xsl:template name="clause_header">
-
 		<xsl:param name="heading"/>
-
 		<xsl:param name="aname"/>
-
 		<H2>
-
 			<A NAME="{$aname}">
-
 				<xsl:value-of select="$heading"/>
-
 			</A>
-
 		</H2>
-
 	</xsl:template>
-
 	
 	<!-- output the Annex heading -->
-
 	<xsl:template name="annex_header">
-
 		<xsl:param name="heading"/>
-
 		<xsl:param name="annex_no"/>
-
 		<xsl:param name="title"/>
-
 		<xsl:param name="aname"/>
-
 		<xsl:param name="informative" select="'informative'"/>
-
 		<div align="center">
-
 			<h2>
-
 				<A NAME="{$aname}">
-
 					<xsl:value-of select="concat('Annex ', $annex_no)"/>
-
 				</A><br/>
-
 			(<xsl:value-of select="$informative"/>)<br/><br/>
-
 				<xsl:value-of select="$heading"/>
-
 			</h2>
-
 		</div>
 
 	</xsl:template>
 
 
   <!-- check the schema name starts with Upper case and rest is lower case
-
        the schema ends in _arm or _mim -->
-
-
-
 <xsl:template name="check_schema_name">
-
     <xsl:param name="arm_mim_schema"/>
-
     <xsl:param name="schema_name"/>
-
-        <xsl:variable name="_arm_mim_schema">
-
-	  <xsl:choose>
-
-	    <xsl:when test="not($arm_mim_schema='aic')">
-
-	      <xsl:value-of select="concat('_',$arm_mim_schema)"/>
-
-	    </xsl:when>
-
-	    <xsl:when test="$arm_mim_schema='aic'">
-
-	      <xsl:value-of select="concat($arm_mim_schema,'_')"/>
-
-	    </xsl:when>
-
-	  </xsl:choose>
-
-	</xsl:variable>
+		<xsl:variable name="_arm_mim_schema">
+			<xsl:choose>
+				<xsl:when test="not($arm_mim_schema='aic')">
+					<xsl:value-of select="concat('_',$arm_mim_schema)"/>
+				</xsl:when>
+				<xsl:when test="$arm_mim_schema='aic'">
+					<xsl:value-of select="concat($arm_mim_schema,'_')"/>
+				</xsl:when>
+			</xsl:choose>
+		</xsl:variable>
 
     <!-- check that the schema name ends in _arm or _mim or _schema or starts with aic_ -->
-
     <xsl:if 
-
       test="substring($schema_name, string-length($schema_name)- string-length($arm_mim_schema)) != $_arm_mim_schema  and  substring($schema_name,1 ,string-length($_arm_mim_schema)) != $_arm_mim_schema">
-
       <xsl:call-template name="error_message">
-
-        <xsl:with-param 
-
-          name="message" 
-
-          select="concat('Error q1: ',$arm_mim_schema,' schema ',$schema_name,' must start or end in', $_arm_mim_schema)"/>
-
+        <xsl:with-param name="message" select="concat('Error q1: ',$arm_mim_schema,' schema ',$schema_name,' must start or end in', $_arm_mim_schema)"/>
       </xsl:call-template>
-
     </xsl:if>
-
 
 
     <!-- check that the schema name starts with Uppercase and rest is
-
          lower case -->
-
     <xsl:variable name="test">
-
       <xsl:call-template name="check_upper_lower_case">
-
         <xsl:with-param name="str" select="$schema_name"/>
-
         <xsl:with-param name="arm_mim_schema" select="$arm_mim_schema"/>
-
       </xsl:call-template>
-
     </xsl:variable>
-
     <xsl:if test="$test = -1">
-
       <xsl:call-template name="error_message">
-
-        <xsl:with-param 
-
-          name="message" 
-
-          select="concat('Error q2: ',$arm_mim_schema,' schema ',$schema_name,' incorrectly
-
-                  named. First letter must uppercase, rest is lower case')"/>
-
-      </xsl:call-template>    
-
+        <xsl:with-param name="message" select="concat('Error q2: ',$arm_mim_schema,' schema ',$schema_name,' incorrectly named. First letter must uppercase, rest is lower case')"/>
+      </xsl:call-template> 
     </xsl:if>
-
   </xsl:template>
 
 
   <!-- return the target for an express entity
-
        This will be of the form schema.entity.attribute
-
        -->
-
   <xsl:template name="express_a_name">
-
     <xsl:param name="section1" select="''"/>
-
     <xsl:param name="section2" select="''"/>
-
     <xsl:param name="section3" select="''"/>
-
     <xsl:param name="section3separator" select="'.'"/>
-
     <xsl:variable name="UPPER">ABCDEFGHIJKLMNOPQRSTUVWXYZ</xsl:variable>
-
     <xsl:variable name="LOWER">abcdefghijklmnopqrstuvwxyz</xsl:variable>
 
-
-
-    <xsl:variable name="s1"
-
-      select="normalize-space(translate($section1,$UPPER,$LOWER))"/>
-
-    <xsl:variable name="s2"
-
-      select="normalize-space(translate($section2,$UPPER,$LOWER))"/>
-
-    <xsl:variable name="s3"
-
-      select="normalize-space(translate($section3,$UPPER,$LOWER))"/>
-
-
+    <xsl:variable name="s1" select="normalize-space(translate($section1,$UPPER,$LOWER))"/>
+    <xsl:variable name="s2" select="normalize-space(translate($section2,$UPPER,$LOWER))"/>
+    <xsl:variable name="s3" select="normalize-space(translate($section3,$UPPER,$LOWER))"/>
 
     <xsl:choose>
-
       <xsl:when test="$s3">
-
         <xsl:value-of select="concat($s1,'.',$s2,$section3separator,$s3)"/>
-
       </xsl:when>
-
       <xsl:when test="$s2">
-
         <xsl:value-of select="concat($s1,'.',$s2)"/>
-
       </xsl:when>
-
       <xsl:when test="$s1">
-
         <xsl:value-of select="$s1"/>
-
       </xsl:when>
-
     </xsl:choose>
-
-
-
+		
   </xsl:template>
 
 
 <xsl:template name="get_module_stdnumber_undated">
-
   <xsl:param name="module"/>
-
   <xsl:variable name="part">
-
     <xsl:choose>
-
       <xsl:when test="string-length($module/@part)>0">
-
         <xsl:value-of select="$module/@part"/>
-
       </xsl:when>
-
         <xsl:otherwise>
-
           &lt;part&gt;
-
         </xsl:otherwise>
-
       </xsl:choose>
-
     </xsl:variable>
 
-
-
    <xsl:variable name="status">
-
     <xsl:choose>
-
       <xsl:when test="string-length($module/@status)>0">
-
         <xsl:choose>
-
           <xsl:when test="starts-with(string($module/@status),'CD-TS')">TS</xsl:when>
-
           <xsl:otherwise>
-
             <xsl:value-of select="string($module/@status)"/>
-
           </xsl:otherwise>
-
         </xsl:choose>
-
       </xsl:when>
-
       <xsl:otherwise>
-
         &lt;status&gt;
-
       </xsl:otherwise>
-
     </xsl:choose>
-
    </xsl:variable>
-
-
 
     <xsl:variable name="orgname" select="'ISO'"/>
 
-
-
-    <xsl:value-of 
-
-      select="concat($orgname,'/',$status,' 10303-',$part)"/>		
+    <xsl:value-of select="concat($orgname,'/',$status,' 10303-',$part)"/>		
 
 </xsl:template>
 
@@ -4949,135 +4835,63 @@ the types, entity specializations, and functions that are specific to this part 
        -->
 
   <xsl:template name="module_display_name">
-
     <xsl:param name="module"/>
 
-
-
     <xsl:variable name="mod_dir">
-
       <xsl:call-template name="module_name">
-
         <xsl:with-param name="module" select="$module"/>
-
       </xsl:call-template>
-
     </xsl:variable>
 
     <!-- Note the use of Latin characters -->
-
     <xsl:variable name="UPPER">ABCDEFGHIJKLMNOPQRSTUVWXYZ&#192;&#193;&#194;&#195;&#196;&#197;&#198;&#199;&#200;&#201;&#202;&#203;&#204;&#205;&#206;&#207;&#208;&#209;&#210;&#211;&#212;&#213;&#214;&#216;&#217;&#218;&#219;&#220;&#221;&#376;&#222;</xsl:variable>
 
-<xsl:variable name="LOWER">abcdefghijklmnopqrstuvwxyz&#224;&#225;&#226;&#227;&#228;&#229;&#230;&#231;&#232;&#233;&#234;&#235;&#236;&#237;&#238;&#239;&#240;&#241;&#242;&#243;&#244;&#245;&#246;&#248;&#249;&#250;&#251;&#252;&#253;&#255;&#254;</xsl:variable>
+		<xsl:variable name="LOWER">abcdefghijklmnopqrstuvwxyz&#224;&#225;&#226;&#227;&#228;&#229;&#230;&#231;&#232;&#233;&#234;&#235;&#236;&#237;&#238;&#239;&#240;&#241;&#242;&#243;&#244;&#245;&#246;&#248;&#249;&#250;&#251;&#252;&#253;&#255;&#254;</xsl:variable>
 
+    <xsl:variable name="first_char" select="substring(translate($module,$LOWER,$UPPER),1,1)"/>
 
-
-    <xsl:variable name="first_char"
-
-      select="substring(translate($module,$LOWER,$UPPER),1,1)"/>
-
-    <xsl:variable name="module_name1"
-
-      select="concat($first_char,
-
-              translate(substring($module,2),'_',' '))"/>
-
-
+    <xsl:variable name="module_name1" select="concat($first_char, translate(substring($module,2),'_',' '))"/>
 
     <xsl:variable name="ap_sect1" select="substring($module_name1,1,2)"/>
 
     <xsl:variable name="ap_sect2" select="translate(substring($module_name1,3,3),'0123456789','##########')"/>
 
 
-
-
-
     <xsl:variable name="module_name2">
-
       <xsl:choose>
-
         <xsl:when test="$ap_sect2='###' and $ap_sect1 = 'Ap'">
-
           <xsl:value-of select="concat('AP',substring($module_name1,3))"/>
-
         </xsl:when>
-
         <xsl:otherwise>
-
           <xsl:value-of select="$module_name1"/>
-
         </xsl:otherwise>
-
       </xsl:choose>
-
     </xsl:variable>
-
-
 
     <xsl:variable name="module_name">
 
       <xsl:choose>
-
         <xsl:when test="contains($module_name2,' 3d ')">
-
           <xsl:value-of select="concat(substring-before($module_name2,' 3d '),' 3D ',substring-after($module_name2,' 3d '))"/>
-
         </xsl:when>
-
         <xsl:when test="contains($module_name2,' 2d ')">
-
           <xsl:value-of select="concat(substring-before($module_name2,' 2d '),' 2D ',substring-after($module_name2,' 2d '))"/>
-
         </xsl:when>
-
-
-
         <xsl:when test="contains($module_name2,' 3d') and string-length(substring-after($module_name2,' 3d'))=0">
-
           <xsl:value-of select="concat(substring-before($module_name2,' 3d'),' 3D')"/>
-
         </xsl:when>
-
-
-
         <xsl:when test="contains($module_name2,' 2d') and string-length(substring-after($module_name2,' 2d'))=0">
-
           <xsl:value-of select="concat(substring-before($module_name2,' 2d'),' 2D')"/>
-
         </xsl:when>
-
-
-
         <xsl:when test="contains($module_name2,'3d ') and string-length(substring-before($module_name2,'3d '))=0">
-
           <xsl:value-of select="concat('3D ', substring-after($module_name2,'3d '))"/>
-
         </xsl:when>
-
-
-
         <xsl:when test="contains($module_name2,'2d ') and string-length(substring-before($module_name2,'2d '))=0">
-
           <xsl:value-of select="concat('2D ', substring-after($module_name2,'2d '))"/>
-
         </xsl:when>
-
-
-
-
-
         <xsl:otherwise>
-
           <xsl:value-of select="$module_name2"/>
-
         </xsl:otherwise>
-
-
-
-
-
-
-
       </xsl:choose>
 
     </xsl:variable>
@@ -5169,65 +4983,36 @@ the types, entity specializations, and functions that are specific to this part 
 	</xsl:template>
 
   <!-- count the number of characters in string -->
-
   <xsl:template name="count_substring">
-
     <xsl:param name="substring"/>
-
     <xsl:param name="string"/>
-
     <xsl:param name="cnt" select="0"/>
 
-
-
     <xsl:choose>
-
       <xsl:when test="$string">
-
         <xsl:variable name="rest" select="substring($string,2)"/>
-
         <xsl:variable name="cnt1">
-
           <xsl:choose>
-
             <xsl:when test="starts-with($string,$substring)">
-
               <xsl:value-of select="$cnt+1"/>
-
             </xsl:when>
-
             <xsl:otherwise>
-
               <xsl:value-of select="$cnt"/>
-
             </xsl:otherwise>
-
           </xsl:choose>
-
         </xsl:variable>
 
-
-
         <xsl:call-template name="count_substring">
-
           <xsl:with-param name="substring" select="$substring"/>
-
           <xsl:with-param name="string" select="$rest"/>
-
           <xsl:with-param name="cnt" select="$cnt1"/>
-
         </xsl:call-template>
-
       </xsl:when>
 
       <xsl:otherwise>
-
         <xsl:value-of select="$cnt"/>
-
       </xsl:otherwise>
-
     </xsl:choose>
-
   </xsl:template>
 
 	
@@ -5258,108 +5043,58 @@ the types, entity specializations, and functions that are specific to this part 
 
 
   <xsl:template name="check_upper_lower_case">
-
     <xsl:param name="str"/>
-
     <xsl:param name="arm_mim_schema"/>
-
     <xsl:variable name="UPPER" select="'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'"/>
-
     <xsl:choose>
-
       <xsl:when test="$arm_mim_schema='schema' or $arm_mim_schema='aic' " >
-
         <xsl:call-template name="check_all_lower_case">
-
           <xsl:with-param name="str" select="$str"/>
-
         </xsl:call-template>
-
       </xsl:when>
-
       <xsl:otherwise>
-
           <xsl:choose>
-
             <xsl:when test="contains($UPPER,substring($str,1,1))">
-
               <xsl:call-template name="check_all_lower_case">
-
-          <xsl:with-param name="str" select="substring($str,2)"/>
-
-        </xsl:call-template>
-
-      </xsl:when>
-
-      <xsl:otherwise>
-
-        <!-- failed -->
-
-        -1
-
-      </xsl:otherwise>
-
+								<xsl:with-param name="str" select="substring($str,2)"/>
+							</xsl:call-template>
+						</xsl:when>
+						<xsl:otherwise>
+							<!-- failed -->
+							-1
+						</xsl:otherwise>
           </xsl:choose>
-
-    </xsl:otherwise>
-
-  </xsl:choose>
-
+			</xsl:otherwise>
+		</xsl:choose>
   </xsl:template>
 
 	
 	  <!-- given the name of a module, or module arm or mim schema
-
        return the name of the module
-
        -->
-
   <xsl:template name="module_name">
-
     <xsl:param name="module"/>
-
     <xsl:variable name="UPPER">ABCDEFGHIJKLMNOPQRSTUVWXYZ</xsl:variable>
-
     <xsl:variable name="LOWER">abcdefghijklmnopqrstuvwxyz</xsl:variable>
-
     <xsl:variable name="module_lcase"
-
       select="translate(
-
               normalize-space(translate($module,$UPPER, $LOWER)),
-
               '&#x20;','_')"/>
-
     <xsl:variable name="mod_name">
-
       <xsl:choose>
-
         <xsl:when test="contains($module_lcase,'_arm')">
-
           <xsl:value-of select="substring-before($module_lcase,'_arm')"/>
-
         </xsl:when>
-
         <xsl:when test="contains($module_lcase,'_mim')">
-
           <xsl:value-of select="substring-before($module_lcase,'_mim')"/>
-
         </xsl:when>
-
         <xsl:when test="contains($module_lcase,'_bom')">
-
           <xsl:value-of select="substring-before($module_lcase,'_bom')"/>
-
         </xsl:when>
-
         <xsl:otherwise>
-
           <xsl:value-of select="string($module_lcase)"/>
-
         </xsl:otherwise>
-
       </xsl:choose>
-
     </xsl:variable>
 
     <xsl:value-of select="$mod_name"/>
@@ -5369,51 +5104,28 @@ the types, entity specializations, and functions that are specific to this part 
   <!-- return 1 if all the letters in string are lower case -->
 
   <xsl:template name="check_all_lower_case">
-
     <xsl:param name="str"/>
-
     <xsl:variable name="LOWER" select="'abcdefghijklmnopqrstuvwxyz_0123456789'"/>
-
     <xsl:variable name="first" select="substring($str,1,1)"/>
-
     <xsl:variable name="rest" select="substring($str,2)"/>
-
     <xsl:choose>
-
       <xsl:when test="contains($LOWER,$first)">
-
         <xsl:choose>
-
           <xsl:when test="$rest">
-
             <xsl:call-template name="check_all_lower_case">
-
               <xsl:with-param name="str" select="$rest"/>
-
             </xsl:call-template>
-
           </xsl:when>
-
           <xsl:otherwise>
-
             <!-- tested all the string -->
-
             1 
-
           </xsl:otherwise>
-
         </xsl:choose>
-
       </xsl:when>
-
       <xsl:otherwise>
-
         -1
-
       </xsl:otherwise>
-
     </xsl:choose>
-
   </xsl:template>
 
 	
