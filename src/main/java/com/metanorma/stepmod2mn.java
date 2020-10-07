@@ -19,9 +19,11 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.UUID;
 import javax.xml.transform.Source;
+import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.URIResolver;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
@@ -244,6 +246,7 @@ public class stepmod2mn {
             
             
             TransformerFactory factory = TransformerFactory.newInstance();
+            factory.setURIResolver(new ClasspathResourceURIResolver());
             Transformer transformer = factory.newTransformer();
             //Source src = new StreamSource(fXMLin);
             Source src = new SAXSource(rdr, new InputSource(new FileInputStream(fXMLin)));
@@ -254,6 +257,7 @@ public class stepmod2mn {
                 
             // linearize XML
             Source srcXSLidentity = new StreamSource(Util.getStreamFromResources(getClass().getClassLoader(), "linearize.xsl"));
+            
             transformer = factory.newTransformer(srcXSLidentity);
 
             StringWriter resultWriteridentity = new StringWriter();
@@ -264,7 +268,11 @@ public class stepmod2mn {
             // load linearized xml
             src = new StreamSource(new StringReader(xmlidentity));
             srcXSL = new StreamSource(Util.getStreamFromResources(getClass().getClassLoader(), "stepmod2mn.adoc.xsl"));
-            transformer = factory.newTransformer(srcXSL);            
+            
+            Templates cachedXSLT = factory.newTemplates(srcXSL);
+            //transformer = factory.newTransformer(srcXSL);
+            transformer = cachedXSLT.newTransformer();
+            
             transformer.setParameter("docfile", bibdataFileName);
             transformer.setParameter("pathSeparator", File.separator);
             transformer.setParameter("path", resourcePath);
@@ -295,6 +303,12 @@ public class stepmod2mn {
         } catch (Exception e) {
             e.printStackTrace(System.err);
             System.exit(ERROR_EXIT_CODE);
+        }
+    }
+    
+    class ClasspathResourceURIResolver implements URIResolver {
+        public Source resolve(String href, String base) throws TransformerException {
+          return new StreamSource(getClass().getClassLoader().getResourceAsStream(href));
         }
     }
     
