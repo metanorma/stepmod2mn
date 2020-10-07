@@ -246,7 +246,7 @@ public class stepmod2mn {
             
             
             TransformerFactory factory = TransformerFactory.newInstance();
-            factory.setURIResolver(new ClasspathResourceURIResolver());
+            factory.setURIResolver(new ClasspathResourceURIResolver());            
             Transformer transformer = factory.newTransformer();
             //Source src = new StreamSource(fXMLin);
             Source src = new SAXSource(rdr, new InputSource(new FileInputStream(fXMLin)));
@@ -267,7 +267,13 @@ public class stepmod2mn {
 
             // load linearized xml
             src = new StreamSource(new StringReader(xmlidentity));
-            srcXSL = new StreamSource(Util.getStreamFromResources(getClass().getClassLoader(), "stepmod2mn.adoc.xsl"));
+            ClassLoader cl = this.getClass().getClassLoader();
+            String systemID = "stepmod2mn.adoc.xsl";
+            InputStream in = cl.getResourceAsStream(systemID);
+            URL url = cl.getResource(systemID);
+            
+            srcXSL = new StreamSource(Util.getStreamFromResources(getClass().getClassLoader(), systemID));//"stepmod2mn.adoc.xsl"
+            srcXSL.setSystemId(url.toExternalForm());
             
             Templates cachedXSLT = factory.newTemplates(srcXSL);
             //transformer = factory.newTransformer(srcXSL);
