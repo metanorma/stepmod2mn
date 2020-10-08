@@ -6,27 +6,35 @@ Owner:   Developed by Eurostep and supplied to NIST under contract.
 Purpose:
 
 -->
-
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"		
 	xmlns:xalan="http://xml.apache.org/xalan" 
-	xmlns:java="http://xml.apache.org/xalan/java" 
-		exclude-result-prefixes="xalan java" 
 		version="1.0">
+		
+		<!-- xmlns:msxsl="urn:schemas-microsoft-com:xslt"
+  xmlns:exslt="http://exslt.org/common"
+  exclude-result-prefixes="msxsl exslt" -->
 
-
-<!--  <xsl:import href="res_toc.xsl"/>
+  <!-- <xsl:import href="res_toc.xsl"/>
 
   <xsl:import href="sect_4_express.xsl"/>
 
-  <xsl:import href="../projmg/resource_issues.xsl"/>-->
+  <xsl:import href="../projmg/resource_issues.xsl"/> -->
 
-		
 
-	<!-- ========================== -->
-	<!-- ========================== -->
-	<!-- templates from res_doc/resource.xsl -->
-	<!-- ========================== -->
-	<!-- ========================== -->
+  <xsl:output 
+      method="html"
+      doctype-system="http://www.w3.org/TR/html4/loose.dtd"
+      doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN"
+      indent="yes"
+      />
+
+
+  <xsl:template match="resource">
+    <xsl:apply-templates select="." mode="coverpage"/>
+    <xsl:apply-templates select="." mode="foreword"/>
+    <xsl:apply-templates/>
+  </xsl:template>
+
 
   <!-- test the WG number. 
        return a string containing Error if incorrect
@@ -82,7 +90,7 @@ Purpose:
     </xsl:apply-templates>
 
     <xsl:variable name="n_number"
-	    select="concat('ISO/TC 184/SC 4/WG 12&#160;N',./@wg.number)"/>
+	    select="concat('ISO/TC 184/SC 4/WG 12 N',./@wg.number)"/>
     <xsl:variable name="date"
 		  select="translate(
 			  substring-before(substring-after(@rcs.date,'$Date: '),' '),
@@ -126,7 +134,7 @@ Purpose:
 		</xsl:when>
 		<xsl:otherwise>
 		  <xsl:value-of 
-			  select="concat('ISO/TC&#160;184/SC&#160;4/WG&#160;12&#160;N',@wg.number.supersedes)"/>
+			  select="concat('ISO/TC 184/SC 4/WG 12 N',@wg.number.supersedes)"/>
 		</xsl:otherwise>
 	      </xsl:choose>
 	    </h3>
@@ -181,8 +189,8 @@ Purpose:
       </xsl:call-template>
     </xsl:variable>
     
-    <h4>
-      <xsl:value-of select="$stdnumber"/><br/>
+    <h4 level="4" id="{$stdnumber}">
+      <!-- <xsl:value-of select="$stdnumber"/><br/> -->
       <xsl:choose>
 	    <xsl:when test="string-length($part_no) &lt; 13"> <!-- if it is 100 series, it is 1 number longer and should have a different name -->
           Product data representation and exchange:  Integrated generic resource:
@@ -641,10 +649,9 @@ Purpose:
 		</P>
 	      </xsl:otherwise>
 	    </xsl:choose>
-	    <!-- <ul> -->
+	    <ul>
 	      <xsl:apply-templates select="./abstract/*"/>
-				<xsl:text>&#xa;</xsl:text>
-	    <!-- </ul> -->
+	    </ul>
 	  </xsl:when>
 	  <xsl:otherwise>
 	    <xsl:apply-templates select="./abstract/*"/>
@@ -656,10 +663,9 @@ Purpose:
 	  The following are within the scope of 
 	  <xsl:value-of select="substring-before($resdoc_stdnumber,'(E)')"/>:
 	</P>
-	<!-- <UL> -->
+	<UL>
 	  <xsl:apply-templates select="./inscope/li"/>
-		<xsl:text>&#xa;</xsl:text>
-	<!-- </UL> -->
+	</UL>
       </xsl:otherwise>
     </xsl:choose>
 
@@ -720,157 +726,214 @@ Purpose:
 
   <!-- Outputs the foreword -->
   <!-- MWD 2018-03-02 #6538 replace the template below with this one after DIS -->
-	<xsl:template match="resource" mode="foreword_resource">
-		<xsl:variable name="status" select="string(@status)"/>
-		<xsl:variable name="part_no">
-			<xsl:call-template name="get_resdoc_iso_number_without_status">
-				<xsl:with-param name="resdoc" select="./@name"/>
-			</xsl:call-template>
-		</xsl:variable>
-	
-		<xsl:text>.Foreword</xsl:text>
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>ISO (the International Organization for Standardization) is a worldwide federation of national standards bodies (ISO member bodies). The work of preparing International Standards is normally carried out through ISO technical committees. Each member body interested in a subject for which a technical committee has been established has the right to be represented on that committee. International organizations, governmental and non-governmental, in liaison with ISO, also take part in the work. ISO collaborates closely with the International Electrotechnical Commission (IEC) on all matters of electrotechnical standardization.</xsl:text>
-		<xsl:text>&#xa;&#xa;</xsl:text>		
-		<xsl:text>The procedures used to develop this document and those intended for its further maintenance are described in the ISO/IEC Directives, Part 1. In particular, the different approval criteria needed for the different types of ISO documents should be noted. This document was drafted in accordance with the editorial rules of the ISO/IEC Directives, Part 2 (see www.iso.org/directives[http://www.iso.org/directives]).</xsl:text>
-		<xsl:text>&#xa;&#xa;</xsl:text>
-		<xsl:text>Attention is drawn to the possibility that some of the elements of this document may be the subject of patent rights. ISO shall not be held responsible for identifying any or all such patent rights. Details of any patent rights identified during the development of the document will be in the Introduction and/or on the ISO list of patent declarations received (see www.iso.org/patents[http://www.iso.org/patents]).</xsl:text>
-		<xsl:text>&#xa;&#xa;</xsl:text>    
-		<xsl:text>Any trade name used in this document is information given for the convenience of users and does not constitute an endorsement.</xsl:text>
-		<xsl:text>&#xa;&#xa;</xsl:text>		
-		<xsl:text>For an explanation on the voluntary nature of standards, the meaning of ISO specific terms and expressions related to conformity assessment, as well as information about ISO's adherence to the World Trade Organization (WTO) principles in the Technical Barriers to Trade (TBT) see www.iso.org/iso/foreword.html[http://www.iso.org/iso/foreword.html].</xsl:text>
-		<xsl:text>&#xa;&#xa;</xsl:text>		
-		<xsl:text>This document was prepared by Technical Committee ISO/TC 184, _Automation systems and integration_, Subcommittee SC 4, _Industrial data._</xsl:text>
-		<xsl:text>&#xa;&#xa;</xsl:text>
-		
-		<xsl:choose>
-			<xsl:when test="not(./foreword)">
-				<xsl:if test="@version!='1'">
-					<xsl:variable name="this_edition">
-						<xsl:choose>
-							<xsl:when test="@version='2'">second</xsl:when>
-							<xsl:when test="@version='3'">third</xsl:when>
-							<xsl:when test="@version='4'">fourth</xsl:when>
-							<xsl:when test="@version='5'">fifth</xsl:when>
-							<xsl:when test="@version='6'">sixth</xsl:when>
-							<xsl:when test="@version='7'">seventh</xsl:when>
-							<xsl:when test="@version='8'">eighth</xsl:when>
-							<xsl:when test="@version='9'">ninth</xsl:when>
-						</xsl:choose>
-					</xsl:variable>
-					
-					<xsl:variable name="prev_edition">
-						<xsl:choose>
-							<xsl:when test="@version='2'">first</xsl:when>
-							<xsl:when test="@version='3'">second</xsl:when>
-							<xsl:when test="@version='4'">third</xsl:when>
-							<xsl:when test="@version='5'">fourth</xsl:when>
-							<xsl:when test="@version='6'">fifth</xsl:when>
-							<xsl:when test="@version='7'">sixth</xsl:when>
-							<xsl:when test="@version='8'">seventh</xsl:when>
-							<xsl:when test="@version='9'">eighth</xsl:when>
-						</xsl:choose>
-					</xsl:variable>
-					<xsl:choose>
-						<xsl:when test="@previous.revision.cancelled='NO'">
-							<xsl:variable name="text">
-								This <xsl:value-of select="$this_edition"/> edition <!--of
-								<xsl:value-of select="$part_no"/>-->
-								cancels and replaces the
-								<xsl:value-of select="$prev_edition"/> edition  
-								(<xsl:value-of select="concat($part_no,':',@previous.revision.year)"/>),
-								which has been technically revised. 
-								
-								<xsl:choose>
-									<!-- only changed a section of the document -->
-									<xsl:when test="@revision.complete='NO'">
-										<xsl:value-of select="@revision.scope"/>
-										of the <xsl:value-of select="$prev_edition"/> 
-										edition  
-										<xsl:choose>
-											<!-- will be Clauses/Figures/ etc so if contains 'es' 
-					 then must be plural-->
-											<xsl:when test="contains(@revision.scope,'es')">
-												have
-											</xsl:when>
-											<xsl:otherwise>
-												has
-											</xsl:otherwise>
-										</xsl:choose>
-										been technically revised.
-									</xsl:when>
-									<xsl:otherwise>
-										<!-- complete revision so no extra text -->
-									</xsl:otherwise>
-								</xsl:choose>
-							</xsl:variable>
-							<xsl:value-of select="normalize-space($text)"/>
-							<xsl:text>&#xa;&#xa;</xsl:text>
-						</xsl:when>
-						
-						<xsl:otherwise>
-							<xsl:variable name="text">
-								<!-- cancelled -->
-								This <xsl:value-of select="$this_edition"/> edition 
-								cancels and replaces the
-								<xsl:value-of select="$prev_edition"/> edition
-								(<xsl:value-of
-									select="concat($part_no,':',@previous.revision.year)"/>), 
-								
-								<xsl:choose>
-									<!-- only changed a section of the document -->
-									<xsl:when test="@revision.complete='NO'">
-										of which 
-										<xsl:value-of select="@revision.scope"/>
-										<xsl:choose>
-											<!-- will be Clauses/Figures/ etc so if contains 'es' 
-					 then must be plural-->
-											<xsl:when test="contains(@revision.scope,'es')">
-												have
-											</xsl:when>
-											<xsl:otherwise>
-												has
-											</xsl:otherwise>
-										</xsl:choose>
-										been technically revised.
-									</xsl:when>
-									<xsl:otherwise>
-										which has been technically revised.
-									</xsl:otherwise>
-								</xsl:choose>
-							</xsl:variable>
-							<xsl:value-of select="normalize-space($text)"/>
-							<xsl:text>&#xa;&#xa;</xsl:text>
-						</xsl:otherwise>
-					</xsl:choose>
-				</xsl:if>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:value-of select="./foreword"/>
-				<xsl:text>&#xa;&#xa;</xsl:text>
-			</xsl:otherwise>
-		</xsl:choose>
-		
-		<xsl:if test="./changes">
-			<xsl:variable name="annex_letter">
-				<xsl:choose>
-					<xsl:when test="./examples and ./tech_discussion">G</xsl:when>
-					<xsl:when test="./examples or ./tech_discussion">F</xsl:when>
-					<xsl:otherwise>E</xsl:otherwise>
-				</xsl:choose>
-			</xsl:variable>			
-			<xsl:variable name="text">A detailed description of the changes is provided in Annex &lt;&lt;g_change,annex=<xsl:value-of select="$annex_letter"/>&gt;&gt;.</xsl:variable>
-			<xsl:value-of select="normalize-space($text)"/>
-			<xsl:text>&#xa;&#xa;</xsl:text>
-		</xsl:if>
-		
-		<xsl:text>A list of all parts in the ISO 10303 series can be found on the ISO website[http://standards.iso.org/iso/10303/tech/step_titles.htm].</xsl:text>
-		<xsl:text>&#xa;&#xa;</xsl:text>
-		
-		<xsl:text>Any feedback or questions on this document should be directed to the user’s national standards body. A complete listing of these bodies can be found at www.iso.org/members.html[https://www.iso.org/members.html].</xsl:text>
-		<xsl:text>&#xa;&#xa;</xsl:text>
-	
-	</xsl:template>
+  <xsl:template match="resource" mode="foreword">
+    <xsl:variable name="status" select="string(@status)"/>
+    <xsl:variable name="part_no">
+      <xsl:call-template name="get_resdoc_iso_number_without_status">
+        <xsl:with-param name="resdoc" select="./@name"/>
+      </xsl:call-template>
+    </xsl:variable>
+    
+    <h2>
+      <a name="foreword">
+        Foreword
+      </a>
+    </h2>
+  
+    <p>
+      ISO (the International Organization for Standardization) is a worldwide federation of national 
+      standards bodies (ISO member bodies). The work of preparing International Standards is normally 
+      carried out through ISO technical committees. Each member body interested in a subject for which a 
+      technical committee has been established has the right to be represented on that committee. 
+      International organizations, governmental and non-governmental, in liaison with ISO, also take part in 
+      the work. ISO collaborates closely with the International Electrotechnical Commission (IEC) on all 
+      matters of electrotechnical standardization.
+    </p>
+    <p>
+      The procedures used to develop this document and those intended for its further maintenance are 
+      described in the ISO/IEC Directives, Part 1. In particular, the different approval criteria needed for the 
+      different types of ISO documents should be noted. This document was drafted in accordance with the 
+      editorial rules of the ISO/IEC Directives, Part 2 (see <a href="http://www.iso.org/directives" target="_blank">www.iso.org/directives</a>).
+    </p>
+    <p>
+      Attention is drawn to the possibility that some of the elements of this document may be the subject of 
+      patent rights. ISO shall not be held responsible for identifying any or all such patent rights. Details of 
+      any patent rights identified during the development of the document will be in the Introduction and/or 
+      on the ISO list of patent declarations received (see <a href="http://www.iso.org/patents" target="_blank">www.iso.org/patents</a>).
+    </p>
+    
+    <p>
+      Any trade name used in this document is information given for the convenience of users and does not 
+      constitute an endorsement.
+    </p>
+    
+    <p>
+      For an explanation on the voluntary nature of standards, the meaning of ISO specific terms and 
+      expressions related to conformity assessment, as well as information about ISO's adherence to the 
+      World Trade Organization (WTO) principles in the Technical Barriers to Trade (TBT) see <a href="http://www.iso.org/iso/foreword.html" target="_blank">www.iso.org/iso/foreword.html</a>.
+    </p>
+    
+    <p>
+      This document was prepared by Technical Committee ISO/TC 184, <i>Automation systems and integration</i>, Subcommittee SC 4,
+      <i>Industrial data.</i>
+    </p>
+    
+    <xsl:choose>
+      <xsl:when test="not(./foreword)">
+        <xsl:if test="@version!='1'">
+          <xsl:variable name="this_edition">
+            <xsl:choose>
+              <xsl:when test="@version='2'">
+                second
+              </xsl:when>
+              <xsl:when test="@version='3'">
+                third
+              </xsl:when>
+              <xsl:when test="@version='4'">
+                fourth
+              </xsl:when>
+              <xsl:when test="@version='5'">
+                fifth
+              </xsl:when>
+              <xsl:when test="@version='6'">
+                sixth
+              </xsl:when>
+              <xsl:when test="@version='7'">
+                seventh
+              </xsl:when>
+              <xsl:when test="@version='8'">
+                eighth
+              </xsl:when>
+              <xsl:when test="@version='9'">
+                ninth
+              </xsl:when>
+            </xsl:choose>
+          </xsl:variable>
+          
+          <xsl:variable name="prev_edition">
+            <xsl:choose>
+              <xsl:when test="@version='2'">
+                first
+              </xsl:when>
+              <xsl:when test="@version='3'">
+                second
+              </xsl:when>
+              <xsl:when test="@version='4'">
+                third
+              </xsl:when>
+              <xsl:when test="@version='5'">
+                fourth
+              </xsl:when>
+              <xsl:when test="@version='6'">
+                fifth
+              </xsl:when>
+              <xsl:when test="@version='7'">
+                sixth
+              </xsl:when>
+              <xsl:when test="@version='8'">
+                seventh
+              </xsl:when>
+              <xsl:when test="@version='9'">
+                eighth
+              </xsl:when>
+            </xsl:choose>
+          </xsl:variable>
+          <xsl:choose>
+            <xsl:when test="@previous.revision.cancelled='NO'">
+              This <xsl:value-of select="$this_edition"/> edition <!--of
+              <xsl:value-of select="$part_no"/>-->
+              cancels and replaces the
+              <xsl:value-of select="$prev_edition"/> edition  
+              (<xsl:value-of
+                select="concat($part_no,':',@previous.revision.year)"/>),
+              which has been technically revised. 
+              
+              <xsl:choose>
+                <!-- only changed a section of the document -->
+                <xsl:when test="@revision.complete='NO'">
+                  <xsl:value-of select="@revision.scope"/>
+                  of the <xsl:value-of select="$prev_edition"/> 
+                  edition  
+                  <xsl:choose>
+                    <!-- will be Clauses/Figures/ etc so if contains 'es' 
+		     then must be plural-->
+                    <xsl:when test="contains(@revision.scope,'es')">
+                      have
+                    </xsl:when>
+                    <xsl:otherwise>
+                      has
+                    </xsl:otherwise>
+                  </xsl:choose>
+                  been technically revised.
+                </xsl:when>
+                <xsl:otherwise>
+                  <!-- complete revision so no extra text -->
+                </xsl:otherwise>
+              </xsl:choose>
+              
+            </xsl:when>
+            
+            <xsl:otherwise>
+              <!-- cancelled -->
+              This <xsl:value-of select="$this_edition"/> edition 
+              cancels and replaces the
+              <xsl:value-of select="$prev_edition"/> edition
+              (<xsl:value-of
+                select="concat($part_no,':',@previous.revision.year)"/>), 
+              
+              <xsl:choose>
+                <!-- only changed a section of the document -->
+                <xsl:when test="@revision.complete='NO'">
+                  of which 
+                  <xsl:value-of select="@revision.scope"/>
+                  <xsl:choose>
+                    <!-- will be Clauses/Figures/ etc so if contains 'es' 
+		     then must be plural-->
+                    <xsl:when test="contains(@revision.scope,'es')">
+                      have
+                    </xsl:when>
+                    <xsl:otherwise>
+                      has
+                    </xsl:otherwise>
+                  </xsl:choose>
+                  been technically revised.
+                </xsl:when>
+                <xsl:otherwise>
+                  which has been technically revised.
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:if>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="./foreword"/>
+      </xsl:otherwise>
+    </xsl:choose>
+    
+    <xsl:if test="./changes">
+      <xsl:variable name="annex_letter">
+        <xsl:choose>
+          <xsl:when test="./examples and ./tech_discussion">G</xsl:when>
+          <xsl:when test="./examples or ./tech_discussion">F</xsl:when>
+          <xsl:otherwise>E</xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable><br/><br/>A detailed description of the changes is provided in Annex <a
+        href="g_change{$FILE_EXT}">
+        <xsl:value-of select="$annex_letter"/>
+      </a>. 
+    </xsl:if>
+    
+    <p>
+      A list of all parts in the ISO 10303 series can be found on the <a href="http://standards.iso.org/iso/10303/tech/step_titles.htm" target="_blank">ISO website</a>. 
+    </p>
+    
+    <p>
+      Any feedback or questions on this document should be directed to the user’s national standards body. 
+      A complete listing of these bodies can be found at <a href="https://www.iso.org/members.html">www.iso.org/members.html</a>.
+    </p>
+    
+  </xsl:template>
   
   <!--<xsl:template match="resource" mode="foreword">
     <xsl:variable name="status" select="string(@status)"/>
@@ -1158,37 +1221,35 @@ Purpose:
     <xsl:apply-templates select="express-g"/>  
   </xsl:template>
 
-	<xsl:template match="inscope">
-   <xsl:text>The following are within the scope of this part of ISO 10303: </xsl:text>
-	 <xsl:text>&#xa;</xsl:text>
+  <xsl:template match="inscope">
+		<p>
+      <a name="inscope"/>
+      The following are within the scope of this part of ISO 10303: 
+		</p>
     <!--  output any issues -->
     <xsl:apply-templates select=".." mode="output_clause_issue">
       <xsl:with-param name="clause" select="'inscope'"/>
     </xsl:apply-templates>
 
-    <!-- list items -->
-		<!-- <ul> -->
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:apply-templates/>
-		<xsl:text>&#xa;</xsl:text>
-    <!-- </ul> -->
+    <ul>
+      <xsl:apply-templates/>
+    </ul>
   </xsl:template>
 
 
-	<xsl:template match="outscope">
-		<xsl:text>The following are outside the scope of this part of ISO 10303: </xsl:text>
-		<xsl:text>&#xa;</xsl:text>
+  <xsl:template match="outscope">
+    <p>
+      <a name="outscope"/>
+      The following are outside the scope of this part of ISO 10303: 
+    </p>
     <!-- output any issues -->
     <xsl:apply-templates select=".." mode="output_clause_issue">
       <xsl:with-param name="clause" select="'outscope'"/>
     </xsl:apply-templates>
 
-    <!-- list items -->
-		<!-- <ul> -->
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:apply-templates/>
-		<xsl:text>&#xa;</xsl:text>
-    <!-- </ul> -->
+    <ul>
+      <xsl:apply-templates/>
+    </ul>
   </xsl:template>
 
 
@@ -1388,7 +1449,7 @@ Purpose:
       defined in ISO 10303-11.
     </p>
 
-    <!-- <ul> -->
+    <ul>
       <xsl:for-each select="./schema/express-g/imgfile" >
 	<xsl:variable name="schema">
 	  <xsl:value-of 
@@ -1419,7 +1480,7 @@ Purpose:
 	  </xsl:call-template>
 	</xsl:variable>
 
-	<xsl:variable name="expg_path" select="concat($path, '../../../',$resource_dir,'/',$schema,'expg',$diagno)"/>
+	<xsl:variable name="expg_path" select="concat('../../',$resource_dir,'/',$schema,'expg',$diagno)"/>
 
 	<xsl:variable name="schema_url">
 	  <xsl:choose>
@@ -1432,8 +1493,7 @@ Purpose:
 	  </xsl:choose>
 	</xsl:variable>
 
-	<xsl:text>* </xsl:text>
-	<!-- <li> -->
+	<li>
 	  <a href="{$schema_url}">
 	    <xsl:value-of 
 		select="concat('Figure D.',$clauseno, 
@@ -1448,12 +1508,10 @@ Purpose:
 	      <xsl:value-of select="'.'"/>        
 	    </xsl:otherwise>
 	  </xsl:choose>
-	<!-- </li> -->
-		<xsl:text>&#xa;&#xa;</xsl:text>
-
+	</li>
       </xsl:for-each>
-    <!-- </ul> -->
-		<xsl:text>&#xa;</xsl:text>
+    </ul>
+
   </xsl:template>
 
 
@@ -1461,11 +1519,12 @@ Purpose:
     <xsl:param name="pos"/>
     <xsl:variable name="schema_display_name">
       <xsl:call-template name="res_display_name">
-				<xsl:with-param name="res" select="@name"/>
+	<xsl:with-param name="res" select="@name"/>
       </xsl:call-template>           
     </xsl:variable>
 
-    <xsl:variable name="schema_no" select="$pos"/>
+    <xsl:variable name="schema_no"
+		  select="$pos"/>
 
     <xsl:variable name="doctype">
       <xsl:apply-templates select="./ancestor::resource" mode="doctype"/>
@@ -1473,18 +1532,18 @@ Purpose:
 
     <xsl:choose>
       <xsl:when test="not($doctype='aic')">
-				<xsl:call-template name="clause_header">
-					<!-- <xsl:with-param name="heading" select="concat((number($schema_no)+3),' ',$schema_display_name)"/> -->
-					<xsl:with-param name="heading" select="$schema_display_name"/>
-					<xsl:with-param name="aname" select="concat('schema', $schema_no+3)"/>
-				</xsl:call-template>
+	<xsl:call-template name="clause_header">
+	  <xsl:with-param name="heading" 
+			  select="concat((number($schema_no)+3),' ',$schema_display_name)"/>
+	  <xsl:with-param name="aname" select="concat('schema','$schema_no+3')"/>
+	</xsl:call-template>
       </xsl:when>
       <xsl:when test="$doctype='aic'">
-				<xsl:call-template name="clause_header">
-					<!-- <xsl:with-param name="heading" select="concat((number($schema_no)+3),' ','EXPRESS short listing')"/> -->
-					<xsl:with-param name="heading" select="$schema_display_name"/>
-					<xsl:with-param name="aname" select="concat('schema', $schema_no+3)"/>
-				</xsl:call-template>
+	<xsl:call-template name="clause_header">
+	  <xsl:with-param name="heading" 
+			  select="concat((number($schema_no)+3),' ','EXPRESS short listing')"/>
+	  <xsl:with-param name="aname" select="concat('schema','$schema_no+3')"/>
+	</xsl:call-template>
       </xsl:when>
     </xsl:choose>
 
@@ -1704,89 +1763,111 @@ the types, entity specializations, and functions that are specific to this part 
        All default normrefs that define terms for which abbreviations are provided and listed in ../data/basic/abbreviations_default.xml
        All resources referenced by a USE FROM in any schema
   -->
-	<xsl:template name="normrefs_list">
-		<xsl:param name="current_resource"/>
+  <xsl:template name="normrefs_list">
+    <xsl:param name="current_resource"/>
 
-		<xsl:variable name="doctype">
-			<xsl:apply-templates select="$current_resource" mode="doctype"/>
-		</xsl:variable>
+    <xsl:variable name="doctype">
+      <xsl:apply-templates select="$current_resource" mode="doctype"/>
+    </xsl:variable>
 
-		<!-- get all default normrefs listed in ../../data/basic/normrefs_resdoc_default.xml -->
-		<xsl:variable name="normref_list1">
-			<xsl:choose>
-				<xsl:when test="not($doctype='aic')">
-					<xsl:call-template name="get_normref">
-						<xsl:with-param name="normref_nodes" select="document(concat($path, '../../../data/basic/normrefs_resdoc_default.xml'))/normrefs/normref.inc"/>
-						<xsl:with-param name="normref_list" select="''"/>
-					</xsl:call-template> 
-				</xsl:when>
-				<xsl:when test="$doctype='aic'">
-					<xsl:call-template name="get_normref">
-						<xsl:with-param name="normref_nodes" select="document(concat($path, '../../../data/basic/normrefs_aic_default.xml'))/normrefs/normref.inc"/>
-						<xsl:with-param name="normref_list" select="''"/>
-					</xsl:call-template> 
-				</xsl:when>
-			</xsl:choose>   
-		</xsl:variable>
+    <!-- get all default normrefs listed in ../../data/basic/normrefs_resdoc_default.xml -->
+    <xsl:variable name="normref_list1">
+      <xsl:choose>
+	<xsl:when test="not($doctype='aic')">
+	  <xsl:call-template name="get_normref">
+	    <xsl:with-param 
+		name="normref_nodes" 
+		select="document(concat($path, '../../../data/basic/normrefs_resdoc_default.xml'))/normrefs/normref.inc"/>
+	    <xsl:with-param 
+		name="normref_list" 
+		select="''"/>
+	  </xsl:call-template> 
+	</xsl:when>
+	<xsl:when test="$doctype='aic'">
+	  <xsl:call-template name="get_normref">
+	    <xsl:with-param 
+		name="normref_nodes" 
+		select="document(concat($path, '../../../data/basic/normrefs_aic_default.xml'))/normrefs/normref.inc"/>
+	    <xsl:with-param 
+		name="normref_list" 
+		select="''"/>
+	  </xsl:call-template> 
+	</xsl:when>
+      </xsl:choose>   
+    </xsl:variable>
 
-		<!--
+    <!--
 	<xsl:message>
 	l1:<xsl:value-of select="$normref_list1"/>:l1
 	</xsl:message>
-		-->
+    -->
 
 
-		<!-- get all normrefs explicitly included in the resource by normref.inc -->
-		<xsl:variable name="normref_list2">
-			<xsl:call-template name="get_normref">
-				<xsl:with-param name="normref_nodes" select="/resource/normrefs/normref.inc"/>
-				<xsl:with-param name="normref_list" select="$normref_list1"/>
-			</xsl:call-template>    
-		</xsl:variable>
-		<!--
+    <!-- get all normrefs explicitly included in the resource by normref.inc -->
+    <xsl:variable name="normref_list2">
+      <xsl:call-template name="get_normref">
+	<xsl:with-param 
+	    name="normref_nodes" 
+	    select="/resource/normrefs/normref.inc"/>
+	<xsl:with-param 
+	    name="normref_list" 
+	    select="$normref_list1"/>
+      </xsl:call-template>    
+    </xsl:variable>
+    <!--
 	<xsl:message>
 	l2:<xsl:value-of select="$normref_list2"/>:l2
 	</xsl:message>
-		-->
+    -->
 
-		<!-- get all normrefs that define terms for which abbreviations are
+    <!-- get all normrefs that define terms for which abbreviations are
 	 provided.
 	 Get the abbreviation.inc from abbreviations_default.xml, 
 	 get the referenced abbreviation from abbreviations.xml
 	 then get the normref in which the term is defined
-		-->
-		<xsl:variable name="normref_list3">
-			<xsl:choose>
-				<xsl:when test="not($doctype='aic')">
-					<xsl:call-template name="get_normrefs_from_abbr">
-						<xsl:with-param name="abbrvinc_nodes" select="document(concat($path, '../../../data/basic/abbreviations_resdoc_default.xml'))/abbreviations/abbreviation.inc"/>
-						<xsl:with-param name="normref_list" select="$normref_list2"/>
-					</xsl:call-template>
-				</xsl:when>
-				<xsl:when test="$doctype='aic'">
-					<xsl:call-template name="get_normrefs_from_abbr">
-						<xsl:with-param name="abbrvinc_nodes" select="document(concat($path, '../../../data/basic/abbreviations_aic_default.xml'))/abbreviations/abbreviation.inc"/>
-						<xsl:with-param name="normref_list" select="$normref_list2"/>
-					</xsl:call-template>
-				</xsl:when>
-			</xsl:choose>
-		</xsl:variable>
-		<!--
+    -->
+    <xsl:variable name="normref_list3">
+      <xsl:choose>
+	<xsl:when test="not($doctype='aic')">
+	  <xsl:call-template name="get_normrefs_from_abbr">
+	    <xsl:with-param 
+		name="abbrvinc_nodes" 
+		select="document(concat($path, '../../../data/basic/abbreviations_resdoc_default.xml'))/abbreviations/abbreviation.inc"/>
+	    <xsl:with-param 
+		name="normref_list" 
+		select="$normref_list2"/>
+	  </xsl:call-template>
+	</xsl:when>
+	<xsl:when test="$doctype='aic'">
+	  <xsl:call-template name="get_normrefs_from_abbr">
+	    <xsl:with-param 
+		name="abbrvinc_nodes" 
+		select="document(concat($path, '../../../data/basic/abbreviations_aic_default.xml'))/abbreviations/abbreviation.inc"/>
+	    <xsl:with-param 
+		name="normref_list" 
+		select="$normref_list2"/>
+	  </xsl:call-template>
+	</xsl:when>
+      </xsl:choose>    
+
+    </xsl:variable>
+    <!--
 	<xsl:message>
 	l3:<xsl:value-of select="$normref_list3"/>:l3
 	</xsl:message>
-		-->
+    -->
 
-		<!-- get all resources referenced by a USE FROM 
+    <!-- get all resources referenced by a USE FROM 
 	 - need to get this working -->
-		<xsl:variable name="resource_dir">
-			<xsl:call-template name="resource_directory">
-				<xsl:with-param name="resource" select="/resource/@name"/>
-			</xsl:call-template>
-		</xsl:variable>
+    <xsl:variable name="resource_dir">
+      <xsl:call-template name="resource_directory">
+	<xsl:with-param name="resource" select="/resource/@name"/>
+      </xsl:call-template>
+    </xsl:variable>
 
-		<xsl:variable name="schema_xml" select="concat($resource_dir,'/resource.xml')"/>
-		<!-- for now hard code as normref_list3
+    <xsl:variable name="schema_xml" 
+		  select="concat($resource_dir,'/resource.xml')"/>
+    <!-- for now hard code as normref_list3
 	 <xsl:variable name="normref_list4">
 	 
 	 <xsl:call-template name="get_normrefs_from_schema">
@@ -1798,16 +1879,17 @@ the types, entity specializations, and functions that are specific to this part 
 	 select="$normref_list3"/>
 	 </xsl:call-template>
 	 </xsl:variable>
-		-->
+    -->
 
-		<xsl:variable name="normref_list4" select="$normref_list3"/>
-		<!--
+    <xsl:variable name="normref_list4" 
+		  select="$normref_list3"/>
+    <!--
 	<xsl:message>
 	l4:<xsl:value-of select="$normref_list4"/>:l4
 	</xsl:message>
-		-->
-		<xsl:value-of select="$normref_list4"/>
-	</xsl:template>
+    -->
+    <xsl:value-of select="$normref_list4"/>
+  </xsl:template>
 
   <!-- given a list of normref nodes, add the ids of the normrefs to the
        normref_list, if not already a member. ids in normref_list are
@@ -1818,94 +1900,108 @@ the types, entity specializations, and functions that are specific to this part 
     
     <xsl:variable name="normref_list_ret">
       <xsl:choose>
-				<xsl:when test="$normref_nodes">
+	<xsl:when test="$normref_nodes">
 
-					<xsl:variable name="first">
-						<xsl:choose>
-							<xsl:when test="$normref_nodes[1]/@normref">
-								<xsl:value-of select="concat('normref:',$normref_nodes[1]/@normref)"/>
-							</xsl:when>
-							<xsl:when test="$normref_nodes[1]/@resource.name">
-								<xsl:value-of select="concat('resource:',$normref_nodes[1]/@resource.name)"/>
-							</xsl:when>            
-							<xsl:when test="$normref_nodes[1]/@resource.name">
-								<xsl:value-of select="concat('resource:',$normref_nodes[1]/@resource.name)"/>
-							</xsl:when>            
-						</xsl:choose>
-					</xsl:variable>
+	  <xsl:variable name="first">
+	    <xsl:choose>
+	      <xsl:when test="$normref_nodes[1]/@normref">
+		<xsl:value-of 
+		    select="concat('normref:',$normref_nodes[1]/@normref)"/>
+	      </xsl:when>
+	      <xsl:when test="$normref_nodes[1]/@resource.name">
+		<xsl:value-of 
+		    select="concat('resource:',$normref_nodes[1]/@resource.name)"/>
+	      </xsl:when>            
+	      <xsl:when test="$normref_nodes[1]/@resource.name">
+		<xsl:value-of 
+		    select="concat('resource:',$normref_nodes[1]/@resource.name)"/>
+	      </xsl:when>            
+	    </xsl:choose>
+	  </xsl:variable>
 
-					<xsl:variable name="normref_list1">
-						<xsl:call-template name="add_normref">
-							<xsl:with-param name="normref" select="$first"/>
-							<xsl:with-param name="normref_list" select="$normref_list"/>
-						</xsl:call-template>
-					</xsl:variable>
+	  <xsl:variable name="normref_list1">
+	    <xsl:call-template name="add_normref">
+	      <xsl:with-param name="normref" select="$first"/>
+	      <xsl:with-param name="normref_list" select="$normref_list"/>
+	    </xsl:call-template>
+	  </xsl:variable>
 
-					<xsl:call-template name="get_normref">
-						<xsl:with-param name="normref_nodes" select="$normref_nodes[position()!=1]"/>
-						<xsl:with-param name="normref_list" select="$normref_list1"/>
-					</xsl:call-template>
-				</xsl:when>
-				<xsl:otherwise>
-					<!-- end of recursion -->
-					<xsl:value-of select="$normref_list"/>
-				</xsl:otherwise>
+	  <xsl:call-template name="get_normref">
+	    <xsl:with-param 
+		name="normref_nodes" 
+		select="$normref_nodes[position()!=1]"/>
+	    <xsl:with-param 
+		name="normref_list" 
+		select="$normref_list1"/>
+	  </xsl:call-template>
+	</xsl:when>
+	<xsl:otherwise>
+	  <!-- end of recursion -->
+	  <xsl:value-of select="$normref_list"/>
+	</xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
     <xsl:value-of select="$normref_list_ret"/>
   </xsl:template>
 
-
   <!-- given a list of abbreviation.inc nodes, add the ids of the normrefs to the
        normref_list, if not already a member. ids in normref_list are
        separated by a , -->
-	<xsl:template name="get_normrefs_from_abbr">
-		<xsl:param name="abbrvinc_nodes"/>
-		<xsl:param name="normref_list"/>
-		
-		<xsl:variable name="normref_list_ret">
-			<xsl:choose>
-				<xsl:when test="$abbrvinc_nodes">
-					<xsl:variable name="abbr.inc" select="$abbrvinc_nodes[1]/@linkend"/>
+  <xsl:template name="get_normrefs_from_abbr">
+    <xsl:param name="abbrvinc_nodes"/>
+    <xsl:param name="normref_list"/>
+    
+    <xsl:variable name="normref_list_ret">
+      <xsl:choose>
+	<xsl:when test="$abbrvinc_nodes">
+	  <xsl:variable name="abbr.inc" select="$abbrvinc_nodes[1]/@linkend"/>
 
-					<xsl:variable name="abbr" select="document(concat($path, '../../../data/basic/abbreviations.xml'))/abbreviation.list/abbreviation[@id=$abbr.inc]"/>
+	  <xsl:variable name="abbr" 
+			select="document(concat($path, '../../../data/basic/abbreviations.xml'))/abbreviation.list/abbreviation[@id=$abbr.inc]"/>
 
-					<xsl:variable name="first">
-						<xsl:choose>
-							<xsl:when test="$abbr/term.ref/@normref">
-								<xsl:value-of select="concat('normref:',$abbr/term.ref/@normref)"/>
-							</xsl:when>
-							<xsl:when test="$abbr/term.ref/@resource.name">
-								<xsl:value-of select="concat('resource:',$abbr/term.ref/@resource.name)"/>
-							</xsl:when>            
-							<xsl:when test="$abbr/term.ref/@resource.name">
-								<xsl:value-of select="concat('resource:',$abbr/term.ref/@resource.name)"/>
-							</xsl:when>            
-						</xsl:choose>
-					</xsl:variable>
+	  <xsl:variable name="first">
+	    <xsl:choose>
+	      <xsl:when test="$abbr/term.ref/@normref">
+		<xsl:value-of 
+		    select="concat('normref:',$abbr/term.ref/@normref)"/>
+	      </xsl:when>
+	      <xsl:when test="$abbr/term.ref/@resource.name">
+		<xsl:value-of 
+		    select="concat('resource:',$abbr/term.ref/@resource.name)"/>
+	      </xsl:when>            
+	      <xsl:when test="$abbr/term.ref/@resource.name">
+		<xsl:value-of 
+		    select="concat('resource:',$abbr/term.ref/@resource.name)"/>
+	      </xsl:when>            
+	    </xsl:choose>
+	  </xsl:variable>
 
-					<xsl:variable name="normref_list1">
-						<xsl:call-template name="add_normref">
-							<xsl:with-param name="normref" select="$first"/>
-							<xsl:with-param name="normref_list" select="$normref_list"/>
-						</xsl:call-template>
-					</xsl:variable>
+	  <xsl:variable name="normref_list1">
+	    <xsl:call-template name="add_normref">
+	      <xsl:with-param name="normref" select="$first"/>
+	      <xsl:with-param name="normref_list" select="$normref_list"/>
+	    </xsl:call-template>
+	  </xsl:variable>
 
-					<xsl:call-template name="get_normrefs_from_abbr">
-						<xsl:with-param name="abbrvinc_nodes" select="$abbrvinc_nodes[position()!=1]"/>
-						<xsl:with-param name="normref_list" select="$normref_list1"/>
-					</xsl:call-template>
-				</xsl:when>
-				<xsl:otherwise>
-					<!-- end of recursion -->
-					<xsl:value-of select="$normref_list"/>
-				</xsl:otherwise>
-			</xsl:choose>
-		</xsl:variable>
+	  <xsl:call-template name="get_normrefs_from_abbr">
+	    <xsl:with-param 
+		name="abbrvinc_nodes" 
+		select="$abbrvinc_nodes[position()!=1]"/>
+	    <xsl:with-param 
+		name="normref_list" 
+		select="$normref_list1"/>
+	  </xsl:call-template>
+	</xsl:when>
+	<xsl:otherwise>
+	  <!-- end of recursion -->
+	  <xsl:value-of select="$normref_list"/>
+	</xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
 
-		<xsl:value-of select="$normref_list_ret"/>
+    <xsl:value-of select="$normref_list_ret"/>
 
-	</xsl:template>
+  </xsl:template>
 
 
   <!-- 
@@ -1969,125 +2065,147 @@ the types, entity specializations, and functions that are specific to this part 
   </xsl:template>
 
 
-	<!-- add a normref id to the set of normref ids. -->
-	<xsl:template name="add_normref">
-		<xsl:param name="normref"/>
-		<xsl:param name="normref_list"/>
-		<!-- end the list with a , -->
-		<xsl:variable name="normref_list_term" select="concat($normref_list,',')"/>
-		<xsl:variable name="normref_list1">
-			<xsl:choose>
-				<xsl:when test="contains($normref_list_term, concat(',',$normref,','))">
-					<xsl:value-of select="$normref_list"/>
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:value-of select="concat($normref_list,',',$normref,',')"/>      
-				</xsl:otherwise>
-			</xsl:choose>
-		</xsl:variable>
-		<xsl:value-of select="$normref_list1"/>
-	</xsl:template>
+  <!-- add a normref id to the set of normref ids. -->
+  <xsl:template name="add_normref">
+    <xsl:param name="normref"/>
+    <xsl:param name="normref_list"/>
+    <!-- end the list with a , -->
+    <xsl:variable name="normref_list_term"
+		  select="concat($normref_list,',')"/>
+    <xsl:variable name="normref_list1">
+      <xsl:choose>
+	<xsl:when test="contains($normref_list_term, concat(',',$normref,','))">
+	  <xsl:value-of select="$normref_list"/>
+	</xsl:when>
+	<xsl:otherwise>
+	  <xsl:value-of select="concat($normref_list,',',$normref,',')"/>      
+	</xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:value-of select="$normref_list1"/>
+  </xsl:template>
   
 
-	<xsl:template name="prune_normrefs_list">
-		<xsl:param name="normrefs_list"/>
-		<xsl:param name="pruned_normrefs_list" select="''"/>
-		<xsl:param name="pruned_normrefs_ids" select="''"/>
-		<xsl:choose>
-			<xsl:when test="$normrefs_list">
-				<xsl:variable name="first" select="substring-before(substring-after($normrefs_list,','),',')"/>
-				<xsl:variable name="rest" select="substring-after(substring-after($normrefs_list,','),',')"/>
+  <xsl:template name="prune_normrefs_list">
+    <xsl:param name="normrefs_list"/>
+    <xsl:param name="pruned_normrefs_list" select="''"/>
+    <xsl:param name="pruned_normrefs_ids" select="''"/>
+    <xsl:choose>
+      <xsl:when test="$normrefs_list">
+	<xsl:variable 
+	    name="first"
+	    select="substring-before(substring-after($normrefs_list,','),',')"/>
+	<xsl:variable 
+	    name="rest"
+	    select="substring-after(substring-after($normrefs_list,','),',')"/>
 
-				<xsl:variable name="add_to_pruned_normrefs_ids">
-					<xsl:choose>
-						<xsl:when test="contains($first,'normref:')">
-							<!--  The default or explicit deal normrefs have
-						 already been pruned so just add -->
-							<xsl:variable name="id" select="substring-after($first,'normref:')"/>
+	<xsl:variable name="add_to_pruned_normrefs_ids">
+	  <xsl:choose>
+	    <xsl:when test="contains($first,'normref:')">
+	      <!--  The default or explicit deal normrefs have
+		   already been pruned so just add -->
+	      <xsl:variable 
+		  name="id" 
+		  select="substring-after($first,'normref:')"/>
 
-							<xsl:variable name="normref">
-							<xsl:apply-templates select="document(concat($path, '../../../data/basic/normrefs.xml'))/normref.list/normref[@id=$id]" mode="prune_normrefs_list"/>
-							</xsl:variable>
-							<!-- return the normref to be added to the list -->
-							<xsl:value-of select="$normref"/>
-						</xsl:when>
+	      <xsl:variable name="normref">
+		<xsl:apply-templates 
+		    select="document(concat($path, '../../../data/basic/normrefs.xml'))/normref.list/normref[@id=$id]" mode="prune_normrefs_list"/>
+	      </xsl:variable>
+	      <!-- return the normref to be added to the list -->
+	      <xsl:value-of select="$normref"/>
+	    </xsl:when>
 
-						<xsl:when test="contains($first,'resource:')">
-							<xsl:variable name="resource" select="substring-after($first,'resource:')"/>							
-							<xsl:variable name="resource_dir">
-							<xsl:call-template name="resource_directory">
-								<xsl:with-param name="resource" select="$resource"/>
-							</xsl:call-template>
-							</xsl:variable>							
-							<xsl:variable name="resource_ok">
-								<xsl:call-template name="check_resource_exists">
-									<xsl:with-param name="schema" select="$resource"/>
-								</xsl:call-template>
-							</xsl:variable>
-							
-							<xsl:variable name="resource_xml" select="concat($resource_dir,'/resource.xml')"/>
+	    <xsl:when test="contains($first,'resource:')">
+	      <xsl:variable 
+		  name="resource" 
+		  select="substring-after($first,'resource:')"/>
+	      
+	      <xsl:variable name="resource_dir">
+		<xsl:call-template name="resource_directory">
+		  <xsl:with-param name="resource" select="$resource"/>
+		</xsl:call-template>
+	      </xsl:variable>
+	      
+	      <xsl:variable name="resource_ok">
+		<xsl:call-template name="check_resource_exists">
+		  <xsl:with-param name="schema" select="$resource"/>
+		</xsl:call-template>
+	      </xsl:variable>
+	      
+	      <xsl:variable name="resource_xml" 
+			    select="concat($resource_dir,'/resource.xml')"/>
 
-							
-							<!-- output the normative reference derived from the resource -->
-							<xsl:variable name="normref">
-								<xsl:if test="$resource_ok='true'">
-									<xsl:apply-templates select="document($resource_xml)/resource" mode="prune_normrefs_list"/>
-								</xsl:if>
-							</xsl:variable>
-							
-							<!-- if the normref for the resource has been already been added,
-						 ignore -->
-							<xsl:if test="not(contains($pruned_normrefs_ids,$normref))">
-								<!-- return the normref to be added to the list -->
-								<xsl:value-of select="$normref"/>
-							</xsl:if>
-						</xsl:when>
-						<xsl:when test="contains($first,'resource:')">
-							<!-- 
-						 NO PRUNING TAKING PLACE - JUST MAKING SURE THAT THE
-						 RESOURCE STAY IN THE LIST -->
-							<xsl:variable name="resource" select="substring-after($first,'resource:')"/>
-							<xsl:value-of select="$resource"/>
-						</xsl:when>
-						<xsl:otherwise/>						
-					</xsl:choose>
-				</xsl:variable> <!-- add_to_pruned_normrefs_ids -->
+	      
+	      <!-- output the normative reference derived from the resource -->
+	      <xsl:variable name="normref">
+		<xsl:if test="$resource_ok='true'">
+		  <xsl:apply-templates 
+		      select="document($resource_xml)/resource"
+		      mode="prune_normrefs_list"/>
+		</xsl:if>
+	      </xsl:variable>
+	      
+	      <!-- if the normref for the resource has been already been added,
+		   ignore -->
+	      <xsl:if test="not(contains($pruned_normrefs_ids,$normref))">
+		<!-- return the normref to be added to the list -->
+		<xsl:value-of select="$normref"/>
+	      </xsl:if>
+	    </xsl:when>
+	    <xsl:when test="contains($first,'resource:')">
+	      <!-- 
+		   NO PRUNING TAKING PLACE - JUST MAKING SURE THAT THE
+		   RESOURCE STAY IN THE LIST -->
+	      <xsl:variable 
+		  name="resource" 
+		  select="substring-after($first,'resource:')"/>
+	      <xsl:value-of select="$resource"/>
+	    </xsl:when>
+	    <xsl:otherwise/>
+	    
+	  </xsl:choose>
+	</xsl:variable> <!-- add_to_pruned_normrefs_ids -->
 	
-				<xsl:variable name="new_pruned_normrefs_ids">
-					<xsl:choose>
-						<xsl:when test="string-length($add_to_pruned_normrefs_ids)>0">
-							<xsl:value-of select="concat($pruned_normrefs_ids,',',$add_to_pruned_normrefs_ids,',')"/>
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:value-of select="$pruned_normrefs_ids"/>
-						</xsl:otherwise>
-					</xsl:choose>
-				</xsl:variable>
+	<xsl:variable name="new_pruned_normrefs_ids">
+	  <xsl:choose>
+	    <xsl:when test="string-length($add_to_pruned_normrefs_ids)>0">
+	      <xsl:value-of 
+		  select="concat($pruned_normrefs_ids,',',$add_to_pruned_normrefs_ids,',')"/>
+	    </xsl:when>
+	    <xsl:otherwise>
+	      <xsl:value-of select="$pruned_normrefs_ids"/>
+	    </xsl:otherwise>
+	  </xsl:choose>
+	</xsl:variable>
 
-				<xsl:variable name="new_pruned_normrefs_list">
-					<xsl:choose>
-						<xsl:when test="string-length($add_to_pruned_normrefs_ids)>0">
-							<xsl:value-of select="concat($pruned_normrefs_list,',',$first,',')"/>
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:value-of select="$pruned_normrefs_list"/>
-						</xsl:otherwise>
-					</xsl:choose>
-				</xsl:variable>
+	<xsl:variable name="new_pruned_normrefs_list">
+	  <xsl:choose>
+	    <xsl:when test="string-length($add_to_pruned_normrefs_ids)>0">
+	      <xsl:value-of 
+		  select="concat($pruned_normrefs_list,',',$first,',')"/>
+	    </xsl:when>
+	    <xsl:otherwise>
+	      <xsl:value-of select="$pruned_normrefs_list"/>
+	    </xsl:otherwise>
+	  </xsl:choose>
+	</xsl:variable>
 
-				<xsl:call-template name="prune_normrefs_list">
-					<xsl:with-param name="normrefs_list" select="$rest"/>
-					<xsl:with-param name="pruned_normrefs_list" select="$new_pruned_normrefs_list"/>
-					<xsl:with-param name="pruned_normrefs_ids" select="$new_pruned_normrefs_ids"/>
-				</xsl:call-template>  
+	<xsl:call-template name="prune_normrefs_list">
+	  <xsl:with-param name="normrefs_list" select="$rest"/>
+	  <xsl:with-param name="pruned_normrefs_list" 
+			  select="$new_pruned_normrefs_list"/>
+	  <xsl:with-param name="pruned_normrefs_ids" 
+			  select="$new_pruned_normrefs_ids"/>
+	</xsl:call-template>  
 
-			</xsl:when>
-			<xsl:otherwise>
-				<!-- end of recursion -->
-				<xsl:value-of select="$pruned_normrefs_list"/>
-			</xsl:otherwise>
-		</xsl:choose>   
-	</xsl:template>
+      </xsl:when>
+      <xsl:otherwise>
+	<!-- end of recursion -->
+	<xsl:value-of select="$pruned_normrefs_list"/>
+      </xsl:otherwise>
+    </xsl:choose>   
+  </xsl:template>
 
   <xsl:template match="normref" mode="prune_normrefs_list">
     <xsl:value-of select="concat(./stdref/stdnumber,./stdref/pubdate)"/>
@@ -2108,16 +2226,20 @@ the types, entity specializations, and functions that are specific to this part 
     <xsl:param name="resource_number"/>
     <xsl:param name="current_resource"/>
 
-		<xsl:text>[bibliography]</xsl:text>
-		<xsl:text>&#xa;</xsl:text>
-    <xsl:text>== Normative references</xsl:text>
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>&#xa;</xsl:text>
+    <h2>Normative references</h2> <!-- 2 Normative references -->
+    <!--<p>
+      The following referenced documents are indispensable for the application of
+      this document. For dated references, only the edition cited applies. For
+      undated references, the latest edition of the referenced document
+      (including any amendments) applies.
+    </p>--> 
     
-    <xsl:text>The following documents are referred to in the text in such a way that some or all of their content constitutes requirements of this document. For dated references, only the edition cited applies. For undated references, the latest edition of the referenced document (including any amendments) applies.</xsl:text>
-    <xsl:text>&#xa;</xsl:text>
-		<xsl:text>&#xa;</xsl:text>
-		
+    <!-- MWD 2018-07-04 6538 the above paragraph replaced with this one -->
+    <p>
+      The following documents are referred to in the text in such a way that some or all of their content constitutes requirements of this document. 
+      For dated references, only the edition cited applies. For undated references, the latest edition of the referenced document (including any amendments) applies.
+    </p>
+    
     <!-- output any issues -->
     <xsl:apply-templates select="." mode="output_clause_issue">
       <xsl:with-param name="clause" select="'normrefs'"/>
@@ -2130,7 +2252,8 @@ the types, entity specializations, and functions that are specific to this part 
     </xsl:apply-templates>
 
 
-    <!-- output the default normative references  -->
+    <!-- output the default normative references 
+    -->
 
     <xsl:call-template name="output_default_normrefs">
       <xsl:with-param name="resource_number" select="$resource_number"/>
@@ -2138,216 +2261,265 @@ the types, entity specializations, and functions that are specific to this part 
     </xsl:call-template>
 
   </xsl:template>
-	
 
-	<!-- output the default normative reference -->
-	<xsl:template name="output_default_normrefs">
-		<xsl:param name="resource_number"/>
-		<xsl:param name="current_resource"/>
+  <!-- output the default normative reference -->
+  <xsl:template name="output_default_normrefs">
+    <xsl:param name="resource_number"/>
+    <xsl:param name="current_resource"/>
 
-		<xsl:variable name="normrefs">
-			<xsl:call-template name="normrefs_list">
-				<xsl:with-param name="current_resource" select="$current_resource"/>
-			</xsl:call-template>
-		</xsl:variable>
-		<!--
+    <xsl:variable name="normrefs">
+      <xsl:call-template name="normrefs_list">
+	<xsl:with-param name="current_resource" select="$current_resource"/>
+      </xsl:call-template>
+    </xsl:variable>
+    <!--
 	<xsl:message>
 	normrefs:<xsl:value-of select="$normrefs"/>:normrefs
 	</xsl:message> 
-		-->
+    -->
 
-		<xsl:variable name="pruned_normrefs">
-			<xsl:call-template name="prune_normrefs_list">
-				<xsl:with-param name="normrefs_list" select="$normrefs"/>
-			</xsl:call-template>  
-		</xsl:variable>
+    <xsl:variable name="pruned_normrefs">
+      <xsl:call-template name="prune_normrefs_list">
+	<xsl:with-param name="normrefs_list" select="$normrefs"/>
+      </xsl:call-template>  
+    </xsl:variable>
 
-		<!--
+    <!--
 	<xsl:message>
 	pruned_normrefs:<xsl:value-of select="$pruned_normrefs"/>:pruned_normrefs
 	</xsl:message>
-		-->
+    -->
 
-		<xsl:variable name="normrefs_to_be_sorted">
-			<xsl:call-template name="output_normrefs_rec">
-				<xsl:with-param name="normrefs" select="$pruned_normrefs"/>
-				<xsl:with-param name="resource_number" select="$resource_number"/>
-			</xsl:call-template>  
-		</xsl:variable>
+  <xsl:variable name="normrefs_to_be_sorted">
+    <xsl:call-template name="output_normrefs_rec">
+      <xsl:with-param name="normrefs" select="$pruned_normrefs"/>
+      <xsl:with-param name="resource_number" select="$resource_number"/>
+    </xsl:call-template>  
+  </xsl:variable>
+
+	<xsl:for-each select="xalan:nodeset($normrefs_to_be_sorted)/normref">
 		
-	<!-- <xsl:message>
-	normrefs_to_be_sorted:<xsl:copy-of select="$normrefs_to_be_sorted"/>:normrefs_to_be_sorted
-	</xsl:message> -->
+		<!-- sorting basis is special normalized string, consisting of organization, series and part number all of equal lengths per each element -->
+		<xsl:sort select='part'/>
 		
-		<xsl:for-each select="xalan:nodeset($normrefs_to_be_sorted)/normref">
-						<!-- sorting basis is special normalized string, consisting of organization, series and part number all of equal lengths per each element -->
-			<xsl:sort select='part'/>			
-			<xsl:for-each select="string">
+		<xsl:for-each select="string/*">
+			<xsl:copy-of select="."/>			
+		</xsl:for-each>
+		
+		<!-- <xsl:for-each select="string">
 				<xsl:text>* </xsl:text><xsl:value-of select="normalize-space(.)"/>
 				<xsl:text>&#xa;&#xa;</xsl:text>				
-			</xsl:for-each>
-		</xsl:for-each>
-
-		<!-- output a footnote to say that the normative reference has not been published -->
-
-		<xsl:call-template name="output_unpublished_normrefs">
-			<xsl:with-param name="normrefs" select="$normrefs"/>
-		</xsl:call-template>
-
-		<!-- output a footnote to say that the normative reference has not been published -->
-		<xsl:call-template name="output_derogated_normrefs">
-			<xsl:with-param name="normrefs" select="$normrefs"/>
-			<xsl:with-param name="current_resource" select="$current_resource"/>
-		</xsl:call-template>
+			</xsl:for-each> -->
 		
-	</xsl:template>
+	</xsl:for-each>
 
-	<xsl:template name="output_normrefs_rec">
-		<xsl:param name="resource_number"/>
-		<xsl:param name="normrefs"/>
+  <!-- <xsl:choose>
+    <xsl:when test="function-available('msxsl:node-set')">
+      <xsl:variable name="normrefs_to_be_sorted_set" select="msxsl:node-set($normrefs_to_be_sorted)"/>
+      <xsl:for-each select="$normrefs_to_be_sorted_set/normref">
+      	
+        <xsl:sort select='part'/>
+      	
+        <xsl:for-each select="string/*">
+        	<xsl:copy-of select="."/>
+        </xsl:for-each>
+      </xsl:for-each>
+    </xsl:when>
+    <xsl:when test="function-available('exslt:node-set')">    
+      <xsl:variable name="normrefs_to_be_sorted_set" select="exslt:node-set($normrefs_to_be_sorted)"/>
+      <xsl:for-each select="$normrefs_to_be_sorted_set/normref">
+        
+        <xsl:sort select='part'/>
+      	
+        <xsl:for-each select="string/*">
+        	<xsl:copy-of select="."/>
+        </xsl:for-each>
+      </xsl:for-each>
+    </xsl:when>
+  </xsl:choose> -->
 
-		<xsl:choose>
-			<xsl:when test="$normrefs">
-				<xsl:variable name="first" select="substring-before(substring-after($normrefs,','),',')"/>
-				<xsl:variable name="rest" select="substring-after(substring-after($normrefs,','),',')"/>      
+    <!-- output a footnote to say that the normative reference has not been
+	 published -->
 
-				<xsl:choose>
-					<xsl:when test="contains($first,'normref:')">
-						<xsl:variable name="normref" select="substring-after($first,'normref:')"/>
+    <xsl:call-template name="output_unpublished_normrefs">
+      <xsl:with-param name="normrefs" select="$normrefs"/>
+    </xsl:call-template>
 
-						<xsl:variable name="normref_node" select="document(concat($path, '../../../data/basic/normrefs.xml'))/normref.list/normref[@id=$normref]"/>
-						
-						<xsl:choose>
-							<xsl:when test="$normref_node">   
-					<!-- don't output the normref if referring to current resource
-					-->
-					<!-- normref stdnumber are 10303-1107 whereas resource numbers are
-							 1107, so remove the 10303- -->
-								<xsl:variable name="part_no" select="substring-after($normref_node/stdref/stdnumber,'-')"/>
-									<xsl:element name="normref">
-										 <xsl:element name="string">											
-											<xsl:if test="$resource_number!=$part_no">
-												<!-- OOUTPUT from normative references -->
-													<xsl:apply-templates select="document(concat($path, '../../../data/basic/normrefs.xml'))/normref.list/normref[@id=$normref]"/>
-											</xsl:if>
-										</xsl:element>
-										<xsl:variable name="part">
-											<xsl:value-of select="document(concat($path, '../../../data/basic/normrefs.xml'))/normref.list/normref[@id=$normref]/stdref/stdnumber"/>
-										</xsl:variable>
-										<xsl:variable name="orgname">
-											<xsl:value-of select="document(concat($path, '../../../data/basic/normrefs.xml'))/normref.list/normref[@id=$normref]/stdref/orgname"/>
-										</xsl:variable>
-										<!-- eliminate status info like TS, CD-TS, etc -->
-										<xsl:variable name="orgname_cleaned">
-											<xsl:choose>
-												<xsl:when test="$orgname='ISO'">AISO</xsl:when>
-												<xsl:when test="$orgname='ISO/TS'">AISO</xsl:when>
-												<xsl:when test="$orgname='ISO/IEC'">BIEC</xsl:when>
-												<xsl:when test="$orgname='IEC'">CIEC</xsl:when>
-												<xsl:otherwise>D<xsl:value-of select="$orgname"/></xsl:otherwise>
-											</xsl:choose>   
-										</xsl:variable>
-										
-										<!-- Try to 'normalize' part and subpart numbers -->
-											<!--<xsl:variable name="series" select="substring-before($part,'-')"/>-->
-										
-										<xsl:variable name="series">
-											<xsl:choose>
-												<xsl:when test="contains($part, '-')">
-													<xsl:value-of select="substring-before($part,'-')"/>
-												</xsl:when>
-												<xsl:otherwise>
-													<xsl:value-of select="$part"/>
-												</xsl:otherwise>
-											</xsl:choose>
-										</xsl:variable>
-										
-										
-										
-										
-											<!-- normalize with longest possible series (10303) -->                    
-										<xsl:variable name="series_norm">
-											<xsl:choose>
-												<xsl:when test="string-length($series)=1">0000<xsl:value-of select="$series"/></xsl:when>
-												<xsl:when test="string-length($series)=2">000<xsl:value-of select="$series"/></xsl:when>
-												<xsl:when test="string-length($series)=3">00<xsl:value-of select="$series"/></xsl:when>
-												<xsl:when test="string-length($series)=4">0<xsl:value-of select="$series"/></xsl:when>
-												<xsl:when test="string-length($series)=5"><xsl:value-of select="$series"/></xsl:when>
-												<xsl:otherwise>00000</xsl:otherwise>
-			<!--                    <xsl:call-template name="error_message">
-														<xsl:with-param name="message">
-															<xsl:value-of select="concat('Unsupported length of series number: ', $series, 'length: ', string-length($series))"/>
-														</xsl:with-param>
-													</xsl:call-template> -->
-											</xsl:choose>
-										</xsl:variable>
-										
-											<!-- normalize with longest possible part (4 digits) -->                    
-										<xsl:variable name="part_norm">
-											<xsl:choose>
-												<xsl:when test="string-length($part_no)=1">-000<xsl:value-of select="$part_no"/></xsl:when> 
-												<xsl:when test="string-length($part_no)=2">-00<xsl:value-of select="$part_no"/></xsl:when>
-												<xsl:when test="string-length($part_no)=3">-0<xsl:value-of select="$part_no"/></xsl:when>
-												<xsl:when test="string-length($part_no)=4">-<xsl:value-of select="$part_no"/></xsl:when>
-												<xsl:otherwise>-0000</xsl:otherwise>
-			<!--                    <xsl:call-template name="error_message">
-														<xsl:with-param name="message">
-															<xsl:value-of select="concat('Unsupported length of part number: ', $part_no, 'length: ', string-length($part_no))"/>
-														</xsl:with-param>
-													</xsl:call-template> -->
-											</xsl:choose>
-										</xsl:variable>
-										<xsl:element name="part">
-										<!-- Organization name -->
-											<xsl:value-of select="$orgname_cleaned"/>-<xsl:value-of select="$series_norm"/><xsl:value-of select="$part_norm"/>
-										</xsl:element>
-								</xsl:element>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:call-template name="error_message">
-									<xsl:with-param name="message">
-										<xsl:value-of select="concat('Error 7: ', $normref, 'not found')"/>
-									</xsl:with-param>
-								</xsl:call-template>
-							</xsl:otherwise>
-						</xsl:choose>
-					</xsl:when>
+    <!-- output a footnote to say that the normative reference has not been
+	 published -->
+    <xsl:call-template name="output_derogated_normrefs">
+      <xsl:with-param name="normrefs" select="$normrefs"/>
+      <xsl:with-param name="current_resource" select="$current_resource"/>
+    </xsl:call-template>
+    
+  </xsl:template>
 
-					<xsl:when test="contains($first,'resource:')">
-						<xsl:variable name="resource" select="substring-after($first,'resource:')"/>						
-						<xsl:variable name="resource_dir">
-							<xsl:call-template name="resource_directory">
-								<xsl:with-param name="resource" select="$resource"/>
-							</xsl:call-template>
-						</xsl:variable>
-						
-						<xsl:variable name="resource_xml" select="concat($resource_dir,'/resource.xml')"/>
-						
-						<!-- output the normative reference derived from the resource -->
-						<xsl:element name="normref">
-							<xsl:apply-templates select="document($resource_xml)/resource" mode="normref" />							
-						</xsl:element>
-						
-					</xsl:when>
-					
-					<xsl:when test="contains($first,'resource:')">
-						<xsl:variable name="resource" select="substring-after($first,'resource:')"/>
-						<xsl:call-template name="output_resource_normref">
-							<xsl:with-param name="resource_schema" select="$resource"/>
-						</xsl:call-template>          
-					</xsl:when>
-				</xsl:choose>
+  <xsl:template name="output_normrefs_rec">
+    <xsl:param name="resource_number"/>
+    <xsl:param name="normrefs"/>
+
+    <xsl:choose>
+      <xsl:when test="$normrefs">
+	<xsl:variable 
+	    name="first"
+	    select="substring-before(substring-after($normrefs,','),',')"/>
+	<xsl:variable 
+	    name="rest"
+	    select="substring-after(substring-after($normrefs,','),',')"/>      
+
+	<xsl:choose>
+	  <xsl:when test="contains($first,'normref:')">
+	    <xsl:variable 
+		name="normref" 
+		select="substring-after($first,'normref:')"/>
+
+	    <xsl:variable 
+		name="normref_node"
+		select="document(concat($path, '../../../data/basic/normrefs.xml'))/normref.list/normref[@id=$normref]"/>
+	    
+	    <xsl:choose>
+	      <xsl:when test="$normref_node">   
+		<!-- don't output the normref if referring to current resource
+		-->
+		<!-- normref stdnumber are 10303-1107 whereas resource numbers are
+		     1107, so remove the 10303- -->
+		<xsl:variable name="part_no" 
+			      select="substring-after($normref_node/stdref/stdnumber,'-')"/>
+            <xsl:element name="normref">
+               <xsl:element name="string">
+                <xsl:if test="$resource_number!=$part_no">
+                  <!-- OOUTPUT from normative references -->
+                    <xsl:apply-templates 
+                      select="document(concat($path, '../../../data/basic/normrefs.xml'))/normref.list/normref[@id=$normref]"/>
+                </xsl:if>
+              </xsl:element>
+              <xsl:variable name="part">
+                <xsl:value-of select="document(concat($path, '../../../data/basic/normrefs.xml'))/normref.list/normref[@id=$normref]/stdref/stdnumber"/>
+              </xsl:variable>
+              <xsl:variable name="orgname">
+				<xsl:value-of select="document(concat($path, '../../../data/basic/normrefs.xml'))/normref.list/normref[@id=$normref]/stdref/orgname"/>
+              </xsl:variable>
+              <!-- eliminate status info like TS, CD-TS, etc -->
+              <xsl:variable name="orgname_cleaned">
+              	<xsl:choose>
+              		<xsl:when test="$orgname='ISO'">AISO</xsl:when>
+              		<xsl:when test="$orgname='ISO/TS'">AISO</xsl:when>
+              		<xsl:when test="$orgname='ISO/IEC'">BIEC</xsl:when>
+              		<xsl:when test="$orgname='IEC'">CIEC</xsl:when>
+              		<xsl:otherwise>D<xsl:value-of select="$orgname"/></xsl:otherwise>
+              	</xsl:choose>   
+              </xsl:variable>
+            	
+            	
+            	
+            	<!-- Try to 'normalize' part and subpart numbers -->
+                <!--<xsl:variable name="series" select="substring-before($part,'-')"/>-->
+            	
+            	<xsl:variable name="series">
+            		<xsl:choose>
+            			<xsl:when test="contains($part, '-')">
+            				<xsl:value-of select="substring-before($part,'-')"/>
+            			</xsl:when>
+            			<xsl:otherwise>
+            				<xsl:value-of select="$part"/>
+            			</xsl:otherwise>
+            		</xsl:choose>
+            	</xsl:variable>
+            	
+            	
+            	
+            	
+                <!-- normalize with longest possible series (10303) -->                    
+                <xsl:variable name="series_norm">
+                <xsl:choose>
+                  <xsl:when test="string-length($series)=1">0000<xsl:value-of select="$series"/></xsl:when>
+                  <xsl:when test="string-length($series)=2">000<xsl:value-of select="$series"/></xsl:when>
+                  <xsl:when test="string-length($series)=3">00<xsl:value-of select="$series"/></xsl:when>
+                  <xsl:when test="string-length($series)=4">0<xsl:value-of select="$series"/></xsl:when>
+                  <xsl:when test="string-length($series)=5"><xsl:value-of select="$series"/></xsl:when>
+                  <xsl:otherwise>00000</xsl:otherwise>
+<!--                    <xsl:call-template name="error_message">
+                      <xsl:with-param name="message">
+                        <xsl:value-of select="concat('Unsupported length of series number: ', $series, 'length: ', string-length($series))"/>
+                      </xsl:with-param>
+                    </xsl:call-template> -->
+                </xsl:choose>
+                </xsl:variable>
+                <!-- normalize with longest possible part (4 digits) -->                    
+                <xsl:variable name="part_norm">
+                <xsl:choose>
+                  <xsl:when test="string-length($part_no)=1">-000<xsl:value-of select="$part_no"/></xsl:when> 
+                  <xsl:when test="string-length($part_no)=2">-00<xsl:value-of select="$part_no"/></xsl:when>
+                  <xsl:when test="string-length($part_no)=3">-0<xsl:value-of select="$part_no"/></xsl:when>
+                  <xsl:when test="string-length($part_no)=4">-<xsl:value-of select="$part_no"/></xsl:when>
+                  <xsl:otherwise>-0000</xsl:otherwise>
+<!--                    <xsl:call-template name="error_message">
+                      <xsl:with-param name="message">
+                        <xsl:value-of select="concat('Unsupported length of part number: ', $part_no, 'length: ', string-length($part_no))"/>
+                      </xsl:with-param>
+                    </xsl:call-template> -->
+                </xsl:choose>
+                </xsl:variable>
+                <xsl:element name="part">
+                <!-- Organization name -->
+                  <xsl:value-of select="$orgname_cleaned"/>-<xsl:value-of select="$series_norm"/><xsl:value-of select="$part_norm"/>
+                </xsl:element>
+            </xsl:element>
+
+	      </xsl:when>
+	      <xsl:otherwise>
+		<xsl:call-template name="error_message">
+		  <xsl:with-param name="message">
+		    <xsl:value-of select="concat('Error 7: ', $normref, 'not found')"/>
+		  </xsl:with-param>
+		</xsl:call-template>
+	      </xsl:otherwise>
+	    </xsl:choose>
+	  </xsl:when>
+
+	  <xsl:when test="contains($first,'resource:')">
+	    <xsl:variable 
+		name="resource" 
+		select="substring-after($first,'resource:')"/>
+	    
+	    <xsl:variable name="resource_dir">
+	      <xsl:call-template name="resource_directory">
+		<xsl:with-param name="resource" select="$resource"/>
+	      </xsl:call-template>
+	    </xsl:variable>
+	    
+	    <xsl:variable name="resource_xml" 
+			  select="concat($resource_dir,'/resource.xml')"/>
+	    
+	    <!-- output the normative reference derived from the resource -->
+        <xsl:element name="normref">
+		    <xsl:apply-templates 
+				select="document($resource_xml)/resource" mode="normref">
+	    	</xsl:apply-templates>
+		</xsl:element>
+	    
+	  </xsl:when>
+	  
+	  <xsl:when test="contains($first,'resource:')">
+	    <xsl:variable 
+		name="resource" 
+		select="substring-after($first,'resource:')"/>
+	    <xsl:call-template name="output_resource_normref">
+	      <xsl:with-param name="resource_schema" select="$resource"/>
+	    </xsl:call-template>          
+	  </xsl:when>
+	</xsl:choose>
 	
-				<xsl:call-template name="output_normrefs_rec">
-					<xsl:with-param name="normrefs" select="$rest"/>
-					<xsl:with-param name="resource_number" select="$resource_number"/>
-				</xsl:call-template>
+	<xsl:call-template name="output_normrefs_rec">
+	  <xsl:with-param name="normrefs" select="$rest"/>
+	  <xsl:with-param name="resource_number" select="$resource_number"/>
+	</xsl:call-template>
 	
-			</xsl:when>
-			<xsl:otherwise/>
-			<!-- end of recursion -->
-		</xsl:choose>
-	</xsl:template>
+      </xsl:when>
+      <xsl:otherwise/>
+      <!-- end of recursion -->
+    </xsl:choose>
+  </xsl:template>
   
 
   <!-- output a footnote to say that the normative reference has not been
@@ -2361,14 +2533,14 @@ the types, entity specializations, and functions that are specific to this part 
 
     <xsl:variable name="footnote">
       <xsl:choose>
-				<xsl:when test="/resource/normrefs/normref/stdref[@published='n']">
-					<xsl:value-of select="'y'"/>
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:call-template name="output_unpublished_normrefs_rec">
-						<xsl:with-param name="normrefs" select="$normrefs"/>
-					</xsl:call-template>
-				</xsl:otherwise>
+	<xsl:when test="/resource/normrefs/normref/stdref[@published='n']">
+	  <xsl:value-of select="'y'"/>
+	</xsl:when>
+	<xsl:otherwise>
+	  <xsl:call-template name="output_unpublished_normrefs_rec">
+	    <xsl:with-param name="normrefs" select="$normrefs"/>
+	  </xsl:call-template>
+	</xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
 
@@ -2394,69 +2566,74 @@ the types, entity specializations, and functions that are specific to this part 
 	    select="substring-after(substring-after($normrefs,','),',')"/>      
 	
 	<xsl:variable name="footnote">
-		<xsl:choose>
-			<xsl:when test="contains($first,'normref:')">
-				<xsl:variable name="normref" select="substring-after($first,'normref:')"/>
-				<xsl:choose>
-					<xsl:when
-							test="document(concat($path, '../../../data/basic/normrefs.xml'))/normref.list/normref[@id=$normref]/stdref[@published='n']">
-						<xsl:value-of select="'y'"/>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:value-of select="'n'"/>
-					</xsl:otherwise>
-				</xsl:choose>
-			</xsl:when>
+	  <xsl:choose>
+	    <xsl:when test="contains($first,'normref:')">
+	      <xsl:variable 
+		  name="normref" 
+		  select="substring-after($first,'normref:')"/>
+	      <xsl:choose>
+		<xsl:when
+		    test="document(concat($path, '../../../data/basic/normrefs.xml'))/normref.list/normref[@id=$normref]/stdref[@published='n']">
+		  <xsl:value-of select="'y'"/>
+		</xsl:when>
+		<xsl:otherwise>
+		  <xsl:value-of select="'n'"/>
+		</xsl:otherwise>
+	      </xsl:choose>
 
-			<xsl:when test="contains($first,'resource:')">
-				<xsl:variable name="resource" select="substring-after($first,'resource:')"/>
-				
-				<xsl:variable name="resource_dir">
-					<xsl:call-template name="resource_directory">
-						<xsl:with-param name="resource" select="$resource"/>
-					</xsl:call-template>
-				</xsl:variable>
+	    </xsl:when>
 
-				<xsl:variable name="resource_xml" select="concat($resource_dir,'/resource.xml')"/>
+	    <xsl:when test="contains($first,'resource:')">
+	      <xsl:variable 
+		  name="resource" 
+		  select="substring-after($first,'resource:')"/>
+	      
+	      <xsl:variable name="resource_dir">
+		<xsl:call-template name="resource_directory">
+		  <xsl:with-param name="resource" select="$resource"/>
+		</xsl:call-template>
+	      </xsl:variable>
 
-				<xsl:choose>
-					<xsl:when test="document($resource_xml)/resource[@published='n']">
-						<xsl:value-of select="'y'"/>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:value-of select="'n'"/>
-					</xsl:otherwise>
-				</xsl:choose>
-			</xsl:when>
+	      <xsl:variable name="resource_xml" 
+			    select="concat($resource_dir,'/resource.xml')"/>
 
-			<xsl:otherwise>
-				<xsl:value-of select="'n'"/>
-			</xsl:otherwise>
-		</xsl:choose>
+	      <xsl:choose>
+		<xsl:when test="document($resource_xml)/resource[@published='n']">
+		  <xsl:value-of select="'y'"/>
+		</xsl:when>
+		<xsl:otherwise>
+		  <xsl:value-of select="'n'"/>
+		</xsl:otherwise>
+	      </xsl:choose>
+	    </xsl:when>
+
+	    <xsl:otherwise>
+	      <xsl:value-of select="'n'"/>
+	    </xsl:otherwise>
+	  </xsl:choose>
 	</xsl:variable>
 
 	<xsl:choose>
-		<xsl:when test="$footnote='n'">
-			<!-- only recurse if no unpublished standard found -->      
-			<xsl:call-template name="output_unpublished_normrefs_rec">
-				<xsl:with-param name="normrefs" select="$rest"/>
-			</xsl:call-template>        
-		</xsl:when>
-		<xsl:otherwise>
-			<!-- footnote found so stop -->
-			<xsl:value-of select="'y'"/>
-		</xsl:otherwise>
+	  <xsl:when test="$footnote='n'">
+	    <!-- only recurse if no unpublished standard found -->      
+	    <xsl:call-template name="output_unpublished_normrefs_rec">
+	      <xsl:with-param name="normrefs" select="$rest"/>
+	    </xsl:call-template>        
+	  </xsl:when>
+	  <xsl:otherwise>
+	    <!-- footnote found so stop -->
+	    <xsl:value-of select="'y'"/>
+	  </xsl:otherwise>
 	</xsl:choose>
 	
-			</xsl:when>
-			<xsl:otherwise>
+      </xsl:when>
+      <xsl:otherwise>
 	<!-- end of recursion -->
 	<!-- <xsl:value-of select="$footnote"/> -->
 	<xsl:value-of select="'n'"/>
-			</xsl:otherwise>
-		</xsl:choose>
-	</xsl:template>
-
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
 
   <!-- output a footnote to say that the normative reference has been
        derogated 
@@ -2464,113 +2641,124 @@ the types, entity specializations, and functions that are specific to this part 
        generated normrefs. These should be passed as a parameter the value of
        which is deduced by: template name="normrefs_list"
   -->
-	<xsl:template name="output_derogated_normrefs">
-		<xsl:param name="current_resource"/>
-		<xsl:param name="normrefs"/>
+  <xsl:template name="output_derogated_normrefs">
+    <xsl:param name="current_resource"/>
+    <xsl:param name="normrefs"/>
 
     <xsl:variable name="footnote">
-				<xsl:choose>
-					<xsl:when 
-							test="( string($current_resource/@status)='TS' or string($current_resource/@status)='IS') and ( string(./@status)='CD' or string(./@status)='CD-TS')">
-						<xsl:value-of select="'y'"/>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:if test="( string($current_resource/@status)='TS' or string($current_resource/@status)='IS')">
-							<xsl:call-template name="output_derogated_normrefs_rec">
-								<xsl:with-param name="normrefs" select="$normrefs"/>
-							</xsl:call-template>
-						</xsl:if>
-					</xsl:otherwise>
-				</xsl:choose>
-			</xsl:variable>
+      <xsl:choose>
+	<xsl:when 
+	    test="( string($current_resource/@status)='TS' or 
+		  string($current_resource/@status)='IS') and
+		  ( string(./@status)='CD' or string(./@status)='CD-TS')">
+	  <xsl:value-of select="'y'"/>
+	</xsl:when>
+	<xsl:otherwise>
+	  <xsl:if test="( string($current_resource/@status)='TS' or 
+			string($current_resource/@status)='IS')">
+	    <xsl:call-template name="output_derogated_normrefs_rec">
+	      <xsl:with-param name="normrefs" select="$normrefs"/>
+	    </xsl:call-template>
+	  </xsl:if>
+	</xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
 
-			<xsl:if test="$footnote='y'">
-				<p>
-		<a name="derogation">
-			2) Reference applicable during ballot or review period.
-		</a>      
-				</p>
-			</xsl:if>
-	</xsl:template>
+    <xsl:if test="$footnote='y'">
+      <p>
+	<a name="derogation">
+	  2) Reference applicable during ballot or review period.
+	</a>      
+      </p>
+    </xsl:if>
+  </xsl:template>
 
-	<xsl:template name="output_derogated_normrefs_rec">
-		<xsl:param name="normrefs"/>
+  <xsl:template name="output_derogated_normrefs_rec">
+    <xsl:param name="normrefs"/>
 
-		<xsl:choose>
-			<xsl:when test="$normrefs">
-				<xsl:variable name="first" select="substring-before(substring-after($normrefs,','),',')"/>
-				<xsl:variable name="rest" select="substring-after(substring-after($normrefs,','),',')"/>      
+    <xsl:choose>
+      <xsl:when test="$normrefs">
+	<xsl:variable 
+	    name="first"
+	    select="substring-before(substring-after($normrefs,','),',')"/>
+	<xsl:variable 
+	    name="rest"
+	    select="substring-after(substring-after($normrefs,','),',')"/>      
 	
-				<xsl:variable name="footnote">
-					<xsl:choose>
-						<!-- ASSUMING THAT ALL NORMREFS IN normrefs.xml ARE
-					 PUBLISHED THERE FORE CANNOT BE DEROGATED 
+	<xsl:variable name="footnote">
+	  <xsl:choose>
+	    <!-- ASSUMING THAT ALL NORMREFS IN normrefs.xml ARE
+		 PUBLISHED THERE FORE CANNOT BE DEROGATED 
 
-			<xsl:when test="contains($first,'normref:')">
-			<xsl:variable 
-			name="normref" 
-			select="substring-after($first,'normref:')"/>
-			<xsl:choose>
-			<xsl:when
-			test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normref]/stdref[@published='n']">
-			<xsl:value-of select="'y'"/>
-			</xsl:when>
-			<xsl:otherwise>
-			<xsl:value-of select="'n'"/>
-			</xsl:otherwise>
-			</xsl:choose>
-			</xsl:when>
-						-->
+<xsl:when test="contains($first,'normref:')">
+<xsl:variable 
+name="normref" 
+select="substring-after($first,'normref:')"/>
+<xsl:choose>
+<xsl:when
+test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normref]/stdref[@published='n']">
+<xsl:value-of select="'y'"/>
+</xsl:when>
+<xsl:otherwise>
+<xsl:value-of select="'n'"/>
+</xsl:otherwise>
+</xsl:choose>
+</xsl:when>
+	    -->
 
-						<xsl:when test="contains($first,'resource:')">
-							<xsl:variable  name="resource" select="substring-after($first,'resource:')"/>
-							
-							<xsl:variable name="resource_dir">
-								<xsl:call-template name="resource_directory">
-									<xsl:with-param name="resource" select="$resource"/>
-								</xsl:call-template>
-							</xsl:variable>
+	    <xsl:when test="contains($first,'resource:')">
+	      <xsl:variable 
+		  name="resource" 
+		  select="substring-after($first,'resource:')"/>
+	      
+	      <xsl:variable name="resource_dir">
+		<xsl:call-template name="resource_directory">
+		  <xsl:with-param name="resource" select="$resource"/>
+		</xsl:call-template>
+	      </xsl:variable>
 
-							<xsl:variable name="resource_xml" select="concat($resource_dir,'/resource.xml')"/>
+	      <xsl:variable name="resource_xml" 
+			    select="concat($resource_dir,'/resource.xml')"/>
 
-							<xsl:variable name="resource_status" select="string(document($resource_xml)/resource/@status)"/>
-								<xsl:choose>
-									<xsl:when test="$resource_status='CD-TS' or $resource_status='CD'">
-										<xsl:value-of select="'y'"/>
-									</xsl:when>
-									<xsl:otherwise>
-										<xsl:value-of select="'n'"/>
-									</xsl:otherwise>
-								</xsl:choose>
-							</xsl:when>
+	      <xsl:variable name="resource_status" 
+			    select="string(document($resource_xml)/resource/@status)"/>
+	      <xsl:choose>
+		<xsl:when test="$resource_status='CD-TS' or $resource_status='CD'">
+		  <xsl:value-of select="'y'"/>
+		</xsl:when>
+		<xsl:otherwise>
+		  <xsl:value-of select="'n'"/>
+		</xsl:otherwise>
+	      </xsl:choose>
+	    </xsl:when>
 
-							<xsl:otherwise>
-								<xsl:value-of select="'n'"/>
-							</xsl:otherwise>
-						</xsl:choose>
-					</xsl:variable>
+	    <xsl:otherwise>
+	      <xsl:value-of select="'n'"/>
+	    </xsl:otherwise>
+	  </xsl:choose>
+	</xsl:variable>
 
-				<xsl:choose>
-					<xsl:when test="$footnote='n'">
-						<!-- only recurse if no unpublished standard found -->      
-						<xsl:call-template name="output_derogated_normrefs_rec">
-							<xsl:with-param name="normrefs" select="$rest"/>
-						</xsl:call-template>        
-					</xsl:when>
-					<xsl:otherwise>
-						<!-- footnote found so stop -->
-						<xsl:value-of select="'y'"/>
-					</xsl:otherwise>
-				</xsl:choose>
+	<xsl:choose>
+	  <xsl:when test="$footnote='n'">
+	    <!-- only recurse if no unpublished standard found -->      
+	    <xsl:call-template name="output_derogated_normrefs_rec">
+	      <xsl:with-param name="normrefs" select="$rest"/>
+	    </xsl:call-template>        
+	  </xsl:when>
+	  <xsl:otherwise>
+	    <!-- footnote found so stop -->
+	    <xsl:value-of select="'y'"/>
+	  </xsl:otherwise>
+	</xsl:choose>
 	
-			</xsl:when>
-			<xsl:otherwise>
-				<!-- end of recursion -->
-				<!-- <xsl:value-of select="$footnote"/> -->
-				<xsl:value-of select="'n'"/>
-			</xsl:otherwise>
-		</xsl:choose>
-	</xsl:template>
+      </xsl:when>
+      <xsl:otherwise>
+	<!-- end of recursion -->
+	<!-- <xsl:value-of select="$footnote"/> -->
+	<xsl:value-of select="'n'"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
 
 
 
@@ -2586,34 +2774,36 @@ the types, entity specializations, and functions that are specific to this part 
     </xsl:apply-templates>
   </xsl:template>
 
-	<xsl:template name="output_resource_normref">
-		<xsl:param name="resource_schema"/>
-		<xsl:variable name="ir_ok">
-			<xsl:call-template name="check_resource_exists">
-				<xsl:with-param name="schema" select="$resource_schema"/>
-			</xsl:call-template>
-		</xsl:variable>
-		<xsl:variable name="ir_ref">
-			<xsl:if test="$ir_ok='true'">
-				<xsl:value-of select="document(concat($path, '../../../data/resources/', $resource_schema,'/',$resource_schema,'.xml'))/express/@reference"/>
-			</xsl:if>
-		</xsl:variable>
+  <xsl:template name="output_resource_normref">
+    <xsl:param name="resource_schema"/>
+    <xsl:variable name="ir_ok">
+      <xsl:call-template name="check_resource_exists">
+	<xsl:with-param name="schema" select="$resource_schema"/>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:variable name="ir_ref">
+      <xsl:if test="$ir_ok='true'">
+	<xsl:value-of 
+	    select="document(concat('../../data/resources/',
+		    $resource_schema,'/',$resource_schema,'.xml'))/express/@reference"/>
+      </xsl:if>
+    </xsl:variable>
 
-		<p>
-			<xsl:call-template name="error_message">
-				<xsl:with-param name="message">
-					<xsl:value-of 
-							select="concat('Warning 8: MIM uses schema ', 
-								$resource_schema, 
-								'Make sure you include Integrated resource (',
-								$ir_ref,
-								') that defines it as a normative reference. ',
-								'Use: normref.inc')"/>
-				</xsl:with-param>
-				<xsl:with-param name="inline" select="'no'"/>
-			</xsl:call-template>
-		</p>
-	</xsl:template>
+    <p>
+      <xsl:call-template name="error_message">
+	<xsl:with-param name="message">
+	  <xsl:value-of 
+	      select="concat('Warning 8: MIM uses schema ', 
+		      $resource_schema, 
+		      'Make sure you include Integrated resource (',
+		      $ir_ref,
+		      ') that defines it as a normative reference. ',
+		      'Use: normref.inc')"/>
+	</xsl:with-param>
+	<xsl:with-param name="inline" select="'no'"/>
+      </xsl:call-template>
+    </p>
+  </xsl:template>
 
   <xsl:template match="resource" mode="normref">
   <xsl:element name="string">
@@ -2662,7 +2852,7 @@ the types, entity specializations, and functions that are specific to this part 
       </xsl:when>
       <xsl:when test="@published='n'">&#160;<sup><a href="#tobepub">1</a>)</sup>
       </xsl:when>
-    </xsl:choose>,&#160;
+    </xsl:choose>, 
     <i>
       <xsl:value-of select="$stdtitle"/>
       <xsl:value-of select="$subtitle"/>
@@ -2688,74 +2878,84 @@ the types, entity specializations, and functions that are specific to this part 
   </xsl:template>
 
   <!-- Output the normative reference -->
-	<xsl:template match="normref">
-		<xsl:variable name="stdnumber">
-			<xsl:value-of select="concat(stdref/orgname,' ',stdref/stdnumber)"/><!-- &#160; -->
-		</xsl:variable>
+  <xsl:template match="normref">
+  <xsl:variable name="stdnumber">
+<!--    <xsl:choose>
+      <xsl:when test="stdref/pubdate">
+        <xsl:value-of select="concat(stdref/orgname,'&#160;',stdref/stdnumber,':',stdref/pubdate)"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="concat(stdref/orgname,'&#160;',stdref/stdnumber,':&#8212;&#160;')"/>
+      </xsl:otherwise>
+    </xsl:choose> -->
+	  <xsl:value-of 
+	    select="concat(stdref/orgname,' ',stdref/stdnumber)"/>
+  </xsl:variable>
+  <li>
+	
+		<xsl:text>[[[</xsl:text>
+			<xsl:value-of select="@id"/>
+			<xsl:text>,</xsl:text>
+			<xsl:value-of select="$stdnumber"/>
+		<xsl:text>]]]</xsl:text>
+	
+    <!-- <xsl:value-of select="$stdnumber"/> -->
 		
-		<xsl:variable name="text">
-			<xsl:text>[[[</xsl:text>
-				<xsl:value-of select="@id"/>
-				<xsl:text>,</xsl:text>
-				<xsl:value-of select="$stdnumber"/>
-			<xsl:text>]]]</xsl:text>
-			
-			<xsl:if test="stdref[@published='n']">
-				<xsl:text> footnote:[To be published.]</xsl:text>				
-			</xsl:if>
-			<xsl:text>, </xsl:text>
-			
-			<xsl:variable name="text_i">			
-				<xsl:value-of select="stdref/stdtitle"/>
-				<xsl:variable name="subtitle" select="normalize-space(stdref/subtitle)"/>				
-				<xsl:choose>
-					<xsl:when test="substring($subtitle, string-length($subtitle)) = '.'">
-						<xsl:value-of select="substring($subtitle, 1, (string-length($subtitle)-1))"/>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:value-of select="$subtitle"/>
-					</xsl:otherwise>
-				</xsl:choose>			
-			</xsl:variable>
-			
-			<xsl:text>_</xsl:text><xsl:value-of select="$text_i"/><xsl:text>_</xsl:text>
-		</xsl:variable>
-		<xsl:value-of select="$text"/>
-		
-	</xsl:template>
+    <xsl:if test="stdref[@published='n']">
+      <sup><a href="#tobepub">1</a>)</sup>
+    </xsl:if>, 
+    <i>
+      <xsl:value-of select="stdref/stdtitle"/>
+      <xsl:variable name="subtitle" select="normalize-space(stdref/subtitle)"/>
+      <!-- 2018-08-22 MAW full-stop not added and removed if it already exists -->
+      <!--<xsl:choose>
+        <xsl:when test="substring($subtitle, string-length($subtitle)) != '.'">
+          <xsl:value-of select="concat($subtitle,'.')"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$subtitle"/>
+        </xsl:otherwise>
+      </xsl:choose>-->
+      <xsl:choose>
+        <xsl:when test="substring($subtitle, string-length($subtitle)) = '.'">
+          <xsl:value-of select="substring($subtitle, 1, (string-length($subtitle)-1))"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$subtitle"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </i>
+  </li>
+  </xsl:template>
 
 
   <!-- Output the standard set of abbreviations and then any added by
        the resource
   -->
   <xsl:template name="output_abbreviations">
-    <xsl:param name="section"/>		
-    <!-- <h2>
-      <a name="abbrv">3.2 Abbreviated terms</a>
-    </h2> -->
-		<xsl:text>[[abbrv]]</xsl:text>
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>=== Abbreviated terms</xsl:text>
-		<xsl:text>&#xa;&#xa;</xsl:text>
+    <xsl:param name="section"/>
+    <h2 level="2">
+      <!-- <a name="abbrv">3.2 Abbreviated terms</a> -->
+      <a name="abbrv">Abbreviated terms</a>
+    </h2>
+
     <!-- output any issues -->
     <xsl:apply-templates select="." mode="output_clause_issue">
       <xsl:with-param name="clause" select="'abbreviations'"/>
     </xsl:apply-templates>
 
 
-    <!-- <p> -->
+    <p>
       <!-- RBN Changed due to request from ISO
 	   For the purposes of this part of ISO 10303, -->              
-      <xsl:text>For the purposes of this document, the following abbreviated terms apply:</xsl:text>
-    <!-- </p> -->
-		<xsl:text>&#xa;&#xa;</xsl:text>
-		
-		
-		
-    <table width="80%">
+      For the purposes of this document,
+      the following abbreviated terms apply:
+    </p>
+    <table width="80%" type="abbreviations">
       <!-- get the default abbreviations out of the abbreviations_resdoc_defaultxml
 	   database -->
-      <xsl:apply-templates select="document(concat($path, '../../../data/basic/abbreviations_resdoc_default.xml'))/abbreviations/abbreviation.inc"/>
+      <xsl:apply-templates 
+	  select="document(concat($path, '../../../data/basic/abbreviations_resdoc_default.xml'))/abbreviations/abbreviation.inc"/>
       
       <xsl:apply-templates select="/resource/abbreviations" mode="output"/>    
     </table>
@@ -2798,26 +2998,23 @@ the types, entity specializations, and functions that are specific to this part 
   <!-- output the abbreviation. The term is defined in the normative
        references -->
   <xsl:template match="abbreviation">
-    <!-- <tr>
-      <td> -->
-		<xsl:value-of select="acronym"/>
-		<xsl:text>:: </xsl:text>
-      <!-- </td>
-      <td> -->
-		<xsl:variable name="dd">
-			<xsl:apply-templates select="./term" mode="abbreviation"/>
-			<xsl:apply-templates select="term.ref" mode="abbreviation"/>
-		</xsl:variable>
-		<xsl:value-of select="normalize-space($dd)"/>
-      <!-- </td>
-    </tr> -->
-		<xsl:text>&#xa;</xsl:text>
+    <tr>
+      <td>
+	<xsl:value-of select="acronym"/>
+      </td>
+      <td>
+	<xsl:apply-templates select="./term" mode="abbreviation"/>
+	<xsl:apply-templates select="term.ref" mode="abbreviation"/>
+      </td>
+    </tr>
   </xsl:template>
 
   <xsl:template match="term.ref" mode="abbreviation">
     <xsl:variable name="termref" select="./@linkend"/>
     <xsl:variable name="normref" select="./@normref"/>
-    <xsl:variable name="term" select="document(concat($path, '../../../data/basic/normrefs.xml'))/normref.list/normref/term[@id=$termref]"/>
+    <xsl:variable 
+	name="term"
+	select="document(concat($path, '../../../data/basic/normrefs.xml'))/normref.list/normref/term[@id=$termref]"/>
     <xsl:choose>
       <xsl:when test="$term">
 	<xsl:value-of select="normalize-space($term)"/>
@@ -2852,239 +3049,260 @@ the types, entity specializations, and functions that are specific to this part 
 
 
   <!-- output the normative references, terms, definitions and abbreviated terms -->
-	<xsl:template name="output_terms">
-		<xsl:param name="resource_number"/>
-		<xsl:param name="current_resource"/>
+  <xsl:template name="output_terms">
+    <xsl:param name="resource_number"/>
+    <xsl:param name="current_resource"/>
 
-		<!-- output any issues -->
-		<xsl:apply-templates select="." mode="output_clause_issue">
-			<xsl:with-param name="clause" select="'definition'"/>
-		</xsl:apply-templates>
 
-		<!-- get a list of normative references that have terms defined -->
-		<xsl:variable name="normrefs">
-			<xsl:call-template name="normrefs_terms_list">
-				<xsl:with-param name="current_resource" select="$current_resource"/>
-			</xsl:call-template>
-		</xsl:variable>
+    <!-- output any issues -->
+    <xsl:apply-templates select="." mode="output_clause_issue">
+      <xsl:with-param name="clause" select="'definition'"/>
+    </xsl:apply-templates>
 
-		<!-- output the included terms -->
-		<xsl:call-template name="output_normrefs_terms_rec">
-			<xsl:with-param name="normrefs" select="$normrefs"/>
-			<xsl:with-param name="normref_ids" select="$normrefs"/>
-			<xsl:with-param name="section" select="0"/>
-			<xsl:with-param name="resource_number" select="$resource_number"/>
-			<xsl:with-param name="current_resource" select="$current_resource"/>
+    <!-- get a list of normative references that have terms defined -->
+    <xsl:variable name="normrefs">
+      <xsl:call-template name="normrefs_terms_list">
+	<xsl:with-param name="current_resource" select="$current_resource"/>
+      </xsl:call-template>
+    </xsl:variable>
 
-		</xsl:call-template>
+    <!-- output the included terms -->
+    <xsl:call-template name="output_normrefs_terms_rec">
+      <xsl:with-param name="normrefs" select="$normrefs"/>
+      <xsl:with-param name="normref_ids" select="$normrefs"/>
+      <xsl:with-param name="section" select="0"/>
+      <xsl:with-param name="resource_number" select="$resource_number"/>
+      <xsl:with-param name="current_resource" select="$current_resource"/>
 
-		<xsl:variable name="def_section">
-			<xsl:call-template name="length_normrefs_list">
-				<xsl:with-param name="resource_number" select="$resource_number"/>
-				<xsl:with-param name="normrefs_list" select="$normrefs"/>
-			</xsl:call-template>
-		</xsl:variable>
+    </xsl:call-template>
 
-		<!-- output any definitions defined in this resource -->
-		<xsl:if test="/resource/definition">
-			<!-- output the section head first -->
-			<xsl:call-template name="output_resource_term_section">
-				<xsl:with-param name="resource" select="/resource"/>
-				<xsl:with-param name="section" select="concat('3.1.',$def_section+1)"/>
-			</xsl:call-template>
-			
-			<!-- RBN Changed due to request from ISO
-		 For the purposes of this part of ISO 10303, -->              
-			<xsl:text>For the purposes of this document, the following terms and definitions apply:</xsl:text>
-			<xsl:text>&#xa;&#xa;</xsl:text>
-		</xsl:if>
+    <xsl:variable name="def_section">
+      <xsl:call-template name="length_normrefs_list">
+	<xsl:with-param name="resource_number" select="$resource_number"/>
+	<xsl:with-param name="normrefs_list" select="$normrefs"/>
+      </xsl:call-template>
+    </xsl:variable>
 
-		<!-- increment the section number depending on whether a definition
+    <!-- output any definitions defined in this resource -->
+    <xsl:if test="/resource/definition">
+      <!-- output the section head first -->
+      <xsl:call-template name="output_resource_term_section">
+	<xsl:with-param name="resource" select="/resource"/>
+	<xsl:with-param name="section" select="concat('3.1.',$def_section+1)"/>
+      </xsl:call-template>
+      <!-- RBN Changed due to request from ISO
+	   For the purposes of this part of ISO 10303, -->              
+      <p>For the purposes of this document,
+      the following terms and definitions apply:</p>
+    </xsl:if>
+
+    <!-- increment the section number depending on whether a definition
 	 section has been output -->
-		<xsl:variable name="def_section1">
-			<xsl:choose>
-				<xsl:when test="/resource/definition">
-					<xsl:value-of select="$def_section+1"/>
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:value-of select="$def_section"/>
-				</xsl:otherwise>
-			</xsl:choose>
-		</xsl:variable>
+    <xsl:variable name="def_section1">
+      <xsl:choose>
+	<xsl:when test="/resource/definition">
+	  <xsl:value-of select="$def_section+1"/>
+	</xsl:when>
+	<xsl:otherwise>
+	  <xsl:value-of select="$def_section"/>
+	</xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
 
-		<xsl:apply-templates select="/resource/definition">
-			<xsl:with-param name="section" select="concat('3.1.',$def_section1)"/>
-			<xsl:sort select="term"/>
-		</xsl:apply-templates>
+    <xsl:apply-templates select="/resource/definition">
+      <xsl:with-param name="section" select="concat('3.1.',$def_section1)"/>
+      <xsl:sort select="term"/>
+    </xsl:apply-templates>
 
-		<xsl:call-template name="output_abbreviations">
-			<xsl:with-param name="section" select="$def_section1+1"/>
-		</xsl:call-template>
-	</xsl:template>
+    <xsl:call-template name="output_abbreviations">
+      <xsl:with-param name="section" select="$def_section1+1"/>
+    </xsl:call-template>
+  </xsl:template>
 
 
   <!-- Given a list of normative references, output any terms from them -->
-	<xsl:template name="output_normrefs_terms_rec">
-		<xsl:param name="normrefs"/>
-		<xsl:param name="normref_ids"/>
-		<xsl:param name="section"/>
-		<xsl:param name="resource_number"/>
-		<xsl:param name="current_resource"/>
+  <xsl:template name="output_normrefs_terms_rec">
+    <xsl:param name="normrefs"/>
+    <xsl:param name="normref_ids"/>
+    <xsl:param name="section"/>
+    <xsl:param name="resource_number"/>
+    <xsl:param name="current_resource"/>
 
-		<xsl:variable name="doctype">
-			<xsl:apply-templates select="$current_resource" mode="doctype"/>
-		</xsl:variable>
+    <xsl:variable name="doctype">
+      <xsl:apply-templates select="$current_resource" mode="doctype"/>
+    </xsl:variable>
 
 
+    <xsl:choose>
+      <xsl:when test="$normrefs">
+
+	<xsl:variable 
+	    name="first"
+	    select="substring-before(substring-after($normrefs,','),',')"/>
+	<xsl:variable 
+	    name="section_no"
+	    select="$section+1"/>
+	<xsl:variable 
+	    name="rest"
+	    select="substring-after(substring-after($normrefs,','),',')"/>      
+
+	<xsl:choose>
+	  <xsl:when test="contains($first,'normref:')">
+	    <xsl:variable 
+		name="ref" 
+		select="substring-after($first,'normref:')"/>
+	    <xsl:variable 
+		name="normref"
+		select="document(concat($path, '../../../data/basic/normrefs.xml'))/normref.list/normref[@id=$ref]"/>
+
+	    <!-- get the number of the standard -->      
+	    <xsl:variable name="stdnumber" 
+			  select="concat($normref/stdref/orgname, ' ',$normref/stdref/stdnumber)"/>
+
+	    <!-- output the section header for the normative reference that is
+		 defining terms 
+		 IGNORE if the normative ref is referring to this resource
+	    -->
+	    <!-- normref stdnumber are 10303-1107 whereas resource numbers are
+		 1107, so remove the 10303- -->
+	    <xsl:variable name="part_no" 
+			  select="substring-after($normref/stdref/stdnumber,'-')"/>
+	    <xsl:if test="$resource_number!=$part_no">
+	      <h2 level="3" id="{concat('3.1.',$section_no)}">
+					<!-- <xsl:value-of select="concat('3.1.',$section_no, ' Terms defined in ',$stdnumber)"/> -->
+					<xsl:value-of select="concat('Terms defined in ',$stdnumber)"/>
+	      </h2>
+	      <!-- RBN Changed due to request from ISO
+		   For the purposes of this part of ISO 10303, -->              
+	      For the purposes of this document,
+	      the following terms defined in 
+	      <xsl:value-of select="$stdnumber"/>
+	      apply:
+	      <ul>
+		<!-- now output the terms -->
+	    <xsl:variable 
+		name="moreNormRefs" 
+		select="string-length(/resource/normrefs/normref.inc[@normref=$ref]/term.ref)+string-length(/resource/normrefs/normref.inc)"/>
 		<xsl:choose>
-			<xsl:when test="$normrefs">
-
-				<xsl:variable name="first" select="substring-before(substring-after($normrefs,','),',')"/>
-				<xsl:variable name="section_no" select="$section+1"/>
-				<xsl:variable name="rest" select="substring-after(substring-after($normrefs,','),',')"/>      
-
-				<xsl:choose>
-					<xsl:when test="contains($first,'normref:')">
-						<xsl:variable name="ref" select="substring-after($first,'normref:')"/>
-						<xsl:variable name="normref" select="document(concat($path, '../../../data/basic/normrefs.xml'))/normref.list/normref[@id=$ref]"/>
-
-						<!-- get the number of the standard -->      
-						<xsl:variable name="stdnumber" select="concat($normref/stdref/orgname, ' ',$normref/stdref/stdnumber)"/>
-
-						<!-- output the section header for the normative reference that is
-					 defining terms 
-					 IGNORE if the normative ref is referring to this resource
-						-->
-						<!-- normref stdnumber are 10303-1107 whereas resource numbers are
-					 1107, so remove the 10303- -->
-						<xsl:variable name="part_no" select="substring-after($normref/stdref/stdnumber,'-')"/>
-						<xsl:if test="$resource_number!=$part_no">
-							<xsl:text>[[sec_</xsl:text><xsl:value-of select="concat('3.1.',$section_no)"/><xsl:text>]]</xsl:text>
-							<xsl:text>&#xa;</xsl:text>
-							<xsl:text>==== </xsl:text><xsl:value-of select="concat('Terms defined in ',$stdnumber)"/>
-							<xsl:text>&#xa;&#xa;</xsl:text>
-							<!-- <h2>
-								<xsl:value-of select="concat('3.1.',$section_no,
-										' Terms defined in ',$stdnumber)"/>
-							</h2> -->
-							<!-- RBN Changed due to request from ISO
-						 For the purposes of this part of ISO 10303, -->              
-							<xsl:text>For the purposes of this document, the following terms defined in </xsl:text><xsl:value-of select="$stdnumber"/><xsl:text> apply:</xsl:text>
-							<xsl:text>&#xa;&#xa;</xsl:text>
-							
-							
-							<!-- <ul> -->
-					<!-- now output the terms -->
-						<xsl:variable name="moreNormRefs" select="string-length(/resource/normrefs/normref.inc[@normref=$ref]/term.ref)+string-length(/resource/normrefs/normref.inc)"/>
-						<xsl:choose>
-							<xsl:when test="not($doctype='aic')">
-								<xsl:apply-templates select="document(concat($path, '../../../data/basic/normrefs_resdoc_default.xml'))/normrefs/normref.inc[@normref=$ref]/term.ref" mode="normref">
-									<xsl:with-param name="current_resource" select="$current_resource"/>
-									<xsl:with-param name="moreNormRefs" select="$moreNormRefs"/>
-								</xsl:apply-templates>
-							</xsl:when>
-							<xsl:when test="$doctype='aic'">
-								<xsl:apply-templates select="document(concat($path, '../../../data/basic/normrefs_aic_default.xml'))/normrefs/normref.inc[@normref=$ref]/term.ref" mode="normref">
-									<xsl:with-param name="current_resource" select="$current_resource"/>
-									<xsl:with-param name="moreNormRefs" select="$moreNormRefs"/>
-								</xsl:apply-templates>
-							</xsl:when>
-						</xsl:choose>
-						<!-- check to see if any terms from the same normref are 
-								 identified in resource -->
-						<xsl:apply-templates select="/resource/normrefs/normref.inc[@normref=$ref]/term.ref" mode="normref"/>
-						<xsl:apply-templates select="/resource/normrefs/normref.inc" mode="normref_check">
-							<xsl:with-param name="resource_number" select="$part_no"/>
-							<xsl:with-param name="current_resource" select="$current_resource"/>
-						</xsl:apply-templates>
-
-							<!-- </ul> -->
-							<xsl:text>&#xa;</xsl:text>
-						</xsl:if>
-					</xsl:when>
-					
-					<!-- a term defined in another resource -->
-					<xsl:when test="contains($first,'resource:')">
-						<xsl:variable name="resource" select="substring-after($first,'resource:')"/>
-
-						<xsl:variable name="resource_dir">
-							<xsl:call-template name="resource_directory">
-								<xsl:with-param name="resource" select="$resource"/>
-							</xsl:call-template>
-						</xsl:variable>
-
-
-						<xsl:variable name="resource_ok">
-							<xsl:call-template name="check_resource_exists">
-								<xsl:with-param name="schema" select="$resource"/>
-							</xsl:call-template>
-						</xsl:variable>
-
-						<xsl:choose>
-							<xsl:when test="$resource_ok='true'">
-								<xsl:variable name="resource_xml" select="concat($resource_dir,'/resource.xml')"/>
-								<xsl:variable name="normrefid" select="concat('10303-',document($resource_xml)/resource/@part)"/>
-					
-								<!-- check to see if the terms for the resource have been output
-										 as part of normative references -->
-								<xsl:if test="not(contains($normref_ids,$normrefid))">
-									<xsl:variable name="resource_node" select="document($resource_xml)/resource"/>
-									<xsl:variable name="stdnumber" select="concat('ISO/',$resource_node/@status,'&#160;10303-',$resource_node/@part)"/>
-
-						
-						<!-- output the section header for the normative reference
-								 that is defining terms -->              
-						<!-- <h2>				
-							<xsl:value-of select="concat('3.',$section_no,
-									' Terms defined in ', $stdnumber)"/>
-						</h2> -->
-								<xsl:text>[[sec_</xsl:text><xsl:value-of select="concat('3.',$section_no)"/><xsl:text>]]</xsl:text>
-								<xsl:text>&#xa;</xsl:text>
-								<xsl:text>=== </xsl:text><xsl:value-of select="concat('Terms defined in ', $stdnumber)"/>
-								<xsl:text>&#xa;&#xa;</xsl:text>
-						<!-- RBN Changed due to request from ISO
-								 For the purposes of this part of ISO 10303,-->              
-								<xsl:text>For the purposes of this document, the following terms defined in </xsl:text><xsl:value-of select="$stdnumber"/><xsl:text> apply:</xsl:text>
-								<xsl:text>&#xa;&#xa;</xsl:text>
-						
-						<!-- <ul> -->
-							<!-- now output the terms -->
-							<xsl:apply-templates select="/resource/normrefs/normref.inc[@resource.name=$resource]/term.ref" mode="resource"/>
-							<xsl:text>&#xa;</xsl:text>
-						<!-- </ul> -->
-					</xsl:if>
-							</xsl:when>
-							<xsl:otherwise>
-					<xsl:call-template name="error_message">
-						<xsl:with-param name="message">
-							<xsl:value-of select="concat('Error ref 2: ', $resource_ok,' Check the normatives references')"/>
-						</xsl:with-param>
-					</xsl:call-template>
-							</xsl:otherwise>
-						</xsl:choose>
-					</xsl:when>
-
-					<xsl:when test="contains($first,'resource:')">
-						<xsl:variable name="resource" select="substring-after($first,'resource:')"/>
-						<!-- should never get here -->
-					</xsl:when>
-				</xsl:choose>
-
-				<xsl:call-template name="output_normrefs_terms_rec">
-					<xsl:with-param name="normrefs" select="$rest"/>
-					<xsl:with-param name="normref_ids" select="$normref_ids"/>
-					<xsl:with-param name="section" select="$section_no"/>
-					<xsl:with-param name="resource_number" select="$resource_number"/>
-					<xsl:with-param name="current_resource" select="$current_resource"/>
-				</xsl:call-template>
-
-			</xsl:when>
-			<xsl:otherwise>
-				<!-- end of recursion -->
-			</xsl:otherwise>
+		  <xsl:when test="not($doctype='aic')">
+		    <xsl:apply-templates 
+			select="document(concat($path, '../../../data/basic/normrefs_resdoc_default.xml'))/normrefs/normref.inc[@normref=$ref]/term.ref" mode="normref">
+		      <xsl:with-param name="current_resource" select="$current_resource"/>
+		      <xsl:with-param name="moreNormRefs" select="$moreNormRefs"/>
+		    </xsl:apply-templates>
+		  </xsl:when>
+		  <xsl:when test="$doctype='aic'">
+		    <xsl:apply-templates 
+			select="document(concat($path, '../../../data/basic/normrefs_aic_default.xml'))/normrefs/normref.inc[@normref=$ref]/term.ref" mode="normref">
+		      <xsl:with-param name="current_resource" select="$current_resource"/>
+		      <xsl:with-param name="moreNormRefs" select="$moreNormRefs"/>
+		    </xsl:apply-templates>
+		  </xsl:when>
 		</xsl:choose>
+		<!-- check to see if any terms from the same normref are 
+		     identified in resource -->
+		<xsl:apply-templates 
+		    select="/resource/normrefs/normref.inc[@normref=$ref]/term.ref"
+		    mode="normref"/>
+		<xsl:apply-templates 
+		    select="/resource/normrefs/normref.inc"
+		    mode="normref_check">
+		  <xsl:with-param name="resource_number" select="$part_no"/>
+		  <xsl:with-param name="current_resource" select="$current_resource"/>
+		</xsl:apply-templates>
 
-	</xsl:template>
+	      </ul>
+	    </xsl:if>
+	  </xsl:when>
+	  
+	  <!-- a term defined in another resource -->
+	  <xsl:when test="contains($first,'resource:')">
+	    <xsl:variable 
+		name="resource" 
+		select="substring-after($first,'resource:')"/>
+
+	    <xsl:variable name="resource_dir">
+	      <xsl:call-template name="resource_directory">
+		<xsl:with-param name="resource" select="$resource"/>
+	      </xsl:call-template>
+	    </xsl:variable>
+
+
+	    <xsl:variable name="resource_ok">
+	      <xsl:call-template name="check_resource_exists">
+		<xsl:with-param name="schema" select="$resource"/>
+	      </xsl:call-template>
+	    </xsl:variable>
+
+	    <xsl:choose>
+	      <xsl:when test="$resource_ok='true'">
+		<xsl:variable name="resource_xml" 
+			      select="concat($resource_dir,'/resource.xml')"/>
+		<xsl:variable name="normrefid"
+			      select="concat('10303-',document($resource_xml)/resource/@part)"/>
+		
+		<!-- check to see if the terms for the resource have been output
+		     as part of normative references -->
+		<xsl:if test="not(contains($normref_ids,$normrefid))">
+		  <xsl:variable name="resource_node" select="document($resource_xml)/resource"/>
+		  <xsl:variable name="stdnumber"
+				select="concat('ISO/',$resource_node/@status,' 10303-',$resource_node/@part)"/>
+
+		  
+		  <!-- output the section header for the normative reference
+		       that is defining terms -->              
+		  <h2 level="2" id="{concat('3.',$section_no)}">
+		    <!-- <xsl:value-of select="concat('3.',$section_no, ' Terms defined in ', $stdnumber)"/> -->
+		    <xsl:value-of select="concat('Terms defined in ', $stdnumber)"/>
+		  </h2>
+		  <!-- RBN Changed due to request from ISO
+		       For the purposes of this part of ISO 10303,-->              
+		  For the purposes of this document, 
+		  the following terms defined in 
+		  <xsl:value-of select="$stdnumber"/>
+		  apply:
+		  <ul>
+		    <!-- now output the terms -->
+		    <xsl:apply-templates 
+			select="/resource/normrefs/normref.inc[@resource.name=$resource]/term.ref" 
+			mode="resource"/>
+		  </ul>
+		</xsl:if>
+	      </xsl:when>
+	      <xsl:otherwise>
+		<xsl:call-template name="error_message">
+		  <xsl:with-param name="message">
+		    <xsl:value-of select="concat('Error ref 2: ',
+					  $resource_ok,' Check the normatives references')"/>
+		  </xsl:with-param>
+		</xsl:call-template>
+	      </xsl:otherwise>
+	    </xsl:choose>
+	  </xsl:when>
+
+	  <xsl:when test="contains($first,'resource:')">
+	    <xsl:variable 
+		name="resource" 
+		select="substring-after($first,'resource:')"/>
+	    <!-- should never get here -->
+	  </xsl:when>
+	</xsl:choose>
+
+	<xsl:call-template name="output_normrefs_terms_rec">
+	  <xsl:with-param name="normrefs" select="$rest"/>
+	  <xsl:with-param name="normref_ids" select="$normref_ids"/>
+	  <xsl:with-param name="section" select="$section_no"/>
+	  <xsl:with-param name="resource_number" select="$resource_number"/>
+	  <xsl:with-param name="current_resource" select="$current_resource"/>
+	</xsl:call-template>
+
+      </xsl:when>
+      <xsl:otherwise>
+	<!-- end of recursion -->
+      </xsl:otherwise>
+    </xsl:choose>
+
+  </xsl:template>
 
 	<!--
 		build a list of normrefs that are used by the resource and have terms
@@ -3096,7 +3314,8 @@ the types, entity specializations, and functions that are specific to this part 
 		<xsl:param name="current_resource" />
 
 		<xsl:variable name="doctype">
-			<xsl:apply-templates select="$current_resource" mode="doctype" />
+			<xsl:apply-templates select="$current_resource"
+				mode="doctype" />
 		</xsl:variable>
 
 		<!-- get all normrefs explicitly included in the resource by normref.inc -->
@@ -3112,13 +3331,15 @@ the types, entity specializations, and functions that are specific to this part 
 			<xsl:choose>
 				<xsl:when test="not($doctype='aic')">
 					<xsl:call-template name="get_normref_term">
-						<xsl:with-param name="normref_nodes" select="document(concat($path, '../../../data/basic/normrefs_resdoc_default.xml'))/normrefs/normref.inc" />
+						<xsl:with-param name="normref_nodes"
+							select="document(concat($path, '../../../data/basic/normrefs_resdoc_default.xml'))/normrefs/normref.inc" />
 						<xsl:with-param name="normref_list" select="$normref_list1" />
 					</xsl:call-template>
 				</xsl:when>
 				<xsl:when test="$doctype='aic'">
 					<xsl:call-template name="get_normref_term">
-						<xsl:with-param name="normref_nodes" select="document(concat($path, '../../../data/basic/normrefs_aic_default.xml'))/normrefs/normref.inc" />
+						<xsl:with-param name="normref_nodes"
+							select="document(concat($path, '../../../data/basic/normrefs_aic_default.xml'))/normrefs/normref.inc" />
 						<xsl:with-param name="normref_list" select="$normref_list1" />
 					</xsl:call-template>
 				</xsl:when>
@@ -3198,50 +3419,55 @@ the types, entity specializations, and functions that are specific to this part 
   </xsl:template>
 
 
-	<!-- Given the name of a resource, check if there is a corresponding
-			 normative reference there. If so, remove it. -->
-	<xsl:template name="remove_resource_from_normrefs_list">
-		<xsl:param name="normrefs_list"/>
-		<xsl:param name="resource_number"/>
+  <!-- Given the name of a resource, check if there is a corresponding
+       normative reference there. If so, remove it. -->
+  <xsl:template name="remove_resource_from_normrefs_list">
+    <xsl:param name="normrefs_list"/>
+    <xsl:param name="resource_number"/>
 
-		<xsl:variable name="nref" select="concat(',normref:ref10303-',$resource_number)"/>
+    <xsl:variable name="nref" 
+		  select="concat(',normref:ref10303-',$resource_number)"/>
 
-		<xsl:variable name="pruned_normrefs_list">
-			<xsl:choose>
-				<xsl:when test="contains($normrefs_list,$nref)">
-					<xsl:variable name="before" select="substring-before($normrefs_list,$nref)"/>
-					<xsl:variable name="after" select="substring-after(substring-after($normrefs_list,$nref),',')"/>
-					<xsl:value-of select="concat($before,$after)"/>
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:value-of select="$normrefs_list"/>
-				</xsl:otherwise>
-			</xsl:choose>
-		</xsl:variable>
-		<xsl:value-of select="$pruned_normrefs_list"/>
-	</xsl:template>
+    <xsl:variable name="pruned_normrefs_list">
+      <xsl:choose>
+	<xsl:when test="contains($normrefs_list,$nref)">
+	  <xsl:variable 
+	      name="before" 
+	      select="substring-before($normrefs_list,$nref)"/>
+	  <xsl:variable 
+	      name="after" 
+	      select="substring-after(substring-after($normrefs_list,$nref),',')"/>
+	  <xsl:value-of select="concat($before,$after)"/>
+	</xsl:when>
+	<xsl:otherwise>
+	  <xsl:value-of select="$normrefs_list"/>
+	</xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:value-of select="$pruned_normrefs_list"/>
+  </xsl:template>
 
-	<!-- return the number of normrefs in the list -->
-	<xsl:template name="length_normrefs_list">
-		<xsl:param name="normrefs_list"/>
-		<xsl:param name="resource_number"/>
-		<!-- check if the current resource is included.
+  <!-- return the number of normrefs in the list -->
+  <xsl:template name="length_normrefs_list">
+    <xsl:param name="normrefs_list"/>
+    <xsl:param name="resource_number"/>
+    <!-- check if the current resource is included.
 	 If so, remove the reference -->
-		<xsl:variable name="pruned_normrefs_list">
-			<xsl:call-template name="remove_resource_from_normrefs_list">
-				<xsl:with-param name="normrefs_list" select="$normrefs_list"/>
-				<xsl:with-param name="resource_number" select="$resource_number"/>
-			</xsl:call-template>
-		</xsl:variable>
+    <xsl:variable name="pruned_normrefs_list">
+      <xsl:call-template name="remove_resource_from_normrefs_list">
+	<xsl:with-param name="normrefs_list" select="$normrefs_list"/>
+	<xsl:with-param name="resource_number" select="$resource_number"/>
+      </xsl:call-template>
+    </xsl:variable>
 
-		<xsl:variable name="section1">
-			<xsl:call-template name="count_substring">
-				<xsl:with-param name="substring" select="','"/>
-				<xsl:with-param name="string" select="$pruned_normrefs_list"/>
-			</xsl:call-template>
-		</xsl:variable>
-		<xsl:value-of select="floor($section1 div 2)"/>
-	</xsl:template>
+    <xsl:variable name="section1">
+      <xsl:call-template name="count_substring">
+	<xsl:with-param name="substring" select="','"/>
+	<xsl:with-param name="string" select="$pruned_normrefs_list"/>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:value-of select="floor($section1 div 2)"/>
+  </xsl:template>
 
 
   <!-- output the section header for terms defined in a resource -->
@@ -3249,24 +3475,19 @@ the types, entity specializations, and functions that are specific to this part 
     <xsl:param name="resource"/>
     <xsl:param name="section"/>
     
-    <xsl:variable name="stdnumber" select="concat('ISO/',$resource/@status,' 10303-',$resource/@part)"/>
+    <xsl:variable name="stdnumber" 
+		  select="concat('ISO/',$resource/@status,' 10303-',$resource/@part)"/>
 
-		
-    <!-- <h2>
-      <xsl:value-of select="concat($section,' Other terms and definitions')"/> -->
+
+    <h2 level="3" id="{$section}">
+      <!-- <xsl:value-of select="concat($section,' Other terms and definitions')"/> -->
+      <xsl:value-of select="'Other terms and definitions'"/>
       <!--
 	  <xsl:value-of select="concat($section,' Terms defined in',$stdnumber)"/>
       -->
-    <!-- </h2> -->
-		
-		<xsl:text>[[sec_</xsl:text><xsl:value-of select="$section"/><xsl:text>]]</xsl:text>
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>==== Other terms and definitions</xsl:text>
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>&#xa;</xsl:text>
-		
+    </h2>
   </xsl:template>
-	
+
 
   <xsl:template match="term.ref" mode="resource">
     <xsl:variable name="resource" select="../@resource.name"/>
@@ -3297,25 +3518,23 @@ the types, entity specializations, and functions that are specific to this part 
 	
 	<xsl:choose>
 	  <xsl:when test="$term">
-			<xsl:text>* </xsl:text><xsl:apply-templates select="$term"/>
 	    <xsl:choose>
 	      <xsl:when test="position()=last()">
-					<xsl:text>.</xsl:text>					
+		<li><xsl:apply-templates select="$term"/>.</li>
 	      </xsl:when>
 	      <xsl:otherwise>
-					<xsl:text>;</xsl:text>
+		<li><xsl:apply-templates select="$term"/>;</li>
 	      </xsl:otherwise>
 	    </xsl:choose>
-			<xsl:text>&#xa;&#xa;</xsl:text>		
 	  </xsl:when>
-	  <xsl:otherwise>	    
-				<xsl:text>* </xsl:text>
+	  <xsl:otherwise>
+	    <li>
 	      <xsl:call-template name="error_message">
 		<xsl:with-param 
 		    name="message"
 		    select="concat('Error 11: Can not find term referenced by: ',$ref)"/>
 	      </xsl:call-template>
-	    <xsl:text>&#xa;&#xa;</xsl:text>		
+	    </li>
 	  </xsl:otherwise>
 	</xsl:choose>
       </xsl:when>
@@ -3385,58 +3604,39 @@ the types, entity specializations, and functions that are specific to this part 
 	  <xsl:when test="position()=last()">
 	    <xsl:choose>
 	      <xsl:when test="$moreNormRefs > 0">
-					<xsl:text>* </xsl:text><xsl:apply-templates select="$term"/><xsl:text>;</xsl:text>
-					<xsl:text>&#xa;&#xa;</xsl:text>	    	
+	    	<li><xsl:apply-templates select="$term"/>;</li>
 	      </xsl:when>
 	      <xsl:otherwise>
-					<xsl:text>* </xsl:text><xsl:apply-templates select="$term"/><xsl:text>.</xsl:text>
-					<xsl:text>&#xa;&#xa;</xsl:text>
-	        <!-- <li><xsl:apply-templates select="$term"/>.</li> -->
+	        <li><xsl:apply-templates select="$term"/>.</li>
 	      </xsl:otherwise>
 	    </xsl:choose>
 	  </xsl:when>
 	  <xsl:otherwise>
-			<xsl:text>* </xsl:text><xsl:apply-templates select="$term"/><xsl:text>;</xsl:text>
-			<xsl:text>&#xa;&#xa;</xsl:text>	    	
-	    <!-- <li><xsl:apply-templates select="$term"/>;</li> -->
+	    <li><xsl:apply-templates select="$term"/>;</li>
 	  </xsl:otherwise>
 	</xsl:choose>
       </xsl:when>
       <xsl:otherwise>
-				<xsl:text>* </xsl:text>
-			<!-- <li> -->
-				<xsl:call-template name="error_message">
-				<xsl:with-param 
-						name="message"
-						select="concat('Error 12: Can not find term referenced by: ',$ref)"/>
-			</xsl:call-template>
-			<xsl:text>&#xa;&#xa;</xsl:text>	    	
-	<!-- </li> -->
+	<li><xsl:call-template name="error_message">
+	  <xsl:with-param 
+	      name="message"
+	      select="concat('Error 12: Can not find term referenced by: ',$ref)"/>
+	</xsl:call-template>
+	</li>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
 
 
-	<xsl:template match="definition">
-		<xsl:param name="section"/>
-		<xsl:text>[[sec_</xsl:text><xsl:value-of select="concat($section,'.',position())"/><xsl:text>]]</xsl:text>
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>===== </xsl:text><xsl:apply-templates select="term"/>
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:variable name="text">
-			<xsl:apply-templates select="def"/>
-		</xsl:variable>
-		<xsl:value-of select="normalize-space($text)"/>
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>&#xa;</xsl:text>
-		<!-- <h4>			
-			<xsl:value-of select="concat($section,'.',position())"/><br/> 
-			<xsl:apply-templates select="term"/>
-		</h4>
-		<xsl:apply-templates select="def"/> -->
-	</xsl:template>
-	
+  <xsl:template match="definition">
+    <xsl:param name="section"/>
+    <h4 level="4" id="{concat($section,'.',position())}">
+      <!-- <xsl:value-of select="$section"/>.<xsl:number/><br/> -->
+      <!-- <xsl:value-of select="concat($section,'.',position())"/><br/>  -->
+      <xsl:apply-templates select="term"/>
+    </h4>
+    <p><xsl:apply-templates select="def"/></p>
+  </xsl:template>
   
   <xsl:template match="def">
     <xsl:apply-templates/>
@@ -3534,10 +3734,9 @@ the types, entity specializations, and functions that are specific to this part 
 
 
   <xsl:template match="express-g">
-    <!-- <ul> -->
+    <ul>
       <xsl:apply-templates select="imgfile|img" mode="expressg"/>
-			<xsl:text>&#xa;</xsl:text>
-    <!-- </ul> -->
+    </ul>
   </xsl:template>
 
   <xsl:template match="imgfile" mode="expressg">
@@ -3751,11 +3950,5 @@ the types, entity specializations, and functions that are specific to this part 
     <xsl:if test="string-length(./examples) > 10">E</xsl:if>
     <xsl:if test="string-length(./add_scope) > 10">A</xsl:if>
   </xsl:template>
-		
-	<!-- ========================== -->
-	<!-- ========================== -->
-	<!-- END of templates from res_doc/resource.xsl -->
-	<!-- ========================== -->
-	<!-- ========================== -->
-
 </xsl:stylesheet>
+

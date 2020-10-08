@@ -14,7 +14,7 @@
 	version="1.0"
 >
 
-
+  <xsl:output method="html"/>
   <!--  <xsl:import href="resdoc_toc.xsl"/> -->
 
   <!-- output any issues against the clause identified by type

@@ -15,6 +15,8 @@ $Id: express_description.xsl,v 1.8 2015/08/03 09:40:44 mikeward Exp $
 >
 
 
+  <xsl:output method="html"/>
+
 
 <!-- Output the description for an Express object, but first check that it
      is valid -->

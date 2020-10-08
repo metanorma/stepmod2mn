@@ -8,13 +8,14 @@ $Id: common.xsl,v 1.204 2018/10/07 10:51:54 mike Exp $
 -->
 
 <xsl:stylesheet 
-  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xmlns:msxsl="urn:schemas-microsoft-com:xslt"
-  xmlns:exslt="http://exslt.org/common"
-  exclude-result-prefixes="msxsl exslt"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"   
+	xmlns:xalan="http://xml.apache.org/xalan" 
   version="1.0">
 
 
+<!-- xmlns:msxsl="urn:schemas-microsoft-com:xslt"
+  xmlns:exslt="http://exslt.org/common"
+  exclude-result-prefixes="msxsl exslt" -->
 
 
 	<!-- replace the file extension with .xml or .htm according to FILE_EXT -->
@@ -37,6 +38,7 @@ $Id: common.xsl,v 1.204 2018/10/07 10:51:54 mike Exp $
 	</xsl:template>
 
 
+  <xsl:output method="html"/>
 
 <!--
      Output a cascading stylesheet. The stylesheet is specified in the
@@ -976,49 +978,61 @@ $Id: common.xsl,v 1.204 2018/10/07 10:51:54 mike Exp $
 
 
 
-	<!-- output the clause heading -->
-	<xsl:template name="clause_header">
-		<xsl:param name="heading"/>
-		<xsl:param name="aname"/>
-		
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>[[</xsl:text><xsl:value-of select="$aname"/><xsl:text>]]</xsl:text>
-		<xsl:text>&#xa;</xsl:text>
-		
-		<xsl:variable name="level" select="string-length($heading) - string-length(translate($heading, '.', '')) + 1"/>
-		<!-- <xsl:text>== </xsl:text> -->
-		<xsl:call-template name="repeat">
-			<xsl:with-param name="char" select="'='"/>
-			<xsl:with-param name="count" select="$level + 1"/>
-		</xsl:call-template>
-		
-		<xsl:text> </xsl:text><xsl:value-of select="$heading"/>
-		<xsl:text>&#xa;&#xa;</xsl:text>
-		<!-- <H2>
-			<A NAME="{$aname}">
-				<xsl:value-of select="$heading"/>
-			</A>
-		</H2> -->
-	</xsl:template>
+<!-- output the clause heading -->
+
+<xsl:template name="clause_header">
+
+  <xsl:param name="heading"/>
+
+  <xsl:param name="aname"/>
+
+  <H2>
+		<xsl:attribute name="level">
+			<xsl:value-of select="string-length($heading) - string-length(translate($heading, '.', '')) + 1"/>
+		</xsl:attribute>
+    <A NAME="{$aname}">
+
+      <xsl:value-of select="$heading"/>
+
+    </A>
+
+  </H2>
+
+</xsl:template>
 
 
 
-	<!-- output the Annex heading -->
-	<xsl:template name="annex_header">
-		<xsl:param name="heading"/>
-		<xsl:param name="annex_no"/>
-		<xsl:param name="title"/>
-		<xsl:param name="aname"/>
-		<xsl:param name="informative" select="'informative'"/>
-		<div align="center">
-			<h2>
-				<A NAME="{$aname}">
-					<xsl:value-of select="concat('Annex ', $annex_no)"/>
-				</A><br/>
-			(<xsl:value-of select="$informative"/>)<br/><br/>
-				<xsl:value-of select="$heading"/>
-			</h2>
-		</div>
+<!-- output the Annex heading -->
+
+<xsl:template name="annex_header">
+
+  <xsl:param name="heading"/>
+
+  <xsl:param name="annex_no"/>
+
+  <xsl:param name="title"/>
+
+  <xsl:param name="aname"/>
+
+  <xsl:param name="informative" select="'informative'"/>
+
+  <div align="center">
+
+    <h2>
+
+      <A NAME="{$aname}">
+
+        <xsl:value-of select="concat('Annex ', $annex_no)"/>
+
+      </A><br/>
+
+    (<xsl:value-of select="$informative"/>)<br/><br/>
+
+      <xsl:value-of select="$heading"/>
+
+    </h2>
+
+  </div>
 
 	</xsl:template>
 
@@ -8912,54 +8926,17 @@ is case sensitive.')"/>
 
   <xsl:param name="list"/>
 
-
-
   <xsl:variable name="nodes">
-
     <xsl:call-template name="list_to_nodes">
-
       <xsl:with-param name="string" select="$list"/>
-
     </xsl:call-template>
-
   </xsl:variable>
 
-
-
-  <xsl:variable name="sorted">
-
-    <xsl:choose>
-
-      <xsl:when test="function-available('msxsl:node-set')">
-
-        <xsl:variable name="nodes_set" select="msxsl:node-set($nodes)"/>
-
-        <xsl:for-each select="$nodes_set//x">
-
-          <xsl:sort/>
-
-          <xsl:value-of select="concat(' ',.,' ')"/>
-
-        </xsl:for-each>
-
-      </xsl:when>
-
-      <xsl:when test="function-available('exslt:node-set')">
-
-        <xsl:variable name="nodes_set" select="exslt:node-set($nodes)"/>
-
-        <xsl:for-each select="$nodes_set//x">
-
-          <xsl:sort/>
-
-          <xsl:value-of select="concat(' ',.,' ')"/>
-
-        </xsl:for-each>
-
-      </xsl:when>
-
-    </xsl:choose>
-
+  <xsl:variable name="sorted">		
+		<xsl:for-each select="xalan:nodeset($nodes)//x">
+			<xsl:sort/>
+			<xsl:value-of select="concat(' ',.,' ')"/>
+		</xsl:for-each>    
   </xsl:variable>
 
   <xsl:value-of select="normalize-space($sorted)"/>

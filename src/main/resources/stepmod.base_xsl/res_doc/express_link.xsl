@@ -17,6 +17,9 @@
 <!--   <xsl:import href="common.xsl"/> -->
 
 
+  <xsl:output method="html"/>
+
+
   <!-- +++++++++++++++++++
          Global variables
        +++++++++++++++++++ -->

@@ -8,13 +8,17 @@ $Id: expressg_icon.xsl,v 1.1 2003/08/26 05:32:50 thendrix Exp $
      then used to determine the EXPRESSG page on which an entity is drawn.
 -->
 <xsl:stylesheet 
-  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xmlns:msxsl="urn:schemas-microsoft-com:xslt"
-  xmlns:exslt="http://exslt.org/common"
-  exclude-result-prefixes="msxsl exslt"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"  
+	xmlns:xalan="http://xml.apache.org/xalan" 
   version="1.0">
 
-<!--  <xsl:import href="common.xsl"/>-->
+<!-- xmlns:msxsl="urn:schemas-microsoft-com:xslt"
+  xmlns:exslt="http://exslt.org/common"
+  exclude-result-prefixes="msxsl exslt" -->
+
+<!--  <xsl:import href="common.xsl"/> -->
+
+  <xsl:output method="html"/>
 
 
   <xsl:template name="make_schema_expressg_node_set">
@@ -42,8 +46,9 @@ $Id: expressg_icon.xsl,v 1.1 2003/08/26 05:32:50 thendrix Exp $
 
 
   <xsl:template name="get_schema_expressg_file">
-    <xsl:param name="object"/>
-    <xsl:choose>
+    <xsl:param name="object"/>		
+		<xsl:apply-templates select="xalan:nodeset($schema_expressg)/expg_nodes/object[@object=$object]" mode="get_file"/>
+   <!--  <xsl:choose>
       <xsl:when test="function-available('msxsl:node-set')">
         <xsl:variable name="schema_expressg_node_set" select="msxsl:node-set($schema_expressg)"/>
         <xsl:apply-templates
@@ -54,13 +59,14 @@ $Id: expressg_icon.xsl,v 1.1 2003/08/26 05:32:50 thendrix Exp $
         <xsl:apply-templates
           select="$schema_expressg_node_set/expg_nodes/object[@object=$object]" mode="get_file"/>
       </xsl:when>
-    </xsl:choose>
+    </xsl:choose> -->
   </xsl:template>
 
 
   <xsl:template name="get_schema_expressg_href">
-    <xsl:param name="object"/>
-    <xsl:choose>
+    <xsl:param name="object"/>		
+		<xsl:apply-templates select="xalan:nodeset($schema_expressg)/expg_nodes/object[@object=$object][1]" mode="get_href"/>
+    <!-- <xsl:choose>
       <xsl:when test="function-available('msxsl:node-set')">
         <xsl:variable name="schema_expressg_node_set" select="msxsl:node-set($schema_expressg)"/>
         <xsl:apply-templates
@@ -71,7 +77,7 @@ $Id: expressg_icon.xsl,v 1.1 2003/08/26 05:32:50 thendrix Exp $
         <xsl:apply-templates
           select="$schema_expressg_node_set/expg_nodes/object[@object=$object][1]" mode="get_href"/>
       </xsl:when>
-    </xsl:choose>
+    </xsl:choose> -->
   </xsl:template>
 
 

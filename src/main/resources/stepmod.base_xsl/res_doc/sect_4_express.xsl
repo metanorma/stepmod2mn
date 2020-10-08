@@ -1,12 +1,26 @@
 <?xml version="1.0"?>
+
+<!--
+     $Id: sect_4_express.xsl,v 1.41 2017/09/16 18:57:00 mikeward Exp $
+
+  Author: Rob Bodington, Eurostep Limited
+  Owner:  Developed by Eurostep and supplied to NIST under contract.
+  Purpose: 
+     Used to display the commented XML encoded Express
+     in the schema clauses 4, etc of a resource.
+-->
+
 <xsl:stylesheet 
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+	xmlns:xalan="http://xml.apache.org/xalan" 
 	version="1.0"
 >
 
 <!--  <xsl:import href="express_link.xsl"/> 
   <xsl:import href="express_description.xsl"/> 
-  <xsl:import href="../projmg/resource_issues.xsl"/> -->
+  <xsl:import href="../projmg/resource_issues.xsl"/>  -->
+
+  <xsl:output method="html"/>
 
   <!-- +++++++++++++++++++
          Global variables
@@ -134,7 +148,6 @@
             
             </xsl:call-template>
           </xsl:variable>
-          <xsl:message>Test=<xsl:value-of select="$resource_dir"/></xsl:message>
           <xsl:variable name="express_xml" select="concat($resource_dir,'/',$resource_dir,'.xml')"/>
           <xsl:call-template name="build_xref_list">
             <xsl:with-param name="express" select="document($express_xml)/express"/>
