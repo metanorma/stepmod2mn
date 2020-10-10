@@ -144,7 +144,7 @@
         
         <!-- get schema node contained in express file -->
         <xsl:variable name="if_schema_node"
-          select="document(string($express_file_to_read))//express/schema"/>
+          select="document(concat($path, '../', string($express_file_to_read)))//express/schema"/>
         
         
         <!-- add separator before name of schema -->
@@ -1080,7 +1080,7 @@ Needs to deal with expressions starting with not ( i.e. ANDOR above
   <xsl:variable name="ret_val">
     <xsl:choose>
           <xsl:when
-            test="document('../../repository_index.xml')/repository_index/resources/resource[@name=$schema_name_tmp]"/>
+            test="document(concat($path, '../../../repository_index.xml'))/repository_index/resources/resource[@name=$schema_name_tmp]"/>
           <xsl:otherwise>
             <xsl:value-of 
               select="concat('ERROR el3: ', $schema_name_tmp, 

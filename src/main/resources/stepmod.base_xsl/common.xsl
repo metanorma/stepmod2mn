@@ -2754,7 +2754,7 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 
           <xsl:when
 
-            test="document('../repository_index.xml')/repository_index/resources/resource[@name=$lschema]">
+            test="document(concat($path,'../../repository_index.xml'))/repository_index/resources/resource[@name=$lschema]">
 
             <xsl:value-of select="'true'"/>
 
@@ -3762,7 +3762,7 @@ width="20" height="20"/>
                 </xsl:choose>
               </xsl:variable>
               
-              <xsl:variable name="resdoc_xml" select="document(concat('../data/resource_docs/',$resource_doc,'/resource.xml'))"/>
+              <xsl:variable name="resdoc_xml" select="document(concat($path, '../../../data/resource_docs/',$resource_doc,'/resource.xml'))"/>
               <xsl:variable name="schema_position">
                 <xsl:apply-templates select="$resdoc_xml//resource/schema[@name=$schema_name]" mode="position"/>
               </xsl:variable>
@@ -6557,7 +6557,7 @@ width="20" height="20"/>
 
       <xsl:variable name="express_nodes"
 
-        select="document(string($express_file))"/>
+        select="document(concat($path, '../../', string($express_file)))"/>
 
       <xsl:choose>
 

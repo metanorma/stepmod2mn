@@ -148,7 +148,8 @@
             
             </xsl:call-template>
           </xsl:variable>
-          <xsl:variable name="express_xml" select="concat($resource_dir,'/',$resource_dir,'.xml')"/>
+          <!-- <xsl:variable name="express_xml" select="concat($resource_dir,'/',$resource_dir,'.xml')"/> -->
+          <xsl:variable name="express_xml" select="concat($resource_dir,'/', ./@name,'.xml')"/>					
           <xsl:call-template name="build_xref_list">
             <xsl:with-param name="express" select="document($express_xml)/express"/>
           </xsl:call-template>

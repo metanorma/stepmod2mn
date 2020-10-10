@@ -20,6 +20,7 @@
 	<xsl:import href="stepmod.base_xsl/res_doc/resource.xsl"/>
 	<xsl:import href="stepmod.base_xsl/res_doc/sect_1_scope.xsl"/>
 	<xsl:import href="stepmod.base_xsl/res_doc/sect_3_defs.xsl"/>
+	<xsl:import href="stepmod.base_xsl/res_doc/sect_schema.xsl"/>
 	<xsl:import href="stepmod.base_xsl/res_doc/sect_4_express.xsl"/>
 	<xsl:import href="stepmod.base_xsl/res_doc/sect_introduction.xsl"/>
 	
@@ -473,21 +474,6 @@
 	</xsl:template>
 	
 	
-	<!-- global variable - Used by templates in expressg_icon.xsl to
-	 resolve href for expressg icon -->
-	<xsl:variable name="schema_expressg">
-		<xsl:call-template name="make_schema_expressg_node_set"/>
-	</xsl:variable>    
-	
-	<xsl:template match="resource" mode="schema_resource">
-		<xsl:param name="pos"/>
-		
-		
-	
-		<xsl:apply-templates select="schema[position()=$pos]">
-			<xsl:with-param name="pos" select="$pos"/>
-		</xsl:apply-templates>
-	</xsl:template>
 	
 	
 	<!-- END EXPRESS short listing -->
@@ -615,7 +601,7 @@
 					<xsl:text>&#xa;</xsl:text>
 				</xsl:if>
 				<xsl:variable name="note">
-					<xsl:apply-templates/>
+					<xsl:apply-templates  mode="stepmod2mn"/>
 				</xsl:variable>
 				<xsl:text>NOTE: </xsl:text>
 				<xsl:choose>
@@ -639,14 +625,14 @@
 	
 	<xsl:template match="a | A" mode="stepmod2mn">
 		<xsl:choose>
-			<xsl:when test="ancestor::p[@class='note']"/>
+			<xsl:when test="ancestor::p[@class='note'] and normalize-space() = '' and starts-with(@name, 'note')"/>
 			<xsl:otherwise>
 				<xsl:if test="normalize-space(.) != '' or normalize-space(@href) != ''">
-					<xsl:if test="preceding-sibling::*">
+					<xsl:if test="preceding-sibling::node()">
 						<xsl:text> </xsl:text>
 					</xsl:if>
 					<!-- <xsl:value-of select="."/> -->
-					<xsl:apply-templates/>
+					<xsl:apply-templates />
 					<xsl:if test="normalize-space(@href) != ''">
 						<xsl:text>[</xsl:text><xsl:value-of select="@href"/><xsl:text>] </xsl:text>
 					</xsl:if>
@@ -733,7 +719,7 @@
 		<xsl:text>&#xa;</xsl:text>
 	</xsl:template>
 	
-	<xsl:template match="table[@type = 'abbreviations']" mode="stepmod2mn">
+	<xsl:template match="table[@type = 'abbreviations'] | table[.//tr[not(count(td) &lt; 2 or count(td) &gt; 2)]]" mode="stepmod2mn">
 		<xsl:apply-templates mode="table_dl"/>
 		<xsl:text>&#xa;</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
@@ -748,7 +734,7 @@
 	</xsl:template>
 	
 	<xsl:template match="td" mode="table_dl">
-		<xsl:apply-templates />
+		<xsl:apply-templates mode="stepmod2mn"/>
 		<xsl:if test="not(preceding-sibling::td)">
 			<xsl:text>:: </xsl:text>
 		</xsl:if>
@@ -776,6 +762,19 @@
 	
 	<xsl:template match="sec/text() | li/text() | ul/text() | ol/text() | inscope/text() | outscope/text()">
 		<xsl:value-of select="normalize-space(.)"/>
+	</xsl:template>
+	
+	
+	<xsl:template match="blockquote"  mode="stepmod2mn">
+			<xsl:text>[quote]</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>_____</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:apply-templates  mode="stepmod2mn"/>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>_____</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
 	</xsl:template>
 	
 	<xsl:template name="repeat">

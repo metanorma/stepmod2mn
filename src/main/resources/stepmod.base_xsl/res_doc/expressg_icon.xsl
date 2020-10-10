@@ -36,7 +36,7 @@ $Id: expressg_icon.xsl,v 1.1 2003/08/26 05:32:50 thendrix Exp $
           <xsl:apply-templates 
             select="$resdoc_xml/resource/schema/express-g/imgfile" mode="mk_node"/>
         </xsl:when>
-        <xsl:when test="/resource">
+        <xsl:when test="/resource">					
           <xsl:apply-templates 
             select="/resource/schema/express-g/imgfile" mode="mk_node"/>
         </xsl:when>
@@ -93,7 +93,7 @@ $Id: expressg_icon.xsl,v 1.1 2003/08/26 05:32:50 thendrix Exp $
   <!-- build the node set of expressg objects -->
   <xsl:template match="imgfile" mode="mk_node">
     <xsl:variable name="img_file"
-      select="concat('../../data/resources/',../../@name,'/',./@file)"/>
+      select="concat($path, '../../../data/resources/',../../@name,'/',./@file)"/>
     <xsl:variable name="img_file_xml" select="document($img_file)"/>
     <xsl:variable name="schema" select="../../@name"/>
     <xsl:apply-templates
@@ -161,7 +161,6 @@ $Id: expressg_icon.xsl,v 1.1 2003/08/26 05:32:50 thendrix Exp $
     <xsl:variable name="lentity"
       select="translate(normalize-space($entity),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')"/> 
 
-
     <xsl:choose>
       <xsl:when test="$lentity"> 
           <xsl:variable name="href_expg">
@@ -172,7 +171,7 @@ $Id: expressg_icon.xsl,v 1.1 2003/08/26 05:32:50 thendrix Exp $
           <xsl:choose>
             <xsl:when test="string-length($href_expg)=0">
               <xsl:variable name="error_msg"
-                select="concat('Error EG1: There is no EXPRESS-G reference for:',$lentity,' - check schema_diagexpg files')"/>
+                select="concat('Error EG: There is no EXPRESS1-G reference for:',$lentity,' - check schema_diagexpg files')"/>
               <xsl:call-template name="error_message">
                 <xsl:with-param name="inline" select="'yes'"/>
                 <xsl:with-param name="warning_gif" select="'../../../../images/warning.gif'"/>
