@@ -606,6 +606,26 @@
 			<xsl:when test="count(node()) = 0"> <!-- skip empty <p/> -->
 				<xsl:text>&#xa;&#xa;</xsl:text>
 			</xsl:when>
+			<xsl:when test="@class = 'note'">
+				<xsl:text>&#xa;&#xa;</xsl:text>
+				<xsl:if test=".//a[@name]">
+					<xsl:text>[[</xsl:text>
+					<xsl:value-of select=".//a/@name"/>
+					<xsl:text>]]</xsl:text>
+					<xsl:text>&#xa;</xsl:text>
+				</xsl:if>
+				<xsl:variable name="note">
+					<xsl:apply-templates/>
+				</xsl:variable>
+				<xsl:text>NOTE: </xsl:text>
+				<xsl:choose>
+					<xsl:when test="starts-with($note, 'NOTE&#160;&#160;')">
+						<xsl:value-of select="normalize-space(substring-after($note, 'NOTE&#160;&#160;'))"/>
+					</xsl:when>
+					<xsl:otherwise><xsl:value-of select="normalize-space($note)"/></xsl:otherwise>
+				</xsl:choose>
+				<xsl:text>&#xa;&#xa;</xsl:text>
+			</xsl:when>
 			<xsl:otherwise>
 				<xsl:variable name="previousnode" select="preceding-sibling::node()[1]"/>
 				<xsl:if test="local-name(xalan:nodeset($previousnode)) = '' and string-length(xalan:nodeset($previousnode)//text()) != ''">
@@ -618,16 +638,21 @@
 	</xsl:template>
 	
 	<xsl:template match="a | A" mode="stepmod2mn">
-		<xsl:if test="normalize-space(.) != '' or normalize-space(@href) != ''">
-			<xsl:if test="preceding-sibling::*">
-				<xsl:text> </xsl:text>
-			</xsl:if>
-			<!-- <xsl:value-of select="."/> -->
-			<xsl:apply-templates/>
-			<xsl:if test="normalize-space(@href) != ''">
-				<xsl:text>[</xsl:text><xsl:value-of select="@href"/><xsl:text>]</xsl:text>
-			</xsl:if>
-		</xsl:if>
+		<xsl:choose>
+			<xsl:when test="ancestor::p[@class='note']"/>
+			<xsl:otherwise>
+				<xsl:if test="normalize-space(.) != '' or normalize-space(@href) != ''">
+					<xsl:if test="preceding-sibling::*">
+						<xsl:text> </xsl:text>
+					</xsl:if>
+					<!-- <xsl:value-of select="."/> -->
+					<xsl:apply-templates/>
+					<xsl:if test="normalize-space(@href) != ''">
+						<xsl:text>[</xsl:text><xsl:value-of select="@href"/><xsl:text>] </xsl:text>
+					</xsl:if>
+				</xsl:if>
+			</xsl:otherwise>			
+		</xsl:choose>		
 	</xsl:template>
 	
 	<xsl:template match="br | BR" mode="stepmod2mn">
@@ -636,7 +661,7 @@
 	</xsl:template>
 	
 	<xsl:template match="b | B" mode="stepmod2mn">
-		<xsl:text> *</xsl:text><xsl:apply-templates mode="stepmod2mn"/><xsl:text>*</xsl:text>
+		<xsl:text> *</xsl:text><xsl:apply-templates mode="stepmod2mn"/><xsl:text>* </xsl:text>
 	</xsl:template>
 	
 	<xsl:template match="i | I" mode="stepmod2mn">
@@ -668,6 +693,7 @@
 	</xsl:template>
 	
 	<xsl:template match="code | CODE" mode="stepmod2mn">
+		<xsl:text>&#xa;&#xa;</xsl:text>
 		<xsl:text>[source]</xsl:text>
 		<!-- <xsl:value-of select="@language"/><xsl:text>]</xsl:text> -->
 		<xsl:text>&#xa;</xsl:text>
@@ -675,8 +701,8 @@
 		<xsl:text>&#xa;</xsl:text>
 		<xsl:apply-templates mode="stepmod2mn"/>
 		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>--</xsl:text>
-		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>--</xsl:text>		
+		<xsl:if test="following-sibling::* or not(parent::p)"><xsl:text>&#xa;&#xa;</xsl:text></xsl:if>
 	</xsl:template>
 	
 	<xsl:template match="ul | UL" mode="stepmod2mn">

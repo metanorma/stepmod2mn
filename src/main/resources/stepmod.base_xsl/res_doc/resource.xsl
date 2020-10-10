@@ -1533,16 +1533,16 @@ Purpose:
     <xsl:choose>
       <xsl:when test="not($doctype='aic')">
 	<xsl:call-template name="clause_header">
-	  <xsl:with-param name="heading" 
-			  select="concat((number($schema_no)+3),' ',$schema_display_name)"/>
-	  <xsl:with-param name="aname" select="concat('schema','$schema_no+3')"/>
+	  <!-- <xsl:with-param name="heading" select="concat((number($schema_no)+3),' ',$schema_display_name)"/> -->
+	  <xsl:with-param name="heading" select="$schema_display_name"/>
+	  <xsl:with-param name="aname" select="concat('schema',$schema_no+3)"/>
 	</xsl:call-template>
       </xsl:when>
       <xsl:when test="$doctype='aic'">
 	<xsl:call-template name="clause_header">
-	  <xsl:with-param name="heading" 
-			  select="concat((number($schema_no)+3),' ','EXPRESS short listing')"/>
-	  <xsl:with-param name="aname" select="concat('schema','$schema_no+3')"/>
+	  <!-- <xsl:with-param name="heading" select="concat((number($schema_no)+3),' ','EXPRESS short listing')"/> -->
+	  <xsl:with-param name="heading" select="'EXPRESS short listing'"/>
+	  <xsl:with-param name="aname" select="concat('schema',$schema_no+3)"/>
 	</xsl:call-template>
       </xsl:when>
     </xsl:choose>
@@ -1586,8 +1586,8 @@ Purpose:
 
     <!-- output the intro and fundamental contants.! -->
     <xsl:call-template name="clause_header">
-      <xsl:with-param name="heading" 
-		      select="concat(($schema_no+3),'.1 General')"/>
+      <!-- <xsl:with-param name="heading" select="concat(($schema_no+3),'.1 General')"/> -->
+      <xsl:with-param name="heading" select="'General'"/>
       <xsl:with-param name="aname" select="'gen'"/>
     </xsl:call-template>
 
@@ -1645,8 +1645,8 @@ the types, entity specializations, and functions that are specific to this part 
     <!--	<a name="funcon{$schema_no+3}" />  -->
 
     <xsl:call-template name="clause_header">
-      <xsl:with-param name="heading" 
-		      select="concat(($schema_no+3),'.2 Fundamental concepts and assumptions')"/>
+      <!-- <xsl:with-param name="heading" select="concat(($schema_no+3),'.2 Fundamental concepts and assumptions')"/> -->
+      <xsl:with-param name="heading" select="'Fundamental concepts and assumptions'"/>
       <!--    <xsl:with-param name="aname" select="concat('schema','position()')"/> -->
       <xsl:with-param name="aname" select="'funcon'"/>
     </xsl:call-template>

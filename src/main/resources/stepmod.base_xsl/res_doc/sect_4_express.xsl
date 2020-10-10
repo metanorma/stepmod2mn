@@ -185,7 +185,8 @@
       </xsl:call-template>
     </xsl:variable>
     <xsl:variable name="clause_header">
-          <xsl:value-of select="concat($clause_number, $schema_name)"/>
+          <!-- <xsl:value-of select="concat($clause_number, $schema_name)"/> -->
+          <xsl:value-of select="$schema_name"/>
     </xsl:variable>
 
     </xsl:if>
@@ -366,7 +367,7 @@
   
     <p class="note">
       <small>
-        NOTE&#160;<xsl:value-of select="$note_number+1"/>&#160;&#160;
+        <!-- NOTE&#160;<xsl:value-of select="$note_number+1"/>&#160;&#160; -->
 	<xsl:variable name="used-count" select="count(used-schema[not(.=preceding-sibling::used-schema)])" />
 	<xsl:choose>
 		<xsl:when test="$used-count = 1" >
@@ -403,7 +404,7 @@
   </blockquote>
     <p class="note">
       <small>
-        NOTE&#160;<xsl:value-of select="$note_number+2"/>&#160;&#160;
+        <!-- NOTE&#160;<xsl:value-of select="$note_number+2"/>&#160;&#160; -->
         <xsl:variable name="resource_dir">
           <xsl:call-template name="resource_directory">
             <xsl:with-param name="resource" select="$schema_node/@name"/>
@@ -420,7 +421,7 @@
 		<xsl:when test="$doctype='aic'">
 			<p class="note">
 				<small>
-					NOTE&#160;3&#160;&#160;
+					<!-- NOTE&#160;3&#160;&#160; -->
 					There may be subtypes and items of select lists that appear in
 					the integrated resources that are
 					not imported into the AIC. Constructs are eliminated from the subtype
@@ -485,10 +486,12 @@
     <xsl:variable name="clause_header">
           <xsl:choose>
             <xsl:when test="count(../constant)>1">
-			  <xsl:value-of select="concat($main_clause,$clause_number,' ',$schema_name,' constant definitions')"/>
+							<!-- <xsl:value-of select="concat($main_clause,$clause_number,' ',$schema_name,' constant definitions')"/> -->
+							<xsl:value-of select="concat($schema_name,' constant definitions')"/>
             </xsl:when>
             <xsl:otherwise>
-			  <xsl:value-of select="concat($main_clause,$clause_number,' ',$schema_name,' constant definition')"/>
+							<!-- <xsl:value-of select="concat($main_clause,$clause_number,' ',$schema_name,' constant definition')"/> -->
+							<xsl:value-of select="concat($schema_name,' constant definition')"/>
             </xsl:otherwise>
           </xsl:choose>
     </xsl:variable>
@@ -524,7 +527,8 @@
   </xsl:variable>    
   <h2>
     <A NAME="{$aname}">
-      <xsl:value-of select="concat($main_clause, $clause_number,'.',position(),' ',@name)"/>
+      <!-- <xsl:value-of select="concat($main_clause, $clause_number,'.',position(),' ',@name)"/> -->
+      <xsl:value-of select="@name"/>
     </A>
   </h2>
 
@@ -650,10 +654,12 @@
     <xsl:variable name="clause_header">
           <xsl:choose>
             <xsl:when test="count(../type)>1">
-			  <xsl:value-of select="concat($main_clause,$clause_number,' ',$schema_name,' type definitions')"/>
+							<!-- <xsl:value-of select="concat($main_clause,$clause_number,' ',$schema_name,' type definitions')"/> -->
+							<xsl:value-of select="concat($schema_name,' type definitions')"/>
             </xsl:when>
             <xsl:otherwise>
-			  <xsl:value-of select="concat($main_clause,$clause_number,' ',$schema_name,' type definition')"/>
+							<!-- <xsl:value-of select="concat($main_clause,$clause_number,' ',$schema_name,' type definition')"/> -->
+							<xsl:value-of select="concat($schema_name,' type definition')"/>
             </xsl:otherwise>
           </xsl:choose>
     </xsl:variable>
@@ -676,7 +682,8 @@
   </xsl:variable>    
   <h2>
     <A NAME="{$aname}">
-      <xsl:value-of select="concat($main_clause,$clause_number, '.', position(), ' ', @name)"/>
+      <!-- <xsl:value-of select="concat($main_clause,$clause_number, '.', position(), ' ', @name)"/> -->
+      <xsl:value-of select="@name"/>
     </A>
     <xsl:apply-templates select="." mode="expressg_icon"/>
   </h2>
@@ -960,10 +967,12 @@
     <xsl:variable name="clause_header">
 	<xsl:choose>
 	  <xsl:when test="count(../entity)>1"> <!-- MWD 2017-06-02 changed "type" to "entity" bug #6263 -->
-		<xsl:value-of select="concat($main_clause,$clause_number,' ',$schema_name,' entity definitions')"/>
+			<!-- <xsl:value-of select="concat($main_clause,$clause_number,' ',$schema_name,' entity definitions')"/> -->
+			<xsl:value-of select="concat($schema_name,' entity definitions')"/>
 	  </xsl:when>
 	  <xsl:otherwise>
-		<xsl:value-of select="concat($main_clause,$clause_number,' ',$schema_name,' entity definition')"/>
+			<!-- <xsl:value-of select="concat($main_clause,$clause_number,' ',$schema_name,' entity definition')"/> -->
+			<xsl:value-of select="concat($schema_name,' entity definition')"/>
 	  </xsl:otherwise>
 	</xsl:choose>
 	</xsl:variable>
@@ -987,7 +996,8 @@
 
   <h2>
     <A NAME="{$aname}">
-     <xsl:value-of select="concat($main_clause,$clause_number,'.',position(),' ',@name)"/>
+			<!-- <xsl:value-of select="concat($main_clause,$clause_number,'.',position(),' ',@name)"/> -->
+			<xsl:value-of select="@name"/>
     </A>
     <xsl:apply-templates select="." mode="expressg_icon"/>
     <xsl:if test="substring($schema_name, string-length($schema_name)-3)=
@@ -1637,10 +1647,12 @@
     <xsl:variable name="clause_header">
           <xsl:choose>
             <xsl:when test="count(../subtype.constraint)>1">
-              <xsl:value-of select="concat($main_clause, $clause_number,' ',$schema_name,' subtype constraint definitions')"/>
+              <!-- <xsl:value-of select="concat($main_clause, $clause_number,' ',$schema_name,' subtype constraint definitions')"/> -->
+              <xsl:value-of select="concat($schema_name,' subtype constraint definitions')"/>
             </xsl:when>
             <xsl:otherwise>
-          <xsl:value-of select="concat($main_clause, $clause_number,' ',$schema_name,' subtype constraint definition')"/>
+							<!-- <xsl:value-of select="concat($main_clause	, $clause_number,' ',$schema_name,' subtype constraint definition')"/> -->
+							<xsl:value-of select="concat($schema_name,' subtype constraint definition')"/>
             </xsl:otherwise>
           </xsl:choose>
 
@@ -1677,7 +1689,8 @@
              
   <h2>
     <A NAME="{$aname}">
-      <xsl:value-of select="concat($main_clause, $clause_number,'.',position(),' ',@name)"/>
+      <!-- <xsl:value-of select="concat($main_clause, $clause_number,'.',position(),' ',@name)"/> -->
+      <xsl:value-of select="@name"/>
     </A>
     <xsl:apply-templates select="." mode="expressg_icon"/> 
   </h2>
@@ -1932,7 +1945,8 @@
   <xsl:if test="position()=1">
     <!-- first entity so output the intro -->
     <xsl:variable name="clause_header">
-          <xsl:value-of select="concat($main_clause, $clause_number,' ',$schema_name,' function definitions')"/>
+          <!-- <xsl:value-of select="concat($main_clause, $clause_number,' ',$schema_name,' function definitions')"/> -->
+          <xsl:value-of select="concat($schema_name,' function definitions')"/>
     </xsl:variable>
 
     <xsl:variable name="clause_intro">
@@ -1962,7 +1976,8 @@
              
   <h2>
     <A NAME="{$aname}">
-      <xsl:value-of select="concat($main_clause, $clause_number,'.',position(),' ',@name)"/>
+      <!-- <xsl:value-of select="concat($main_clause, $clause_number,'.',position(),' ',@name)"/> -->
+      <xsl:value-of select="@name"/>
     </A>
   </h2>
   <!-- output description from external file -->
@@ -2036,7 +2051,8 @@
     <!-- first procedure so output the intro -->
     <xsl:variable name="clause_header">
     </xsl:variable>
-          <xsl:value-of select="concat($clause_number,' ',$schema_name,' procedure definitions')"/>
+          <!-- <xsl:value-of select="concat($clause_number,' ',$schema_name,' procedure definitions')"/> -->
+          <xsl:value-of select="concat($schema_name,' procedure definitions')"/>
     <xsl:variable name="clause_intro">
       <xsl:choose>
         <xsl:when test="contains($schema_name,'_arm')">
@@ -2065,7 +2081,8 @@
 
   <h2>
     <A NAME="{$aname}">
-      <xsl:value-of select="concat($clause_number,'.',position(),' ',@name)"/>
+      <!-- <xsl:value-of select="concat($clause_number,'.',position(),' ',@name)"/> -->
+      <xsl:value-of select="@name"/>
     </A>
   </h2>
   <!-- output description from external file -->
@@ -2231,10 +2248,12 @@
     <xsl:variable name="clause_header">
           <xsl:choose>
             <xsl:when test="count(../type)>1">
-			  <xsl:value-of select="concat($main_clause,$clause_number,' ',$schema_name,' rule definitions')"/>
+							<!-- <xsl:value-of select="concat($main_clause,$clause_number,' ',$schema_name,' rule definitions')"/> -->
+							<xsl:value-of select="concat($schema_name,' rule definitions')"/>
             </xsl:when>
             <xsl:otherwise>
-			  <xsl:value-of select="concat($main_clause,$clause_number,' ',$schema_name,' rule definition')"/>
+							<!-- <xsl:value-of select="concat($main_clause,$clause_number,' ',$schema_name,' rule definition')"/> -->
+							<xsl:value-of select="concat($schema_name,' rule definition')"/>
             </xsl:otherwise>
           </xsl:choose>
 
@@ -2266,7 +2285,8 @@
 
   <h2>
     <A NAME="{$aname}">
-      <xsl:value-of select="concat($main_clause, $clause_number,'.',position(),' ',@name)"/>
+      <!-- <xsl:value-of select="concat($main_clause, $clause_number,'.',position(),' ',@name)"/> -->
+      <xsl:value-of select="@name"/>
     </A>
   </h2>
 
@@ -3102,14 +3122,12 @@ main_clause in exp_cl_pres   :<xsl:value-of select="$main_clause"/>
         <xsl:variable name="clause_header">
           <xsl:choose>
             <xsl:when test="contains($schema_name,'_schema')">
-              <xsl:value-of select="concat($clause_number, 
-                                    ' EXPRESS imported ',
-                                    $lkind,' modifications')"/>
+              <!-- <xsl:value-of select="concat($clause_number, ' EXPRESS imported ', $lkind,' modifications')"/> -->
+              <xsl:value-of select="concat('EXPRESS imported ', $lkind,' modifications')"/>
             </xsl:when>
             <xsl:when test="contains($schema_name,'aic_')">
-              <xsl:value-of select="concat($clause_number, 
-                                    ' EXPRESS imported '
-                                    ,$lkind,' modifications')"/>
+              <!-- <xsl:value-of select="concat($clause_number, ' EXPRESS imported ' ,$lkind,' modifications')"/> -->
+              <xsl:value-of select="concat('EXPRESS imported ' ,$lkind,' modifications')"/>
             </xsl:when>
           </xsl:choose>      
         </xsl:variable>
@@ -3139,7 +3157,8 @@ main_clause in exp_cl_pres   :<xsl:value-of select="$main_clause"/>
   </xsl:variable>
   
   <h4>
-    <xsl:value-of select="concat($clause_number,'.',position(),' ',@item )"/>
+    <!-- <xsl:value-of select="concat($clause_number,'.',position(),' ',@item )"/> -->
+    <xsl:value-of select="@item"/>
   </h4>
   <!-- get information about the resource from which the construct is being
        imported -->
@@ -3244,7 +3263,7 @@ main_clause in exp_cl_pres   :<xsl:value-of select="$main_clause"/>
         </xsl:if>
         <p class="note">
           <small>
-            NOTE&#160;&#160;The list of entity data types will be
+            <!-- NOTE&#160;&#160; -->The list of entity data types will be
             extended in application resources that use the constructs of
             this resource.                 
           </small>
@@ -3301,7 +3320,7 @@ main_clause in exp_cl_pres   :<xsl:value-of select="$main_clause"/>
             extensions.  
             <p class="note">
               <small>
-                NOTE&#160;&#160;The list of entity data types will be
+                <!-- NOTE&#160;&#160; -->The list of entity data types will be
                 extended in application resources that use the constructs of
                 this resource.                 
               </small>
@@ -3323,7 +3342,7 @@ main_clause in exp_cl_pres   :<xsl:value-of select="$main_clause"/>
                  -->
             <p class="note">
               <small>
-                NOTE&#160;&#160;This empty extensible select requires
+                <!-- NOTE&#160;&#160; -->This empty extensible select requires
                 extension in a further schema to ensure that entities that refer to it have
                 at least one valid instantiation.
               </small>

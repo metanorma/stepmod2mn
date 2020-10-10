@@ -1262,7 +1262,7 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 
           <a name="{$aname}">
 
-            <xsl:value-of select="concat('NOTE&#160;',@number)"/></a>&#160;&#160;
+            <!-- <xsl:value-of select="concat('NOTE&#160;',@number)"/> --></a><!-- &#160;&#160; -->
 
             <xsl:apply-templates/>
 
@@ -1352,7 +1352,7 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 
         <a name="{$aname}">
 
-          <xsl:value-of select="concat('NOTE&#160;',$number)"/></a>&#160;&#160;
+          <!-- <xsl:value-of select="concat('NOTE&#160;',$number)"/> --></a><!-- &#160;&#160; -->
 
           <xsl:apply-templates/>
 
@@ -1368,7 +1368,7 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 
           <a name="{$aname}">
 
-            <xsl:value-of select="concat('NOTE&#160;',$number)"/></a>&#160;&#160;
+            <!-- <xsl:value-of select="concat('NOTE&#160;',$number)"/> --></a><!-- &#160;&#160; -->
 
             <xsl:apply-templates/>
 
