@@ -171,7 +171,7 @@ $Id: expressg_icon.xsl,v 1.1 2003/08/26 05:32:50 thendrix Exp $
           <xsl:choose>
             <xsl:when test="string-length($href_expg)=0">
               <xsl:variable name="error_msg"
-                select="concat('Error EG: There is no EXPRESS1-G reference for:',$lentity,' - check schema_diagexpg files')"/>
+                select="concat('Error EG1: There is no EXPRESS-G reference for:',$lentity,' - check schema_diagexpg files')"/>
               <xsl:call-template name="error_message">
                 <xsl:with-param name="inline" select="'yes'"/>
                 <xsl:with-param name="warning_gif" select="'../../../../images/warning.gif'"/>

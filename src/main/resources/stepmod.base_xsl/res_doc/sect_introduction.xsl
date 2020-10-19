@@ -34,11 +34,17 @@ $Id: sect_introduction.xsl,v 1.13 2010/10/20 07:44:26 robbod Exp $
 <!-- =============================================== -->
 
 <xsl:template match="purpose">
-  <h2>
+  <!-- <h2>
     <a name="introduction">
       Introduction
     </a>
-  </h2>
+  </h2> -->
+
+	<xsl:call-template name="insertHeaderADOC">
+		<xsl:with-param name="id" select="'introduction'"/>		
+		<xsl:with-param name="level" select="1"/>
+		<xsl:with-param name="header" select="'Introduction'"/>					
+	</xsl:call-template>
 
   <p>
     ISO 10303 is an International Standard for the computer-interpretable 

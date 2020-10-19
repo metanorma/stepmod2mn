@@ -22,8 +22,8 @@ $Id: sect_3_defs.xsl,v 1.5 2009/12/24 17:42:04 lothartklein Exp $
 <!-- overwrites the template declared in resource.xsl -->
 <xsl:template match="resource" mode="terms_definitions_resource">
   <!-- Output the terms identified in the normative references -->
-  <h2 level="1">
-    <a name="defns">
+  <!-- <h2 level="1">
+    <a name="defns"> -->
       <!--
       <xsl:choose>
         <xsl:when test="./definition/term">
@@ -34,23 +34,51 @@ $Id: sect_3_defs.xsl,v 1.5 2009/12/24 17:42:04 lothartklein Exp $
         </xsl:otherwise>
       </xsl:choose>
 -->
-      <xsl:choose>
+      <!-- <xsl:choose>
         <xsl:when test="./abbreviation">
           Terms, definitions and abbreviated terms
         </xsl:when>
-        <xsl:otherwise>
+        <xsl:otherwise> -->
           <!-- every module references Terms defined in other standards,
                and abbreviations hence as per ISO -->
-          Terms, definitions and abbreviated terms
+         <!--  Terms, definitions and abbreviated terms
         </xsl:otherwise>
       </xsl:choose>
     </a>
-  </h2>
-    <h2 level="2">
+  </h2> -->
+	
+	<xsl:variable name="header">
+		<xsl:choose>
+			<xsl:when test="./abbreviation">
+				Terms, definitions and abbreviated terms
+			</xsl:when>
+			<xsl:otherwise>
+				<!-- every module references Terms defined in other standards,
+						 and abbreviations hence as per ISO -->
+				Terms, definitions and abbreviated terms
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:variable>
+	
+	<xsl:text>&#xa;</xsl:text>
+	<xsl:call-template name="insertHeaderADOC">
+		<xsl:with-param name="id" select="'defns'"/>		
+		<xsl:with-param name="level" select="1"/>
+		<xsl:with-param name="header" select="$header"/>					
+	</xsl:call-template>
+	
+    <!-- <h2 level="2">
       <a name="termsdefns">
         Terms and definitions
       </a>        
-    </h2>  
+    </h2>   -->
+	
+	<xsl:call-template name="insertHeaderADOC">
+		<xsl:with-param name="id" select="'termsdefns'"/>		
+		<xsl:with-param name="level" select="2"/>
+		<xsl:with-param name="header" select="'Terms and definitions'"/>					
+	</xsl:call-template>	
+		
   <xsl:call-template name="output_terms">
     <xsl:with-param name="current_resource" select="."/>
     <xsl:with-param name="resource_number" select="./@part"/>

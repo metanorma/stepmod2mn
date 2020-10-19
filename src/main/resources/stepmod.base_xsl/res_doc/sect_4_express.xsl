@@ -499,11 +499,16 @@
 
     <xsl:variable name="clause_intro" select="''"/>
 
-    <h2>
+    <!-- <h2>
       <A NAME="constants">
         <xsl:value-of select="$clause_header"/>
       </A>
-    </h2>
+    </h2> -->
+		<xsl:call-template name="insertHeaderADOC">
+			<xsl:with-param name="id" select="'constants'"/>
+			<xsl:with-param name="header" select="$clause_header"/>					
+		</xsl:call-template>
+		
     <xsl:value-of select="$clause_intro"/>
   </xsl:if>
 
@@ -526,12 +531,19 @@
       <xsl:with-param name="section2" select="@name"/>
     </xsl:call-template>
   </xsl:variable>    
-  <h2>
+	
+	<!-- <xsl:value-of select="concat($main_clause, $clause_number,'.',position(),' ',@name)"/> -->
+  <!-- <h2>
     <A NAME="{$aname}">
-      <!-- <xsl:value-of select="concat($main_clause, $clause_number,'.',position(),' ',@name)"/> -->
       <xsl:value-of select="@name"/>
     </A>
-  </h2>
+  </h2> -->
+	<xsl:call-template name="insertHeaderADOC">
+		<xsl:with-param name="id" select="$aname"/>
+		<xsl:with-param name="level" select="3"/>							
+		<xsl:with-param name="header" select="@name"/>					
+	</xsl:call-template>
+	
 
   <!-- output description from external file -->
   <xsl:call-template name="output_external_description">
@@ -667,11 +679,16 @@
 
     <xsl:variable name="clause_intro" select="''"/>
 
-    <h2>
+    <!-- <h2>
       <A NAME="types">
         <xsl:value-of select="$clause_header"/>
       </A>
-    </h2>
+    </h2> -->		
+		<xsl:call-template name="insertHeaderADOC">
+			<xsl:with-param name="id" select="'types'"/>
+			<xsl:with-param name="header" select="$clause_header"/>					
+		</xsl:call-template>
+		
     <xsl:value-of select="$clause_intro"/>
   </xsl:if>
 
@@ -681,13 +698,20 @@
       <xsl:with-param name="section2" select="@name"/>
     </xsl:call-template>
   </xsl:variable>    
-  <h2>
-    <A NAME="{$aname}">
-      <!-- <xsl:value-of select="concat($main_clause,$clause_number, '.', position(), ' ', @name)"/> -->
+	
+	<!-- <xsl:value-of select="concat($main_clause,$clause_number, '.', position(), ' ', @name)"/> -->
+  <!-- <h2>
+    <A NAME="{$aname}">      
       <xsl:value-of select="@name"/>
     </A>
     <xsl:apply-templates select="." mode="expressg_icon"/>
-  </h2>
+  </h2> -->
+	<xsl:call-template name="insertHeaderADOC">
+		<xsl:with-param name="id" select="$aname"/>
+		<xsl:with-param name="level" select="3"/>
+		<xsl:with-param name="header" select="@name"/>					
+	</xsl:call-template>
+
 
   <xsl:call-template name="check_type_name">
     <xsl:with-param name="type_name" select="@name"/>
@@ -980,11 +1004,16 @@
 
     <xsl:variable name="clause_intro" select="''"/>
 
-    <h2>
+    <!-- <h2>
       <A NAME="entities">
         <xsl:value-of select="$clause_header"/>
       </A>
-    </h2>
+    </h2> -->		
+		<xsl:call-template name="insertHeaderADOC">
+			<xsl:with-param name="id" select="'entities'"/>
+			<xsl:with-param name="header" select="$clause_header"/>					
+		</xsl:call-template>
+		
     <xsl:value-of select="$clause_intro"/>
   </xsl:if>
 
@@ -995,9 +1024,9 @@
     </xsl:call-template>
   </xsl:variable>
 
-  <h2>
-    <A NAME="{$aname}">
-			<!-- <xsl:value-of select="concat($main_clause,$clause_number,'.',position(),' ',@name)"/> -->
+	<!-- <xsl:value-of select="concat($main_clause,$clause_number,'.',position(),' ',@name)"/> -->
+  <!-- <h2>
+    <A NAME="{$aname}">			
 			<xsl:value-of select="@name"/>
     </A>
     <xsl:apply-templates select="." mode="expressg_icon"/>
@@ -1016,7 +1045,15 @@
           alt="Mapping table" src="../../../../images/mapping.gif"/>
       </a>
     </xsl:if>
-  </h2>
+  </h2> -->
+	
+	<xsl:call-template name="insertHeaderADOC">
+		<xsl:with-param name="id" select="$aname"/>
+		<xsl:with-param name="level" select="3"/>
+		<xsl:with-param name="header" select="@name"/>					
+	</xsl:call-template>
+	
+	
   <!--
       <xsl:call-template name="check_entity_name">
         <xsl:with-param name="entity_name" select="@name"/>
@@ -1673,11 +1710,17 @@
       </xsl:choose>      
     </xsl:variable>
 
-    <h2>
+    <!-- <h2>
       <a NAME="subtype_constraints">
         <xsl:value-of select="$clause_header"/>
       </a>
-    </h2>
+    </h2> -->
+		<xsl:call-template name="insertHeaderADOC">
+			<xsl:with-param name="id" select="'subtype_constraints'"/>
+			<xsl:with-param name="header" select="$clause_header"/>
+		</xsl:call-template>
+		
+		
     <xsl:value-of select="$clause_intro"/>
   </xsl:if>
 
@@ -1688,13 +1731,18 @@
     </xsl:call-template>
   </xsl:variable>
              
-  <h2>
-    <A NAME="{$aname}">
-      <!-- <xsl:value-of select="concat($main_clause, $clause_number,'.',position(),' ',@name)"/> -->
+	<!-- <xsl:value-of select="concat($main_clause, $clause_number,'.',position(),' ',@name)"/> -->
+  <!-- <h2>
+    <A NAME="{$aname}">      
       <xsl:value-of select="@name"/>
     </A>
     <xsl:apply-templates select="." mode="expressg_icon"/> 
-  </h2>
+  </h2> -->
+	<xsl:call-template name="insertHeaderADOC">
+		<xsl:with-param name="id" select="$aname"/>
+		<xsl:with-param name="header" select="@name"/>
+	</xsl:call-template>
+	
   
   <xsl:apply-templates select="." mode="description"/>
 
@@ -1960,11 +2008,16 @@
       </xsl:choose>      
     </xsl:variable>
 
-    <h2>
+    <!-- <h2>
       <a name="functions">
         <xsl:value-of select="$clause_header"/>
       </a>
-    </h2>
+    </h2> -->
+		<xsl:call-template name="insertHeaderADOC">
+			<xsl:with-param name="id" select="'functions'"/>
+			<xsl:with-param name="header" select="$clause_header"/>
+		</xsl:call-template>
+		
     <xsl:value-of select="$clause_intro"/>
   </xsl:if>
 
@@ -1975,12 +2028,18 @@
     </xsl:call-template>
   </xsl:variable>
              
-  <h2>
-    <A NAME="{$aname}">
-      <!-- <xsl:value-of select="concat($main_clause, $clause_number,'.',position(),' ',@name)"/> -->
+	<!-- <xsl:value-of select="concat($main_clause, $clause_number,'.',position(),' ',@name)"/> -->
+  <!-- <h2>
+    <A NAME="{$aname}">      
       <xsl:value-of select="@name"/>
     </A>
-  </h2>
+  </h2> -->
+	<xsl:call-template name="insertHeaderADOC">
+		<xsl:with-param name="id" select="$aname"/>
+		<xsl:with-param name="level" select="3"/>
+		<xsl:with-param name="header" select="@name"/>
+	</xsl:call-template>
+		
   <!-- output description from external file -->
   <xsl:call-template name="output_external_description">
     <xsl:with-param name="schema" select="../@name"/>
@@ -2064,12 +2123,16 @@
       </xsl:choose>      
     </xsl:variable>
 
-    <h2>
-      <a name="procedures">
-        <xsl:value-of 
-          select="$clause_header"/>
-      </a>
-      </h2> 
+    <!-- <h2>
+			<a name="procedures">
+				<xsl:value-of select="$clause_header"/>
+			</a>
+		</h2>  -->
+		<xsl:call-template name="insertHeaderADOC">
+			<xsl:with-param name="id" select="'procedures'"/>
+			<xsl:with-param name="header" select="$clause_header"/>
+		</xsl:call-template>
+			
       <xsl:value-of select="$clause_intro"/>
   </xsl:if>
 
@@ -2080,12 +2143,17 @@
     </xsl:call-template>
   </xsl:variable>
 
-  <h2>
-    <A NAME="{$aname}">
-      <!-- <xsl:value-of select="concat($clause_number,'.',position(),' ',@name)"/> -->
+	<!-- <xsl:value-of select="concat($clause_number,'.',position(),' ',@name)"/> -->
+  <!-- <h2>
+    <A NAME="{$aname}">      
       <xsl:value-of select="@name"/>
     </A>
-  </h2>
+  </h2> -->
+	<xsl:call-template name="insertHeaderADOC">
+		<xsl:with-param name="id" select="$aname"/>
+		<xsl:with-param name="header" select="@name"/>
+	</xsl:call-template>
+	
   <!-- output description from external file -->
   <xsl:call-template name="output_external_description">
     <xsl:with-param name="schema" select="../@name"/>
@@ -2269,11 +2337,16 @@
         </xsl:when>
       </xsl:choose>      
     </xsl:variable>
-    <h2>
+    <!-- <h2>
       <a name="rules">
         <xsl:value-of select="$clause_header"/>
       </a>
-    </h2>
+    </h2> -->
+		<xsl:call-template name="insertHeaderADOC">
+			<xsl:with-param name="id" select="'rules'"/>
+			<xsl:with-param name="header" select="$clause_header"/>
+		</xsl:call-template>
+		
     <xsl:value-of select="$clause_intro"/>
   </xsl:if>
 
@@ -2284,12 +2357,18 @@
     </xsl:call-template>
   </xsl:variable>
 
-  <h2>
-    <A NAME="{$aname}">
-      <!-- <xsl:value-of select="concat($main_clause, $clause_number,'.',position(),' ',@name)"/> -->
+	<!-- <xsl:value-of select="concat($main_clause, $clause_number,'.',position(),' ',@name)"/> -->
+  <!-- <h2>
+    <A NAME="{$aname}">      
       <xsl:value-of select="@name"/>
     </A>
-  </h2>
+  </h2> -->	
+	<xsl:call-template name="insertHeaderADOC">
+		<xsl:with-param name="id" select="$aname"/>
+		<xsl:with-param name="level" select="3"/>							
+		<xsl:with-param name="header" select="@name"/>					
+	</xsl:call-template>
+	
 
   <!-- output description from external file -->
   <xsl:call-template name="output_external_description">
@@ -3134,11 +3213,16 @@ main_clause in exp_cl_pres   :<xsl:value-of select="$main_clause"/>
         </xsl:variable>
 
         <xsl:variable name="aname" select="concat('imported_',$lkind)"/>
-        <h2>
+       <!--  <h2>
           <A NAME="{$aname}">
             <xsl:value-of select="$clause_header"/>
           </A>
-        </h2>
+        </h2> -->
+				<xsl:call-template name="insertHeaderADOC">
+					<xsl:with-param name="id" select="$aname"/>
+					<xsl:with-param name="header" select="$clause_header"/>					
+				</xsl:call-template>
+				
         <xsl:apply-templates select="$desc_item"/>                    
       </xsl:if>
 </xsl:template>
@@ -3157,10 +3241,16 @@ main_clause in exp_cl_pres   :<xsl:value-of select="$main_clause"/>
     </xsl:call-template>
   </xsl:variable>
   
-  <h4>
-    <!-- <xsl:value-of select="concat($clause_number,'.',position(),' ',@item )"/> -->
+	<!-- <xsl:value-of select="concat($clause_number,'.',position(),' ',@item )"/> -->
+  <!-- <h4>    
     <xsl:value-of select="@item"/>
-  </h4>
+  </h4> -->
+	<xsl:call-template name="insertHeaderADOC">					
+		<xsl:with-param name="level" select="2"/>					
+		<xsl:with-param name="header" select="@item"/>					
+	</xsl:call-template>
+	
+	
   <!-- get information about the resource from which the construct is being
        imported -->
   <xsl:variable name="resource_dir">

@@ -526,67 +526,42 @@
 		<xsl:text>&#xa;</xsl:text>
 	</xsl:template>
 
-	<xsl:template match="h2 | H2 | h4 | H4" mode="stepmod2mn">
-		<!-- <xsl:variable name="title"> -->		
-		<xsl:choose>
-			<xsl:when test="normalize-space(.) = 'Foreword'">
-				<xsl:text>.</xsl:text>		<xsl:apply-templates mode="stepmod2mn"/>		
-			</xsl:when>
-			<xsl:when test="*/@name ='scope' or */@NAME ='scope'">
-				<xsl:text>== </xsl:text>
-				<xsl:value-of select="*[@name]"/><xsl:value-of select="*[@NAME]"/>
-				<xsl:text>&#xa;</xsl:text>
-			</xsl:when>
-			<xsl:when test="normalize-space(.) = 'Normative references'">
-				<xsl:text>[bibliography]</xsl:text>
-				<xsl:text>&#xa;</xsl:text>
-				<xsl:text>== </xsl:text>
-				<xsl:apply-templates mode="stepmod2mn"/>
-				<xsl:text>&#xa;</xsl:text>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:choose>
-					<xsl:when test="@id">
-						<xsl:text>[[</xsl:text>
-							<xsl:value-of select="concat('sec_', @id)"/>
-						<xsl:text>]]</xsl:text>
-						<xsl:text>&#xa;</xsl:text>					
-					</xsl:when>
-					<xsl:when test="*[@name] or *[@NAME]">
-						<xsl:text>[[</xsl:text>
-							<xsl:value-of select="*/@name"/><xsl:value-of select="*/@NAME"/>
-						<xsl:text>]]</xsl:text>
-						<xsl:text>&#xa;</xsl:text>					
-					</xsl:when>
-				</xsl:choose>
-				
-				
-				<xsl:choose>
-					<xsl:when test="normalize-space(@level) != ''">
-						<xsl:call-template name="repeat">
-							<xsl:with-param name="char" select="'='"/>
-							<xsl:with-param name="count" select="@level + 1"/>
-						</xsl:call-template>
-						<xsl:text> </xsl:text>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:text>== </xsl:text>
-					</xsl:otherwise>
-				</xsl:choose>
-				
-				<xsl:apply-templates mode="stepmod2mn"/>
-				<xsl:text>&#xa;</xsl:text>
-			</xsl:otherwise>
-		</xsl:choose>			
-		<!-- </xsl:variable>
-		<xsl:value-of select="normalize-space($title)"/> -->
-		<xsl:text>&#xa;</xsl:text>
+
+	<xsl:template name="insertHeaderADOC">
+		<xsl:param name="id"/>
+		<xsl:param name="level" select="1"/>
+		<xsl:param name="header"/>		
+		<xsl:param name="annex"/>		
+		<xsl:param name="obligation"/>		
+		<xsl:if test="$id != ''">
+			<xsl:text>[[</xsl:text>
+				<xsl:value-of select="$id"/>
+			<xsl:text>]]</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+		</xsl:if>
+		<xsl:if test="$annex = 'true'">
+			<xsl:text>[appendix</xsl:text>
+			<xsl:if test="$obligation != ''">
+				<xsl:text>,obligation=</xsl:text><xsl:value-of select="$obligation"/>
+			</xsl:if>
+			<xsl:text>]</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+		</xsl:if>		
+		
+		<xsl:call-template name="repeat">
+			<xsl:with-param name="char" select="'='"/>
+			<xsl:with-param name="count" select="$level + 1"/>
+		</xsl:call-template>
+		<xsl:text> </xsl:text>		
+		<xsl:value-of select="$header"/>
+		<xsl:text>&#xa;&#xa;</xsl:text>
 	</xsl:template>
 
-	<xsl:template match="h2/a | H2/a" mode="stepmod2mn">
+
+	<!-- <xsl:template match="h2/a | H2/a" mode="stepmod2mn">
 		<xsl:value-of select="normalize-space(.)"/>
 	</xsl:template>
-
+ -->
 	<xsl:template match="p | P" mode="stepmod2mn">
 		<xsl:choose>
 			<xsl:when test="count(node()) = 0"> <!-- skip empty <p/> -->

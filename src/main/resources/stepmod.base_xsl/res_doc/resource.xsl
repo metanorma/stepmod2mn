@@ -189,10 +189,10 @@ Purpose:
       </xsl:call-template>
     </xsl:variable>
     
-    <h4 level="4" id="{$stdnumber}">
-      <!-- <xsl:value-of select="$stdnumber"/><br/> -->
-      <xsl:choose>
-	    <xsl:when test="string-length($part_no) &lt; 13"> <!-- if it is 100 series, it is 1 number longer and should have a different name -->
+		<!-- <xsl:value-of select="$stdnumber"/><br/> -->
+    <!-- <h4 level="4" id="{$stdnumber}">      
+      <xsl:choose>			 
+				<xsl:when test="string-length($part_no) &lt; 13">
           Product data representation and exchange:  Integrated generic resource:
         </xsl:when>
         <xsl:otherwise>
@@ -200,8 +200,24 @@ Purpose:
         </xsl:otherwise>
       </xsl:choose>
       <xsl:value-of select="$resdoc_name"/>
-    </h4>
+    </h4> -->
 
+		<xsl:variable name="header">
+			<xsl:choose>			 
+				<xsl:when test="string-length($part_no) &lt; 13"><!-- if it is 100 series, it is 1 number longer and should have a different name -->
+					Product data representation and exchange:  Integrated generic resource:
+				</xsl:when>
+				<xsl:otherwise>
+					Product data representation and exchange:  Integrated application resource:
+				</xsl:otherwise>
+			</xsl:choose>
+			<xsl:value-of select="$resdoc_name"/>
+		</xsl:variable>
+		<xsl:call-template name="insertHeaderADOC">
+			<xsl:with-param name="id" select="$stdnumber"/>		
+			<xsl:with-param name="level" select="4"/>
+			<xsl:with-param name="header" select="normalize-space($header)"/>					
+		</xsl:call-template>
 
     <xsl:variable name="status" select="string(@status)"/>
     <xsl:variable name="status_words">
@@ -734,12 +750,16 @@ Purpose:
       </xsl:call-template>
     </xsl:variable>
     
-    <h2>
+    <!-- <h2>
       <a name="foreword">
         Foreword
       </a>
-    </h2>
-  
+    </h2> -->
+		
+		<xsl:text>.Foreword</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+	
+	
     <p>
       ISO (the International Organization for Standardization) is a worldwide federation of national 
       standards bodies (ISO member bodies). The work of preparing International Standards is normally 
@@ -2226,7 +2246,15 @@ the types, entity specializations, and functions that are specific to this part 
     <xsl:param name="resource_number"/>
     <xsl:param name="current_resource"/>
 
-    <h2>Normative references</h2> <!-- 2 Normative references -->
+    <!-- <h2>Normative references</h2> --> <!-- 2 Normative references -->
+		
+		<xsl:text>[bibliography]</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>== </xsl:text>
+		<xsl:text>Normative references</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		
+		
     <!--<p>
       The following referenced documents are indispensable for the application of
       this document. For dated references, only the edition cited applies. For
@@ -2934,10 +2962,17 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
   -->
   <xsl:template name="output_abbreviations">
     <xsl:param name="section"/>
-    <h2 level="2">
-      <!-- <a name="abbrv">3.2 Abbreviated terms</a> -->
+		
+		<!-- <a name="abbrv">3.2 Abbreviated terms</a> -->
+    <!-- <h2 level="2">      
       <a name="abbrv">Abbreviated terms</a>
-    </h2>
+    </h2> -->
+	<xsl:call-template name="insertHeaderADOC">
+		<xsl:with-param name="id" select="'abbrv'"/>		
+		<xsl:with-param name="level" select="2"/>
+		<xsl:with-param name="header" select="'Abbreviated terms'"/>		
+	</xsl:call-template>
+
 
     <!-- output any issues -->
     <xsl:apply-templates select="." mode="output_clause_issue">
@@ -3168,10 +3203,16 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 	    <xsl:variable name="part_no" 
 			  select="substring-after($normref/stdref/stdnumber,'-')"/>
 	    <xsl:if test="$resource_number!=$part_no">
-	      <h2 level="3" id="{concat('3.1.',$section_no)}">
-					<!-- <xsl:value-of select="concat('3.1.',$section_no, ' Terms defined in ',$stdnumber)"/> -->
+				<!-- <xsl:value-of select="concat('3.1.',$section_no, ' Terms defined in ',$stdnumber)"/> -->
+	      <!-- <h2 level="3" id="{concat('3.1.',$section_no)}">					
 					<xsl:value-of select="concat('Terms defined in ',$stdnumber)"/>
-	      </h2>
+	      </h2> -->				
+				<xsl:call-template name="insertHeaderADOC">
+					<xsl:with-param name="id" select="concat('sec_3.1.',$section_no)"/>		
+					<xsl:with-param name="level" select="3"/>
+					<xsl:with-param name="header" select="concat('Terms defined in ',$stdnumber)"/>					
+				</xsl:call-template>
+				
 	      <!-- RBN Changed due to request from ISO
 		   For the purposes of this part of ISO 10303, -->              
 	      For the purposes of this document,
@@ -3251,10 +3292,16 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 		  
 		  <!-- output the section header for the normative reference
 		       that is defining terms -->              
-		  <h2 level="2" id="{concat('3.',$section_no)}">
-		    <!-- <xsl:value-of select="concat('3.',$section_no, ' Terms defined in ', $stdnumber)"/> -->
+			<!-- <xsl:value-of select="concat('3.',$section_no, ' Terms defined in ', $stdnumber)"/> -->
+		  <!-- <h2 level="2" id="{concat('3.',$section_no)}">		    
 		    <xsl:value-of select="concat('Terms defined in ', $stdnumber)"/>
-		  </h2>
+		  </h2> -->			
+			<xsl:call-template name="insertHeaderADOC">
+				<xsl:with-param name="id" select="concat('sec_3.',$section_no)"/>		
+				<xsl:with-param name="level" select="2"/>
+				<xsl:with-param name="header" select="concat('Terms defined in ', $stdnumber)"/>					
+			</xsl:call-template>
+			
 		  <!-- RBN Changed due to request from ISO
 		       For the purposes of this part of ISO 10303,-->              
 		  For the purposes of this document, 
@@ -3479,13 +3526,18 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 		  select="concat('ISO/',$resource/@status,' 10303-',$resource/@part)"/>
 
 
-    <h2 level="3" id="{$section}">
-      <!-- <xsl:value-of select="concat($section,' Other terms and definitions')"/> -->
-      <xsl:value-of select="'Other terms and definitions'"/>
-      <!--
+		<!-- <xsl:value-of select="concat($section,' Other terms and definitions')"/> -->
+			<!--
 	  <xsl:value-of select="concat($section,' Terms defined in',$stdnumber)"/>
       -->
-    </h2>
+    <!-- <h2 level="3" id="{$section}">
+      <xsl:value-of select="'Other terms and definitions'"/>
+    </h2> -->
+		<xsl:call-template name="insertHeaderADOC">
+			<xsl:with-param name="id" select="$section"/>
+			<xsl:with-param name="level" select="3"/>
+			<xsl:with-param name="header" select="'Other terms and definitions'"/>					
+		</xsl:call-template>
   </xsl:template>
 
 
@@ -3630,11 +3682,22 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 
   <xsl:template match="definition">
     <xsl:param name="section"/>
-    <h4 level="4" id="{concat($section,'.',position())}">
-      <!-- <xsl:value-of select="$section"/>.<xsl:number/><br/> -->
-      <!-- <xsl:value-of select="concat($section,'.',position())"/><br/>  -->
+		
+		<!-- <xsl:value-of select="$section"/>.<xsl:number/><br/> -->
+		<!-- <xsl:value-of select="concat($section,'.',position())"/><br/>  -->
+    <!-- <h4 level="4" id="{concat($section,'.',position())}">      
       <xsl:apply-templates select="term"/>
-    </h4>
+    </h4> -->
+		
+		<xsl:variable name="header">
+			<xsl:apply-templates select="term"/>
+		</xsl:variable>
+		<xsl:call-template name="insertHeaderADOC">
+			<xsl:with-param name="id" select="concat($section,'.',position())"/>		
+			<xsl:with-param name="level" select="4"/>
+			<xsl:with-param name="header" select="normalize-space($header)"/>					
+		</xsl:call-template>
+		
     <p><xsl:apply-templates select="def"/></p>
   </xsl:template>
   
@@ -3677,11 +3740,18 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 		
 		<xsl:variable name="annex_letter" select="'E'"/>
 					
-		<h2>
+		<!-- <h2>
 			<a name="{$title}">
 				<xsl:value-of select="concat($annex_letter,'.',$sect_no,' ',$title)"/>
 			</a>
-		</h2>
+		</h2> -->		
+		<xsl:call-template name="insertHeaderADOC">
+			<xsl:with-param name="id" select="$title"/>		
+			<xsl:with-param name="level" select="2"/>
+			<xsl:with-param name="header" select="concat($annex_letter,'.',$sect_no,' ',$title)"/>					
+			<xsl:with-param name="annex" select="'true'"/>
+		</xsl:call-template>
+		
 		<xsl:apply-templates/>
 	</xsl:template>
 	
