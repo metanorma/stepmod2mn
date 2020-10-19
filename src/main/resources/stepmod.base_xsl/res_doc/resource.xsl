@@ -100,7 +100,8 @@ Purpose:
       <tr>
 	<td><h3><xsl:value-of select="$n_number"/></h3></td>
 	<td>&#x20;</td>
-	<td valign="top"><b>Date:&#x20;</b><xsl:value-of select="$date"/></td>
+	<!-- <td valign="top"><b>Date:&#x20;</b><xsl:value-of select="$date"/></td> -->
+	<td valign="top"><xsl:text>*</xsl:text>Date: <xsl:text>* </xsl:text><xsl:value-of select="$date"/></td>
       </tr>    
 
       <xsl:variable name="test_wg_number">
@@ -793,10 +794,12 @@ Purpose:
       World Trade Organization (WTO) principles in the Technical Barriers to Trade (TBT) see <a href="http://www.iso.org/iso/foreword.html" target="_blank">www.iso.org/iso/foreword.html</a>.
     </p>
     
-    <p>
+    <!-- <p>
       This document was prepared by Technical Committee ISO/TC 184, <i>Automation systems and integration</i>, Subcommittee SC 4,
       <i>Industrial data.</i>
-    </p>
+    </p> -->
+		
+		<xsl:text>This document was prepared by Technical Committee ISO/TC 184, _Automation systems and integration_, Subcommittee SC 4, _Industrial data._</xsl:text>
     
     <xsl:choose>
       <xsl:when test="not(./foreword)">
@@ -1317,13 +1320,21 @@ Purpose:
     </table>
     <p/>
 
-    <div align="center">
+
+    <!-- <div align="center">
       <a name="table_e1">
 	<b>
 	  Table C.1 &#8212; EXPRESS listings
 	</b>
       </a>
-    </div>
+    </div> -->
+		
+		<xsl:text>[#table_e1]</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>[cols=to do]</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>.EXPRESS listings</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
 
     <br/>
 
@@ -1639,7 +1650,11 @@ the types, entity specializations, and functions that are specific to this part 
     <p>
       Short names of entities defined in this schema are described in Annex A. Unambiguous identification of this schema is defined in Annex B.
     </p>
-    <u>EXPRESS specification: </u>
+		
+		<!-- <u>EXPRESS specification: </u> -->
+		<xsl:text>[.underline]#EXPRESS specification:#</xsl:text>
+		<xsl:text>&#xa;&#xa;</xsl:text>
+		
     <code>
 
       <br/>    <br/>
@@ -2881,10 +2896,14 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
       <xsl:when test="@published='n'">&#160;<sup><a href="#tobepub">1</a>)</sup>
       </xsl:when>
     </xsl:choose>, 
-    <i>
+    <!-- <i>
       <xsl:value-of select="$stdtitle"/>
       <xsl:value-of select="$subtitle"/>
-    </i>
+    </i> -->
+		<xsl:text> _</xsl:text>
+      <xsl:value-of select="$stdtitle"/>
+      <xsl:value-of select="$subtitle"/>
+    <xsl:text>_</xsl:text>
   </p>
   </xsl:element>    
   <xsl:element name="part">
@@ -2932,8 +2951,9 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
     <xsl:if test="stdref[@published='n']">
       <sup><a href="#tobepub">1</a>)</sup>
     </xsl:if>, 
-    <i>
-      <xsl:value-of select="stdref/stdtitle"/>
+		
+    <!-- <i> -->
+		<xsl:text>_</xsl:text><xsl:value-of select="stdref/stdtitle"/>
       <xsl:variable name="subtitle" select="normalize-space(stdref/subtitle)"/>
       <!-- 2018-08-22 MAW full-stop not added and removed if it already exists -->
       <!--<xsl:choose>
@@ -2952,7 +2972,8 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
           <xsl:value-of select="$subtitle"/>
         </xsl:otherwise>
       </xsl:choose>
-    </i>
+    <!-- </i> -->
+		<xsl:text>_</xsl:text>
   </li>
   </xsl:template>
 
@@ -3956,9 +3977,12 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
   </xsl:template>
 
   <xsl:template match="stdtitle">
-    <i>
+    <!-- <i>
       <xsl:value-of select="."/>
-    </i>
+    </i> -->
+		<xsl:text> _</xsl:text>
+			<xsl:value-of select="."/>
+    <xsl:text>_ </xsl:text>
   </xsl:template>
 
   <xsl:template match="subtitle">

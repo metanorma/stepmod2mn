@@ -495,12 +495,15 @@ $Id: common.xsl,v 1.204 2018/10/07 10:51:54 mike Exp $
     </TR>
     <TR>
       <TD valign="MIDDLE">
-        <B>
+				<xsl:variable name="text">
+        <!-- <B> -->
           Application module:
           <xsl:call-template name="module_display_name">
             <xsl:with-param name="module" select="@name"/>
           </xsl:call-template>
-        </B>
+        <!-- </B> -->
+				</xsl:variable>
+				<xsl:text> *</xsl:text><xsl:value-of select="normalize-space($text)"/><xsl:text>* </xsl:text>
       </TD>
       <TD valign="MIDDLE" align="RIGHT">
         <xsl:variable name="stdnumber">
@@ -508,14 +511,17 @@ $Id: common.xsl,v 1.204 2018/10/07 10:51:54 mike Exp $
             <xsl:with-param name="module" select="."/>
           </xsl:call-template>
         </xsl:variable>
-        <b>
+				<xsl:variable name="text">
+        <!-- <b> -->
           <xsl:value-of select="$stdnumber"/>
           <xsl:variable name="status" select="string(@status)"/>
           <xsl:if test="$status='TS' or $status='DIS' or $status='IS'">
             <br/>
             &#169; ISO
           </xsl:if>
-        </b>
+        <!-- </b> -->
+				</xsl:variable>
+				<xsl:text> *</xsl:text><xsl:value-of select="normalize-space($text)"/><xsl:text>* </xsl:text>
       </TD>
     </TR>
   </TABLE>
@@ -778,12 +784,13 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
       <xsl:apply-templates select="./img">
         <xsl:with-param name="alt" select="$title"/>
       </xsl:apply-templates>
-    <br/>
+    <!-- <br/> -->
+		<xsl:text>&#xa;&#xa;</xsl:text>
     <div align="center">
-      <b>
-        
+      <!-- <b>
         <xsl:value-of select="$title"/>
-      </b>
+      </b> -->
+			<xsl:text> *</xsl:text><xsl:value-of select="$title"/><xsl:text>* </xsl:text>
     </div>
     <br/>
   </xsl:template>
@@ -1152,22 +1159,25 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 </xsl:template>
 
 <xsl:template match="b|B">
-  <b>
+  <!-- <b>
     <xsl:apply-templates/>
-  </b>
+  </b> -->
+	<xsl:text> *</xsl:text><xsl:apply-templates/><xsl:text>* </xsl:text>
 </xsl:template>
 
 <xsl:template match="tt">
-  <tt>
+  <!-- <tt>
     <xsl:apply-templates/>
-  </tt>
+  </tt> -->
+	<xsl:text>`</xsl:text><xsl:apply-templates/><xsl:text>`</xsl:text>
 </xsl:template>
 
 
 <xsl:template match="i|I">
-  <i>
+  <!-- <i>
     <xsl:apply-templates/>
-  </i>
+  </i> -->
+	<xsl:text> _</xsl:text><xsl:apply-templates/><xsl:text>_ </xsl:text>
 </xsl:template>
 
 <!-- added template to display eqn  and bigeqn RJG March 2012 -->
@@ -1195,17 +1205,19 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 
 <!-- subscript -->
 <xsl:template match="sub|SUB" >
-  <sub>
+  <!-- <sub>
     <xsl:apply-templates/>
-  </sub>
+  </sub> -->
+	<xsl:text>~</xsl:text><xsl:apply-templates/><xsl:text>~</xsl:text>
 </xsl:template>
 
 
 <!-- superscript -->
 <xsl:template match="sup|SUP" >
-  <sup>
+  <!-- <sup>
     <xsl:apply-templates/>
-  </sup>
+  </sup> -->
+	<xsl:text>^</xsl:text><xsl:apply-templates/><xsl:text>^</xsl:text>
 </xsl:template>
 
 <xsl:template match="screen">
@@ -1235,8 +1247,12 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
       <xsl:with-param name="id" select="@id"/>
     </xsl:call-template>
   </xsl:variable>
-
-  <p align="center">
+	
+	<xsl:text>[#</xsl:text><xsl:value-of select="$aname"/><xsl:text>]</xsl:text>
+	<xsl:text>&#xa;</xsl:text>
+	<xsl:text>[cols=to do]</xsl:text>
+	<xsl:text>&#xa;</xsl:text>	
+  <!-- <p align="center">
     <b>
       Table 
       <a name="{$aname}">
@@ -1244,7 +1260,10 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
         select="@caption"/>
       </a>
     </b>
-  </p>
+  </p> -->
+	<xsl:text>.</xsl:text><xsl:value-of select="@caption"/>
+	<xsl:text>&#xa;</xsl:text>	
+	
   <div align="center">
     <table border="1" cellpadding="2" cellspacing="0">
       <xsl:apply-templates/>
@@ -1288,7 +1307,8 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
   <xsl:element name="th">
     <!-- copy across the attributes -->
     <xsl:copy-of select="@*"/>    
-    <p align="center"><b><xsl:apply-templates/></b></p>
+    <!-- <p align="center"><b><xsl:apply-templates/></b></p> -->
+    <p align="center"><xsl:text>*</xsl:text><xsl:apply-templates/><xsl:text>*</xsl:text></p>
   </xsl:element>
 </xsl:template>
 
@@ -1518,16 +1538,24 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
           align="bottom" border="0"
 width="20" height="20"/>
         
-       
-        <font color="#FF0000" size="-1">
-          <i>
+          <!--
+					<font color="#FF0000" size="-1">
+					<i>
             <xsl:call-template name="output_line_breaks">
               <xsl:with-param name="str" select="$message"/>
               <xsl:with-param name="break_char" select="'#'"/>
               <xsl:with-param name="replace_break_char" select="'true'"/>
             </xsl:call-template>
           </i>
-        </font>
+					</font>					-->
+					<xsl:text> _</xsl:text>					
+            <xsl:call-template name="output_line_breaks">
+              <xsl:with-param name="str" select="$message"/>
+              <xsl:with-param name="break_char" select="'#'"/>
+              <xsl:with-param name="replace_break_char" select="'true'"/>
+            </xsl:call-template>
+          <xsl:text>_ </xsl:text>
+        
         <br/>
       </xsl:if>
     </xsl:if>
@@ -1822,10 +1850,11 @@ width="20" height="20"/>
   <!-- a reference to an EXPRESS construct in a module ARM or MIM or in
        a standard outside of STEPMOD -->
   <xsl:template match="express_extref">
-    <b>
+    <!-- <b>
       <xsl:value-of select="@linkend"/>
-    </b>
-    defined in 
+    </b> -->
+		<xsl:text> *</xsl:text><xsl:value-of select="@linkend"/><xsl:text>* </xsl:text>
+    <xsl:text>defined in </xsl:text>
     <xsl:value-of select="@standard"/>
   </xsl:template>
 
@@ -1927,20 +1956,24 @@ width="20" height="20"/>
       
         <xsl:choose>
           <xsl:when test="string-length(normalize-space(.))>0">
-            <b><xsl:apply-templates/></b>
+            <!-- <b><xsl:apply-templates/></b> -->
+            <xsl:text> *</xsl:text><xsl:apply-templates/><xsl:text>* </xsl:text>
           </xsl:when>
           <xsl:otherwise>
-            <b><xsl:value-of select="$item"/></b>
+            <!-- <b><xsl:value-of select="$item"/></b> -->
+						<xsl:text> *</xsl:text><xsl:value-of select="$item"/><xsl:text>* </xsl:text>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:when>
       <xsl:otherwise>
         <xsl:choose>
           <xsl:when test="string-length(normalize-space(.))>0">
-            <a href="{$href}"><b><xsl:apply-templates/></b></a>
+            <!-- <a href="{$href}"><b><xsl:apply-templates/></b></a> -->
+            <a href="{$href}"><xsl:text> *</xsl:text><xsl:apply-templates/><xsl:text>* </xsl:text></a>
           </xsl:when>
           <xsl:otherwise>
-            <a href="{$href}"><b><xsl:value-of select="$item"/></b></a>
+            <!-- <a href="{$href}"><b><xsl:value-of select="$item"/></b></a> -->
+            <a href="{$href}"><xsl:text> *</xsl:text><xsl:value-of select="$item"/><xsl:text>* </xsl:text></a>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:otherwise>
@@ -4519,7 +4552,8 @@ is case sensitive.')"/>
   <xsl:variable name="ref" select="@ref"/>
   <xsl:variable name="projlead"
     select="document('../data/basic/contacts.xml')/contact.list/contact[@id=$ref]"/>
-  <b>Project leader: </b>
+  <!-- <b>Project leader: </b> -->
+	<xsl:text> *Project leader:* </xsl:text>
   <xsl:choose>
     <xsl:when test="$projlead">
       <xsl:apply-templates select="$projlead"/>      
@@ -4574,7 +4608,8 @@ is case sensitive.')"/>
   <xsl:variable name="ref" select="@ref"/>
   <xsl:variable name="editor"
     select="document('../data/basic/contacts.xml')/contact.list/contact[@id=$ref]"/>
-  <b>Project editor: </b>
+  <!-- <b>Project editor: </b> -->  
+	<xsl:text> *Project editor:* </xsl:text>
   <xsl:choose>
     <xsl:when test="$editor">
       <xsl:apply-templates select="$editor"/>      
@@ -4680,7 +4715,8 @@ is case sensitive.')"/>
 </xsl:template>
 
 <xsl:template match="contact" mode="address">
-  <b>Address: </b>
+  <!-- <b>Address: </b> -->  
+	<xsl:text> *Address:* </xsl:text>
   <xsl:apply-templates select="./affiliation"/>
   <xsl:apply-templates select="./street"/>
   <xsl:apply-templates select="./pobox"/>
@@ -4720,20 +4756,23 @@ is case sensitive.')"/>
 </xsl:template>
 
 <xsl:template match="phone">
-  <b>Telephone: </b>
+  <!-- <b>Telephone: </b> -->
+	<xsl:text> *Telephone:* </xsl:text>
   <xsl:value-of select="."/>
   <br/>
 </xsl:template>
 
 <xsl:template match="fax">
-  <b>Telefacsimile: </b>
+  <!-- <b>Telefacsimile: </b> -->
+  <xsl:text> *Telefacsimile:* </xsl:text>
   <xsl:value-of select="."/>
   <br/>
 </xsl:template>
 
 <xsl:template match="email">
   <xsl:variable name="mailto" select="concat('mailto:',.)"/>
-  <b>Electronic mail: </b>
+  <!-- <b>Electronic mail: </b> -->
+	<xsl:text> *Electronic mail:* </xsl:text>
   <a href="{$mailto}">
     <xsl:value-of select="."/>
   </a>
@@ -5042,10 +5081,14 @@ is case sensitive.')"/>
         http://locke.dcnicn.com/bugzilla/iso10303/show_bug.cgi?id=3401#c5        
       <xsl:when test="@published='n'">&#160;<sup><a href="#tobepub">1</a>)</sup>
       </xsl:when> -->
-    </xsl:choose>,&#160; <i>
+    </xsl:choose>,&#160; <!-- <i>
       <xsl:value-of select="$stdtitle"/>
       <xsl:value-of select="$subtitle"/>
-    </i>
+    </i> -->
+		<xsl:text> _</xsl:text>
+      <xsl:value-of select="$stdtitle"/>
+      <xsl:value-of select="$subtitle"/>
+    <xsl:text>_ </xsl:text>
   </xsl:template>
  
   <!-- output the AP as a bibliography entry -->
@@ -5089,10 +5132,14 @@ is case sensitive.')"/>
         
       <xsl:when test="@published='n'">&#160;<sup><a href="#tobepub">1</a>)</sup>
       </xsl:when> -->
-    </xsl:choose>,&#160; <i>
+    </xsl:choose>,&#160; <!-- <i>
       <xsl:value-of select="$stdtitle"/>
       <xsl:value-of select="$subtitle"/>
-    </i>
+    </i> -->
+		<xsl:text> _</xsl:text>
+      <xsl:value-of select="$stdtitle"/>
+      <xsl:value-of select="$subtitle"/>
+    <xsl:text>_ </xsl:text>
   </xsl:template>
   
   <!-- output the resource document as a bibliography entry -->
@@ -5136,10 +5183,14 @@ is case sensitive.')"/>
         -->
       <xsl:when test="@published='n'">&#160;<sup><a href="#tobepub">1</a>)</sup>
       </xsl:when>
-    </xsl:choose>,&#160; <i>
+    </xsl:choose>,&#160; <!-- <i>
       <xsl:value-of select="$stdtitle"/>
       <xsl:value-of select="$subtitle"/>
-    </i>
+    </i> -->
+		<xsl:text> _</xsl:text>
+      <xsl:value-of select="$stdtitle"/>
+      <xsl:value-of select="$subtitle"/>
+    <xsl:text>_ </xsl:text>
   </xsl:template>
   
   <!-- 

@@ -216,7 +216,7 @@
 
   <blockquote>
     <span style="background-color: {$bg_color}">
-      <b>
+      <!-- <b>
         <a href="../dvlp/issues{$FILE_EXT}#{$issue_target}">
           <xsl:apply-templates select="." mode="status_icon"/>
           Issue:
@@ -226,7 +226,19 @@
                                 ' (', string(@date), 
                                 ') [', string(@category),', ',string(@status), ', ',$resolution,']')" />
         </a>
-      </b>
+      </b> -->
+			<xsl:variable name="text">
+				<a href="../dvlp/issues{$FILE_EXT}#{$issue_target}">
+          <xsl:apply-templates select="." mode="status_icon"/>
+          Issue:
+          <xsl:value-of select="concat(
+                                string(@id), 
+                                ' by ', string(@by),
+                                ' (', string(@date), 
+                                ') [', string(@category),', ',string(@status), ', ',$resolution,']')" />
+        </a>
+			</xsl:variable>
+			<xsl:text> *</xsl:text><xsl:value-of select="normalize-space($text)"/><xsl:text>* </xsl:text>
       <br/>
 <!-- commented out as tc184-sc4.rg no longer operational
       <xsl:if test="@seds='yes'">
@@ -242,10 +254,13 @@
       </xsl:if>
 -->
       <xsl:if test="@ballot_comment='yes'">
-        <i>
+        <!-- <i>
           Registered as a Ballot comment by:
           <xsl:value-of select="@member_body"/>
-        </i>
+        </i> -->
+				<xsl:text> _Registered as a Ballot comment by:</xsl:text>
+				<xsl:value-of select="@member_body"/>
+        <xsl:text>_</xsl:text>
         <br/>
       </xsl:if>      
 
@@ -257,8 +272,11 @@
 
   <xsl:template match="comment">
   <blockquote>
-    <b>Comment: </b>
-    <i><xsl:value-of select="string(@status)" /></i>
+    <!-- <b>Comment: </b> -->
+    <xsl:text> *Comment:* </xsl:text>
+    <!-- <i><xsl:value-of select="string(@status)" /></i> -->
+    <xsl:text> _</xsl:text><xsl:value-of select="string(@status)" /><xsl:text>_ </xsl:text>
+		
     (<xsl:value-of select="concat(string(@by),' ', string(@date))" />
     <b>)</b><br/>
     <xsl:apply-templates />
@@ -267,7 +285,8 @@
 
 <xsl:template match="issue_management">
   <blockquote>
-    <b>Issue Management: </b>
+    <!-- <b>Issue Management: </b> -->
+    <xsl:text> *Issue Management:* </xsl:text>
     <xsl:for-each select="@*" >
     <xsl:value-of select="concat(name(),': ', string(.))" /><br/>
     </xsl:for-each>

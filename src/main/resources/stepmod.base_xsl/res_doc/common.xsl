@@ -333,12 +333,14 @@ $Id: common.xsl,v 1.33 2008/05/21 20:50:25 abf Exp $
     </TR>
     <TR>
       <TD valign="MIDDLE">
-        <B>
+        <!-- <B> -->
+				<xsl:text> *</xsl:text>
           <xsl:value-of select="concat($this-type,': ')" />
           <xsl:call-template name="res_display_name">
             <xsl:with-param name="res" select="@name"/>
           </xsl:call-template>
-        </B>
+        <!-- </B> -->
+				<xsl:text>* </xsl:text>
       </TD>
       <TD valign="MIDDLE" align="RIGHT">
         <xsl:variable name="stdnumber">
@@ -346,14 +348,16 @@ $Id: common.xsl,v 1.33 2008/05/21 20:50:25 abf Exp $
             <xsl:with-param name="resdoc" select="."/>
           </xsl:call-template>
         </xsl:variable>
-        <b>
+        <!-- <b> -->
+				<xsl:text> *</xsl:text>
           <xsl:value-of select="$stdnumber"/>
           <xsl:variable name="status" select="string(@status)"/>
           <xsl:if test="$status='TS' or $status='DIS' or $status='IS'">
             <br/>
             &#169; ISO
           </xsl:if>
-        </b>
+        <!-- </b> -->
+				<xsl:text>* </xsl:text>
       </TD>
     </TR>
   </TABLE>
@@ -385,151 +389,6 @@ $Id: common.xsl,v 1.33 2008/05/21 20:50:25 abf Exp $
 	<xsl:value-of select="$expg_count + $schema_count + $schema_count  + 16" />
   </xsl:template>
 
-
-
-
-
-
-<!--
-     A definition list
-     -->
-<xsl:template match="dl">
-  <dl>
-    <xsl:apply-templates/>
-  </dl>
-</xsl:template>
-
-<!--
-     A definition term
-     -->
-<xsl:template match="dt">
-  <dt>
-    <xsl:apply-templates/>
-  </dt>
-</xsl:template>
-
-<!--
-     A definition desription
-     -->
-<xsl:template match="dd">
-  <dd>
-    <xsl:apply-templates/>
-  </dd>
-</xsl:template>
-
-
-<!--
-     A paragraph
-     -->
-<xsl:template match="p|P">
-  <xsl:apply-templates select="." mode="check_html"/>
-  <xsl:choose>
-    <xsl:when test="./ancestor::*[name()='example' or name()='note']">
-      <p>
-        <small>
-          <xsl:apply-templates/>
-        </small>
-      </p>      
-    </xsl:when>
-    <xsl:otherwise>
-      <p>
-        <xsl:apply-templates/>
-      </p>
-    </xsl:otherwise>
-  </xsl:choose>
-</xsl:template>
-
-<!-- 
-     flag an error if a paragraph contains another <p> or <ul> or <screen>
-     as these will lead to invalid HTML 
--->
-<xsl:template match="p|P" mode="check_html">
-  <xsl:if test="./child::*[name()='p' or name()='ul' or name='screen']">
-    <xsl:call-template name="error_message">
-      <xsl:with-param 
-        name="message" 
-        select="'Error HTM1: A paragraph should not enclose a &lt;p&gt; or &lt;ul&gt; or &lt;screen&gt;. Close the &lt;p&gt; first'"/>
-    </xsl:call-template>
-  </xsl:if>
-</xsl:template>
-
-
-<xsl:template match="b|B">
-  <b>
-    <xsl:apply-templates/>
-  </b>
-</xsl:template>
-
-
-<xsl:template match="i|I">
-  <i>
-    <xsl:apply-templates/>
-  </i>
-</xsl:template>
-
-<!-- subscript -->
-<xsl:template match="sub|SUB" >
-  <sub>
-    <xsl:apply-templates/>
-  </sub>
-</xsl:template>
-
-
-<!-- superscript -->
-<xsl:template match="sup|SUP" >
-  <sup>
-    <xsl:apply-templates/>
-  </sup>
-</xsl:template>
-
-<xsl:template match="screen" >
-  <pre>
-    <xsl:apply-templates />
-  </pre>
-</xsl:template>
-
-
-<xsl:template match="table">
-  <xsl:variable name="aname">
-    <xsl:call-template name="table_aname">
-      <xsl:with-param name="table" select="."/>
-      <xsl:with-param name="number" select="@number"/>
-      <xsl:with-param name="id" select="@id"/>
-    </xsl:call-template>
-  </xsl:variable>
-
-  <p align="center">
-    <b>
-      Table 
-      <a name="{$aname}">
-        <xsl:value-of select="@number"/> &#8212; <xsl:value-of
-        select="@caption"/>
-      </a>
-    </b>
-  </p>
-  <div align="center">
-    <table border="1" cellpadding="2" cellspacing="0">
-      <xsl:apply-templates/>
-    </table>
-  </div>
-</xsl:template>
-
-<xsl:template match="tr|td">
-  <xsl:variable name="node" select="string(name(.))"/>
-  <xsl:element name="{$node}">
-    <!-- copy across the attributes -->
-    <xsl:copy-of select="@*"/>    
-      <xsl:apply-templates/>
-  </xsl:element>
-</xsl:template>
-
-<xsl:template match="th">
-  <xsl:element name="th">
-    <!-- copy across the attributes -->
-    <xsl:copy-of select="@*"/>    
-    <p align="centre"><b><xsl:apply-templates/></b></p>
-  </xsl:element>
-</xsl:template>
 
 
 
@@ -581,10 +440,12 @@ $Id: common.xsl,v 1.33 2008/05/21 20:50:25 abf Exp $
         </xsl:call-template>
         <xsl:choose>
           <xsl:when test="string-length(.)>0">
-            <b><xsl:apply-templates/></b>
+            <!-- <b><xsl:apply-templates/></b> -->
+            <xsl:text> *</xsl:text><xsl:apply-templates/><xsl:text>* </xsl:text>
           </xsl:when>
           <xsl:otherwise>
-            <b><xsl:value-of select="$item"/></b>
+            <!-- <b><xsl:value-of select="$item"/></b> -->
+						<xsl:text> *</xsl:text><xsl:value-of select="$item"/><xsl:text>* </xsl:text>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:when>

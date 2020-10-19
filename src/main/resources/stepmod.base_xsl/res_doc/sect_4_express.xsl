@@ -388,16 +388,28 @@
           <xsl:variable name="schema_name" select="./@schema"/>      
           <tr>
             <td width="266">
-              <b>
+              <!-- <b>
                 <small>
                   <xsl:value-of select="$schema_name"/>
                 </small>
-              </b>
+              </b> -->
+							
+							<xsl:text>*</xsl:text>
+							<xsl:text>[smallcap]#</xsl:text>
+							<xsl:value-of select="$schema_name"/>
+							<xsl:text>#</xsl:text>
+							<xsl:text>*</xsl:text>
             </td>
             <td width="127">
-              <small>
+              <!-- <small>
                 <xsl:apply-templates select="." mode="source"/>
-              </small>
+              </small> -->
+							<xsl:variable name="text">
+								<xsl:apply-templates select="." mode="source"/>
+							</xsl:variable>
+							<xsl:text>[smallcap]#</xsl:text>
+							<xsl:value-of select="normalize-space($text)"/>
+							<xsl:text>#</xsl:text>
             </td>
           </tr>
         </xsl:for-each>
@@ -513,7 +525,10 @@
   </xsl:if>
 
   <xsl:if test="position()=1">
-    <p><u>EXPRESS specification:</u></p>
+    <!-- <p><u>EXPRESS specification:</u></p> -->
+		<xsl:text>[.underline]#EXPRESS specification:#</xsl:text>
+		<xsl:text>&#xa;&#xa;</xsl:text>
+		
     <p>
     <!-- start blockquote -->
       <code>
@@ -582,7 +597,9 @@
 
 
     <!-- output EXPRESS -->
-    <p><u>EXPRESS specification:</u></p>
+    <!-- <p><u>EXPRESS specification:</u></p> -->
+		<xsl:text>[.underline]#EXPRESS specification:#</xsl:text>
+		<xsl:text>&#xa;&#xa;</xsl:text>
     <p>
     <!--  start blockquote -->
       <code>
@@ -765,7 +782,9 @@
     <xsl:with-param name="entity" select="@name"/>
   </xsl:call-template> 
 
-  <p><u>EXPRESS specification:</u></p>
+  <!-- <p><u>EXPRESS specification:</u></p> -->
+	<xsl:text>[.underline]#EXPRESS specification:#</xsl:text>
+		<xsl:text>&#xa;&#xa;</xsl:text>
   <p>
   <!-- start blockquote -->
     <code>
@@ -892,7 +911,10 @@
 
 <xsl:template match="enumeration" mode="describe_enums">
   <xsl:if test="string-length(normalize-space(@items))>0">
-    <p><u>Enumerated item definitions:</u></p>
+    <!-- <p><u>Enumerated item definitions:</u></p> -->		
+		<xsl:text>[.underline]#Enumerated item definitions:#</xsl:text>
+		<xsl:text>&#xa;&#xa;</xsl:text>
+		
     <xsl:call-template name="output_enums">
       <xsl:with-param name="str" select="normalize-space(@items)"/>
     </xsl:call-template>
@@ -1097,7 +1119,10 @@
     <xsl:with-param name="entity" select="./@name"/>
   </xsl:call-template> 
 
-  <p><u>EXPRESS specification:</u></p>
+  <!-- <p><u>EXPRESS specification:</u></p> -->
+	<xsl:text>[.underline]#EXPRESS specification:#</xsl:text>
+	<xsl:text>&#xa;&#xa;</xsl:text>
+	
   <p>
   <!--  start blockquote -->
     <code>
@@ -1337,7 +1362,10 @@
 
 <xsl:template match="explicit" mode="description">
   <xsl:if test="position()=1">
-    <p><u>Attribute definitions:</u></p>
+    <!-- <p><u>Attribute definitions:</u></p> -->
+		<xsl:text>[.underline]#Attribute definitions:#</xsl:text>
+		<xsl:text>&#xa;&#xa;</xsl:text>
+		
   </xsl:if>
 
   <xsl:variable name="aname">
@@ -1402,7 +1430,9 @@
        there are no explicit attribute - if there were then Attribute
        definitions" would have already been output -->
   <xsl:if test="position()=1 and not(../explicit)">
-    <p><u>Attribute definitions:</u></p>
+    <!-- <p><u>Attribute definitions:</u></p> -->
+		<xsl:text>[.underline]#Attribute definitions:#</xsl:text>
+		<xsl:text>&#xa;&#xa;</xsl:text>
   </xsl:if>
 
   <xsl:variable name="aname">
@@ -1463,7 +1493,9 @@
 <xsl:template match="inverse" mode="description">
 
   <xsl:if test="position()=1 and not(../explicit | ../derived)">
-    <p><u>Attribute definitions:</u></p>
+    <!-- <p><u>Attribute definitions:</u></p> -->
+		<xsl:text>[.underline]#Attribute definitions:#</xsl:text>
+		<xsl:text>&#xa;&#xa;</xsl:text>
   </xsl:if>
 
   <xsl:variable name="aname">
@@ -1529,7 +1561,9 @@
 
 <xsl:template match="unique" mode="description">
   <xsl:if test="position()=1">
-    <p><u>Formal propositions:</u></p>
+    <!-- <p><u>Formal propositions:</u></p> -->
+		<xsl:text>[.underline]#Formal propositions:#</xsl:text>
+		<xsl:text>&#xa;&#xa;</xsl:text>
   </xsl:if>  
 
   <xsl:variable name="aname">
@@ -1593,14 +1627,18 @@
 
 <xsl:template name="output_where_formal">
   <xsl:if test="./where[@expression] and not(./unique)">
-    <p><u>Formal propositions:</u></p>
+    <!-- <p><u>Formal propositions:</u></p> -->
+		<xsl:text>[.underline]#Formal propositions:#</xsl:text>
+		<xsl:text>&#xa;&#xa;</xsl:text>
   </xsl:if>
   <xsl:apply-templates select="./where[@expression]" mode="description"/>
 </xsl:template>
 
 <xsl:template name="output_where_informal">
   <xsl:if test="./where[not(@expression)]">
-    <p><u>Informal propositions:</u></p>
+    <!-- <p><u>Informal propositions:</u></p> -->
+		<xsl:text>[.underline]#Informal propositions:#</xsl:text>
+		<xsl:text>&#xa;&#xa;</xsl:text>
   </xsl:if>
   <xsl:apply-templates select="./where[not(@expression)]" mode="description"/>
 </xsl:template>
@@ -1747,13 +1785,16 @@
   <xsl:apply-templates select="." mode="description"/>
 
   <!-- output the EXPRESS -->
-  <p><u>EXPRESS specification:</u></p>
+  <!-- <p><u>EXPRESS specification:</u></p> -->
+	<xsl:text>[.underline]#EXPRESS specification:#</xsl:text>
+	<xsl:text>&#xa;&#xa;</xsl:text>
   
   <p>
     <code>
   *)<br/>
-  <A NAME="{$aname}">SUBTYPE_CONSTRAINT <b>
-	<xsl:value-of select="@name"/></b></A>
+  <!-- <A NAME="{$aname}">SUBTYPE_CONSTRAINT <b>
+	<xsl:value-of select="@name"/></b></A> -->
+	<A NAME="{$aname}">SUBTYPE_CONSTRAINT <xsl:text>*</xsl:text><xsl:value-of select="@name"/><xsl:text>*</xsl:text></A>
   <xsl:text> FOR </xsl:text>
   <xsl:call-template name="link_object">
     <xsl:with-param name="object_name" select="@entity"/>
@@ -1816,8 +1857,8 @@
   <xsl:if test="$sc_description='YES'">
     <xsl:choose>
       <!-- an ABSTRACT ONEOF -->
-      <xsl:when test="(./@abstract.supertype='YES') and ($one_of = 'ONEOF')">
-        <p>
+      <xsl:when test="(./@abstract.supertype='YES') and ($one_of = 'ONEOF')">        				
+				<!-- <p>
           The
           <b>
             <xsl:value-of select="@name"/>
@@ -1848,11 +1889,36 @@
             <xsl:with-param name="clause" select="'section'"/>
             <xsl:with-param name="and_for_last_pair" select="'yes'"/>
           </xsl:call-template>.
-        </p>
+        </p> -->
+				<xsl:variable name="text">
+					The *<xsl:value-of select="@name"/>* constraint specifies that 
+          *<xsl:call-template name="link_object">
+              <xsl:with-param name="object_name" select="@entity"/>
+              <xsl:with-param name="object_used_in_schema_name" 
+                select="../@name"/>
+              <xsl:with-param name="clause" select="'section'"/>
+            </xsl:call-template>* is an abstract supertype and that instances of subtypes of
+          *<xsl:call-template name="link_object">
+              <xsl:with-param name="object_name" select="@entity"/>
+              <xsl:with-param name="object_used_in_schema_name" 
+                select="../@name"/>
+              <xsl:with-param name="clause" select="'section'"/>
+            </xsl:call-template>* shall not be simultaneously of type 
+          <xsl:call-template name="link_list">
+            <xsl:with-param name="list" select="$sc_list"/>
+            <xsl:with-param name="suffix" select="', '"/>
+            <xsl:with-param name="object_used_in_schema_name" select="../@name"/>
+            <xsl:with-param name="clause" select="'section'"/>
+            <xsl:with-param name="and_for_last_pair" select="'yes'"/>
+          </xsl:call-template>.
+				</xsl:variable>
+				<xsl:text>&#xa;</xsl:text>
+				<xsl:value-of select="normalize-space($text)"/>
+				<xsl:text>&#xa;&#xa;</xsl:text>
       </xsl:when>
       
       <xsl:when test="($one_of = 'ONEOF')">
-        <p>
+        <!-- <p>
           The
           <b>
             <xsl:value-of select="@name"/>
@@ -1874,12 +1940,33 @@
             <xsl:with-param name="clause" select="'section'"/>
             <xsl:with-param name="and_for_last_pair" select="'yes'"/>
           </xsl:call-template>.
-        </p>
+        </p> -->
+				<xsl:variable name="text">				
+          The *<xsl:value-of select="@name"/>* constraint specifies that instances of subtypes of
+          *<xsl:call-template name="link_object">
+              <xsl:with-param name="object_name" select="@entity"/>
+              <xsl:with-param name="object_used_in_schema_name" 
+                select="../@name"/>
+              <xsl:with-param name="clause" select="'section'"/>
+            </xsl:call-template>* shall not be simultaneously of type 
+          <xsl:call-template name="link_list">
+            <xsl:with-param name="list" select="$sc_list"/>
+            <xsl:with-param name="suffix" select="', '"/>
+            <xsl:with-param name="object_used_in_schema_name" select="../@name"/>
+            <xsl:with-param name="clause" select="'section'"/>
+            <xsl:with-param name="and_for_last_pair" select="'yes'"/>
+          </xsl:call-template>.        
+				</xsl:variable>
+				
+				<xsl:text>&#xa;</xsl:text>
+				<xsl:value-of select="normalize-space($text)"/>
+				<xsl:text>&#xa;&#xa;</xsl:text>
+				
       </xsl:when>
 
       <!-- an ABSTRACT EXPRESSION -->
       <xsl:when test="(./@abstract.supertype='YES') and ./@super.expression">
-        <p>
+        <!-- <p>
           The
           <b>
             <xsl:value-of select="@name"/>
@@ -1903,12 +1990,33 @@
               <xsl:with-param name="clause" select="'section'"/>
             </xsl:call-template>
           </b>.
-        </p>
+        </p> -->
+				<xsl:variable name="text">
+          The *<xsl:value-of select="@name"/>* constraint specifies that 
+          *<xsl:call-template name="link_object">
+              <xsl:with-param name="object_name" select="@entity"/>
+              <xsl:with-param name="object_used_in_schema_name" 
+                select="../@name"/>
+              <xsl:with-param name="clause" select="'section'"/>
+            </xsl:call-template>* is an abstract supertype and that defines 
+          a constraint that applies to instances of subtypes of 
+            *<xsl:call-template name="link_object">
+              <xsl:with-param name="object_name" select="@entity"/>
+              <xsl:with-param name="object_used_in_schema_name" 
+                select="../@name"/>
+              <xsl:with-param name="clause" select="'section'"/>
+            </xsl:call-template>*.
+        </xsl:variable>
+				
+				<xsl:text>&#xa;</xsl:text>
+				<xsl:value-of select="normalize-space($text)"/>
+				<xsl:text>&#xa;&#xa;</xsl:text>
+				
       </xsl:when>
 
       <!-- an subtype expression -->
       <xsl:when test="./@super.expression">
-        <p>
+        <!-- <p>
           The
           <b>
             <xsl:value-of select="@name"/>
@@ -1922,12 +2030,27 @@
               <xsl:with-param name="clause" select="'section'"/>
             </xsl:call-template>
           </b>.
-        </p>
+        </p> -->
+				
+				<xsl:variable name="text">
+          The *<xsl:value-of select="@name"/>* constraint specifies a constraint that applies to instances of subtypes of
+          *<xsl:call-template name="link_object">
+              <xsl:with-param name="object_name" select="@entity"/>
+              <xsl:with-param name="object_used_in_schema_name" 
+                select="../@name"/>
+              <xsl:with-param name="clause" select="'section'"/>
+            </xsl:call-template>*.
+        </xsl:variable>
+				
+				<xsl:text>&#xa;</xsl:text>
+				<xsl:value-of select="normalize-space($text)"/>
+				<xsl:text>&#xa;&#xa;</xsl:text>
+				
       </xsl:when>
 
       <!-- an ABSTRACT supertype -->
       <xsl:when test="./@abstract.supertype='YES'">
-          The
+          <!-- The
           <b>
             <xsl:value-of select="@name"/>
           </b> 
@@ -1940,7 +2063,20 @@
               <xsl:with-param name="clause" select="'section'"/>
             </xsl:call-template>
           </b>
-          is an abstract supertype.
+          is an abstract supertype. -->
+					
+					<xsl:variable name="text">
+						The *<xsl:value-of select="@name"/>* constraint specifies that 
+						*<xsl:call-template name="link_object">
+								<xsl:with-param name="object_name" select="@entity"/>
+								<xsl:with-param name="object_used_in_schema_name" 
+									select="../@name"/>
+								<xsl:with-param name="clause" select="'section'"/>
+							</xsl:call-template>* is an abstract supertype.
+					</xsl:variable>
+					
+					<xsl:value-of select="normalize-space($text)"/>
+					
       </xsl:when>
     </xsl:choose>
 
@@ -2077,7 +2213,9 @@
   </xsl:call-template>
 
   <!-- output the EXPRESS -->
-  <p><u>EXPRESS specification:</u></p>
+  <!-- <p><u>EXPRESS specification:</u></p> -->
+	<xsl:text>[.underline]#EXPRESS specification:#</xsl:text>
+	<xsl:text>&#xa;&#xa;</xsl:text>
 
   <!--  start blockquote  -->
     <code>
@@ -2189,7 +2327,9 @@
   </xsl:call-template> 
   
   <!-- output the EXPRESS -->
-  <p><u>EXPRESS specification:</u></p>
+  <!-- <p><u>EXPRESS specification:</u></p> -->
+	<xsl:text>[.underline]#EXPRESS specification:#</xsl:text>
+	<xsl:text>&#xa;&#xa;</xsl:text>
   <!--  start blockquote  -->
     <code>
       *)<br/>     
@@ -2229,7 +2369,9 @@
 
 <xsl:template match="parameter" mode="description">
   <xsl:if test="position()=1">
-    <p><u>Argument definitions:</u></p>
+    <!-- <p><u>Argument definitions:</u></p> -->
+		<xsl:text>[.underline]#Argument definitions:#</xsl:text>
+		<xsl:text>&#xa;&#xa;</xsl:text>
   </xsl:if>
 
   <xsl:variable name="aname">
@@ -2407,7 +2549,10 @@
   </xsl:call-template> 
   
   <!-- output the EXPRESS -->
-  <p><u>EXPRESS specification:</u></p>
+  <!-- <p><u>EXPRESS specification:</u></p> -->
+	<xsl:text>[.underline]#EXPRESS specification:#</xsl:text>
+	<xsl:text>&#xa;&#xa;</xsl:text>
+	
  <p>
   <!-- start blockquote -->
     <code>
@@ -2424,7 +2569,9 @@
     </code>
   <!-- end blockquote -->
    </p>
-  <p><u>Argument definitions:</u></p>
+  <!-- <p><u>Argument definitions:</u></p> -->
+	<xsl:text>[.underline]#Argument definitions:#</xsl:text>
+	<xsl:text>&#xa;&#xa;</xsl:text>
   <xsl:call-template name="process_rule_arguments">
     <xsl:with-param name="args" select="@appliesto"/>
   </xsl:call-template>
@@ -2460,9 +2607,11 @@
 <xsl:template name="output_rule_argument">
   <xsl:param name="arg"/>
   <p class="expressdescription">
-    <b>
+    <!-- <b>
       <xsl:value-of select="concat($arg,' : ')"/>
-    </b>
+    </b> -->
+		<xsl:text> *</xsl:text><xsl:value-of select="concat($arg,' : ')"/><xsl:text>* </xsl:text>
+		
     <!-- output the default description -->
     the set of all instances of 
     <xsl:call-template name="link_object">
@@ -3321,7 +3470,9 @@ main_clause in exp_cl_pres   :<xsl:value-of select="$main_clause"/>
       <xsl:when test="@basedon and @extensible='YES'">
         <!-- an extended and extensible SELECT type -->
          <!-- <p><b><i><font color="#FF0000">an extended and extensible SELECT type</font></i></b></p> -->
-        The <b><xsl:value-of select="$typename"/></b> type is an extension
+				 
+				 
+        <!-- The <b><xsl:value-of select="$typename"/></b> type is an extension
         of the 
         <b>
           <xsl:call-template name="link_object">
@@ -3333,9 +3484,9 @@ main_clause in exp_cl_pres   :<xsl:value-of select="$main_clause"/>
         </b> type. 
         <xsl:if test="@selectitems and (string-length(@selectitems)!=0)">
           It adds the data 
-          <xsl:choose>
+          <xsl:choose> -->
             <!-- if the list has a space there must be more than one item -->
-            <xsl:when test="contains(normalize-space(@selectitems),' ')">
+            <!-- <xsl:when test="contains(normalize-space(@selectitems),' ')">
               types
             </xsl:when>
             <xsl:otherwise>
@@ -3351,7 +3502,41 @@ main_clause in exp_cl_pres   :<xsl:value-of select="$main_clause"/>
             <xsl:with-param name="and_for_last_pair" select="'yes'"/>
           </xsl:call-template>
           to the list of alternate data types.
-        </xsl:if>
+        </xsl:if> -->
+				
+				<xsl:variable name="text">
+					The *<xsl:value-of select="$typename"/>* type is an extension of the 
+        *<xsl:call-template name="link_object">
+            <xsl:with-param name="object_name" select="@basedon"/>
+            <xsl:with-param name="object_used_in_schema_name" 
+              select="../../@name"/>
+            <xsl:with-param name="clause" select="'section'"/>
+          </xsl:call-template>* type. 
+					<xsl:if test="@selectitems and (string-length(@selectitems)!=0)">
+						It adds the data 
+						<xsl:choose>
+							<!-- if the list has a space there must be more than one item -->
+							<xsl:when test="contains(normalize-space(@selectitems),' ')">
+								types
+							</xsl:when>
+							<xsl:otherwise>
+								type
+							</xsl:otherwise>
+						</xsl:choose>
+						<xsl:call-template name="link_list">
+							<xsl:with-param name="suffix" select="', '"/>
+							<xsl:with-param name="list" select="@selectitems"/>
+							<xsl:with-param name="object_used_in_schema_name"
+								select="../../@name"/>
+							<xsl:with-param name="clause" select="'section'"/>
+							<xsl:with-param name="and_for_last_pair" select="'yes'"/>
+						</xsl:call-template>
+						to the list of alternate data types.
+					</xsl:if>
+				</xsl:variable>
+				
+				<xsl:value-of select="normalize-space($text)"/>				
+				
         <p class="note">
           <small>
             <!-- NOTE&#160;&#160; -->The list of entity data types will be
@@ -3364,7 +3549,7 @@ main_clause in exp_cl_pres   :<xsl:value-of select="$main_clause"/>
       <xsl:when test="(@basedon and @extensible='NO') or @basedon">
         <!-- an extended not extensible SELECT type  -->
          <!-- <p><b><i><font color="#FF0000">an extended not extensible SELECT type</font></i></b></p> -->
-        The <b><xsl:value-of select="$typename"/></b> type is an extension
+        <!-- The <b><xsl:value-of select="$typename"/></b> type is an extension
         of the 
         <b>
           <xsl:call-template name="link_object">
@@ -3376,9 +3561,9 @@ main_clause in exp_cl_pres   :<xsl:value-of select="$main_clause"/>
         </b> type. 
         <xsl:if test="@selectitems and (string-length(@selectitems)!=0)">
           It adds the data 
-          <xsl:choose>
+          <xsl:choose> -->
             <!-- if the list has a space there must be more than one item -->
-            <xsl:when test="contains(normalize-space(@selectitems),' ')">
+            <!-- <xsl:when test="contains(normalize-space(@selectitems),' ')">
               types
             </xsl:when>
             <xsl:otherwise>
@@ -3394,7 +3579,41 @@ main_clause in exp_cl_pres   :<xsl:value-of select="$main_clause"/>
             <xsl:with-param name="and_for_last_pair" select="'yes'"/>
           </xsl:call-template>
           to the list of alternate data types.
-        </xsl:if>
+        </xsl:if> -->
+				
+				<xsl:variable name="text">
+					The *<xsl:value-of select="$typename"/>* type is an extension of the 
+					*<xsl:call-template name="link_object">
+							<xsl:with-param name="object_name" select="@basedon"/>
+							<xsl:with-param name="object_used_in_schema_name" 
+								select="../../@name"/>
+							<xsl:with-param name="clause" select="'section'"/>
+						</xsl:call-template>* type. 
+						<xsl:if test="@selectitems and (string-length(@selectitems)!=0)">
+							It adds the data 
+							<xsl:choose>
+								<!-- if the list has a space there must be more than one item -->
+								<xsl:when test="contains(normalize-space(@selectitems),' ')">
+									types
+								</xsl:when>
+								<xsl:otherwise>
+									type
+								</xsl:otherwise>
+							</xsl:choose>
+							<xsl:call-template name="link_list">
+								<xsl:with-param name="suffix" select="', '"/>
+								<xsl:with-param name="list" select="@selectitems"/>
+								<xsl:with-param name="object_used_in_schema_name"
+									select="../../@name"/>
+								<xsl:with-param name="clause" select="'section'"/>
+								<xsl:with-param name="and_for_last_pair" select="'yes'"/>
+							</xsl:call-template>
+							to the list of alternate data types.
+						</xsl:if>
+				</xsl:variable>
+				
+				<xsl:value-of select="normalize-space($text)"/>
+				
       </xsl:when>
 
       <xsl:when test="@extensible='YES'">
@@ -3404,11 +3623,22 @@ main_clause in exp_cl_pres   :<xsl:value-of select="$main_clause"/>
           <xsl:when test="@selectitems">
             <!-- an extensible non-empty SELECT type -->
              <!-- <p><b><i><font color="#FF0000">an extensible non-empty SELECT type</font></i></b></p> -->
-            The <b><xsl:value-of select="$typename"/></b> type is an
+            <!-- The <b><xsl:value-of select="$typename"/></b> type is an
             extensible list of alternate data types. It provides a
             mechanism to refer to instances of the data types included in
             the <b><xsl:value-of select="$typename"/></b> type or in its
-            extensions.  
+            extensions. -->
+						
+						<xsl:variable name="text">
+							The *<xsl:value-of select="$typename"/>* type is an
+							extensible list of alternate data types. It provides a
+							mechanism to refer to instances of the data types included in
+							the *<xsl:value-of select="$typename"/>* type or in its
+							extensions.
+						</xsl:variable>
+						
+						<xsl:value-of select="normalize-space($text)"/>
+						
             <p class="note">
               <small>
                 <!-- NOTE&#160;&#160; -->The list of entity data types will be
@@ -3421,11 +3651,24 @@ main_clause in exp_cl_pres   :<xsl:value-of select="$main_clause"/>
           <xsl:otherwise>
             <!-- an extensible empty SELECT type -->
             <!-- <p><b><i><font color="#FF0000">an extensible empty SELECT type</font></i></b></p> -->
-            The <b><xsl:value-of select="$typename"/></b> type is an
+            
+						
+						<!-- The <b><xsl:value-of select="$typename"/></b> type is an
             extensible list of alternate data types. It provides a
             mechanism to refer to instances of the data types included in
             the types that extend the 
-            <b><xsl:value-of select="$typename"/></b> type. 
+            <b><xsl:value-of select="$typename"/></b> type.  -->
+						
+						<xsl:variable name="text">
+							The *<xsl:value-of select="$typename"/>* type is an
+							extensible list of alternate data types. It provides a
+							mechanism to refer to instances of the data types included in
+							the types that extend the 
+							*<xsl:value-of select="$typename"/>* type. 
+						</xsl:variable>
+						
+						<xsl:value-of select="normalize-space($text)"/>
+						
             <!--
               The <b><xsl:value-of select="$typename"/></b> type shall be
             extended in schemas that use the constructs of this
@@ -3444,9 +3687,18 @@ main_clause in exp_cl_pres   :<xsl:value-of select="$main_clause"/>
       <xsl:otherwise>
         <!-- a non extensible SELECT type -->
          <!-- <p><b><i><font color="#FF0000">a non extensible SELECT type</font></i></b></p> -->
-        The <b><xsl:value-of select="$typename"/></b> type is a list of
+        <!-- The <b><xsl:value-of select="$typename"/></b> type is a list of
         alternate data types. It provides a mechanism to refer to an
-        instance of one of these data types.  
+        instance of one of these data types.  --> 
+				
+				<xsl:variable name="text">
+					The *<xsl:value-of select="$typename"/>* type is a list of
+					alternate data types. It provides a mechanism to refer to an
+					instance of one of these data types. 
+				</xsl:variable>
+						
+				<xsl:value-of select="normalize-space($text)"/>
+				
       </xsl:otherwise>
       
     </xsl:choose>    

@@ -621,21 +621,21 @@
 		<xsl:text>&#xa;</xsl:text>
 	</xsl:template>
 	
-	<xsl:template match="b | B" mode="stepmod2mn">
+	<!-- <xsl:template match="b | B" mode="stepmod2mn">
 		<xsl:text> *</xsl:text><xsl:apply-templates mode="stepmod2mn"/><xsl:text>* </xsl:text>
-	</xsl:template>
+	</xsl:template> -->
 	
-	<xsl:template match="i | I" mode="stepmod2mn">
+	<!-- <xsl:template match="i | I" mode="stepmod2mn">
 		<xsl:text> _</xsl:text><xsl:apply-templates mode="stepmod2mn"/><xsl:text>_</xsl:text>
-	</xsl:template>
+	</xsl:template> -->
 	
-	<xsl:template match="u | U" mode="stepmod2mn">
+	<!-- <xsl:template match="u | U" mode="stepmod2mn">
 		<xsl:text>[.underline]#</xsl:text>
 		<xsl:apply-templates mode="stepmod2mn"/>
 		<xsl:text>#</xsl:text>
-	</xsl:template>
+	</xsl:template> -->
 	
-	<xsl:template match="sub | SUB" mode="stepmod2mn">
+	<!-- <xsl:template match="sub | SUB" mode="stepmod2mn">
 		<xsl:text>~</xsl:text><xsl:apply-templates mode="stepmod2mn"/><xsl:text>~</xsl:text>
 	</xsl:template>
 	
@@ -645,7 +645,7 @@
 	
 	<xsl:template match="tt" mode="stepmod2mn">
 		<xsl:text>`</xsl:text><xsl:apply-templates mode="stepmod2mn"/><xsl:text>`</xsl:text>
-	</xsl:template>
+	</xsl:template> -->
 	
 	<xsl:template match="sc" mode="stepmod2mn">
 		<xsl:text>[smallcap]#</xsl:text>
