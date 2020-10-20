@@ -1422,14 +1422,23 @@ Purpose:
     If there is difficulty accessing these sites, contact ISO Central
     Secretariat.
   </p> removed by MWD 2018-08-23 -->
-    <p class="note">
+    <!-- <p class="note">
       <small>
-	NOTE&#160;&#160;The information provided in computer-interpretable
-	form at the 
-	above URLs is informative. The information that is contained in the
-	body of this part of ISO 10303 is normative. 
+        NOTE&#160;&#160;The information provided in computer-interpretable
+        form at the 
+        above URLs is informative. The information that is contained in the
+        body of this part of ISO 10303 is normative. 
       </small>
-    </p>
+    </p> -->
+    <xsl:variable name="note">The information provided in computer-interpretable
+        form at the 
+        above URLs is informative. The information that is contained in the
+        body of this part of ISO 10303 is normative. 
+    </xsl:variable>
+    <xsl:text>&#xa;&#xa;</xsl:text>    
+    <xsl:text>NOTE: </xsl:text><xsl:value-of select="normalize-space($note)"/>
+    <xsl:text>&#xa;&#xa;</xsl:text>
+    
   </xsl:template>
 
 

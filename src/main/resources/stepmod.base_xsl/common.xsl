@@ -606,18 +606,29 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
           <xsl:when test="@id">
             <xsl:value-of select="concat('example_',@id)"/>
           </xsl:when>
-          <xsl:otherwise>
+          <xsl:when test="@number">
             <xsl:value-of select="concat('example_',@number)"/>
-          </xsl:otherwise>
+          </xsl:when>          
         </xsl:choose>
       </xsl:variable>
-      <p class="example">
+      <!-- <p class="example">
         <small>
           <a name="{$aname}">
-            <xsl:value-of select="concat('EXAMPLE&#160;',@number)"/></a>&#160;&#160;
-            <xsl:apply-templates/>
-          </small>
-        </p>  
+          <xsl:value-of select="concat('EXAMPLE&#160;',@number)"/></a>&#160;&#160;
+          <xsl:apply-templates/>
+        </small>
+      </p> -->
+      <xsl:text>&#xa;&#xa;</xsl:text>
+      <xsl:text>[example]</xsl:text>
+      <xsl:text>&#xa;</xsl:text>
+      <xsl:text>[[</xsl:text>
+      <xsl:value-of select="$aname"/>
+      <xsl:text>]]</xsl:text>
+      <xsl:text>&#xa;</xsl:text>
+      <xsl:variable name="example"><xsl:apply-templates/></xsl:variable>
+      <xsl:value-of select="normalize-space($example)"/>
+      <xsl:text>&#xa;&#xa;</xsl:text>
+        
     </xsl:when>
     <!-- check that the first element is p or ul-->
     <xsl:when test="name(child::*[1]) != 'p'">
@@ -644,22 +655,34 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
   <xsl:param name="number"/>
   <xsl:variable name="aname">
     <xsl:choose>
-      <xsl:when test="$id">
+      <xsl:when test="$id != ''">
         <xsl:value-of select="concat('example_',$id)"/>
       </xsl:when>
-      <xsl:otherwise>
+      <xsl:when test="$number != ''">
         <xsl:value-of select="concat('example_',$number)"/>
-      </xsl:otherwise>
+      </xsl:when>      
     </xsl:choose>
   </xsl:variable>
   <xsl:apply-templates select="." mode="check_html"/>
-  <p class="example">
+  <!-- <p class="example">
     <small>
       <a name="{$aname}">
         <xsl:value-of select="concat('EXAMPLE&#160;',$number)"/></a>&#160;&#160;
       <xsl:apply-templates/>
     </small>
-  </p>  
+  </p> -->  
+  
+  <xsl:text>&#xa;&#xa;</xsl:text>
+  <xsl:text>[example]</xsl:text>
+  <xsl:text>&#xa;</xsl:text>
+  <xsl:text>[[</xsl:text>
+  <xsl:value-of select="$aname"/>
+  <xsl:text>]]</xsl:text>
+  <xsl:text>&#xa;</xsl:text>
+  <xsl:variable name="example"><xsl:apply-templates/></xsl:variable>
+  <xsl:value-of select="normalize-space($example)"/>
+  <xsl:text>&#xa;&#xa;</xsl:text>
+  
 </xsl:template>
 
 
@@ -684,18 +707,31 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
           <xsl:when test="@id">
             <xsl:value-of select="concat('note_',@id)"/>
           </xsl:when>
-          <xsl:otherwise>
+          <xsl:when test="@number">
             <xsl:value-of select="concat('note_',@number)"/>
-          </xsl:otherwise>
+          </xsl:when>          
         </xsl:choose>
       </xsl:variable>
-      <p class="note">
+      
+      <!-- <p class="note">
         <small>
           <a name="{$aname}">
-            <!-- <xsl:value-of select="concat('NOTE&#160;',@number)"/> --></a><!-- &#160;&#160; -->
+            <xsl:value-of select="concat('NOTE&#160;',@number)"/></a> &#160;&#160; 
             <xsl:apply-templates/>
-          </small>
-        </p>  
+        </small>
+      </p> -->  
+        
+      <xsl:text>&#xa;&#xa;</xsl:text>
+      <xsl:if test="normalize-space($aname) != ''">
+        <xsl:text>[[</xsl:text>
+        <xsl:value-of select="$aname"/>
+        <xsl:text>]]</xsl:text>
+        <xsl:text>&#xa;</xsl:text>
+      </xsl:if>
+      <xsl:variable name="note"><xsl:apply-templates/></xsl:variable>
+      <xsl:text>NOTE: </xsl:text><xsl:value-of select="normalize-space($note)"/>
+      <xsl:text>&#xa;&#xa;</xsl:text>
+        
     </xsl:when>
     <!-- check that the first element is p -->
     <xsl:when test="string(name(child::*[1])) != 'p'">
@@ -723,32 +759,67 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
   <xsl:param name="number"/>
   <xsl:variable name="aname">
     <xsl:choose>
-      <xsl:when test="$id">
+      <xsl:when test="$id != ''">
         <xsl:value-of select="concat('note_',$id)"/>
       </xsl:when>
-      <xsl:otherwise>
+      <xsl:when test="$number != ''">
         <xsl:value-of select="concat('note_',$number)"/>
-      </xsl:otherwise>
+      </xsl:when>      
     </xsl:choose>
   </xsl:variable>
   <xsl:apply-templates select="." mode="check_html"/>
   <xsl:choose>
     <xsl:when test="name(../..)='example'">
       <!-- already small -->
-      <p class="note">
+      <!-- <p class="note">
         <a name="{$aname}">
-          <!-- <xsl:value-of select="concat('NOTE&#160;',$number)"/> --></a><!-- &#160;&#160; -->
+          <xsl:value-of select="concat('NOTE&#160;',$number)"/></a>&#160;&#160;
           <xsl:apply-templates/>
-      </p>
+      </p> -->
+      
+      <xsl:text>&#xa;&#xa;</xsl:text>
+      <xsl:text>[example]</xsl:text>
+      <xsl:text>&#xa;</xsl:text>
+      <xsl:if test="normalize-space($aname) != ''">
+        <xsl:text>[[</xsl:text>
+        <xsl:value-of select="$aname"/>
+        <xsl:text>]]</xsl:text>
+        <xsl:text>&#xa;</xsl:text>
+      </xsl:if>
+      <xsl:variable name="example"><xsl:apply-templates/></xsl:variable>
+      <xsl:value-of select="normalize-space($example)"/>
+      <xsl:text>&#xa;&#xa;</xsl:text>
+      
+      <!-- <xsl:text>&#xa;&#xa;</xsl:text>  
+      <xsl:text>[[</xsl:text>
+      <xsl:value-of select="$aname"/>
+      <xsl:text>]]</xsl:text>
+      <xsl:text>&#xa;</xsl:text>
+      <xsl:variable name="note"><xsl:apply-templates/></xsl:variable>
+      <xsl:text>NOTE: </xsl:text><xsl:value-of select="normalize-space($note)"/>
+      <xsl:text>&#xa;&#xa;</xsl:text> -->
+      
     </xsl:when>
     <xsl:otherwise>
-      <p class="note">
+      <!-- <p class="note">
         <small>
           <a name="{$aname}">
-            <!-- <xsl:value-of select="concat('NOTE&#160;',$number)"/> --></a><!-- &#160;&#160; -->
+            <xsl:value-of select="concat('NOTE&#160;',$number)"/></a>&#160;&#160;
             <xsl:apply-templates/>
           </small>
-        </p>  
+        </p>  --> 
+        
+        <xsl:text>&#xa;&#xa;</xsl:text>  
+        <xsl:if test="normalize-space($aname) != ''">
+          <xsl:text>[[</xsl:text>
+          <xsl:value-of select="$aname"/>
+          <xsl:text>]]</xsl:text>
+          <xsl:text>&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:variable name="note"><xsl:apply-templates/></xsl:variable>
+        <xsl:text>NOTE: </xsl:text><xsl:value-of select="normalize-space($note)"/>
+        <xsl:text>&#xa;&#xa;</xsl:text>
+        
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>

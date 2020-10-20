@@ -366,9 +366,9 @@
   <xsl:variable name="note_number" select="count(document(concat($path, '../../../data/resource_docs/', $resdoc_name, '/resource.xml'))//schema[@name=$schema_name_param]/introduction//note)"/><!-- MWD 2018-02-06 -->
   
   
-    <p class="note">
+    <!-- <p class="note">
       <small>
-        <!-- NOTE&#160;<xsl:value-of select="$note_number+1"/>&#160;&#160; -->
+        NOTE&#160;<xsl:value-of select="$note_number+1"/>&#160;&#160;
 	<xsl:variable name="used-count" select="count(used-schema[not(.=preceding-sibling::used-schema)])" />
 	<xsl:choose>
 		<xsl:when test="$used-count = 1" >
@@ -381,7 +381,26 @@
 		</xsl:otherwise>
 	</xsl:choose>
       </small>
-    </p>
+    </p> -->
+    
+    
+    <xsl:variable name="note">      
+      <xsl:variable name="used-count" select="count(used-schema[not(.=preceding-sibling::used-schema)])" />
+      <xsl:choose>
+        <xsl:when test="$used-count = 1" >
+                The schemas referenced above are specified in the following 
+                part:
+        </xsl:when>
+        <xsl:otherwise >
+          The schemas referenced above are specified in the following 
+          parts:
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:text>&#xa;&#xa;</xsl:text>    
+    <xsl:text>NOTE: </xsl:text><xsl:value-of select="normalize-space($note)"/>
+    <xsl:text>&#xa;&#xa;</xsl:text>
+    
     <blockquote>
         <table>  
         <xsl:for-each select="$schema_node/interface[not(@schema = node()/preceding::node()/@schema)]">
@@ -415,9 +434,9 @@
         </xsl:for-each>
       </table>
   </blockquote>
-    <p class="note">
+    <!-- <p class="note">
       <small>
-        <!-- NOTE&#160;<xsl:value-of select="$note_number+2"/>&#160;&#160; -->
+        NOTE&#160;<xsl:value-of select="$note_number+2"/>&#160;&#160;
         <xsl:variable name="resource_dir">
           <xsl:call-template name="resource_directory">
             <xsl:with-param name="resource" select="$schema_node/@name"/>
@@ -428,13 +447,29 @@
             See Annex <a href="d_expg{$FILE_EXT}">D</a>
         for a graphical representation of this schema.
       </small>
-    </p>
+    </p> -->
+    
+    <xsl:variable name="note">        
+        <xsl:variable name="resource_dir">
+          <xsl:call-template name="resource_directory">
+            <xsl:with-param name="resource" select="$schema_node/@name"/>
+          </xsl:call-template>
+        </xsl:variable>
+        <xsl:variable name="resource_file"
+          select="concat($resource_dir,'/resource.xml')"/>
+            See Annex <a href="d_expg{$FILE_EXT}">D</a>
+        for a graphical representation of this schema.
+      </xsl:variable>    
+      <xsl:text>&#xa;&#xa;</xsl:text>        
+      <xsl:text>NOTE: </xsl:text><xsl:value-of select="normalize-space($note)"/>
+      <xsl:text>&#xa;&#xa;</xsl:text>
+
 
 	<xsl:choose>
 		<xsl:when test="$doctype='aic'">
-			<p class="note">
+			<!-- <p class="note">
 				<small>
-					<!-- NOTE&#160;3&#160;&#160; -->
+					NOTE&#160;3&#160;&#160;
 					There may be subtypes and items of select lists that appear in
 					the integrated resources that are
 					not imported into the AIC. Constructs are eliminated from the subtype
@@ -447,7 +482,26 @@
 					list will be defined by the scope of the
 					application protocol
       			</small>
-			</p>
+			</p> -->
+      
+      <xsl:variable name="note">					
+					There may be subtypes and items of select lists that appear in
+					the integrated resources that are
+					not imported into the AIC. Constructs are eliminated from the subtype
+					tree or select list through the use of
+					the implicit interface rules of ISO 10303-11. References to eliminated
+					constructs are outside the scope of the
+					AIC. In some cases, all items of the select list are eliminated. Because
+					AICs are intended to be implemented
+					in the context of an application protocol, the items of the select
+					list will be defined by the scope of the
+					application protocol
+      </xsl:variable>
+      
+      <xsl:text>&#xa;&#xa;</xsl:text>        
+      <xsl:text>NOTE: </xsl:text><xsl:value-of select="normalize-space($note)"/>
+      <xsl:text>&#xa;&#xa;</xsl:text>
+      
 		</xsl:when>
 	</xsl:choose>
 	
@@ -3537,13 +3591,22 @@ main_clause in exp_cl_pres   :<xsl:value-of select="$main_clause"/>
 				
 				<xsl:value-of select="normalize-space($text)"/>				
 				
-        <p class="note">
+        <!-- <p class="note">
           <small>
-            <!-- NOTE&#160;&#160; -->The list of entity data types will be
+            NOTE&#160;&#160;The list of entity data types will be
             extended in application resources that use the constructs of
             this resource.                 
           </small>
-        </p>
+        </p> -->
+        <xsl:variable name="note">The list of entity data types will be
+            extended in application resources that use the constructs of
+            this resource.                 
+        </xsl:variable>
+        
+        <xsl:text>&#xa;&#xa;</xsl:text>        
+        <xsl:text>NOTE: </xsl:text><xsl:value-of select="normalize-space($note)"/>
+        <xsl:text>&#xa;&#xa;</xsl:text>
+        
       </xsl:when>
 
       <xsl:when test="(@basedon and @extensible='NO') or @basedon">
@@ -3639,13 +3702,21 @@ main_clause in exp_cl_pres   :<xsl:value-of select="$main_clause"/>
 						
 						<xsl:value-of select="normalize-space($text)"/>
 						
-            <p class="note">
+            <!-- <p class="note">
               <small>
-                <!-- NOTE&#160;&#160; -->The list of entity data types will be
+                NOTE&#160;&#160;The list of entity data types will be
                 extended in application resources that use the constructs of
                 this resource.                 
               </small>
-            </p>
+            </p> -->
+            <xsl:variable name="note">The list of entity data types will be
+                extended in application resources that use the constructs of
+                this resource.                 
+            </xsl:variable>            
+            <xsl:text>&#xa;&#xa;</xsl:text>              
+            <xsl:text>NOTE: </xsl:text><xsl:value-of select="normalize-space($note)"/>
+            <xsl:text>&#xa;&#xa;</xsl:text>
+            
           </xsl:when>
 
           <xsl:otherwise>
@@ -3674,13 +3745,20 @@ main_clause in exp_cl_pres   :<xsl:value-of select="$main_clause"/>
             extended in schemas that use the constructs of this
             resource.
                  -->
-            <p class="note">
+            <!-- <p class="note">
               <small>
-                <!-- NOTE&#160;&#160; -->This empty extensible select requires
+                NOTE&#160;&#160;This empty extensible select requires
                 extension in a further schema to ensure that entities that refer to it have
                 at least one valid instantiation.
               </small>
-            </p>
+            </p> -->
+            <xsl:variable name="note">This empty extensible select requires
+                extension in a further schema to ensure that entities that refer to it have
+                at least one valid instantiation.
+            </xsl:variable>
+            <xsl:text>&#xa;&#xa;</xsl:text>            
+            <xsl:text>NOTE: </xsl:text><xsl:value-of select="normalize-space($note)"/>
+            <xsl:text>&#xa;&#xa;</xsl:text>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:when>

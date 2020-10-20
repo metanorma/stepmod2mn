@@ -567,7 +567,9 @@
 			<xsl:when test="count(node()) = 0"> <!-- skip empty <p/> -->
 				<xsl:text>&#xa;&#xa;</xsl:text>
 			</xsl:when>
-			<xsl:when test="@class = 'note'">
+			
+      
+      <xsl:when test="@class = 'note'">
 				<xsl:text>&#xa;&#xa;</xsl:text>
 				<xsl:if test=".//a[@name]">
 					<xsl:text>[[</xsl:text>
@@ -587,6 +589,8 @@
 				</xsl:choose>
 				<xsl:text>&#xa;&#xa;</xsl:text>
 			</xsl:when>
+      
+      
 			<xsl:otherwise>
 				<xsl:variable name="previousnode" select="preceding-sibling::node()[1]"/>
 				<xsl:if test="local-name(xalan:nodeset($previousnode)) = '' and string-length(xalan:nodeset($previousnode)//text()) != ''">
