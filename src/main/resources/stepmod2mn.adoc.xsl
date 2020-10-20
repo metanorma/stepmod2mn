@@ -569,25 +569,8 @@
 			</xsl:when>
 			
       
-      <xsl:when test="@class = 'note'">
-				<xsl:text>&#xa;&#xa;</xsl:text>
-				<xsl:if test=".//a[@name]">
-					<xsl:text>[[</xsl:text>
-					<xsl:value-of select=".//a/@name"/>
-					<xsl:text>]]</xsl:text>
-					<xsl:text>&#xa;</xsl:text>
-				</xsl:if>
-				<xsl:variable name="note">
-					<xsl:apply-templates  mode="stepmod2mn"/>
-				</xsl:variable>
-				<xsl:text>NOTE: </xsl:text>
-				<xsl:choose>
-					<xsl:when test="starts-with($note, 'NOTE&#160;&#160;')">
-						<xsl:value-of select="normalize-space(substring-after($note, 'NOTE&#160;&#160;'))"/>
-					</xsl:when>
-					<xsl:otherwise><xsl:value-of select="normalize-space($note)"/></xsl:otherwise>
-				</xsl:choose>
-				<xsl:text>&#xa;&#xa;</xsl:text>
+      <xsl:when test="@class = 'note2'">
+				
 			</xsl:when>
       
       
@@ -602,7 +585,7 @@
 		</xsl:choose>
 	</xsl:template>
 	
-	<xsl:template match="a | A" mode="stepmod2mn">
+	<xsl:template match="a2 | A2" mode="stepmod2mn">
 		<xsl:choose>
 			<xsl:when test="ancestor::p[@class='note'] and normalize-space() = '' and starts-with(@name, 'note')"/>
 			<xsl:otherwise>
@@ -625,32 +608,7 @@
 		<xsl:text>&#xa;</xsl:text>
 	</xsl:template>
 	
-	<!-- <xsl:template match="b | B" mode="stepmod2mn">
-		<xsl:text> *</xsl:text><xsl:apply-templates mode="stepmod2mn"/><xsl:text>* </xsl:text>
-	</xsl:template> -->
-	
-	<!-- <xsl:template match="i | I" mode="stepmod2mn">
-		<xsl:text> _</xsl:text><xsl:apply-templates mode="stepmod2mn"/><xsl:text>_</xsl:text>
-	</xsl:template> -->
-	
-	<!-- <xsl:template match="u | U" mode="stepmod2mn">
-		<xsl:text>[.underline]#</xsl:text>
-		<xsl:apply-templates mode="stepmod2mn"/>
-		<xsl:text>#</xsl:text>
-	</xsl:template> -->
-	
-	<!-- <xsl:template match="sub | SUB" mode="stepmod2mn">
-		<xsl:text>~</xsl:text><xsl:apply-templates mode="stepmod2mn"/><xsl:text>~</xsl:text>
-	</xsl:template>
-	
-	<xsl:template match="sup | SUP" mode="stepmod2mn">
-		<xsl:text>^</xsl:text><xsl:apply-templates mode="stepmod2mn"/><xsl:text>^</xsl:text>
-	</xsl:template>
-	
-	<xsl:template match="tt" mode="stepmod2mn">
-		<xsl:text>`</xsl:text><xsl:apply-templates mode="stepmod2mn"/><xsl:text>`</xsl:text>
-	</xsl:template> -->
-	
+  
 	<xsl:template match="sc" mode="stepmod2mn">
 		<xsl:text>[smallcap]#</xsl:text>
 		<xsl:apply-templates mode="stepmod2mn"/>

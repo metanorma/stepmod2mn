@@ -850,20 +850,44 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
       <xsl:value-of select="concat('Figure ',$number, $letter,
                             '&#160;&#8212;&#160;&#160;',./title)"/><!-- MWD 2017-09-14 -->
     </xsl:variable>
-    <br/><br/>
+    <!-- <br/><br/>
     <a name="{$aname}"/>
       <xsl:apply-templates select="./img">
         <xsl:with-param name="alt" select="$title"/>
       </xsl:apply-templates>
-    <!-- <br/> -->
-		<xsl:text>&#xa;&#xa;</xsl:text>
+    <br/>    
     <div align="center">
-      <!-- <b>
+      <b>
         <xsl:value-of select="$title"/>
-      </b> -->
-			<xsl:text> *</xsl:text><xsl:value-of select="$title"/><xsl:text>* </xsl:text>
+      </b>
     </div>
-    <br/>
+    <br/> -->
+    
+    <!-- example:
+    [[figureA-1]]
+      .Split-it-right sample divider
+      image::images/a1.png[Alt1]
+    -->
+    <xsl:text>&#xa;&#xa;</xsl:text>
+    <xsl:text>[[</xsl:text>
+    <xsl:value-of select="concat('figure', $number, $letter)"/>
+    <xsl:text>]]</xsl:text>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:text>.</xsl:text><xsl:value-of select="./title"/>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:text>image::</xsl:text>
+    <xsl:variable name="img">
+      <xsl:apply-templates select="./img">
+        <xsl:with-param name="alt" select="$title"/>
+      </xsl:apply-templates>
+    </xsl:variable>
+    <xsl:value-of select="concat($path, '../', $img)"/>
+    <!-- alt -->
+    <xsl:text>[</xsl:text>
+    <xsl:value-of select="./title"/>
+    <xsl:text>]</xsl:text>
+    <xsl:text>&#xa;&#xa;</xsl:text>
+    
   </xsl:template>
 
 <xsl:template match="title">
@@ -911,7 +935,9 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
       </xsl:call-template>
     </xsl:when>
     <xsl:otherwise>
-      <div align="center">
+      <xsl:value-of select="$src"/>
+    
+      <!-- <div align="center">
         <xsl:choose>
           <xsl:when test="./@usemap">
             <xsl:variable name="map1" select="./@usemap"/>
@@ -939,7 +965,7 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
             <IMG src="{$src}" border="0" alt="{$alt1}"/>
           </xsl:otherwise>
         </xsl:choose>
-      </div>
+      </div> -->
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -1210,12 +1236,29 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
   </xsl:variable>
   
   
-  <a href="{$href}" target="_self"><!-- @href replaced with $href here and throughout rest of template MWD 2017-04-05 -->
-    
+  <!-- <a href="{$href}" target="_self"> --><!-- @href replaced with $href here and throughout rest of template MWD 2017-04-05 -->
+   <!--  
   <xsl:variable name="link_name">
     <xsl:apply-templates/>
   </xsl:variable>
 <xsl:value-of select="$link_name"/>
+    <xsl:choose>
+      <xsl:when test="string-length($link_name) > 0"> -->
+        <!-- link alread has a name so don't add another -->
+      <!-- </xsl:when>
+        
+      <xsl:when test="string-length(text()) > 0" >(<xsl:value-of select="$href"/>)</xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="$href"/>
+    </xsl:otherwise>
+    </xsl:choose>
+  </a> -->
+  
+  <xsl:variable name="text">
+    <xsl:variable name="link_name">
+      <xsl:apply-templates/>
+    </xsl:variable>
+    <xsl:value-of select="$link_name"/>
     <xsl:choose>
       <xsl:when test="string-length($link_name) > 0">
         <!-- link alread has a name so don't add another -->
@@ -1226,7 +1269,10 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
       <xsl:value-of select="$href"/>
     </xsl:otherwise>
     </xsl:choose>
-  </a>
+  </xsl:variable>
+  
+  <xsl:value-of select="$text"/><xsl:text>[</xsl:text><xsl:value-of select="$href"/><xsl:text>]</xsl:text>
+  
 </xsl:template>
 
 <xsl:template match="b|B">
@@ -1255,14 +1301,20 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 <xsl:template match="eqn" >
   <xsl:variable name="eqn_id" select="./@id"/>
   
-  <font size="+1">
+  <!-- <font size="+1">
    <p align="center"> 
     <xsl:apply-templates/>
     </p>
   </font>
   <xsl:if test="string-length($eqn_id > 0)">
     <a name="{$eqn_id}"/>
-  </xsl:if>
+  </xsl:if> -->
+  
+  <xsl:if test="string-length($eqn_id > 0)"><xsl:text>[[</xsl:text><xsl:value-of select="$eqn_id"/><xsl:text>]]</xsl:text></xsl:if>
+  <xsl:text>stem:[</xsl:text>
+  <xsl:apply-templates/>
+  <xsl:text>]</xsl:text>
+  
   
 </xsl:template>
 
@@ -2039,12 +2091,12 @@ width="20" height="20"/>
       <xsl:otherwise>
         <xsl:choose>
           <xsl:when test="string-length(normalize-space(.))>0">
-            <!-- <a href="{$href}"><b><xsl:apply-templates/></b></a> -->
-            <a href="{$href}"><xsl:text> *</xsl:text><xsl:apply-templates/><xsl:text>* </xsl:text></a>
+            <!-- <a href="{$href}"><b><xsl:apply-templates/></b></a> -->            
+            <xsl:text> *</xsl:text><xsl:apply-templates/><xsl:text>*[</xsl:text><xsl:value-of select="$href"/><xsl:text>]</xsl:text>
           </xsl:when>
           <xsl:otherwise>
-            <!-- <a href="{$href}"><b><xsl:value-of select="$item"/></b></a> -->
-            <a href="{$href}"><xsl:text> *</xsl:text><xsl:value-of select="$item"/><xsl:text>* </xsl:text></a>
+            <!-- <a href="{$href}"><b><xsl:value-of select="$item"/></b></a> -->            
+            <xsl:text> *</xsl:text><xsl:apply-templates/><xsl:text>*[</xsl:text><xsl:value-of select="$item"/><xsl:text>]</xsl:text>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:otherwise>
@@ -2853,7 +2905,8 @@ width="20" height="20"/>
       <xsl:otherwise>
         <xsl:choose>
           <xsl:when test="string-length(.)>0">
-            <a href="{$href}"><xsl:apply-templates/></a>
+            <!-- <a href="{$href}"><xsl:apply-templates/></a> -->
+            <xsl:apply-templates/><xsl:text>[</xsl:text><xsl:value-of select="$href"/><xsl:text>]</xsl:text>
           </xsl:when>
           <xsl:otherwise>
             <xsl:variable name="module_name">
@@ -2861,7 +2914,8 @@ width="20" height="20"/>
                 <xsl:with-param name="module" select="$module"/>
               </xsl:call-template>
             </xsl:variable>
-            <a href="{$href}"><xsl:value-of select="$module_name"/></a>
+            <!-- <a href="{$href}"><xsl:value-of select="$module_name"/></a> -->
+            <xsl:value-of select="$module_name"/><xsl:text>[</xsl:text><xsl:value-of select="$href"/><xsl:text>]</xsl:text>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:otherwise>
@@ -4842,12 +4896,15 @@ is case sensitive.')"/>
 
 <xsl:template match="email">
   <xsl:variable name="mailto" select="concat('mailto:',.)"/>
-  <!-- <b>Electronic mail: </b> -->
-	<xsl:text> *Electronic mail:* </xsl:text>
+  <!-- <b>Electronic mail: </b>
   <a href="{$mailto}">
     <xsl:value-of select="."/>
-  </a>
-  <br/>
+  </a>  
+  <br/> -->	
+  
+  <xsl:text> *Electronic mail:* </xsl:text>
+  <xsl:value-of select="$mailto"/><xsl:text>[]</xsl:text>
+  <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 

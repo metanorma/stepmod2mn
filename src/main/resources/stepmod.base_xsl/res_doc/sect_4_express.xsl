@@ -449,7 +449,7 @@
       </small>
     </p> -->
     
-    <xsl:variable name="note">        
+      <xsl:variable name="note2">        
         <xsl:variable name="resource_dir">
           <xsl:call-template name="resource_directory">
             <xsl:with-param name="resource" select="$schema_node/@name"/>
@@ -457,11 +457,11 @@
         </xsl:variable>
         <xsl:variable name="resource_file"
           select="concat($resource_dir,'/resource.xml')"/>
-            See Annex <a href="d_expg{$FILE_EXT}">D</a>
+            See &lt;&lt;AnnexD&gt;&gt; Annex <!-- <a href="d_expg{$FILE_EXT}">D</a> -->
         for a graphical representation of this schema.
       </xsl:variable>    
       <xsl:text>&#xa;&#xa;</xsl:text>        
-      <xsl:text>NOTE: </xsl:text><xsl:value-of select="normalize-space($note)"/>
+      <xsl:text>NOTE: </xsl:text><xsl:value-of select="normalize-space($note2)"/>
       <xsl:text>&#xa;&#xa;</xsl:text>
 
 
@@ -484,7 +484,7 @@
       			</small>
 			</p> -->
       
-      <xsl:variable name="note">					
+      <xsl:variable name="note3">					
 					There may be subtypes and items of select lists that appear in
 					the integrated resources that are
 					not imported into the AIC. Constructs are eliminated from the subtype
@@ -499,7 +499,7 @@
       </xsl:variable>
       
       <xsl:text>&#xa;&#xa;</xsl:text>        
-      <xsl:text>NOTE: </xsl:text><xsl:value-of select="normalize-space($note)"/>
+      <xsl:text>NOTE: </xsl:text><xsl:value-of select="normalize-space($note3)"/>
       <xsl:text>&#xa;&#xa;</xsl:text>
       
 		</xsl:when>
@@ -3471,20 +3471,31 @@ main_clause in exp_cl_pres   :<xsl:value-of select="$main_clause"/>
   <xsl:variable name="resource_href"
     select="concat($path, '../../../',$resdoc_name,'/sys/1_scope',$FILE_EXT)"/>
   
-  The base definition of the 
-  <xsl:call-template name="link_object">
-    <xsl:with-param name="object_name" select="@item"/>
-    <xsl:with-param name="object_used_in_schema_name" 
-      select="../../@name"/>
-    <xsl:with-param name="clause" select="'section'"/>
-  </xsl:call-template>
-  <xsl:value-of select="concat(' ',$lkind)"/>
-  is specified in 
-  <a href="{$resource_href}">
+  
+  <xsl:variable name="text">
+    The base definition of the 
+    <xsl:call-template name="link_object">
+      <xsl:with-param name="object_name" select="@item"/>
+      <xsl:with-param name="object_used_in_schema_name" 
+        select="../../@name"/>
+      <xsl:with-param name="clause" select="'section'"/>
+    </xsl:call-template>
+    <xsl:value-of select="concat(' ',$lkind)"/>
+    is specified in 
+    <!-- <a href="{$resource_href}">
+      <xsl:value-of select="concat('ISO 10303-',$resource_no)"/>
+    </a> -->
     <xsl:value-of select="concat('ISO 10303-',$resource_no)"/>
-  </a>
-  The following modifications apply to this part of ISO 10303.
-  <p>
+    <xsl:text>[</xsl:text><xsl:value-of select="$resource_href"/><xsl:text>]</xsl:text>
+    
+    The following modifications apply to this part of ISO 10303.
+  </xsl:variable>
+  
+  <xsl:value-of select="normalize-space($text)"/>
+  <xsl:text>&#xa;&#xa;</xsl:text>
+  
+  <!-- <p> -->
+  <xsl:variable name="text2">
     The definition of 
     <xsl:call-template name="link_object">
       <xsl:with-param name="object_name" select="@item"/>
@@ -3493,7 +3504,12 @@ main_clause in exp_cl_pres   :<xsl:value-of select="$main_clause"/>
       <xsl:with-param name="clause" select="'section'"/>
     </xsl:call-template>
     is modified as follows:
-  </p>
+  <!-- </p> -->
+  </xsl:variable>
+  <xsl:value-of select="normalize-space($text2)"/>
+  <xsl:text>&#xa;&#xa;</xsl:text>
+  
+  
   <ul>
     <li>
       <xsl:apply-templates/>

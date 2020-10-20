@@ -215,8 +215,8 @@
   </xsl:variable>
 
   <blockquote>
-    <span style="background-color: {$bg_color}">
-      <!-- <b>
+    <!--<span style="background-color: {$bg_color}">
+       <b>
         <a href="../dvlp/issues{$FILE_EXT}#{$issue_target}">
           <xsl:apply-templates select="." mode="status_icon"/>
           Issue:
@@ -226,20 +226,23 @@
                                 ' (', string(@date), 
                                 ') [', string(@category),', ',string(@status), ', ',$resolution,']')" />
         </a>
-      </b> -->
-			<xsl:variable name="text">
-				<a href="../dvlp/issues{$FILE_EXT}#{$issue_target}">
-          <xsl:apply-templates select="." mode="status_icon"/>
-          Issue:
-          <xsl:value-of select="concat(
-                                string(@id), 
-                                ' by ', string(@by),
-                                ' (', string(@date), 
-                                ') [', string(@category),', ',string(@status), ', ',$resolution,']')" />
-        </a>
+      </b>
+			<br/>  -->
+      <xsl:variable name="href" select="concat('../dvlp/issues', $FILE_EXT, '#', $issue_target)"/>
+      <xsl:variable name="text">				
+        <xsl:apply-templates select="." mode="status_icon"/>
+        Issue:
+        <xsl:value-of select="concat(
+                              string(@id), 
+                              ' by ', string(@by),
+                              ' (', string(@date), 
+                              ') [', string(@category),', ',string(@status), ', ',$resolution,']')" />        
 			</xsl:variable>
-			<xsl:text> *</xsl:text><xsl:value-of select="normalize-space($text)"/><xsl:text>* </xsl:text>
-      <br/>
+      
+			<xsl:text> *</xsl:text><xsl:value-of select="normalize-space($text)"/><xsl:text>*[</xsl:text><xsl:value-of select="$href"/><xsl:text>]</xsl:text>
+      
+      <xsl:text>&#xa;</xsl:text>
+      
 <!-- commented out as tc184-sc4.rg no longer operational
       <xsl:if test="@seds='yes'">
         <i>
@@ -257,15 +260,17 @@
         <!-- <i>
           Registered as a Ballot comment by:
           <xsl:value-of select="@member_body"/>
-        </i> -->
+        </i> 
+        <br/>
+        -->
 				<xsl:text> _Registered as a Ballot comment by:</xsl:text>
 				<xsl:value-of select="@member_body"/>
         <xsl:text>_</xsl:text>
-        <br/>
+        <xsl:text>&#xa;</xsl:text>
       </xsl:if>      
 
       <xsl:apply-templates/>
-    </span>
+    <!-- </span> -->
   </blockquote>
 </xsl:template>
 

@@ -443,9 +443,11 @@
       <xsl:value-of select="$schema_name"/>
     </xsl:when>
     <xsl:otherwise>
-      <A HREF="{$express_file_to_ref}#{$xref}">
+      <!-- <A HREF="{$express_file_to_ref}#{$xref}">
         <xsl:value-of select="$schema_name"/>
-      </A>
+      </A> -->      
+      <xsl:value-of select="$schema_name"/><xsl:text>[</xsl:text><xsl:value-of select="concat($express_file_to_ref, '#', $xref)"/><xsl:text>]</xsl:text>
+      
     </xsl:otherwise>
   </xsl:choose>
 
@@ -489,9 +491,10 @@
       <xsl:value-of select="$schema_name"/>
     </xsl:when>
     <xsl:otherwise>
-      <A HREF="{$express_file_to_ref}#{$xref}">
+      <!-- <A HREF="{$express_file_to_ref}#{$xref}">
         <xsl:value-of select="$schema_name"/>
-      </A>
+      </A> -->
+      <xsl:value-of select="$schema_name"/><xsl:text>[</xsl:text><xsl:value-of select="concat($express_file_to_ref, '#', $xref)"/><xsl:text>]</xsl:text>
     </xsl:otherwise>
   </xsl:choose>
 
@@ -535,9 +538,10 @@
       <xsl:value-of select="$schema_name"/>
     </xsl:when>
     <xsl:otherwise>
-      <A HREF="{$express_file_to_ref}#{$xref}">
+      <!-- <A HREF="{$express_file_to_ref}#{$xref}">
         <xsl:value-of select="$schema_name"/>
-      </A>
+      </A> -->
+      <xsl:value-of select="$schema_name"/><xsl:text>[</xsl:text><xsl:value-of select="concat($express_file_to_ref, '#', $xref)"/><xsl:text>]</xsl:text>
     </xsl:otherwise>
   </xsl:choose>
 
@@ -581,9 +585,11 @@
         </xsl:call-template>
       </xsl:variable>
       
-      <A HREF="{$xref}">
+      <!-- <A HREF="{$xref}">
         <xsl:value-of select="$lobject_name"/>
-      </A>
+      </A> -->
+      <xsl:value-of select="$lobject_name"/><xsl:text>[</xsl:text><xsl:value-of select="$xref"/><xsl:text>]</xsl:text>
+      
       <!-- debug 
       <xsl:message>     
         <xsl:value-of select="concat('xr:{',$object_name,':',$xref,'}')"/>
@@ -1192,9 +1198,10 @@ Needs to deal with expressions starting with not ( i.e. ANDOR above
           <xsl:with-param name="object_name" select="$lobject_name"/>
         </xsl:call-template>
       </xsl:variable>
-      <A HREF="{$xref}">
+      <!-- <A HREF="{$xref}">
         <xsl:value-of select="$lobject_name"/>
-      </A>
+      </A> -->
+      <xsl:value-of select="$lobject_name"/><xsl:text>[</xsl:text><xsl:value-of select="$xref"/><xsl:text>]</xsl:text>
     </xsl:when>
 
     <xsl:otherwise>

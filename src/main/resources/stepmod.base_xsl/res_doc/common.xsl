@@ -452,10 +452,12 @@ $Id: common.xsl,v 1.33 2008/05/21 20:50:25 abf Exp $
       <xsl:otherwise>
         <xsl:choose>
           <xsl:when test="string-length(.)>0">
-            <a href="{$href}"><b><xsl:apply-templates/></b></a>
+            <!-- <a href="{$href}"><b><xsl:apply-templates/></b></a> -->
+            <xsl:text> *</xsl:text><xsl:apply-templates/><xsl:text>*[</xsl:text><xsl:value-of select="$href"/><xsl:text>]</xsl:text>            
           </xsl:when>
           <xsl:otherwise>
-            <a href="{$href}"><b><xsl:value-of select="$item"/></b></a>
+            <!-- <a href="{$href}"><b><xsl:value-of select="$item"/></b></a> -->            
+            <xsl:text> *</xsl:text><xsl:value-of select="$item"/><xsl:text>*[</xsl:text><xsl:value-of select="$href"/><xsl:text>]</xsl:text>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:otherwise>
@@ -872,7 +874,8 @@ $Id: common.xsl,v 1.33 2008/05/21 20:50:25 abf Exp $
         <xsl:apply-templates/>
       </xsl:when>
       <xsl:otherwise>
-        <a href="{$href}"><xsl:apply-templates/></a>
+        <!-- <a href="{$href}"><xsl:apply-templates/></a> -->
+        <xsl:apply-templates/><xsl:text>[</xsl:text><xsl:value-of select="$href"/><xsl:text>]</xsl:text>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
