@@ -625,11 +625,11 @@ Purpose:
 
   <xsl:template match="resource" mode="abstract">
 
-    <xsl:variable name="resdoc_name">
-      <xsl:call-template name="res_display_name">
-	<xsl:with-param name="res" select="./@name"/>
-      </xsl:call-template>           
-    </xsl:variable>
+		<xsl:variable name="resdoc_name">
+			<xsl:call-template name="res_display_name">
+				<xsl:with-param name="res" select="./@name"/>
+			</xsl:call-template>           
+		</xsl:variable>
 
 
     <xsl:variable name="resdoc_title">
@@ -644,51 +644,62 @@ Purpose:
       </xsl:call-template>           
     </xsl:variable>
 
+		<xsl:text>[abstract]</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		
     <!-- THX deleted per ISO review of part 107
          PS Added back in following review of Part 61 -->
- <P>
-   <xsl:value-of select="substring-before($resdoc_stdnumber,'(E)')"/>
-   specifies the integrated resource constructs for 
-   <xsl:value-of select="$resdoc_name"/>.
- </P>
+ <!-- <P> -->
+		<xsl:variable name="text1">
+		 <xsl:value-of select="substring-before($resdoc_stdnumber,'(E)')"/>
+		 specifies the integrated resource constructs for 
+		 <xsl:value-of select="$resdoc_name"/>.
+	 </xsl:variable>
+	 <xsl:value-of select="normalize-space($text1)"/>
+	 <xsl:text>&#xa;&#xa;</xsl:text>	 
+ <!-- </P> -->
 
-    <xsl:choose>
-      <xsl:when test="./abstract">
-	<xsl:choose>
-	  <xsl:when  test="./abstract/li">
-	    <xsl:choose>
-	      <xsl:when  test="count(./abstract/li)=1">
-		<P>
-		  The following is within the scope of 
-		  <xsl:value-of select="substring-before($resdoc_stdnumber,'(E)')"/>: 
-		</P>
-	      </xsl:when>
-	      <xsl:otherwise>
-		<P>
-		  The following are within the scope of 
-		  <xsl:value-of select="substring-before($resdoc_stdnumber,'(E)')"/>:
-		</P>
-	      </xsl:otherwise>
-	    </xsl:choose>
-	    <ul>
-	      <xsl:apply-templates select="./abstract/*"/>
-	    </ul>
-	  </xsl:when>
-	  <xsl:otherwise>
-	    <xsl:apply-templates select="./abstract/*"/>
-	  </xsl:otherwise>
-	</xsl:choose>
-      </xsl:when>
-      <xsl:otherwise>
-	<P>
-	  The following are within the scope of 
-	  <xsl:value-of select="substring-before($resdoc_stdnumber,'(E)')"/>:
-	</P>
-	<UL>
-	  <xsl:apply-templates select="./inscope/li"/>
-	</UL>
-      </xsl:otherwise>
-    </xsl:choose>
+		<xsl:choose>
+			<xsl:when test="./abstract">
+				<xsl:choose>
+					<xsl:when  test="./abstract/li">
+						<xsl:choose>
+							<xsl:when  test="count(./abstract/li)=1">
+								<!-- <P> -->
+									<xsl:text>The following is within the scope of </xsl:text>
+									<xsl:value-of select="substring-before($resdoc_stdnumber,'(E)')"/><xsl:text>:</xsl:text>
+									<xsl:text>&#xa;&#xa;</xsl:text>
+								<!-- </P> -->
+							</xsl:when>
+							<xsl:otherwise>
+								<!-- <P> -->
+									<xsl:text>The following are within the scope of </xsl:text>
+									<xsl:value-of select="substring-before($resdoc_stdnumber,'(E)')"/><xsl:text>:</xsl:text>
+									<xsl:text>&#xa;&#xa;</xsl:text>
+								<!-- </P> -->
+							</xsl:otherwise>
+						</xsl:choose>
+						<!-- <ul> -->
+							<xsl:text>&#xa;</xsl:text>
+							<xsl:apply-templates select="./abstract/*"/>
+						<!-- </ul> -->
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:apply-templates select="./abstract/*"/>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:when>
+			<xsl:otherwise>
+				<!-- <P> -->
+					<xsl:text>The following are within the scope of </xsl:text>
+					<xsl:value-of select="substring-before($resdoc_stdnumber,'(E)')"/><xsl:text>:</xsl:text>
+					<xsl:text>&#xa;&#xa;</xsl:text>
+				<!-- </P> -->
+				<!-- <UL> -->
+					<xsl:apply-templates select="./inscope/li"/>
+				<!-- </UL> -->
+			</xsl:otherwise>
+		</xsl:choose>
 
   </xsl:template>
   <!--

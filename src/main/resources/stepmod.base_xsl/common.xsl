@@ -1190,7 +1190,8 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
      -->
 <xsl:template match="p|P">
   <xsl:apply-templates select="." mode="check_html"/>
-  <xsl:choose>
+	
+  <!-- <xsl:choose>
     <xsl:when test="./ancestor::*[name()='example' or name()='note']">
       <p>
         <small>
@@ -1203,7 +1204,12 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
         <xsl:apply-templates/>
       </p>
     </xsl:otherwise>
-  </xsl:choose>
+  </xsl:choose> -->
+	
+	<xsl:variable name="text"><xsl:apply-templates/></xsl:variable>
+	<xsl:value-of select="normalize-space($text)"/>
+	<xsl:text>&#xa;&#xa;</xsl:text>
+	
 </xsl:template>
 
 <!-- 

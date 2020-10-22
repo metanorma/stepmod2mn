@@ -158,9 +158,21 @@
 		<xsl:apply-templates select="resource" mode="docstage"/>
 		<xsl:text>&#xa;</xsl:text>
 		
+		
 		<xsl:text>:copyright-year: </xsl:text><xsl:value-of select="substring(resource/@publication.year,1,4)"/>
 		<xsl:text>&#xa;</xsl:text>
+		
+
+		<!-- fixed text from resource.xml   <xsl:template match="resource" mode="coverpage"> -->
+		
+		<xsl:text>:technical-committee-number: 184</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>:subcommittee-number: 4</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>:workgroup-number: 12</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+
 		
 		<!-- 
 		<xsl:variable name="resource_xml" select="document(concat($path, '../',@directory,'/resource.xml'))"/>
@@ -211,6 +223,11 @@
 			<xsl:apply-templates select="document(concat($path, 'sys/cover.xml'))" mode="cover"/>
 		</xsl:if> -->
 		
+		<!-- Abstract -->
+		<xsl:if test=" java:exists(java:java.io.File.new(concat($path, 'sys/main.xml')))">
+			<xsl:message>[INFO] Processing main.xml ...</xsl:message>
+			<xsl:apply-templates select="document(concat($path, 'sys/foreword.xml'))" mode="abstract"/>
+		</xsl:if>
 		
 		<!-- Foreword-->
 		<!-- draughting_elements/sys/foreword.xml -->
@@ -345,6 +362,25 @@
 	<!-- =========== -->
 
 
+	<!-- =========== -->
+	<!--  Abstract -->
+	<xsl:template match="resource_clause" mode="abstract">		
+		<xsl:variable name="resource_xml" select="document(concat($path, '../',@directory,'/resource.xml'))"/>
+		<xsl:choose>
+			<xsl:when test="@pos">				
+				<xsl:apply-templates select="$resource_xml/*" mode="abstract"><!-- foreword_resource -->
+					 <xsl:with-param name="pos" select="string(@pos)"/>
+				 </xsl:apply-templates>
+			 </xsl:when>
+			 <xsl:otherwise>
+				 <xsl:apply-templates select="$resource_xml/*" mode="abstract"/> <!-- foreword_resource -->
+			 </xsl:otherwise>
+		 </xsl:choose>
+	</xsl:template>
+	
+	<!-- END Abstract -->
+	<!-- =========== -->
+	
 	
 	<!-- =========== -->
 	<!--  Foreword -->
@@ -585,24 +621,7 @@
 		</xsl:choose>
 	</xsl:template>
 	
-	<xsl:template match="a2 | A2" mode="stepmod2mn">
-		<xsl:choose>
-			<xsl:when test="ancestor::p[@class='note'] and normalize-space() = '' and starts-with(@name, 'note')"/>
-			<xsl:otherwise>
-				<xsl:if test="normalize-space(.) != '' or normalize-space(@href) != ''">
-					<xsl:if test="preceding-sibling::node()">
-						<xsl:text> </xsl:text>
-					</xsl:if>
-					<!-- <xsl:value-of select="."/> -->
-					<xsl:apply-templates />
-					<xsl:if test="normalize-space(@href) != ''">
-						<xsl:text>[</xsl:text><xsl:value-of select="@href"/><xsl:text>] </xsl:text>
-					</xsl:if>
-				</xsl:if>
-			</xsl:otherwise>			
-		</xsl:choose>		
-	</xsl:template>
-	
+  
 	<xsl:template match="br | BR" mode="stepmod2mn">
 		<xsl:text> +</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
