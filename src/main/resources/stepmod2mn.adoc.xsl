@@ -162,6 +162,13 @@
 		<xsl:text>:copyright-year: </xsl:text><xsl:value-of select="substring(resource/@publication.year,1,4)"/>
 		<xsl:text>&#xa;</xsl:text>
 		
+		<xsl:variable name="keywords">			
+			<xsl:apply-templates select="resource/keywords"/>
+		</xsl:variable>
+		<xsl:if test="normalize-space($keywords) != ''">
+			<xsl:text>:keywords: </xsl:text><xsl:value-of select="normalize-space($keywords)"/>
+			<xsl:text>&#xa;</xsl:text>
+		</xsl:if>
 
 		<!-- fixed text from resource.xml   <xsl:template match="resource" mode="coverpage"> -->
 		
@@ -226,7 +233,7 @@
 		<!-- Abstract -->
 		<xsl:if test=" java:exists(java:java.io.File.new(concat($path, 'sys/main.xml')))">
 			<xsl:message>[INFO] Processing main.xml ...</xsl:message>
-			<xsl:apply-templates select="document(concat($path, 'sys/foreword.xml'))" mode="abstract"/>
+			<xsl:apply-templates select="document(concat($path, 'sys/main.xml'))" mode="abstract"/>
 		</xsl:if>
 		
 		<!-- Foreword-->
@@ -362,18 +369,19 @@
 	<!-- =========== -->
 
 
+
 	<!-- =========== -->
 	<!--  Abstract -->
 	<xsl:template match="resource_clause" mode="abstract">		
 		<xsl:variable name="resource_xml" select="document(concat($path, '../',@directory,'/resource.xml'))"/>
 		<xsl:choose>
 			<xsl:when test="@pos">				
-				<xsl:apply-templates select="$resource_xml/*" mode="abstract"><!-- foreword_resource -->
+				<xsl:apply-templates select="$resource_xml/*" mode="abstract">
 					 <xsl:with-param name="pos" select="string(@pos)"/>
 				 </xsl:apply-templates>
 			 </xsl:when>
 			 <xsl:otherwise>
-				 <xsl:apply-templates select="$resource_xml/*" mode="abstract"/> <!-- foreword_resource -->
+				 <xsl:apply-templates select="$resource_xml/*" mode="abstract"/>
 			 </xsl:otherwise>
 		 </xsl:choose>
 	</xsl:template>
