@@ -401,39 +401,41 @@
     <xsl:text>NOTE: </xsl:text><xsl:value-of select="normalize-space($note)"/>
     <xsl:text>&#xa;&#xa;</xsl:text>
     
-    <blockquote>
+    <!-- <blockquote>
         <table>  
         <xsl:for-each select="$schema_node/interface[not(@schema = node()/preceding::node()/@schema)]">
           <xsl:variable name="schema_name" select="./@schema"/>      
           <tr>
             <td width="266">
-              <!-- <b>
+              <b>
                 <small>
                   <xsl:value-of select="$schema_name"/>
                 </small>
-              </b> -->
-							
-							<xsl:text>*</xsl:text>
-							<xsl:text>[smallcap]#</xsl:text>
-							<xsl:value-of select="$schema_name"/>
-							<xsl:text>#</xsl:text>
-							<xsl:text>*</xsl:text>
+              </b>							
             </td>
             <td width="127">
-              <!-- <small>
+              <small>
                 <xsl:apply-templates select="." mode="source"/>
-              </small> -->
-							<xsl:variable name="text">
-								<xsl:apply-templates select="." mode="source"/>
-							</xsl:variable>
-							<xsl:text>[smallcap]#</xsl:text>
-							<xsl:value-of select="normalize-space($text)"/>
-							<xsl:text>#</xsl:text>
+              </small>							
             </td>
           </tr>
         </xsl:for-each>
       </table>
-  </blockquote>
+  </blockquote> -->
+	
+	<xsl:call-template name="insertQuoteStart"/>
+		<xsl:for-each select="$schema_node/interface[not(@schema = node()/preceding::node()/@schema)]">
+			<xsl:variable name="schema_name" select="./@schema"/>      
+			<xsl:value-of select="$schema_name"/>
+			<xsl:text>:: </xsl:text>
+			<xsl:variable name="text">
+				<xsl:apply-templates select="." mode="source"/>
+			</xsl:variable>
+			<xsl:value-of select="$text"/>
+			<xsl:text>&#xa;</xsl:text>			
+		</xsl:for-each>
+	<xsl:call-template name="insertQuoteEnd"/>
+	
     <!-- <p class="note">
       <small>
         NOTE&#160;<xsl:value-of select="$note_number+2"/>&#160;&#160;
@@ -449,19 +451,8 @@
       </small>
     </p> -->
     
-      <xsl:variable name="note2">        
-        <xsl:variable name="resource_dir">
-          <xsl:call-template name="resource_directory">
-            <xsl:with-param name="resource" select="$schema_node/@name"/>
-          </xsl:call-template>
-        </xsl:variable>
-        <xsl:variable name="resource_file"
-          select="concat($resource_dir,'/resource.xml')"/>
-            See &lt;&lt;AnnexD&gt;&gt; Annex <!-- <a href="d_expg{$FILE_EXT}">D</a> -->
-        for a graphical representation of this schema.
-      </xsl:variable>    
       <xsl:text>&#xa;&#xa;</xsl:text>        
-      <xsl:text>NOTE: </xsl:text><xsl:value-of select="normalize-space($note2)"/>
+      <xsl:text>NOTE: See &lt;&lt;AnnexD&gt;&gt; for a graphical representation of this schema.</xsl:text>
       <xsl:text>&#xa;&#xa;</xsl:text>
 
 

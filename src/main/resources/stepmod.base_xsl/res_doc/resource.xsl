@@ -731,21 +731,15 @@ Purpose:
 
   <xsl:template match="keywords">
     <xsl:variable name="keywords1">
-      <xsl:if test="not(contains(.,'STEP'))">
-	STEP, 
-      </xsl:if>    
+      <xsl:if test="not(contains(.,'STEP'))">STEP, </xsl:if>
     </xsl:variable>
 
     <xsl:variable name="keywords2">
-      <xsl:if test="not(contains(.,'10303'))">
-	ISO 10303,  
-      </xsl:if>
+      <xsl:if test="not(contains(.,'10303'))">ISO 10303, </xsl:if>
     </xsl:variable>
 
     <xsl:variable name="keywords3">
-      <xsl:if test="not(contains(.,'integrated resource'))">
-	integrated resource, 
-      </xsl:if>
+      <xsl:if test="not(contains(.,'integrated resource'))">integrated resource, </xsl:if>
     </xsl:variable>
 
     <xsl:variable name="keywords4">
@@ -773,10 +767,11 @@ Purpose:
     </h2> -->
 		
 		<xsl:text>.Foreword</xsl:text>
-		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>&#xa;&#xa;</xsl:text>
 	
 	
-    <p>
+    <!-- <p> -->
+		<xsl:variable name="text1">
       ISO (the International Organization for Standardization) is a worldwide federation of national 
       standards bodies (ISO member bodies). The work of preparing International Standards is normally 
       carried out through ISO technical committees. Each member body interested in a subject for which a 
@@ -784,30 +779,48 @@ Purpose:
       International organizations, governmental and non-governmental, in liaison with ISO, also take part in 
       the work. ISO collaborates closely with the International Electrotechnical Commission (IEC) on all 
       matters of electrotechnical standardization.
-    </p>
-    <p>
+		</xsl:variable>
+		<xsl:value-of select="normalize-space($text1)"/>
+		<xsl:text>&#xa;&#xa;</xsl:text>
+    <!-- </p> -->
+    <!-- <p> -->
+		<xsl:variable name="text2">
       The procedures used to develop this document and those intended for its further maintenance are 
       described in the ISO/IEC Directives, Part 1. In particular, the different approval criteria needed for the 
       different types of ISO documents should be noted. This document was drafted in accordance with the 
       editorial rules of the ISO/IEC Directives, Part 2 (see www.iso.org/directives[http://www.iso.org/directives]<!-- <a href="http://www.iso.org/directives" target="_blank">www.iso.org/directives</a> -->).
-    </p>
-    <p>
+		</xsl:variable>
+    <!-- </p> -->
+		<xsl:value-of select="normalize-space($text2)"/>
+		<xsl:text>&#xa;&#xa;</xsl:text>
+    <!-- <p> -->
+		<xsl:variable name="text3">
       Attention is drawn to the possibility that some of the elements of this document may be the subject of 
       patent rights. ISO shall not be held responsible for identifying any or all such patent rights. Details of 
       any patent rights identified during the development of the document will be in the Introduction and/or 
       on the ISO list of patent declarations received (see www.iso.org/patents[http://www.iso.org/patents]<!-- <a href="http://www.iso.org/patents" target="_blank">www.iso.org/patents</a> -->).
-    </p>
+    </xsl:variable>
+    <!-- </p> -->
+		<xsl:value-of select="normalize-space($text3)"/>
+		<xsl:text>&#xa;&#xa;</xsl:text>
     
-    <p>
+    <!-- <p> -->
+		<xsl:variable name="text4">
       Any trade name used in this document is information given for the convenience of users and does not 
       constitute an endorsement.
-    </p>
+    </xsl:variable>
+    <!-- </p> -->
+		<xsl:value-of select="normalize-space($text4)"/>
+		<xsl:text>&#xa;&#xa;</xsl:text>
     
-    <p>
+    <xsl:variable name="text5">
       For an explanation on the voluntary nature of standards, the meaning of ISO specific terms and 
       expressions related to conformity assessment, as well as information about ISO's adherence to the 
       World Trade Organization (WTO) principles in the Technical Barriers to Trade (TBT) see www.iso.org/iso/foreword.html[http://www.iso.org/iso/foreword.html]<!-- <a href="http://www.iso.org/iso/foreword.html" target="_blank">www.iso.org/iso/foreword.html</a> -->.
-    </p>
+    </xsl:variable>
+    <!-- </p> -->
+		<xsl:value-of select="normalize-space($text5)"/>
+		<xsl:text>&#xa;&#xa;</xsl:text>
     
     <!-- <p>
       This document was prepared by Technical Committee ISO/TC 184, <i>Automation systems and integration</i>, Subcommittee SC 4,
@@ -815,140 +828,145 @@ Purpose:
     </p> -->
 		
 		<xsl:text>This document was prepared by Technical Committee ISO/TC 184, _Automation systems and integration_, Subcommittee SC 4, _Industrial data._</xsl:text>
-    
-    <xsl:choose>
-      <xsl:when test="not(./foreword)">
-        <xsl:if test="@version!='1'">
-          <xsl:variable name="this_edition">
-            <xsl:choose>
-              <xsl:when test="@version='2'">
-                second
-              </xsl:when>
-              <xsl:when test="@version='3'">
-                third
-              </xsl:when>
-              <xsl:when test="@version='4'">
-                fourth
-              </xsl:when>
-              <xsl:when test="@version='5'">
-                fifth
-              </xsl:when>
-              <xsl:when test="@version='6'">
-                sixth
-              </xsl:when>
-              <xsl:when test="@version='7'">
-                seventh
-              </xsl:when>
-              <xsl:when test="@version='8'">
-                eighth
-              </xsl:when>
-              <xsl:when test="@version='9'">
-                ninth
-              </xsl:when>
-            </xsl:choose>
-          </xsl:variable>
-          
-          <xsl:variable name="prev_edition">
-            <xsl:choose>
-              <xsl:when test="@version='2'">
-                first
-              </xsl:when>
-              <xsl:when test="@version='3'">
-                second
-              </xsl:when>
-              <xsl:when test="@version='4'">
-                third
-              </xsl:when>
-              <xsl:when test="@version='5'">
-                fourth
-              </xsl:when>
-              <xsl:when test="@version='6'">
-                fifth
-              </xsl:when>
-              <xsl:when test="@version='7'">
-                sixth
-              </xsl:when>
-              <xsl:when test="@version='8'">
-                seventh
-              </xsl:when>
-              <xsl:when test="@version='9'">
-                eighth
-              </xsl:when>
-            </xsl:choose>
-          </xsl:variable>
-          <xsl:choose>
-            <xsl:when test="@previous.revision.cancelled='NO'">
-              This <xsl:value-of select="$this_edition"/> edition <!--of
-              <xsl:value-of select="$part_no"/>-->
-              cancels and replaces the
-              <xsl:value-of select="$prev_edition"/> edition  
-              (<xsl:value-of
-                select="concat($part_no,':',@previous.revision.year)"/>),
-              which has been technically revised. 
-              
-              <xsl:choose>
-                <!-- only changed a section of the document -->
-                <xsl:when test="@revision.complete='NO'">
-                  <xsl:value-of select="@revision.scope"/>
-                  of the <xsl:value-of select="$prev_edition"/> 
-                  edition  
-                  <xsl:choose>
-                    <!-- will be Clauses/Figures/ etc so if contains 'es' 
-		     then must be plural-->
-                    <xsl:when test="contains(@revision.scope,'es')">
-                      have
-                    </xsl:when>
-                    <xsl:otherwise>
-                      has
-                    </xsl:otherwise>
-                  </xsl:choose>
-                  been technically revised.
-                </xsl:when>
-                <xsl:otherwise>
-                  <!-- complete revision so no extra text -->
-                </xsl:otherwise>
-              </xsl:choose>
-              
-            </xsl:when>
-            
-            <xsl:otherwise>
-              <!-- cancelled -->
-              This <xsl:value-of select="$this_edition"/> edition 
-              cancels and replaces the
-              <xsl:value-of select="$prev_edition"/> edition
-              (<xsl:value-of
-                select="concat($part_no,':',@previous.revision.year)"/>), 
-              
-              <xsl:choose>
-                <!-- only changed a section of the document -->
-                <xsl:when test="@revision.complete='NO'">
-                  of which 
-                  <xsl:value-of select="@revision.scope"/>
-                  <xsl:choose>
-                    <!-- will be Clauses/Figures/ etc so if contains 'es' 
-		     then must be plural-->
-                    <xsl:when test="contains(@revision.scope,'es')">
-                      have
-                    </xsl:when>
-                    <xsl:otherwise>
-                      has
-                    </xsl:otherwise>
-                  </xsl:choose>
-                  been technically revised.
-                </xsl:when>
-                <xsl:otherwise>
-                  which has been technically revised.
-                </xsl:otherwise>
-              </xsl:choose>
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:if>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="./foreword"/>
-      </xsl:otherwise>
-    </xsl:choose>
-    
+    <xsl:text>&#xa;&#xa;</xsl:text>
+		
+		<xsl:variable name="text6">
+			<xsl:choose>
+				<xsl:when test="not(./foreword)">
+					<xsl:if test="@version!='1'">
+						<xsl:variable name="this_edition">
+							<xsl:choose>
+								<xsl:when test="@version='2'">
+									second
+								</xsl:when>
+								<xsl:when test="@version='3'">
+									third
+								</xsl:when>
+								<xsl:when test="@version='4'">
+									fourth
+								</xsl:when>
+								<xsl:when test="@version='5'">
+									fifth
+								</xsl:when>
+								<xsl:when test="@version='6'">
+									sixth
+								</xsl:when>
+								<xsl:when test="@version='7'">
+									seventh
+								</xsl:when>
+								<xsl:when test="@version='8'">
+									eighth
+								</xsl:when>
+								<xsl:when test="@version='9'">
+									ninth
+								</xsl:when>
+							</xsl:choose>
+						</xsl:variable>
+						
+						<xsl:variable name="prev_edition">
+							<xsl:choose>
+								<xsl:when test="@version='2'">
+									first
+								</xsl:when>
+								<xsl:when test="@version='3'">
+									second
+								</xsl:when>
+								<xsl:when test="@version='4'">
+									third
+								</xsl:when>
+								<xsl:when test="@version='5'">
+									fourth
+								</xsl:when>
+								<xsl:when test="@version='6'">
+									fifth
+								</xsl:when>
+								<xsl:when test="@version='7'">
+									sixth
+								</xsl:when>
+								<xsl:when test="@version='8'">
+									seventh
+								</xsl:when>
+								<xsl:when test="@version='9'">
+									eighth
+								</xsl:when>
+							</xsl:choose>
+						</xsl:variable>
+						<xsl:choose>
+							<xsl:when test="@previous.revision.cancelled='NO'">
+								This <xsl:value-of select="$this_edition"/> edition <!--of
+								<xsl:value-of select="$part_no"/>-->
+								cancels and replaces the
+								<xsl:value-of select="$prev_edition"/> edition  
+								(<xsl:value-of
+									select="concat($part_no,':',@previous.revision.year)"/>),
+								which has been technically revised. 
+								
+								<xsl:choose>
+									<!-- only changed a section of the document -->
+									<xsl:when test="@revision.complete='NO'">
+										<xsl:value-of select="@revision.scope"/>
+										of the <xsl:value-of select="$prev_edition"/> 
+										edition  
+										<xsl:choose>
+											<!-- will be Clauses/Figures/ etc so if contains 'es' 
+					 then must be plural-->
+											<xsl:when test="contains(@revision.scope,'es')">
+												have
+											</xsl:when>
+											<xsl:otherwise>
+												has
+											</xsl:otherwise>
+										</xsl:choose>
+										been technically revised.
+									</xsl:when>
+									<xsl:otherwise>
+										<!-- complete revision so no extra text -->
+									</xsl:otherwise>
+								</xsl:choose>
+								
+							</xsl:when>
+							
+							<xsl:otherwise>
+								<!-- cancelled -->
+								This <xsl:value-of select="$this_edition"/> edition 
+								cancels and replaces the
+								<xsl:value-of select="$prev_edition"/> edition
+								(<xsl:value-of
+									select="concat($part_no,':',@previous.revision.year)"/>), 
+								
+								<xsl:choose>
+									<!-- only changed a section of the document -->
+									<xsl:when test="@revision.complete='NO'">
+										of which 
+										<xsl:value-of select="@revision.scope"/>
+										<xsl:choose>
+											<!-- will be Clauses/Figures/ etc so if contains 'es' 
+					 then must be plural-->
+											<xsl:when test="contains(@revision.scope,'es')">
+												have
+											</xsl:when>
+											<xsl:otherwise>
+												has
+											</xsl:otherwise>
+										</xsl:choose>
+										been technically revised.
+									</xsl:when>
+									<xsl:otherwise>
+										which has been technically revised.
+									</xsl:otherwise>
+								</xsl:choose>
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:if>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="./foreword"/>
+				</xsl:otherwise>
+			</xsl:choose>
+    </xsl:variable>
+		<xsl:value-of select="normalize-space($text6)"/>
+		<xsl:text>&#xa;&#xa;</xsl:text>
+		
     <xsl:if test="./changes">
       <xsl:variable name="annex_letter">
         <xsl:choose>
@@ -956,21 +974,32 @@ Purpose:
           <xsl:when test="./examples or ./tech_discussion">F</xsl:when>
           <xsl:otherwise>E</xsl:otherwise>
         </xsl:choose>
-      </xsl:variable><br/><br/>A detailed description of the changes is provided in Annex <a
+      </xsl:variable>
+			<!-- <br/><br/>A detailed description of the changes is provided in Annex <a
         href="g_change{$FILE_EXT}">
         <xsl:value-of select="$annex_letter"/>
-      </a>. 
+      </a>.  -->
+			<xsl:text>A detailed description of the changes is provided in &lt;&lt;Annex</xsl:text><xsl:value-of select="$annex_letter"/><xsl:text>&gt;&gt;.</xsl:text>
+			<xsl:text>&#xa;&#xa;</xsl:text>
     </xsl:if>
     
-    <p>
+    <!-- <p> -->
+		<xsl:variable name="text7">
       A list of all parts in the ISO 10303 series can be found on the ISO website[http://standards.iso.org/iso/10303/tech/step_titles.htm]<!-- <a href="http://standards.iso.org/iso/10303/tech/step_titles.htm" target="_blank">ISO website</a> -->. 
-    </p>
+		</xsl:variable>		
+    <!-- </p> -->
+		<xsl:value-of select="normalize-space($text7)"/>
+		<xsl:text>&#xa;&#xa;</xsl:text>
     
-    <p>
+    <!-- <p> -->
+		<xsl:variable name="text8">
       Any feedback or questions on this document should be directed to the user’s national standards body. 
       A complete listing of these bodies can be found at www.iso.org/members.html[https://www.iso.org/members.html]<!-- <a href="https://www.iso.org/members.html">www.iso.org/members.html</a> -->.
-    </p>
-    
+		</xsl:variable>
+    <!-- </p> -->
+    <xsl:value-of select="normalize-space($text8)"/>
+		<xsl:text>&#xa;&#xa;</xsl:text>
+		
   </xsl:template>
   
   <!--<xsl:template match="resource" mode="foreword">

@@ -214,7 +214,9 @@
     </xsl:choose>
   </xsl:variable>
 
-  <blockquote>
+  <!-- <blockquote> -->
+	<xsl:call-template name="insertQuoteStart"/>
+	
     <!--<span style="background-color: {$bg_color}">
        <b>
         <a href="../dvlp/issues{$FILE_EXT}#{$issue_target}">
@@ -239,8 +241,7 @@
                               ') [', string(@category),', ',string(@status), ', ',$resolution,']')" />        
 			</xsl:variable>
       
-			<xsl:text> *</xsl:text><xsl:value-of select="normalize-space($text)"/><xsl:text>*[</xsl:text><xsl:value-of select="$href"/><xsl:text>]</xsl:text>
-      
+			<xsl:text>*</xsl:text><xsl:value-of select="normalize-space($text)"/><xsl:text>*[</xsl:text><xsl:value-of select="$href"/><xsl:text>]</xsl:text>      
       <xsl:text>&#xa;</xsl:text>
       
 <!-- commented out as tc184-sc4.rg no longer operational
@@ -263,41 +264,66 @@
         </i> 
         <br/>
         -->
+				<xsl:text>&#xa;</xsl:text>
 				<xsl:text> _Registered as a Ballot comment by:</xsl:text>
 				<xsl:value-of select="@member_body"/>
         <xsl:text>_</xsl:text>
-        <xsl:text>&#xa;</xsl:text>
+        <xsl:text>&#xa;&#xa;</xsl:text>
       </xsl:if>      
 
       <xsl:apply-templates/>
     <!-- </span> -->
-  </blockquote>
+  <!-- </blockquote> -->
+	
+	
+	<xsl:call-template name="insertQuoteEnd"/>
+			
 </xsl:template>
 
 
   <xsl:template match="comment">
-  <blockquote>
-    <!-- <b>Comment: </b> -->
-    <xsl:text> *Comment:* </xsl:text>
-    <!-- <i><xsl:value-of select="string(@status)" /></i> -->
-    <xsl:text> _</xsl:text><xsl:value-of select="string(@status)" /><xsl:text>_ </xsl:text>
+<!-- 		<blockquote>
+			<b>Comment: </b>    
+			<i><xsl:value-of select="string(@status)" /></i>
+			(<xsl:value-of select="concat(string(@by),' ', string(@date))" />
+			<b>)</b><br/>
+			<xsl:apply-templates />
+		</blockquote>
+ -->	
+		<xsl:call-template name="insertQuoteStart"/>
+			<xsl:text>*Comment:* _</xsl:text>
+			<xsl:value-of select="string(@status)" />
+			<xsl:text>_ (</xsl:text>
+			<xsl:value-of select="concat(string(@by),' ', string(@date))" />
+			<xsl:text>)</xsl:text>
+			<xsl:text>&#xa;&#xa;</xsl:text>
+			<xsl:apply-templates />
+		<xsl:call-template name="insertQuoteEnd"/>
+	
 		
-    (<xsl:value-of select="concat(string(@by),' ', string(@date))" />
-    <b>)</b><br/>
-    <xsl:apply-templates />
-  </blockquote>
   </xsl:template>
 
-<xsl:template match="issue_management">
-  <blockquote>
-    <!-- <b>Issue Management: </b> -->
-    <xsl:text> *Issue Management:* </xsl:text>
-    <xsl:for-each select="@*" >
-    <xsl:value-of select="concat(name(),': ', string(.))" /><br/>
-    </xsl:for-each>
-    <xsl:apply-templates />
-  </blockquote>
+	<xsl:template match="issue_management">
+		<!-- <blockquote>
+			<b>Issue Management: </b>			
+			<xsl:for-each select="@*" >
+			<xsl:value-of select="concat(name(),': ', string(.))" /><br/>
+			</xsl:for-each>
+			<xsl:apply-templates />
+		</blockquote> -->
+		
+		<xsl:call-template name="insertQuoteStart"/>
+			<xsl:text> *Issue Management:* </xsl:text>
+			<xsl:for-each select="@*" >
+				<xsl:value-of select="concat(name(),': ', string(.))" /><xsl:text>&#xa;</xsl:text>
+			</xsl:for-each>
+			<xsl:apply-templates />
+		<xsl:call-template name="insertQuoteEnd"/>
+		
+		
   </xsl:template>
+
+
 
 
   <xsl:template name="issue_ae_map_aname">

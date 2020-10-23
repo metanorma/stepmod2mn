@@ -240,11 +240,11 @@
 		<!-- draughting_elements/sys/foreword.xml -->
 		<xsl:if test=" java:exists(java:java.io.File.new(concat($path, 'sys/foreword.xml')))">
 			<xsl:message>[INFO] Processing foreword.xml ...</xsl:message>
-			<xsl:variable name="foreword">
+			<!-- <xsl:variable name="foreword"> -->
 				<xsl:apply-templates select="document(concat($path, 'sys/foreword.xml'))" mode="foreword"/>
-			</xsl:variable>
+			<!-- </xsl:variable> -->
 			<!-- <xsl:copy-of select="$foreword"/> -->
-			<xsl:apply-templates select="xalan:nodeset($foreword)/node()" mode="stepmod2mn"/>
+			<!-- <xsl:apply-templates select="xalan:nodeset($foreword)/node()" mode="stepmod2mn"/> -->
 		</xsl:if>
 		
 		<!-- Introduction -->
@@ -729,16 +729,17 @@
 	</xsl:template>
 	
 	
-	<xsl:template match="blockquote"  mode="stepmod2mn">
-			<xsl:text>[quote]</xsl:text>
-			<xsl:text>&#xa;</xsl:text>
-			<xsl:text>_____</xsl:text>
-			<xsl:text>&#xa;</xsl:text>
-			<xsl:apply-templates  mode="stepmod2mn"/>
-			<xsl:text>&#xa;</xsl:text>
-			<xsl:text>_____</xsl:text>
-			<xsl:text>&#xa;</xsl:text>
-			<xsl:text>&#xa;</xsl:text>
+	<xsl:template name="insertQuoteStart">		
+		<xsl:text>[quote]</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>_____</xsl:text>
+		<xsl:text>&#xa;</xsl:text>		
+	</xsl:template>
+	
+	<xsl:template name="insertQuoteEnd">		
+		<xsl:text>_____</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
 	</xsl:template>
 	
 	<xsl:template name="repeat">
