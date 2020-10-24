@@ -62,7 +62,7 @@ $Id: sect_introduction.xsl,v 1.13 2010/10/20 07:44:26 robbod Exp $
     <xsl:when test="$doctype='igr' or $doctype='iar'">
       <xsl:choose>
         <xsl:when test="count(../schema)>1">
-	      <p> Major subdivisions of this part of ISO 10303 are:</p>
+	      <!-- <p> Major subdivisions of this part of ISO 10303 are:</p>
 	      <ul>
 	        <xsl:for-each select="../schema"> 
 	          <li>
@@ -76,8 +76,26 @@ $Id: sect_introduction.xsl,v 1.13 2010/10/20 07:44:26 robbod Exp $
                 </xsl:choose>
                </li>
               </xsl:for-each>
-	        </ul>
-          </xsl:when>
+	        </ul> -->
+					
+					<xsl:text>Major subdivisions of this part of ISO 10303 are:</xsl:text>
+					<xsl:text>&#xa;&#xa;</xsl:text>
+					<xsl:for-each select="../schema">
+						<xsl:text>* </xsl:text>
+						<xsl:choose>
+							<xsl:when test="position()!=last()">
+								<xsl:value-of select="concat(@name,';')"/>
+								<xsl:text>&#xa;&#xa;</xsl:text>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="concat(@name,'.')"/>        
+								<xsl:text>&#xa;</xsl:text>
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:for-each>					
+					<xsl:text>&#xa;&#xa;</xsl:text>
+					
+				</xsl:when>
         <xsl:otherwise>
           <p>
             This part of ISO 10303 specifies the 
@@ -177,7 +195,7 @@ $Id: sect_introduction.xsl,v 1.13 2010/10/20 07:44:26 robbod Exp $
 			<p>
 			The following schemas shown in Figure 1 are not found in this part of ISO 10303, but are found as specified:
 			</p>
-			<ul>
+			<!-- <ul>
 			  <xsl:for-each select="used-schema[not(.=preceding-sibling::used-schema)]">
 			  	<xsl:sort />
 				<li>
@@ -193,7 +211,30 @@ $Id: sect_introduction.xsl,v 1.13 2010/10/20 07:44:26 robbod Exp $
                                   </xsl:choose>
 				</li>
 			    </xsl:for-each>
-			</ul>
+			</ul> -->
+			
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:for-each select="used-schema[not(.=preceding-sibling::used-schema)]">
+				<xsl:sort />
+				<xsl:text>* </xsl:text>
+				<xsl:variable name="text">
+					<xsl:value-of select="." /> is found in
+					<xsl:apply-templates select="." mode="reference" /> 
+				</xsl:variable>
+					<xsl:value-of select="normalize-space($text)"/>
+					<xsl:choose>
+						<xsl:when test="position()!=last()">
+							<xsl:value-of select="';'"/>
+							<xsl:text>&#xa;</xsl:text>
+							<xsl:text>&#xa;</xsl:text>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:value-of select="'.'"/> 
+							<xsl:text>&#xa;</xsl:text>
+						</xsl:otherwise>
+					</xsl:choose>					
+				</xsl:for-each>
+			<xsl:text>&#xa;&#xa;</xsl:text>			
 		</xsl:when>
 	</xsl:choose>
 </xsl:template>

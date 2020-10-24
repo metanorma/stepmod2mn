@@ -655,33 +655,24 @@
 		<xsl:if test="following-sibling::* or not(parent::p)"><xsl:text>&#xa;&#xa;</xsl:text></xsl:if>
 	</xsl:template>
 	
-	<xsl:template match="ul | UL" mode="stepmod2mn">
+	<!-- <xsl:template match="ul/li | li" mode="stepmod2mn">
 		<xsl:text>&#xa;</xsl:text>
-		<xsl:apply-templates mode="stepmod2mn"/>
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>&#xa;</xsl:text>
-	</xsl:template>
-
-	<xsl:template match="ul/li | li" mode="stepmod2mn">
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:call-template name="getLevelListItem">
+		<xsl:call-template name="insertListItemLabel">
 			<xsl:with-param name="list-label">*</xsl:with-param>
-		</xsl:call-template>		
-		<xsl:text> </xsl:text>
+		</xsl:call-template>				
 		<xsl:apply-templates mode="stepmod2mn"/>
 		<xsl:text>&#xa;</xsl:text>
 		
-	</xsl:template>
+	</xsl:template> -->
 
-	<xsl:template match="ol/li" mode="stepmod2mn">
-		<xsl:call-template name="getLevelListItem">
+	<!-- <xsl:template match="ol/li" mode="stepmod2mn">
+		<xsl:call-template name="insertListItemLabel">
 			<xsl:with-param name="list-label">.</xsl:with-param>
-		</xsl:call-template>
-		<xsl:text> </xsl:text>
+		</xsl:call-template>		
 		<xsl:apply-templates mode="stepmod2mn"/>
 		<xsl:text>&#xa;</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
-	</xsl:template>
+	</xsl:template> -->
 	
 	<xsl:template match="table[@type = 'abbreviations'] | table[.//tr[not(count(td) &lt; 2 or count(td) &gt; 2)]]" mode="stepmod2mn">
 		<xsl:apply-templates mode="table_dl"/>
@@ -704,7 +695,7 @@
 		</xsl:if>
 	</xsl:template>
 	
-	<xsl:template name="getLevelListItem">
+	<xsl:template name="insertListItemLabel">
 		<xsl:param name="list-label" select="'*'"/>
 		<xsl:variable name="level_" select="count(ancestor-or-self::ul) + count(ancestor-or-self::ol)"/>		
 		<xsl:variable name="level">
@@ -717,7 +708,7 @@
 			<xsl:with-param name="char" select="$list-label"/>
 			<xsl:with-param name="count" select="$level"/>
 		</xsl:call-template>
-		
+		<xsl:text> </xsl:text>
 	</xsl:template>
 	
 	<xsl:template match="text()" mode="stepmod2mn">

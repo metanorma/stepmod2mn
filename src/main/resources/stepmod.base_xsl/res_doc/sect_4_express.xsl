@@ -3501,11 +3501,20 @@ main_clause in exp_cl_pres   :<xsl:value-of select="$main_clause"/>
   <xsl:text>&#xa;&#xa;</xsl:text>
   
   
-  <ul>
+  <!-- <ul>
     <li>
       <xsl:apply-templates/>
     </li>
-  </ul>
+  </ul> -->
+	
+	<xsl:text>&#xa;</xsl:text>
+	<xsl:text>* </xsl:text>
+	<xsl:variable name="text">
+		<xsl:apply-templates/>
+	</xsl:variable>
+	<xsl:value-of select="$text"/>
+	<xsl:text>&#xa;&#xa;</xsl:text>
+	
 </xsl:template>
 
 

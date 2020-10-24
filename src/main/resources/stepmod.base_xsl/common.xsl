@@ -1015,19 +1015,19 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
      An unordered list
      -->
 <xsl:template match="ul|UL">
-  <ul>
+  <!-- <ul> -->
+	<xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates/>
-  </ul>
+  <!-- </ul> -->
+	<xsl:text>&#xa;&#xa;</xsl:text>	
 </xsl:template>
 
 <!--
      An ordered list
      -->
-<xsl:template match="ol" >
-  <xsl:variable
-    name="type"
-    select="@type"/>
-  <xsl:choose>
+<xsl:template match="ol | OL" >
+  <xsl:variable name="type" select="@type"/>
+  <!-- <xsl:choose>
     <xsl:when test="$type">
       <ol type="{$type}">
         <xsl:apply-templates/>
@@ -1038,25 +1038,17 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
         <xsl:apply-templates/>
       </ol>
     </xsl:otherwise>
-  </xsl:choose>
+  </xsl:choose> -->
+	
+	<xsl:text>&#xa;</xsl:text>
+	<xsl:if test="$type">
+		<xsl:text>[</xsl:text><xsl:value-of select="$type"/><xsl:text>]</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+	</xsl:if>
+	<xsl:apply-templates/>
+	<xsl:text>&#xa;&#xa;</xsl:text>	
 </xsl:template>
-<xsl:template match="OL" >
-  <xsl:variable
-    name="type"
-    select="@type"/>
-  <xsl:choose>
-    <xsl:when test="$type">
-      <ol type="{$type}">
-        <xsl:apply-templates/>
-      </ol>
-    </xsl:when>
-    <xsl:otherwise>
-      <ol>
-        <xsl:apply-templates/>
-      </ol>
-    </xsl:otherwise>
-  </xsl:choose>
-</xsl:template>
+
 
 <!--
      A list item - called from scope statements where there are clear rules
@@ -1081,7 +1073,7 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 
   <xsl:choose>
     <xsl:when test="$ERROR_CHECK_LIST_ITEMS = 'NO'">
-      <li>
+      <!-- <li>
         <xsl:choose>
           <xsl:when test="./ancestor::*[name()='example' or name()='note']">
             <small>
@@ -1092,7 +1084,14 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
             <xsl:apply-templates/>
           </xsl:otherwise>
         </xsl:choose>
-      </li>
+      </li> -->
+			
+			<xsl:text>* </xsl:text>
+			<xsl:variable name="text">
+				<xsl:apply-templates/>
+			</xsl:variable>
+			<xsl:value-of select="$text"/>
+			<xsl:text>&#xa;&#xa;</xsl:text>
     </xsl:when>
     <xsl:otherwise>
       <!-- get the text or the text of the last paragraph. Ignore examples and
@@ -1117,11 +1116,12 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
           </xsl:otherwise>
         </xsl:choose>
       </xsl:variable>  
-      <li>
-        <xsl:choose>
-          <xsl:when test="contains($item,'**')">
+      <!-- <li> -->
+			<xsl:text>* </xsl:text>				
+        <!-- <xsl:choose>
+          <xsl:when test="contains($item,'**')"> -->
             <!-- the list item contains a sub list, so allow other terminators -->
-          </xsl:when>
+          <!-- </xsl:when>
           <xsl:when test="substring($item,string-length($item))!=$terminator">
             <xsl:call-template name="error_message">
               <xsl:with-param 
@@ -1140,7 +1140,13 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
             <xsl:apply-templates/>
           </xsl:otherwise>
         </xsl:choose>
-      </li>
+				 -->
+				<xsl:variable name="text">
+					<xsl:apply-templates/>
+				</xsl:variable>
+				<xsl:value-of select="$text"/>
+      <!-- </li> -->
+			<xsl:text>&#xa;&#xa;</xsl:text>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>

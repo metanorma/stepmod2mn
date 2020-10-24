@@ -683,6 +683,7 @@ Purpose:
 							<xsl:text>&#xa;</xsl:text>
 							<xsl:apply-templates select="./abstract/*"/>
 						<!-- </ul> -->
+							<xsl:text>&#xa;&#xa;</xsl:text>							
 					</xsl:when>
 					<xsl:otherwise>
 						<xsl:apply-templates select="./abstract/*"/>
@@ -696,7 +697,9 @@ Purpose:
 					<xsl:text>&#xa;&#xa;</xsl:text>
 				<!-- </P> -->
 				<!-- <UL> -->
+					<xsl:text>&#xa;</xsl:text>		
 					<xsl:apply-templates select="./inscope/li"/>
+					<xsl:text>&#xa;&#xa;</xsl:text>					
 				<!-- </UL> -->
 			</xsl:otherwise>
 		</xsl:choose>
@@ -1299,9 +1302,12 @@ Purpose:
       <xsl:with-param name="clause" select="'inscope'"/>
     </xsl:apply-templates>
 
-    <ul>
+    <!-- <ul> -->
+		<xsl:text>&#xa;</xsl:text>
       <xsl:apply-templates/>
-    </ul>
+    <!-- </ul> -->
+		<xsl:text>&#xa;&#xa;</xsl:text>
+		
   </xsl:template>
 
 
@@ -1316,9 +1322,11 @@ Purpose:
       <xsl:with-param name="clause" select="'outscope'"/>
     </xsl:apply-templates>
 
-    <ul>
+    <!-- <ul> -->
+		<xsl:text>&#xa;</xsl:text>
       <xsl:apply-templates/>
-    </ul>
+    <!-- </ul> -->
+		<xsl:text>&#xa;&#xa;</xsl:text>
   </xsl:template>
 
 
@@ -1535,68 +1543,75 @@ Purpose:
       defined in ISO 10303-11.
     </p>
 
-    <ul>
+    <!-- <ul> -->
+		<xsl:text>&#xa;</xsl:text>
+      		
       <xsl:for-each select="./schema/express-g/imgfile" >
-	<xsl:variable name="schema">
-	  <xsl:value-of 
-	      select="substring-before(@file,'expg')"/>
-	</xsl:variable>
-	<xsl:variable name="ldiagno">
-	  <xsl:value-of select="substring-after(@file,'expg')"/>       
-	</xsl:variable>
-	<xsl:variable name="diagno">
-	  <xsl:value-of select="substring-before($ldiagno,'.xml')"/>
-	</xsl:variable>
+				<xsl:variable name="schema">
+					<xsl:value-of 
+							select="substring-before(@file,'expg')"/>
+				</xsl:variable>
+				<xsl:variable name="ldiagno">
+					<xsl:value-of select="substring-after(@file,'expg')"/>       
+				</xsl:variable>
+				<xsl:variable name="diagno">
+					<xsl:value-of select="substring-before($ldiagno,'.xml')"/>
+				</xsl:variable>
 
-	<xsl:variable name="clauseno">
-	  <xsl:value-of select="position()"/>
-	</xsl:variable>
+				<xsl:variable name="clauseno">
+					<xsl:value-of select="position()"/>
+				</xsl:variable>
 
-	<xsl:variable name="rel_clauseno">
-	  <xsl:number/>
-	</xsl:variable>
+				<xsl:variable name="rel_clauseno">
+					<xsl:number/>
+				</xsl:variable>
 
-	<xsl:variable name="img_count">
-	  <xsl:value-of select="count(../imgfile)"/>
-	</xsl:variable>
+				<xsl:variable name="img_count">
+					<xsl:value-of select="count(../imgfile)"/>
+				</xsl:variable>
 
-	<xsl:variable name="resource_dir">
-	  <xsl:call-template name="resource_directory">
-	    <xsl:with-param name="resource" select="$schema"/>
-	  </xsl:call-template>
-	</xsl:variable>
+				<xsl:variable name="resource_dir">
+					<xsl:call-template name="resource_directory">
+						<xsl:with-param name="resource" select="$schema"/>
+					</xsl:call-template>
+				</xsl:variable>
 
-	<xsl:variable name="expg_path" select="concat('../../',$resource_dir,'/',$schema,'expg',$diagno)"/>
+				<xsl:variable name="expg_path" select="concat('../../',$resource_dir,'/',$schema,'expg',$diagno)"/>
 
-	<xsl:variable name="schema_url">
-	  <xsl:choose>
-	    <xsl:when test="$FILE_EXT='.xml'">
-	      <xsl:value-of select="concat($expg_path,'.xml')"/>
-	    </xsl:when>
-	    <xsl:otherwise>
-	      <xsl:value-of select="concat($expg_path,'.htm')"/>
-	    </xsl:otherwise>
-	  </xsl:choose>
-	</xsl:variable>
+				<xsl:variable name="schema_url">
+					<xsl:choose>
+						<xsl:when test="$FILE_EXT='.xml'">
+							<xsl:value-of select="concat($expg_path,'.xml')"/>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:value-of select="concat($expg_path,'.htm')"/>
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:variable>
 
-	<li>
-	  <a href="{$schema_url}">
-	    <xsl:value-of 
-		select="concat('Figure D.',$clauseno, 
-			' &#8212; EXPRESS-G diagram of the ', $schema, ' (', $rel_clauseno,' of ', $img_count, ')' )" />
-
-	  </a>
-	  <xsl:choose>
-	    <xsl:when test="position()!=last()">
-	      <xsl:value-of select="';'"/>
-	    </xsl:when>
-	    <xsl:otherwise>
-	      <xsl:value-of select="'.'"/>        
-	    </xsl:otherwise>
-	  </xsl:choose>
-	</li>
+				<!-- <li> -->
+					<xsl:text>* &lt;&lt;</xsl:text>
+					
+					<!-- <a href="{$schema_url}">
+						<xsl:value-of 
+					select="concat('Figure D.',$clauseno, 
+						' &#8212; EXPRESS-G diagram of the ', $schema, ' (', $rel_clauseno,' of ', $img_count, ')' )" />
+					</a> -->
+					<xsl:value-of select="concat($schema,'expg',$diagno)"/>
+					<xsl:text>&gt;&gt;</xsl:text>
+					<xsl:choose>
+						<xsl:when test="position()!=last()">
+							<xsl:value-of select="';'"/>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:value-of select="'.'"/>        
+						</xsl:otherwise>
+					</xsl:choose>
+				<!-- </li> -->
+				<xsl:text>&#xa;&#xa;</xsl:text>
       </xsl:for-each>
-    </ul>
+    <!-- </ul> -->
+		<xsl:text>&#xa;&#xa;</xsl:text>
 
   </xsl:template>
 
@@ -1811,39 +1826,67 @@ the types, entity specializations, and functions that are specific to this part 
 
   <xsl:template match="uof" mode="toc">
     <xsl:variable name="href" select="concat('#uof',@name)"/>
-    <li>
+    <!-- <li>
       <a href="{$href}">
-	<xsl:choose>
-	  <xsl:when test="position()!=last()">
-	    <xsl:value-of select="concat(@name,';')"/>
-	  </xsl:when>
-	  <xsl:otherwise>
-	    <xsl:value-of select="concat(@name,'.')"/>        
-	  </xsl:otherwise>
-	</xsl:choose>
+				<xsl:choose>
+					<xsl:when test="position()!=last()">
+						<xsl:value-of select="concat(@name,';')"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="concat(@name,'.')"/>        
+					</xsl:otherwise>
+				</xsl:choose>
       </a>
-    </li>
+    </li> -->
+		
+		<xsl:text>* &lt;&lt;</xsl:text>
+			<xsl:choose>
+				<xsl:when test="position()!=last()">
+					<xsl:value-of select="concat(@name,';')"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="concat(@name,'.')"/>        
+				</xsl:otherwise>
+			</xsl:choose>
+			<xsl:text>, </xsl:text>
+			<xsl:value-of select="$href"/>
+			
+		<xsl:text>&gt;&gt;</xsl:text>
+		<xsl:text>&#xa;&#xa;</xsl:text>
+		
   </xsl:template>
 
   <xsl:template match="uoflink" mode="toc">
     <xsl:variable name="resource" select="@resource"/>
     <xsl:variable name="uof" select="@uof"/>
-    <xsl:variable name="xref" 
-		  select="concat('#uof',$uof)"/>
-    <li>
+    <xsl:variable name="xref" select="concat('#uof',$uof)"/>
+    <!-- <li>
       <xsl:choose>
-	<xsl:when test="position()!=last()">
-	  <a href="{$xref}">
-	    <xsl:value-of select="concat($uof,';')"/>
-	  </a>
-	</xsl:when>
-	<xsl:otherwise>
-	  <a href="{$xref}">
-	    <xsl:value-of select="concat($uof,'.')"/>        
-	  </a>
-	</xsl:otherwise>
-      </xsl:choose>
-    </li>
+				<xsl:when test="position()!=last()">
+					<a href="{$xref}">
+						<xsl:value-of select="concat($uof,';')"/>
+					</a>
+				</xsl:when>
+				<xsl:otherwise>
+					<a href="{$xref}">
+						<xsl:value-of select="concat($uof,'.')"/>        
+					</a>
+				</xsl:otherwise>
+			</xsl:choose>
+    </li> -->
+		<xsl:text>* &lt;&lt;</xsl:text>			
+			<xsl:choose>
+				<xsl:when test="position()!=last()">					
+					<xsl:value-of select="concat($uof,';')"/>					
+				</xsl:when>
+				<xsl:otherwise>					
+					<xsl:value-of select="concat($uof,'.')"/>
+				</xsl:otherwise>
+			</xsl:choose>		
+			<xsl:text>, </xsl:text>
+			<xsl:value-of select="$xref"/>
+		<xsl:text>&gt;&gt;</xsl:text>
+		<xsl:text>&#xa;&#xa;</xsl:text>
   </xsl:template>
 
 
@@ -2993,9 +3036,9 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 	  <xsl:value-of 
 	    select="concat(stdref/orgname,' ',stdref/stdnumber)"/>
   </xsl:variable>
-  <li>
-	
-		<xsl:text>[[[</xsl:text>
+  <!-- <li> -->
+		
+		<xsl:text>* [[[</xsl:text>
 			<xsl:value-of select="@id"/>
 			<xsl:text>,</xsl:text>
 			<xsl:value-of select="$stdnumber"/>
@@ -3029,7 +3072,8 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
       </xsl:choose>
     <!-- </i> -->
 		<xsl:text>_</xsl:text>
-  </li>
+		<xsl:text>&#xa;&#xa;</xsl:text>
+  <!-- </li> -->
   </xsl:template>
 
 
@@ -3299,40 +3343,42 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 	      the following terms defined in 
 	      <xsl:value-of select="$stdnumber"/>
 	      apply:
-	      <ul>
+	      <!-- <ul> -->
+				<xsl:text>&#xa;</xsl:text>
 		<!-- now output the terms -->
 	    <xsl:variable 
-		name="moreNormRefs" 
-		select="string-length(/resource/normrefs/normref.inc[@normref=$ref]/term.ref)+string-length(/resource/normrefs/normref.inc)"/>
-		<xsl:choose>
-		  <xsl:when test="not($doctype='aic')">
-		    <xsl:apply-templates 
-			select="document(concat($path, '../../../data/basic/normrefs_resdoc_default.xml'))/normrefs/normref.inc[@normref=$ref]/term.ref" mode="normref">
-		      <xsl:with-param name="current_resource" select="$current_resource"/>
-		      <xsl:with-param name="moreNormRefs" select="$moreNormRefs"/>
-		    </xsl:apply-templates>
-		  </xsl:when>
-		  <xsl:when test="$doctype='aic'">
-		    <xsl:apply-templates 
-			select="document(concat($path, '../../../data/basic/normrefs_aic_default.xml'))/normrefs/normref.inc[@normref=$ref]/term.ref" mode="normref">
-		      <xsl:with-param name="current_resource" select="$current_resource"/>
-		      <xsl:with-param name="moreNormRefs" select="$moreNormRefs"/>
-		    </xsl:apply-templates>
-		  </xsl:when>
-		</xsl:choose>
-		<!-- check to see if any terms from the same normref are 
-		     identified in resource -->
-		<xsl:apply-templates 
-		    select="/resource/normrefs/normref.inc[@normref=$ref]/term.ref"
-		    mode="normref"/>
-		<xsl:apply-templates 
-		    select="/resource/normrefs/normref.inc"
-		    mode="normref_check">
-		  <xsl:with-param name="resource_number" select="$part_no"/>
-		  <xsl:with-param name="current_resource" select="$current_resource"/>
-		</xsl:apply-templates>
+					name="moreNormRefs" 
+					select="string-length(/resource/normrefs/normref.inc[@normref=$ref]/term.ref)+string-length(/resource/normrefs/normref.inc)"/>
+					<xsl:choose>
+						<xsl:when test="not($doctype='aic')">
+							<xsl:apply-templates 
+						select="document(concat($path, '../../../data/basic/normrefs_resdoc_default.xml'))/normrefs/normref.inc[@normref=$ref]/term.ref" mode="normref">
+								<xsl:with-param name="current_resource" select="$current_resource"/>
+								<xsl:with-param name="moreNormRefs" select="$moreNormRefs"/>
+							</xsl:apply-templates>
+						</xsl:when>
+						<xsl:when test="$doctype='aic'">
+							<xsl:apply-templates 
+						select="document(concat($path, '../../../data/basic/normrefs_aic_default.xml'))/normrefs/normref.inc[@normref=$ref]/term.ref" mode="normref">
+								<xsl:with-param name="current_resource" select="$current_resource"/>
+								<xsl:with-param name="moreNormRefs" select="$moreNormRefs"/>
+							</xsl:apply-templates>
+						</xsl:when>
+					</xsl:choose>
+					<!-- check to see if any terms from the same normref are 
+							 identified in resource -->
+					<xsl:apply-templates 
+							select="/resource/normrefs/normref.inc[@normref=$ref]/term.ref"
+							mode="normref"/>
+					<xsl:apply-templates 
+							select="/resource/normrefs/normref.inc"
+							mode="normref_check">
+						<xsl:with-param name="resource_number" select="$part_no"/>
+						<xsl:with-param name="current_resource" select="$current_resource"/>
+					</xsl:apply-templates>
 
-	      </ul>
+	      <!-- </ul> -->
+				<xsl:text>&#xa;&#xa;</xsl:text>
 	    </xsl:if>
 	  </xsl:when>
 	  
@@ -3388,12 +3434,14 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 		  the following terms defined in 
 		  <xsl:value-of select="$stdnumber"/>
 		  apply:
-		  <ul>
+		  <!-- <ul> -->
+			<xsl:text>&#xa;</xsl:text>
 		    <!-- now output the terms -->
 		    <xsl:apply-templates 
 			select="/resource/normrefs/normref.inc[@resource.name=$resource]/term.ref" 
 			mode="resource"/>
-		  </ul>
+			<xsl:text>&#xa;&#xa;</xsl:text>
+		 <!--  </ul> -->
 		</xsl:if>
 	      </xsl:when>
 	      <xsl:otherwise>
@@ -3641,41 +3689,48 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 
     <xsl:choose>
       <xsl:when test="$resource_ok='true'">
-	<xsl:variable 
-	    name="ref"
-	    select="@linkend"/>
-	<xsl:variable 
-	    name="term"
-	    select="document($resource_xml)/resource/definition/term[@id=$ref]"/>
+				<xsl:variable name="ref" select="@linkend"/>
+				<xsl:variable name="term" select="document($resource_xml)/resource/definition/term[@id=$ref]"/>
 	
-	<xsl:choose>
-	  <xsl:when test="$term">
-	    <xsl:choose>
-	      <xsl:when test="position()=last()">
-		<li><xsl:apply-templates select="$term"/>.</li>
-	      </xsl:when>
-	      <xsl:otherwise>
-		<li><xsl:apply-templates select="$term"/>;</li>
-	      </xsl:otherwise>
-	    </xsl:choose>
-	  </xsl:when>
-	  <xsl:otherwise>
-	    <li>
-	      <xsl:call-template name="error_message">
-		<xsl:with-param 
-		    name="message"
-		    select="concat('Error 11: Can not find term referenced by: ',$ref)"/>
-	      </xsl:call-template>
-	    </li>
-	  </xsl:otherwise>
-	</xsl:choose>
+				<xsl:choose>
+					<xsl:when test="$term">		
+						<!-- <xsl:choose>
+							<xsl:when test="position()=last()">
+								<li><xsl:apply-templates select="$term"/>.</li>
+							</xsl:when>
+							<xsl:otherwise>
+								<li><xsl:apply-templates select="$term"/>;</li>
+							</xsl:otherwise>
+						</xsl:choose> -->
+						<xsl:text>* </xsl:text>
+						<xsl:apply-templates select="$term"/>
+						<xsl:choose>
+							<xsl:when test="position()=last()">.</xsl:when>
+							<xsl:otherwise>;</xsl:otherwise>
+						</xsl:choose>
+						<xsl:text>&#xa;&#xa;</xsl:text>
+					</xsl:when>
+					
+					<xsl:otherwise>
+						<!-- <li> -->
+							<xsl:variable name="text">
+								<xsl:call-template name="error_message">
+									<xsl:with-param name="message" select="concat('Error 11: Can not find term referenced by: ',$ref)"/>
+								</xsl:call-template>
+							</xsl:variable>
+							<xsl:text>* </xsl:text>
+							<xsl:value-of select="$text"/>
+							<xsl:text>&#xa;&#xa;</xsl:text>
+						<!-- </li> -->
+					</xsl:otherwise>
+				</xsl:choose>
       </xsl:when>
       <xsl:otherwise>
-	<xsl:call-template name="error_message">
-	  <xsl:with-param name="message">
-	    <xsl:value-of select="concat('Error ref1: ', $resource_ok)"/>
-	  </xsl:with-param>
-	</xsl:call-template>
+				<xsl:call-template name="error_message">
+					<xsl:with-param name="message">
+						<xsl:value-of select="concat('Error ref1: ', $resource_ok)"/>
+					</xsl:with-param>
+				</xsl:call-template>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -3733,28 +3788,49 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
     <xsl:choose>
       <xsl:when test="$term">
 	<xsl:choose>
-	  <xsl:when test="position()=last()">
-	    <xsl:choose>
+	  <xsl:when test="position()=last()">		
+	    <!-- <xsl:choose>
 	      <xsl:when test="$moreNormRefs > 0">
-	    	<li><xsl:apply-templates select="$term"/>;</li>
+					<li><xsl:apply-templates select="$term"/>;</li>					
 	      </xsl:when>
 	      <xsl:otherwise>
 	        <li><xsl:apply-templates select="$term"/>.</li>
 	      </xsl:otherwise>
+	    </xsl:choose> -->			
+			<xsl:text>* </xsl:text>
+			<xsl:apply-templates select="$term"/>
+			<xsl:choose>
+	      <xsl:when test="$moreNormRefs > 0">;</xsl:when>
+	      <xsl:otherwise>.</xsl:otherwise>
 	    </xsl:choose>
+			<xsl:text>&#xa;&#xa;</xsl:text>
 	  </xsl:when>
 	  <xsl:otherwise>
-	    <li><xsl:apply-templates select="$term"/>;</li>
+	    <!-- <li><xsl:apply-templates select="$term"/>;</li> -->
+			<xsl:text>* </xsl:text>
+			<xsl:apply-templates select="$term"/>
+			<xsl:text>;</xsl:text>
+			<xsl:text>&#xa;&#xa;</xsl:text>
 	  </xsl:otherwise>
 	</xsl:choose>
       </xsl:when>
       <xsl:otherwise>
-	<li><xsl:call-template name="error_message">
-	  <xsl:with-param 
-	      name="message"
-	      select="concat('Error 12: Can not find term referenced by: ',$ref)"/>
-	</xsl:call-template>
-	</li>
+				<!-- <li><xsl:call-template name="error_message">
+					<xsl:with-param 
+							name="message"
+							select="concat('Error 12: Can not find term referenced by: ',$ref)"/>
+				</xsl:call-template>
+				</li> -->
+				<xsl:text>* </xsl:text>
+				<xsl:variable name="text">
+					<xsl:call-template name="error_message">
+						<xsl:with-param 
+								name="message"
+								select="concat('Error 12: Can not find term referenced by: ',$ref)"/>
+					</xsl:call-template>
+				</xsl:variable>
+				<xsl:value-of select="$text"/>
+				<xsl:text>&#xa;&#xa;</xsl:text>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -3884,9 +3960,11 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 
 
   <xsl:template match="express-g">
-    <ul>
+    <!-- <ul> -->
+		<xsl:text>&#xa;</xsl:text>
       <xsl:apply-templates select="imgfile|img" mode="expressg"/>
-    </ul>
+		<xsl:text>&#xa;&#xa;</xsl:text>
+    <!-- </ul> -->
   </xsl:template>
 
   <xsl:template match="imgfile" mode="expressg">
@@ -3896,11 +3974,18 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
       </xsl:call-template>
     </xsl:variable>
     <xsl:variable name="href" select="concat('../',$file)"/>
-    <li>
+    <!-- <li>
       <a href="{$href}">
-	<xsl:apply-templates select="." mode="title"/>
+				<xsl:apply-templates select="." mode="title"/>
       </a>
-    </li>
+    </li> -->
+		<xsl:text>* </xsl:text>
+		<xsl:text>&lt;&lt;</xsl:text>
+		<xsl:apply-templates select="." mode="title"/>
+		<xsl:text>, </xsl:text>
+		<xsl:value-of select="$href"/>
+		<xsl:text>&gt;&gt;</xsl:text>
+		<xsl:text>&#xa;&#xa;</xsl:text>
   </xsl:template>
 
   <xsl:template match="imgfile" mode="title">
