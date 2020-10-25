@@ -1292,11 +1292,13 @@ Purpose:
   </xsl:template>
 
   <xsl:template match="inscope">
-		<p>
+		<!-- <p> -->
       <!-- <a name="inscope"/> -->
       <xsl:text>[[inscope]]</xsl:text>
-      The following are within the scope of this part of ISO 10303: 
-		</p>
+			<xsl:text>&#xa;</xsl:text>
+      <xsl:text>The following are within the scope of this part of ISO 10303: </xsl:text>
+			<xsl:text>&#xa;&#xa;</xsl:text>
+		<!-- </p> -->
     <!--  output any issues -->
     <xsl:apply-templates select=".." mode="output_clause_issue">
       <xsl:with-param name="clause" select="'inscope'"/>
@@ -1312,11 +1314,13 @@ Purpose:
 
 
   <xsl:template match="outscope">
-    <p>
+    <!-- <p> -->
       <!-- <a name="outscope"/> -->
       <xsl:text>[[outscope]]</xsl:text>
-      The following are outside the scope of this part of ISO 10303: 
-    </p>
+			<xsl:text>&#xa;</xsl:text>
+      <xsl:text>The following are outside the scope of this part of ISO 10303: </xsl:text>
+			<xsl:text>&#xa;&#xa;</xsl:text>
+    <!-- </p> -->
     <!-- output any issues -->
     <xsl:apply-templates select=".." mode="output_clause_issue">
       <xsl:with-param name="clause" select="'outscope'"/>

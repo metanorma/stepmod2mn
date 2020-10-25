@@ -47,20 +47,24 @@ $Id: sect_1_scope.xsl,v 1.6 2008/12/16 15:44:48 darla Exp $
     </xsl:variable>
     <xsl:choose>
 	  <xsl:when test="$doctype='aic'">
-        This part of ISO 10303 specifies the interpretation of the integrated resources to satisfy requirements for the representation of  
+        <xsl:text>This part of ISO 10303 specifies the interpretation of the integrated resources to satisfy requirements for the representation of </xsl:text>
         <xsl:value-of select="translate($resdoc_name,$ucletters,$lcletters)"/>.
+				<xsl:text>&#xa;</xsl:text>
 	  </xsl:when>
 	  <xsl:when test="$doctype='igr'">
-        This part of ISO 10303 specifies the integrated generic resource constructs for 
+        <xsl:text>This part of ISO 10303 specifies the integrated generic resource constructs for </xsl:text>
         <xsl:value-of select="translate($resdoc_name,$ucletters,$lcletters)"/>.
+				<xsl:text>&#xa;</xsl:text>
 	  </xsl:when>
 	  <xsl:when test="$doctype='iar'">
-        This part of ISO 10303 specifies the integrated application resource constructs for 
+        <xsl:text>This part of ISO 10303 specifies the integrated application resource constructs for </xsl:text>
         <xsl:value-of select="translate($resdoc_name,$ucletters,$lcletters)"/>.
+				<xsl:text>&#xa;</xsl:text>
 	  </xsl:when>
 	</xsl:choose>
   </xsl:template>
 
+<!-- 
 <xsl:template match="resource" mode="special_header">
   <xsl:variable name="right">
     <xsl:choose>
@@ -113,12 +117,62 @@ $Id: sect_1_scope.xsl,v 1.6 2008/12/16 15:44:48 darla Exp $
       </td>
     </tr>
   </table>
-  <hr/>
-</xsl:template>
+  <hr/> 
+</xsl:template> -->
 
+	<xsl:template match="resource" mode="docnumber">
+	  <xsl:choose>
+      <xsl:when test="@status='WD' or @status='CD' or @status='DIS'">
+        <xsl:value-of select="concat('ISO/',@status,' 10303-',@part)"/>
+      </xsl:when>
+      <xsl:when test="@status='CD-TS'">
+        <xsl:value-of select="concat('ISO/CD TS 10303-',@part)"/>
+      </xsl:when>
+      <xsl:when test="@status='IS'">
+        <xsl:value-of select="concat('ISO',' 10303-',@part,':',@publication.year,'(',@language,')')"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="concat('ISO/',@status,' 10303-',@part,':',@publication.year,'(',@language,')')"/>
+      </xsl:otherwise>
+    </xsl:choose>
+	</xsl:template>
+
+	<xsl:template match="resource" mode="docstage">
+		<xsl:choose>
+			<xsl:when test="@status='WD'"> <!-- WORKING DRAFT -->
+				<xsl:text>:docstage: 20</xsl:text>
+				<xsl:text>&#xa;</xsl:text>
+				<xsl:text>:docsubstage: 00</xsl:text>
+			</xsl:when>
+			<xsl:when test="@status='CD' or @status='CD-TS'"> <!-- COMMITTEE DRAFT -->
+				<xsl:text>:docstage: 30</xsl:text>
+				<xsl:text>&#xa;</xsl:text>
+				<xsl:text>:docsubstage: 00</xsl:text>
+			</xsl:when>
+			<xsl:when test="@status='DIS'"> <!-- DRAFT INTERNATIONAL STANDARD -->
+				<xsl:text>:docstage: 40</xsl:text>
+				<xsl:text>&#xa;</xsl:text>
+				<xsl:text>:docsubstage: 00</xsl:text>
+			</xsl:when>
+			<xsl:when test="@status='FDIS'"> <!-- FINAL DRAFT INTERNATIONAL STANDARD -->
+				<xsl:text>:docstage: 50</xsl:text>
+				<xsl:text>&#xa;</xsl:text>
+				<xsl:text>:docsubstage: 00</xsl:text>
+			</xsl:when>
+			<xsl:when test="@status='IS'"> <!-- INTERNATIONAL STANDARD -->
+				<xsl:text>:docstage: 60</xsl:text>
+				<xsl:text>&#xa;</xsl:text>
+				<xsl:text>:docsubstage: 60</xsl:text>        
+			</xsl:when>
+			<xsl:when test="@status='TS'"> <!-- TECHNICAL SPECIFICATION -->
+				<xsl:text>:docstage: 30</xsl:text>
+				<xsl:text>&#xa;</xsl:text>
+				<xsl:text>:docsubstage: 00</xsl:text>        
+			</xsl:when>
+		</xsl:choose>
+	</xsl:template>
   
+	
+	
 </xsl:stylesheet>
-
-
-
 

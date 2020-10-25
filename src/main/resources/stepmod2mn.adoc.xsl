@@ -262,14 +262,16 @@
 		
 		<!-- 1 Scope -->
 		<!-- draughting_elements/sys/1_scope.xml -->
-		<xsl:if test=" java:exists(java:java.io.File.new(concat($path, 'sys/1_scope.xml')))">
+		<xsl:message>[INFO] Processing Scope ...</xsl:message>
+		<xsl:apply-templates select="resource" mode="scope_resource"/>		
+		
+		<!-- <xsl:if test=" java:exists(java:java.io.File.new(concat($path, 'sys/1_scope.xml')))">
 			<xsl:message>[INFO] Processing scope.xml ...</xsl:message>
 			<xsl:variable name="scope">
 				<xsl:apply-templates select="document(concat($path, 'sys/1_scope.xml'))" mode="scope"/>
-			</xsl:variable>
-			<!-- <xsl:copy-of select="$scope"/> -->
+			</xsl:variable>			
 			<xsl:apply-templates select="xalan:nodeset($scope)/node()" mode="stepmod2mn"/>
-		</xsl:if>
+		</xsl:if> -->
 		
 		<!-- 2 Normative references -->
 		<xsl:if test=" java:exists(java:java.io.File.new(concat($path, 'sys/2_refs.xml')))">
@@ -309,67 +311,7 @@
 		
 	</xsl:template>
 	
-	<!-- =========== -->
-	<!-- bibdate -->
-	<!-- from  sect_1_scope.xsl 	<xsl:template match="resource" mode="special_header"> -->
-	<xsl:template match="resource" mode="docnumber">
-	  <xsl:choose>
-      <xsl:when test="@status='WD' or @status='CD' or @status='DIS'">
-        <xsl:value-of select="concat('ISO/',@status,' 10303-',@part)"/>
-      </xsl:when>
-      <xsl:when test="@status='CD-TS'">
-        <xsl:value-of select="concat('ISO/CD TS 10303-',@part)"/>
-      </xsl:when>
-      <xsl:when test="@status='IS'">
-        <xsl:value-of select="concat('ISO',' 10303-',@part,':',@publication.year,'(',@language,')')"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="concat('ISO/',@status,' 10303-',@part,':',@publication.year,'(',@language,')')"/>
-      </xsl:otherwise>
-    </xsl:choose>
-	</xsl:template>
-
-	<!-- from  sect_1_scope.xsl 	<xsl:template match="resource" mode="special_header"> -->
-	<xsl:template match="resource" mode="docstage">
-		<xsl:choose>
-			<xsl:when test="@status='WD'">         
-				<xsl:text>:docstage: 20</xsl:text>
-				<xsl:text>&#xa;</xsl:text>
-				<xsl:text>:docsubstage: 00</xsl:text>
-			</xsl:when>
-			<xsl:when test="@status='CD' or @status='CD-TS'">
-				<xsl:text>:docstage: 30</xsl:text>
-				<xsl:text>&#xa;</xsl:text>
-				<xsl:text>:docsubstage: 00</xsl:text>
-			</xsl:when>
-			<xsl:when test="@status='DIS'">        
-				<xsl:text>:docstage: 40</xsl:text>
-				<xsl:text>&#xa;</xsl:text>
-				<xsl:text>:docsubstage: 00</xsl:text>
-			</xsl:when>
-			<xsl:when test="@status='FDIS'">
-				<xsl:text>:docstage: 50</xsl:text>
-				<xsl:text>&#xa;</xsl:text>
-				<xsl:text>:docsubstage: 00</xsl:text>
-			</xsl:when>
-			<xsl:when test="@status='IS'">
-				<xsl:text>:docstage: 60</xsl:text>
-				<xsl:text>&#xa;</xsl:text>
-				<xsl:text>:docsubstage: 60</xsl:text>        
-			</xsl:when>
-			<xsl:when test="@status='TS'">
-				<xsl:text>:docstage: ??</xsl:text>
-				<xsl:text>&#xa;</xsl:text>
-				<xsl:text>:docsubstage: ??</xsl:text>        
-			</xsl:when>
-		</xsl:choose>
-	</xsl:template>
-	<!-- =========== -->
-	<!-- END bibdate -->
-	<!-- =========== -->
-
-
-
+	
 	<!-- =========== -->
 	<!--  Abstract -->
 	<xsl:template match="resource_clause" mode="abstract">		
@@ -437,12 +379,9 @@
 	
 	<!-- Scope -->
 	<!-- =========== -->
-	<xsl:template match="resource_clause" mode="scope">	
+	<!-- <xsl:template match="resource_clause" mode="scope">	
 		<xsl:variable name="resource_xml" select="document(concat($path, '../',@directory,'/resource.xml'))"/>
-	
-		<!-- <xsl:text>== Scope</xsl:text>
-		<xsl:text>&#xa;</xsl:text> -->
-	    
+	  
 		<xsl:choose>
 			<xsl:when test="@pos">				
 				<xsl:apply-templates select="$resource_xml/*" mode="scope_resource">
@@ -455,7 +394,7 @@
 		 </xsl:choose>
 			
 	</xsl:template>
-	
+	 -->
 	<!-- END Scope  -->
 	<!-- =========== -->
 	
@@ -531,37 +470,10 @@
 		<xsl:text>&#xa;</xsl:text>
 		
 		
-
-		
-		<!-- scope -->
-		
-		
-		
 		
 	</xsl:template>
 	
 
-
-	
-
-	<xsl:template match="resource" mode="title_part">
-		<xsl:choose>
-			<xsl:when test="@part >  500">Application interpreted construct</xsl:when>
-			<xsl:when test="@part >  99">Integrated application resource</xsl:when>
-			<xsl:when test="@part &lt;  99">Integrated generic resource</xsl:when>
-			<xsl:otherwise>
-				<xsl:call-template name="error_message">
-					<xsl:with-param name="message" select="concat('Error : unknown type,  part number:', @part)"/>
-				</xsl:call-template>
-			</xsl:otherwise>
-		</xsl:choose>
-		<xsl:text>: </xsl:text>
-		<xsl:call-template name="res_display_name">
-			<xsl:with-param name="res" select="@name"/>
-		</xsl:call-template>
-
-		
-	</xsl:template>
 
 
 

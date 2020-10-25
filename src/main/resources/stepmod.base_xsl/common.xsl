@@ -5024,23 +5024,27 @@ is case sensitive.')"/>
 </xsl:template>
 
 
-<xsl:template match="resource" mode="type">
-  <xsl:choose>
-	<xsl:when test="@part >  500">
-	  Application interpreted construct</xsl:when>
-	<xsl:when test="@part >  99">
-	  Integrated application resource</xsl:when>
-	<xsl:when test="@part &lt;  99">
-	  Integrated generic resource</xsl:when>
-	<xsl:otherwise>
-	  <xsl:call-template name="error_message">
-		<xsl:with-param 
-			name="message" 
-			select="concat('Error : unknown type,  part number:', @part)"/>
-	  </xsl:call-template>
-	</xsl:otherwise>
-  </xsl:choose>
-</xsl:template>
+	<xsl:template match="resource" mode="type">
+		<xsl:choose>
+			<xsl:when test="@part >  500">Application interpreted construct</xsl:when>
+			<xsl:when test="@part >  99">Integrated application resource</xsl:when>
+			<xsl:when test="@part &lt;  99">Integrated generic resource</xsl:when>
+			<xsl:otherwise>
+				<xsl:call-template name="error_message">
+				<xsl:with-param name="message" select="concat('Error : unknown type,  part number:', @part)"/>
+				</xsl:call-template>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template match="resource" mode="title_part">		
+		<xsl:apply-templates select="." mode="type"/>
+		<xsl:text>: </xsl:text>
+		<xsl:call-template name="res_display_name">
+			<xsl:with-param name="res" select="@name"/>
+		</xsl:call-template>
+	</xsl:template>
+
 
 <xsl:template match="resource" mode="display_french_doctype">
   <xsl:variable name="doctype">
