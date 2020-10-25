@@ -1734,17 +1734,11 @@ the types, entity specializations, and functions that are specific to this part 
       </a>
     </code> -->
 
-		<xsl:text>&#xa;&#xa;</xsl:text>
-		<xsl:text>[source]</xsl:text>		
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>--</xsl:text>
-		<xsl:text>&#xa;</xsl:text>
+		<xsl:call-template name="insertCodeStart"/>
 		<xsl:text>*)</xsl:text>		
 		<xsl:text> +&#xa;</xsl:text>
 		<xsl:text>&lt;&lt;SCHEMA </xsl:text><xsl:value-of select="concat($schema_name,';')"/><xsl:text>, </xsl:text><xsl:value-of select="$xref"/><xsl:text>&gt;&gt;</xsl:text>
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>--</xsl:text>		
-		<xsl:text>&#xa;&#xa;</xsl:text>
+		<xsl:call-template name="insertCodeEnd"/>
 
     <!-- output all the EXPRESS specifications -->
     <!-- display the EXPRESS for the interfaces in the ARM.
@@ -1828,19 +1822,13 @@ the types, entity specializations, and functions that are specific to this part 
       <br/>(*
     </code> -->
 
-		<xsl:text>&#xa;&#xa;</xsl:text>
-		<xsl:text>[source]</xsl:text>		
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>--</xsl:text>
-		<xsl:text>&#xa;</xsl:text>
+		<xsl:call-template name="insertCodeStart"/>
 		<xsl:text>*)</xsl:text>		
 		<xsl:text> +&#xa;</xsl:text>
 		<xsl:text>END_SCHEMA;  -- </xsl:text><xsl:value-of select="$express_xml/express/schema/@name"/>
 		<xsl:text> +&#xa;</xsl:text>
 		<xsl:text>(*</xsl:text>
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>--</xsl:text>		
-		<xsl:text>&#xa;&#xa;</xsl:text>
+		<xsl:call-template name="insertCodeEnd"/>
 
     <xsl:message>
       <xsl:value-of select="'&#010;___________________________________________________________'"/>

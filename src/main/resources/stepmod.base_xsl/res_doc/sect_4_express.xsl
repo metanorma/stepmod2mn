@@ -194,11 +194,7 @@
   <!-- <p>
     <code> -->
 		
-		<xsl:text>&#xa;&#xa;</xsl:text>
-		<xsl:text>[source]</xsl:text>		
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>--</xsl:text>
-		<xsl:text>&#xa;</xsl:text>
+		<xsl:call-template name="insertCodeStart"/>
 
       <xsl:choose>
         <xsl:when test="@kind='reference'">
@@ -266,9 +262,7 @@
           </xsl:call-template>
         </xsl:otherwise>
       </xsl:choose>
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>--</xsl:text>		
-		<xsl:text>&#xa;&#xa;</xsl:text>
+		<xsl:call-template name="insertCodeEnd"/>
 <!--     </code> -->
 		
   <!-- end blockquote -->
@@ -588,17 +582,11 @@
     <!-- <p> -->
     <!-- start blockquote -->
       <!-- <code> -->
-			<xsl:text>&#xa;&#xa;</xsl:text>
-			<xsl:text>[source]</xsl:text>		
-			<xsl:text>&#xa;</xsl:text>
-			<xsl:text>--</xsl:text>
-			<xsl:text>&#xa;</xsl:text>
+			<xsl:call-template name="insertCodeStart"/>
         *)<xsl:text> +&#xa;</xsl:text><!-- <br/> -->
         CONSTANT
       <xsl:text> +&#xa;</xsl:text><!-- <br/> -->(*
-			<xsl:text>&#xa;</xsl:text>
-			<xsl:text>--</xsl:text>		
-			<xsl:text>&#xa;&#xa;</xsl:text>
+			<xsl:call-template name="insertCodeEnd"/>
       <!-- </code> -->
     <!-- end blockquote  -->
   <!-- </p> -->
@@ -667,11 +655,7 @@
     <!-- <p> -->
     <!--  start blockquote -->
      <!--  <code> -->
-			<xsl:text>&#xa;&#xa;</xsl:text>
-			<xsl:text>[source]</xsl:text>		
-			<xsl:text>&#xa;</xsl:text>
-			<xsl:text>--</xsl:text>
-			<xsl:text>&#xa;</xsl:text>
+			<xsl:call-template name="insertCodeStart"/>
         *)<xsl:text> +&#xa;</xsl:text><!-- <br/> -->
         &#160;&#160;<xsl:value-of select="@name"/> 
 : <xsl:apply-templates select="./*" mode="underlyingconstant"/><xsl:apply-templates select="./*" mode="underlying"/> := <xsl:choose>
@@ -687,9 +671,7 @@
       </xsl:otherwise>
   </xsl:choose>
      <xsl:text> +&#xa;</xsl:text><!-- <br/> -->(*
-			<xsl:text>&#xa;</xsl:text>
-			<xsl:text>--</xsl:text>		
-			<xsl:text>&#xa;&#xa;</xsl:text>
+			<xsl:call-template name="insertCodeEnd"/>
       <!-- </code> -->
     <!-- end blockquote  -->
     <!-- </p> -->
@@ -699,17 +681,11 @@
       <!-- <p> -->
       <!--  start blockquote -->
        <!--  <code> -->
-				<xsl:text>&#xa;&#xa;</xsl:text>
-				<xsl:text>[source]</xsl:text>		
-				<xsl:text>&#xa;</xsl:text>
-				<xsl:text>--</xsl:text>
-				<xsl:text>&#xa;</xsl:text>
+				<xsl:call-template name="insertCodeStart"/>
           *)<xsl:text> +&#xa;</xsl:text><!-- <br/> -->
           END_CONSTANT;
           <xsl:text> +&#xa;</xsl:text><!-- <br/> -->(*
-				<xsl:text>&#xa;</xsl:text>
-				<xsl:text>--</xsl:text>		
-				<xsl:text>&#xa;&#xa;</xsl:text>
+				<xsl:call-template name="insertCodeEnd"/>
         <!-- </code> -->
       <!--  end blockquote  -->
     <!-- </p> -->
@@ -868,11 +844,7 @@
   <!-- <p> -->
   <!-- start blockquote -->
     <!-- <code> -->
-		<xsl:text>&#xa;&#xa;</xsl:text>
-		<xsl:text>[source]</xsl:text>		
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>--</xsl:text>
-		<xsl:text>&#xa;</xsl:text>
+		<xsl:call-template name="insertCodeStart"/>
       *)<xsl:text> +&#xa;</xsl:text><!-- <br/> -->
       TYPE 
       <xsl:value-of select="@name" />
@@ -889,9 +861,7 @@
         </xsl:choose>
         END_TYPE; <xsl:text> +&#xa;</xsl:text><!-- <br/> -->
         (*
-			<xsl:text>&#xa;</xsl:text>
-			<xsl:text>--</xsl:text>		
-			<xsl:text>&#xa;&#xa;</xsl:text>
+			<xsl:call-template name="insertCodeEnd"/>
     <!-- </code> -->
   <!--  end blockquote  -->
 <!-- </p> -->
@@ -1214,11 +1184,7 @@
   <!-- <p> -->
   <!--  start blockquote -->
     <!-- <code> -->
-		<xsl:text>&#xa;&#xa;</xsl:text>
-		<xsl:text>[source]</xsl:text>		
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>--</xsl:text>
-		<xsl:text>&#xa;</xsl:text>
+		<xsl:call-template name="insertCodeStart"/>
       *)<xsl:text> +&#xa;</xsl:text><!-- <br/> -->
       ENTITY <xsl:value-of select="@name"/>
       <xsl:call-template name="abstract.entity"/>
@@ -1231,9 +1197,7 @@
       <xsl:apply-templates select="./unique" mode="code"/>
       <xsl:apply-templates select="./where[@expression]" mode="code"/>
       END_ENTITY;<xsl:text> +&#xa;</xsl:text><!-- <br/> -->(*
-			<xsl:text>&#xa;</xsl:text>
-			<xsl:text>--</xsl:text>		
-			<xsl:text>&#xa;&#xa;</xsl:text>
+			<xsl:call-template name="insertCodeEnd"/>
     <!-- </code> -->
   <!--  end blockquote -->
   <!-- </p> -->
@@ -1887,11 +1851,7 @@
   
  <!--  <p>
     <code> -->
-		<xsl:text>&#xa;&#xa;</xsl:text>
-		<xsl:text>[source]</xsl:text>		
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>--</xsl:text>
-		<xsl:text>&#xa;</xsl:text>
+		<xsl:call-template name="insertCodeStart"/>
   *)<xsl:text> +&#xa;</xsl:text><!-- <br/> -->
   <!-- <A NAME="{$aname}">SUBTYPE_CONSTRAINT <b>
 	<xsl:value-of select="@name"/></b></A> -->
@@ -1932,9 +1892,7 @@
       </xsl:call-template>;<xsl:text> +&#xa;</xsl:text><!-- <br/> -->
     </xsl:if>      
   END_SUBTYPE_CONSTRAINT;<br/>(*
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>--</xsl:text>		
-		<xsl:text>&#xa;&#xa;</xsl:text>
+		<xsl:call-template name="insertCodeEnd"/>
   <!-- </code></p> -->
 </xsl:template>
 
@@ -2323,33 +2281,21 @@
 
   <!--  start blockquote  -->
     <!-- <code> -->
-		<xsl:text>&#xa;&#xa;</xsl:text>
-		<xsl:text>[source]</xsl:text>		
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>--</xsl:text>
-		<xsl:text>&#xa;</xsl:text>
+		<xsl:call-template name="insertCodeStart"/>
       *)<xsl:text> +&#xa;</xsl:text><!-- <br/> -->
       FUNCTION <xsl:value-of select="@name"/>
       <xsl:apply-templates select="./parameter" mode="code"/><xsl:text> : </xsl:text>
       <xsl:apply-templates select="./aggregate" mode="code"/>
       <xsl:apply-templates select="./*" mode="underlying"/>;
-			<xsl:text>&#xa;</xsl:text>
-			<xsl:text>--</xsl:text>		
-			<xsl:text>&#xa;&#xa;</xsl:text>
+			<xsl:call-template name="insertCodeEnd"/>
     <!-- </code> -->
       <xsl:apply-templates select="./algorithm" mode="code"/>
 
-			<xsl:text>&#xa;&#xa;</xsl:text>
-			<xsl:text>[source]</xsl:text>		
-			<xsl:text>&#xa;</xsl:text>
-			<xsl:text>--</xsl:text>
-			<xsl:text>&#xa;</xsl:text>
+			<xsl:call-template name="insertCodeStart"/>
 <!--       <code> -->
       END_FUNCTION;
       <xsl:text> +&#xa;</xsl:text><!-- <br/> -->(*
-			<xsl:text>&#xa;</xsl:text>
-			<xsl:text>--</xsl:text>		
-			<xsl:text>&#xa;&#xa;</xsl:text>
+			<xsl:call-template name="insertCodeEnd"/>
     <!-- </code> -->
   <!-- end blockquote -->
 
@@ -2453,33 +2399,21 @@
 	<xsl:text>&#xa;&#xa;</xsl:text>
   <!--  start blockquote  -->
     <!-- <code> -->
-		<xsl:text>&#xa;&#xa;</xsl:text>
-		<xsl:text>[source]</xsl:text>		
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>--</xsl:text>
-		<xsl:text>&#xa;</xsl:text>
+		<xsl:call-template name="insertCodeStart"/>
       *)<xsl:text> +&#xa;</xsl:text><!-- <br/> -->     
       PROCEDURE <xsl:value-of select="@name"/>
     <xsl:apply-templates select="./parameter" mode="code"/><xsl:text> : </xsl:text>
     <xsl:apply-templates select="./aggregate" mode="code"/>
     <xsl:apply-templates select="./*" mode="underlying"/>;
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>--</xsl:text>		
-		<xsl:text>&#xa;&#xa;</xsl:text>
+		<xsl:call-template name="insertCodeEnd"/>
   <!-- </code> -->
     <xsl:apply-templates select="./algorithm" mode="code"/><br/>
     
 		<!-- <code> -->
-		<xsl:text>&#xa;&#xa;</xsl:text>
-		<xsl:text>[source]</xsl:text>		
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>--</xsl:text>
-		<xsl:text>&#xa;</xsl:text>
+		<xsl:call-template name="insertCodeStart"/>
     END_PROCEDURE;
     <xsl:text> +&#xa;</xsl:text><!-- <br/> -->(*
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>--</xsl:text>		
-		<xsl:text>&#xa;&#xa;</xsl:text>
+		<xsl:call-template name="insertCodeEnd"/>
     <!-- </code> -->
   <!-- end blockquote -->
   <xsl:apply-templates select="./explicit" mode="description"/>
@@ -2694,33 +2628,21 @@
  <!-- <p> -->
   <!-- start blockquote -->
     <!-- <code> -->
-		<xsl:text>&#xa;&#xa;</xsl:text>
-		<xsl:text>[source]</xsl:text>		
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>--</xsl:text>
-		<xsl:text>&#xa;</xsl:text>
+		<xsl:call-template name="insertCodeStart"/>
       *)<xsl:text> +&#xa;</xsl:text><!-- <br/> -->
       RULE <xsl:value-of select="@name"/> FOR
     <br/>
-      (<xsl:value-of select="translate(@appliesto,' ',', ')"/>);<br/>
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>--</xsl:text>		
-		<xsl:text>&#xa;&#xa;</xsl:text>
+      (<xsl:value-of select="translate(@appliesto,' ',', ')"/>);<xsl:text> +&#xa;</xsl:text><!-- <br/> -->
+		<xsl:call-template name="insertCodeEnd"/>
   <!-- </code> -->
     <xsl:apply-templates select="./algorithm" mode="code"/>
     
 		<!-- <code> -->		
-		<xsl:text>&#xa;&#xa;</xsl:text>
-		<xsl:text>[source]</xsl:text>		
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>--</xsl:text>
-		<xsl:text>&#xa;</xsl:text>
+		<xsl:call-template name="insertCodeStart"/>
     <xsl:apply-templates select="./where" mode="code"/>
       END_RULE;
     <xsl:text> +&#xa;</xsl:text><!-- <br/> -->(*
-			<xsl:text>&#xa;</xsl:text>
-			<xsl:text>--</xsl:text>		
-			<xsl:text>&#xa;&#xa;</xsl:text>
+			<xsl:call-template name="insertCodeEnd"/>
     <!-- </code> -->
   <!-- end blockquote -->
    <!-- </p> -->

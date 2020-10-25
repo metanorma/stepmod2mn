@@ -635,25 +635,6 @@
 		<xsl:text>&#xa;</xsl:text>
 	</xsl:template>
 	
-  
-	<xsl:template match="sc" mode="stepmod2mn">
-		<xsl:text>[smallcap]#</xsl:text>
-		<xsl:apply-templates mode="stepmod2mn"/>
-		<xsl:text>#</xsl:text>
-	</xsl:template>
-	
-	<xsl:template match="code | CODE" mode="stepmod2mn">
-		<xsl:text>&#xa;&#xa;</xsl:text>
-		<xsl:text>[source]</xsl:text>
-		<!-- <xsl:value-of select="@language"/><xsl:text>]</xsl:text> -->
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>--</xsl:text>
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:apply-templates mode="stepmod2mn"/>
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>--</xsl:text>		
-		<xsl:if test="following-sibling::* or not(parent::p)"><xsl:text>&#xa;&#xa;</xsl:text></xsl:if>
-	</xsl:template>
 	
 	<!-- <xsl:template match="ul/li | li" mode="stepmod2mn">
 		<xsl:text>&#xa;</xsl:text>
@@ -720,17 +701,32 @@
 	</xsl:template>
 	
 	
-	<xsl:template name="insertQuoteStart">		
+	<xsl:template name="insertQuoteStart">
 		<xsl:text>[quote]</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
 		<xsl:text>_____</xsl:text>
 		<xsl:text>&#xa;</xsl:text>		
 	</xsl:template>
 	
-	<xsl:template name="insertQuoteEnd">		
+	<xsl:template name="insertQuoteEnd">
 		<xsl:text>_____</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
+	</xsl:template>
+	
+	
+	<xsl:template name="insertCodeStart">
+		<xsl:text>&#xa;&#xa;</xsl:text>
+		<xsl:text>[source]</xsl:text>		
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>--</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+	</xsl:template>
+	
+	<xsl:template name="insertCodeEnd">
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>--</xsl:text>		
+		<xsl:text>&#xa;&#xa;</xsl:text>	
 	</xsl:template>
 	
 	<xsl:template name="repeat">

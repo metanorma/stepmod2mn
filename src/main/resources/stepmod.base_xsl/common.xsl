@@ -5106,15 +5106,9 @@ is case sensitive.')"/>
   <!-- <code>
     <xsl:apply-templates/>
   </code> -->	
-	<xsl:text>&#xa;&#xa;</xsl:text>
-	<xsl:text>[source]</xsl:text>		
-	<xsl:text>&#xa;</xsl:text>
-	<xsl:text>--</xsl:text>
-	<xsl:text>&#xa;</xsl:text>
+	<xsl:call-template name="insertCodeStart"/>
 	<xsl:apply-templates />
-	<xsl:text>&#xa;</xsl:text>
-	<xsl:text>--</xsl:text>		
-	<xsl:text>&#xa;&#xa;</xsl:text>
+	<xsl:call-template name="insertCodeEnd"/>
 </xsl:template>
 
 <xsl:template name="number_to_word">
