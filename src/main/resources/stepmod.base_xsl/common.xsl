@@ -5103,9 +5103,18 @@ is case sensitive.')"/>
 </xsl:template>
 
 <xsl:template match="code">
-  <code>
+  <!-- <code>
     <xsl:apply-templates/>
-  </code>
+  </code> -->	
+	<xsl:text>&#xa;&#xa;</xsl:text>
+	<xsl:text>[source]</xsl:text>		
+	<xsl:text>&#xa;</xsl:text>
+	<xsl:text>--</xsl:text>
+	<xsl:text>&#xa;</xsl:text>
+	<xsl:apply-templates />
+	<xsl:text>&#xa;</xsl:text>
+	<xsl:text>--</xsl:text>		
+	<xsl:text>&#xa;&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template name="number_to_word">
