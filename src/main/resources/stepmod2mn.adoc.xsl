@@ -243,15 +243,8 @@
 		
 		<!-- Introduction -->
 		<!-- draughting_elements/sys/introduction.xml -->
-		<xsl:if test=" java:exists(java:java.io.File.new(concat($path, 'sys/introduction.xml')))">
-			<xsl:message>[INFO] Processing introduction.xml ...</xsl:message>
-			<xsl:variable name="introduction">
-				<xsl:apply-templates select="document(concat($path, 'sys/introduction.xml'))" mode="introduction"/>
-			</xsl:variable>
-			<!-- <xsl:copy-of select="$introduction"/> -->
-			<xsl:apply-templates select="xalan:nodeset($introduction)/node()" mode="stepmod2mn"/>
-		</xsl:if>
-		
+		<xsl:message>[INFO] Processing Introduction ...</xsl:message>
+		<xsl:apply-templates select="resource" mode="introduction"/>
 		
 		
 		<!-- 1 Scope -->
@@ -286,36 +279,9 @@
 			<xsl:apply-templates select="xalan:nodeset($schema)/node()" mode="stepmod2mn"/>
 		</xsl:if>
 		
-		
 	</xsl:template>
 	
-	
-	
-	<!-- Introduction  -->
-	<!-- =========== -->
-	<xsl:template match="resource_clause" mode="introduction">		
-		<xsl:variable name="resource_xml" select="document(concat($path, '../',@directory,'/resource.xml'))"/>
-		<xsl:choose>
-			<xsl:when test="@pos">				
-				<xsl:apply-templates select="$resource_xml/*" mode="introduction_resource">
-					 <xsl:with-param name="pos" select="string(@pos)"/>
-				 </xsl:apply-templates>
-			 </xsl:when>
-			 <xsl:otherwise>
-				 <xsl:apply-templates select="$resource_xml/*" mode="introduction_resource"/>
-			 </xsl:otherwise>
-		 </xsl:choose>
-	</xsl:template>
-	
-	
-	<xsl:template match="resource" mode="introduction_resource">
-		<xsl:apply-templates select="purpose"/>		 <!-- from res_doc\sect_introduction.xsl -->
-	</xsl:template>
-	
-	<!-- END Introduction  -->
-	<!-- =========== -->
-	
-	
+
 	
 	<!-- EXPRESS short listing -->
 	<!-- =========== -->
