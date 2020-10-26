@@ -232,10 +232,8 @@
 		</xsl:if> -->
 		
 		<!-- Abstract -->
-		<xsl:if test=" java:exists(java:java.io.File.new(concat($path, 'sys/main.xml')))">
-			<xsl:message>[INFO] Processing main.xml ...</xsl:message>
-			<xsl:apply-templates select="document(concat($path, 'sys/main.xml'))" mode="abstract"/>
-		</xsl:if>
+		<xsl:apply-templates select="resource" mode="abstract"/>
+
 		
 		<!-- Foreword-->
 		<!-- draughting_elements/sys/foreword.xml -->
@@ -295,26 +293,6 @@
 		
 		
 	</xsl:template>
-	
-	
-	<!-- =========== -->
-	<!--  Abstract -->
-	<xsl:template match="resource_clause" mode="abstract">		
-		<xsl:variable name="resource_xml" select="document(concat($path, '../',@directory,'/resource.xml'))"/>
-		<xsl:choose>
-			<xsl:when test="@pos">				
-				<xsl:apply-templates select="$resource_xml/*" mode="abstract">
-					 <xsl:with-param name="pos" select="string(@pos)"/>
-				 </xsl:apply-templates>
-			 </xsl:when>
-			 <xsl:otherwise>
-				 <xsl:apply-templates select="$resource_xml/*" mode="abstract"/>
-			 </xsl:otherwise>
-		 </xsl:choose>
-	</xsl:template>
-	
-	<!-- END Abstract -->
-	<!-- =========== -->
 	
 	
 	<!-- =========== -->

@@ -634,13 +634,13 @@ Purpose:
 
 		<xsl:variable name="resdoc_title">
 			<xsl:apply-templates select="resource" mode="title">
-	<xsl:with-param name="res" select="./@name"/>
+				<xsl:with-param name="res" select="./@name"/>
 			</xsl:apply-templates>           
 		</xsl:variable>
 
 		<xsl:variable name="resdoc_stdnumber">
 			<xsl:call-template name="get_resdoc_stdnumber">
-	<xsl:with-param name="resdoc" select="."/>
+				<xsl:with-param name="resdoc" select="."/>
 			</xsl:call-template>           
 		</xsl:variable>
 
