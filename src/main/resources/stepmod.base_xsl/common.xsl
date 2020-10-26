@@ -574,7 +574,7 @@ $Id: common.xsl,v 1.204 2018/10/07 10:51:54 mike Exp $
 	<xsl:call-template name="insertHeaderADOC">
 		<xsl:with-param name="id" select="$aname"/>
 		<xsl:with-param name="header" select="$heading"/>
-		<xsl:with-param name="annex" select="'true'"/>
+		<xsl:with-param name="annex_no" select="$annex_no"/>
 		<xsl:with-param name="obligation" select="$informative"/>
 	</xsl:call-template>
 	

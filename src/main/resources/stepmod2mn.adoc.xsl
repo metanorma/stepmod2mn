@@ -18,12 +18,14 @@
 	<xsl:import href="stepmod.base_xsl/res_doc/expressg_icon.xsl"/>
 	<xsl:import href="stepmod.base_xsl/res_doc/res_toc.xsl"/>
 	<xsl:import href="stepmod.base_xsl/res_doc/resource.xsl"/>
+	<xsl:import href="stepmod.base_xsl/res_doc/sect_introduction.xsl"/>
 	<xsl:import href="stepmod.base_xsl/res_doc/sect_1_scope.xsl"/>
 	<xsl:import href="stepmod.base_xsl/res_doc/sect_2_refs.xsl"/>
 	<xsl:import href="stepmod.base_xsl/res_doc/sect_3_defs.xsl"/>
 	<xsl:import href="stepmod.base_xsl/res_doc/sect_schema.xsl"/>
 	<xsl:import href="stepmod.base_xsl/res_doc/sect_4_express.xsl"/>
-	<xsl:import href="stepmod.base_xsl/res_doc/sect_introduction.xsl"/>
+	<xsl:import href="stepmod.base_xsl/res_doc/sect_a_short_names.xsl"/>
+	
 	
 	<xsl:import href="stepmod.base_xsl/projmg/resource_issues.xsl"/>
 
@@ -143,8 +145,13 @@
 		<xsl:text>:docnumber: </xsl:text><xsl:apply-templates select="resource" mode="docnumber"/>
 		<xsl:text>&#xa;</xsl:text>
 		
-		<xsl:text>:part: </xsl:text><xsl:value-of select="resource/@part"/>
+		<xsl:text>:partnumber: </xsl:text><xsl:value-of select="resource/@part"/>
 		<xsl:text>&#xa;</xsl:text>
+		
+		<xsl:text>:edition: </xsl:text><xsl:value-of select="resource/@version"/>
+		<xsl:text>&#xa;</xsl:text>
+		
+		
 		
 		<xsl:text>:title-intro-en: Industrial automation systems and integration</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
@@ -185,8 +192,9 @@
 		<xsl:text>&#xa;</xsl:text>
 		<xsl:text>:workgroup-number: 12</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>&#xa;</xsl:text>
-
+		
+		<xsl:text>:library-ics: 25.040.40</xsl:text>
+		<xsl:text>&#xa;&#xa;</xsl:text>
 		
 		
 		
@@ -244,10 +252,16 @@
 			<!-- <xsl:copy-of select="$schema"/> -->
 			<xsl:apply-templates select="xalan:nodeset($schema)/node()" mode="stepmod2mn"/>
 		</xsl:if>
+	
+
+		<!-- Annex A Short names of entities -->
+		<xsl:message>[INFO] Annex A Short names of entities ...</xsl:message>		
+		<xsl:apply-templates select="resource" mode="annex_a"/>
 		
 	</xsl:template>
 	
 
+	
 	
 	<!-- EXPRESS short listing -->
 	<!-- =========== -->
@@ -272,24 +286,30 @@
 	
 	<!-- END EXPRESS short listing -->
 	<!-- ================== -->
-	
-	
-
 
 
 	<xsl:template name="insertHeaderADOC">
 		<xsl:param name="id"/>
 		<xsl:param name="level" select="1"/>
 		<xsl:param name="header"/>		
-		<xsl:param name="annex"/>		
-		<xsl:param name="obligation"/>		
-		<xsl:if test="$id != ''">
+		<xsl:param name="annex_no"/>		
+		<xsl:param name="obligation"/>
+		
+		<xsl:choose>
+			<xsl:when test="$annex_no != ''">
+				<xsl:text>[[Annex</xsl:text>
+				<xsl:value-of select="$annex_no"/>
+				<xsl:text>]]</xsl:text>
+				<xsl:text>&#xa;</xsl:text>
+			</xsl:when>
+			<xsl:when test="$id != ''">
 			<xsl:text>[[</xsl:text>
 				<xsl:value-of select="$id"/>
 			<xsl:text>]]</xsl:text>
 			<xsl:text>&#xa;</xsl:text>
-		</xsl:if>
-		<xsl:if test="$annex = 'true'">
+			</xsl:when>
+		</xsl:choose>		
+		<xsl:if test="$annex_no != ''">
 			<xsl:text>[appendix</xsl:text>
 			<xsl:if test="$obligation != ''">
 				<xsl:text>,obligation=</xsl:text><xsl:value-of select="$obligation"/>

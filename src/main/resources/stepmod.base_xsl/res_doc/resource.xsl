@@ -3952,7 +3952,7 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 			<xsl:with-param name="id" select="$title"/>		
 			<xsl:with-param name="level" select="2"/>
 			<xsl:with-param name="header" select="concat($annex_letter,'.',$sect_no,' ',$title)"/>					
-			<xsl:with-param name="annex" select="'true'"/>
+			<xsl:with-param name="annex_no" select="$annex_letter"/>
 		</xsl:call-template>
 		
 		<xsl:apply-templates/>
