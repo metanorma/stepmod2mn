@@ -25,6 +25,7 @@
 	<xsl:import href="stepmod.base_xsl/res_doc/sect_schema.xsl"/>
 	<xsl:import href="stepmod.base_xsl/res_doc/sect_4_express.xsl"/>
 	<xsl:import href="stepmod.base_xsl/res_doc/sect_a_short_names.xsl"/>
+	<xsl:import href="stepmod.base_xsl/res_doc/sect_b_obj_reg.xsl"/>
 	
 	
 	<xsl:import href="stepmod.base_xsl/projmg/resource_issues.xsl"/>
@@ -257,6 +258,10 @@
 		<!-- Annex A Short names of entities -->
 		<xsl:message>[INFO] Annex A Short names of entities ...</xsl:message>		
 		<xsl:apply-templates select="resource" mode="annex_a"/>
+		
+		<!-- Annex A Short names of entities -->
+		<xsl:message>[INFO] Annex B Information object registration ...</xsl:message>		
+		<xsl:apply-templates select="resource" mode="annex_b"/>
 		
 	</xsl:template>
 	
