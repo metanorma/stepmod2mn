@@ -375,7 +375,10 @@ $Id: common.xsl,v 1.33 2008/05/21 20:50:25 abf Exp $
   </xsl:template>
 
   <xsl:template match="resource" mode="display_name_french">
-    <xsl:apply-templates select="." mode="display_french_doctype"/>: 
+		<xsl:variable name="this-type">
+			<xsl:apply-templates select="." mode="display_french_doctype"/>
+		</xsl:variable>
+    <xsl:value-of select="concat($this-type,': ')" />
     <xsl:call-template name="module_display_name">
       <xsl:with-param name="module" select="@name.french"/>
     </xsl:call-template>

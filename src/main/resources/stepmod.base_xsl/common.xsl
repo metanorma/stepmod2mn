@@ -5037,13 +5037,13 @@ is case sensitive.')"/>
 		</xsl:choose>
 	</xsl:template>
 
-	<xsl:template match="resource" mode="title_part">		
+	<!-- <xsl:template match="resource" mode="title_part">		
 		<xsl:apply-templates select="." mode="type"/>
 		<xsl:text>: </xsl:text>
 		<xsl:call-template name="res_display_name">
 			<xsl:with-param name="res" select="@name"/>
 		</xsl:call-template>
-	</xsl:template>
+	</xsl:template> -->
 
 
 <xsl:template match="resource" mode="display_french_doctype">
@@ -5051,17 +5051,12 @@ is case sensitive.')"/>
     <xsl:apply-templates select="." mode="doctype"/>
   </xsl:variable>
   <xsl:choose>
-	<xsl:when test="$doctype='aic'">
-	  Construction interpr&#233;t&#233;e d'application</xsl:when>
-	<xsl:when test="$doctype='iar'">
-	  Ressources d'application int&#233;gr&#233;es</xsl:when>
-	<xsl:when test="$doctype='igr'">
-	  Ressources g&#233;n&#233;riques int&#233;gr&#233;es</xsl:when>
+	<xsl:when test="$doctype='aic'">Construction interpr&#233;t&#233;e d'application</xsl:when>
+	<xsl:when test="$doctype='iar'">Ressources d'application int&#233;gr&#233;es</xsl:when>
+	<xsl:when test="$doctype='igr'">Ressources g&#233;n&#233;riques int&#233;gr&#233;es</xsl:when>
 	<xsl:otherwise>
 	  <xsl:call-template name="error_message">
-		<xsl:with-param 
-			name="message" 
-			select="concat('Error : unknown type: ', $doctype)"/>
+			<xsl:with-param name="message" select="concat('Error : unknown type: ', $doctype)"/>
 	  </xsl:call-template>
 	</xsl:otherwise>
   </xsl:choose>

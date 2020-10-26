@@ -150,7 +150,13 @@
 		<xsl:text>&#xa;</xsl:text>
 		<xsl:text>:title-main-en: Product data representation and exchange</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>:title-part-en: </xsl:text><xsl:apply-templates select="resource" mode="title_part"/>
+		<xsl:text>:title-part-en: </xsl:text><xsl:apply-templates select="resource" mode="display_name"/>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>:title-intro-fr: Systèmes d'automatisation industrielle et intégration</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>:title-main-fr: Représentation et échange de données de produits </xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>:title-part-fr: </xsl:text><xsl:apply-templates select="resource" mode="display_name_french"/>
 		<xsl:text>&#xa;</xsl:text>
 		
 		<xsl:text>:doctype: international-standard</xsl:text>
@@ -181,46 +187,6 @@
 		<xsl:text>&#xa;</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
 
-		
-		<!-- 
-		<xsl:variable name="resource_xml" select="document(concat($path, '../',@directory,'/resource.xml'))"/>
-		
-		<xsl:text>:docnumber: </xsl:text><xsl:apply-templates select="$resource_xml/resource" mode="title"/>
-		<xsl:text>&#xa;</xsl:text>
-		
-		<xsl:text>:docnumber: </xsl:text><xsl:apply-templates select="$resource_xml/resource" mode="docnumber"/>
-		<xsl:text>&#xa;</xsl:text>
-		
-		<xsl:text>:part: </xsl:text><xsl:value-of select="$resource_xml/resource/@part"/>
-		<xsl:text>&#xa;</xsl:text>
-		
-		<xsl:text>:title-intro-en: Industrial automation systems and integration</xsl:text>
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>:title-main-en: Product data representation and exchange</xsl:text>
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>:title-part-en: </xsl:text><xsl:apply-templates select="$resource_xml/resource" mode="title_part"/>
-		<xsl:text>&#xa;</xsl:text>
-		
-		<xsl:text>:doctype: international-standard</xsl:text>
-		<xsl:text>&#xa;</xsl:text>
-		
-		<xsl:apply-templates select="$resource_xml/resource" mode="doctype"/>
-		
-		<xsl:choose>
-			<xsl:when test="@pos">				
-				<xsl:apply-templates select="$resource_xml/resource">
-					 <xsl:with-param name="pos" select="string(@pos)"/>
-				 </xsl:apply-templates>
-			 </xsl:when>
-			 <xsl:otherwise>
-				 <xsl:apply-templates select="$resource_xml/resource"/>
-			 </xsl:otherwise>
-		 </xsl:choose>
-		
-		<xsl:text>:copyright-year: </xsl:text><xsl:value-of select="substring($resource_xml/resource/@publication.year,1,4)"/>
-		
-		-->
-		
 		
 		
 		
