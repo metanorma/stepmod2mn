@@ -342,10 +342,13 @@
 	</xsl:template>
 
 
-	<!-- <xsl:template match="h2/a | H2/a" mode="stepmod2mn">
-		<xsl:value-of select="normalize-space(.)"/>
+	<xsl:template name="insertParagraph">
+		<xsl:param name="text"/>
+		<xsl:value-of select="normalize-space($text)"/>
+		<xsl:text>&#xa;&#xa;</xsl:text>
 	</xsl:template>
- -->
+
+
 	<xsl:template match="p | P" mode="stepmod2mn">
 		<xsl:choose>
 			<xsl:when test="count(node()) = 0"> <!-- skip empty <p/> -->
@@ -436,9 +439,9 @@
 		<xsl:value-of select="normalize-space(.)"/>
 	</xsl:template>
 	
-	<xsl:template match="sec/text() | li/text() | ul/text() | ol/text() | inscope/text() | outscope/text()">
+	<!-- <xsl:template match="sec/text() | li/text() | ul/text() | ol/text() | inscope/text() | outscope/text()">
 		<xsl:value-of select="normalize-space(.)"/>
-	</xsl:template>
+	</xsl:template> -->
 	
 	
 	<xsl:template name="insertQuoteStart">

@@ -47,18 +47,18 @@ $Id: sect_introduction.xsl,v 1.13 2010/10/20 07:44:26 robbod Exp $
 		</xsl:call-template>
 
 		<!-- <p> -->
-		<xsl:variable name="text1">
-			ISO 10303 is an International Standard for the computer-interpretable 
-			representation of product information and for the exchange of product data.
-			The objective is to provide a neutral mechanism capable of describing
-			products throughout their life cycle. This mechanism is suitable not only
-			for neutral file exchange, but also as a basis for implementing and
-			sharing product databases, and as a basis 
-			for retention and archiving.
+		<xsl:call-template name="insertParagraph">
+			<xsl:with-param name="text">
+				ISO 10303 is an International Standard for the computer-interpretable 
+				representation of product information and for the exchange of product data.
+				The objective is to provide a neutral mechanism capable of describing
+				products throughout their life cycle. This mechanism is suitable not only
+				for neutral file exchange, but also as a basis for implementing and
+				sharing product databases, and as a basis 
+				for retention and archiving.
+			</xsl:with-param>
+		</xsl:call-template>
 		<!-- </p> -->
-		</xsl:variable>
-		<xsl:value-of select="normalize-space($text1)"/>
-		<xsl:text>&#xa;&#xa;</xsl:text>
 		
 		<xsl:variable name="doctype" >
 			<xsl:apply-templates select="ancestor::*[last()]" mode="doctype"/>
@@ -83,14 +83,18 @@ $Id: sect_introduction.xsl,v 1.13 2010/10/20 07:44:26 robbod Exp $
 								</xsl:for-each>
 						</ul> -->
 						
-						<xsl:text>Major subdivisions of this part of ISO 10303 are:</xsl:text>
-						<xsl:text>&#xa;&#xa;</xsl:text>
+						<xsl:call-template name="insertParagraph">
+							<xsl:with-param name="text">Major subdivisions of this part of ISO 10303 are:</xsl:with-param>
+						</xsl:call-template>
+						
+						
 						<xsl:for-each select="../schema">
 							<xsl:text>* </xsl:text>
 							<xsl:choose>
 								<xsl:when test="position()!=last()">
-									<xsl:value-of select="concat(@name,';')"/>
-									<xsl:text>&#xa;&#xa;</xsl:text>
+									<xsl:call-template name="insertParagraph">
+										<xsl:with-param name="text"><xsl:value-of select="concat(@name,';')"/></xsl:with-param>
+									</xsl:call-template>
 								</xsl:when>
 								<xsl:otherwise>
 									<xsl:value-of select="concat(@name,'.')"/>        
@@ -103,9 +107,10 @@ $Id: sect_introduction.xsl,v 1.13 2010/10/20 07:44:26 robbod Exp $
 					</xsl:when>
 					<xsl:otherwise>
 						<!-- <p> -->
-							<xsl:text>This part of ISO 10303 specifies the </xsl:text>
-							<xsl:value-of select="../schema[1]/@name" />.
-							<xsl:text>&#xa;&#xa;</xsl:text>
+							<xsl:call-template name="insertParagraph">
+								<xsl:with-param name="text">This part of ISO 10303 specifies the 
+									<xsl:value-of select="../schema[1]/@name" />.</xsl:with-param>
+							</xsl:call-template>
 						<!-- </p> -->
 					</xsl:otherwise>
 				</xsl:choose>
@@ -120,13 +125,13 @@ $Id: sect_introduction.xsl,v 1.13 2010/10/20 07:44:26 robbod Exp $
 
 				<!-- prepare variables to output list of used schemas and parts -->
 				<!-- <p> -->
-				<xsl:variable name="text2">
-					The relationships of the schemas in this part of ISO 10303 to other schemas 
-					that define the integrated resources of ISO 10303 are illustrated in Figure 1 
-					using the EXPRESS-G notation. EXPRESS-G is defined in ISO 10303-11.  </xsl:variable>
+				<xsl:call-template name="insertParagraph">
+					<xsl:with-param name="text">
+						The relationships of the schemas in this part of ISO 10303 to other schemas 
+						that define the integrated resources of ISO 10303 are illustrated in Figure 1 
+						using the EXPRESS-G notation. EXPRESS-G is defined in ISO 10303-11.</xsl:with-param>
+				</xsl:call-template>
 				<!-- </p> -->
-				<xsl:value-of select="normalize-space($text2)"/>
-				<xsl:text>&#xa;&#xa;</xsl:text>
 				
 				<xsl:variable name="used" >
 					<xsl:apply-templates select="../schema_diag" mode="use_reference_list" />
@@ -154,8 +159,10 @@ $Id: sect_introduction.xsl,v 1.13 2010/10/20 07:44:26 robbod Exp $
 
 				</xsl:choose> -->
 
-				<!-- <p> --><xsl:text>The schemas illustrated in Figure 1 are components of the integrated resources.</xsl:text>
-				<xsl:text>&#xa;&#xa;</xsl:text>
+				<!-- <p> -->
+				<xsl:call-template name="insertParagraph">
+					<xsl:with-param name="text">The schemas illustrated in Figure 1 are components of the integrated resources.</xsl:with-param>
+				</xsl:call-template>
 				<!-- </p> -->
 
 				<xsl:apply-templates select="//schema_diag" />
@@ -163,13 +170,13 @@ $Id: sect_introduction.xsl,v 1.13 2010/10/20 07:44:26 robbod Exp $
 			</xsl:when>
 
 			<xsl:when test="$doctype='aic'">
-				<xsl:variable name="text3">An application interpreted construct (AIC) provides a logical grouping of 
-				interpreted constructs that supports a specific functionality for the 
-				usage of product data across multiple application contexts. 
-				An interpreted construct is a common interpretation of the integrated resources 
-				that supports shared information requirements among application protocols.</xsl:variable>
-				<xsl:value-of select="normalize-space($text3)"/>
-				<xsl:text>&#xa;&#xa;</xsl:text>
+				<xsl:call-template name="insertParagraph">
+					<xsl:with-param name="text">An application interpreted construct (AIC) provides a logical grouping of 
+						interpreted constructs that supports a specific functionality for the 
+						usage of product data across multiple application contexts. 
+						An interpreted construct is a common interpretation of the integrated resources 
+						that supports shared information requirements among application protocols.</xsl:with-param>
+				</xsl:call-template>
 	<!-- output explicit text from the purpose tag --> 
 				<xsl:apply-templates/>
 
@@ -201,18 +208,19 @@ $Id: sect_introduction.xsl,v 1.13 2010/10/20 07:44:26 robbod Exp $
 		<xsl:choose>
 			<xsl:when test="$used-count = 1" >
 				<!-- <p> -->
-				<xsl:variable name="text1">The <xsl:value-of select="./used-schema[1]" /> shown in Figure 1 is found in 
-					<xsl:apply-templates select="./used-schema[1]" mode="reference" />
-				</xsl:variable>
-				<!-- </p> -->
-				<xsl:value-of select="normalize-space($text1)"/>
-				<xsl:text>&#xa;&#xa;</xsl:text>
+				<xsl:call-template name="insertParagraph">
+					<xsl:with-param name="text">The <xsl:value-of select="./used-schema[1]" /> shown in Figure 1 is found in 
+						<xsl:apply-templates select="./used-schema[1]" mode="reference" />
+					</xsl:with-param>
+				</xsl:call-template>
+				<!-- </p> -->				
 			</xsl:when>
 
 			<xsl:when test="$used-count > 1" >
 				<!-- <p> -->
-				<xsl:text>The following schemas shown in Figure 1 are not found in this part of ISO 10303, but are found as specified:</xsl:text>
-				<xsl:text>&#xa;&#xa;</xsl:text>
+				<xsl:call-template name="insertParagraph">
+					<xsl:with-param name="text">The following schemas shown in Figure 1 are not found in this part of ISO 10303, but are found as specified:</xsl:with-param>
+				</xsl:call-template>
 				<!-- </p> -->
 				<!-- <ul>
 					<xsl:for-each select="used-schema[not(.=preceding-sibling::used-schema)]">

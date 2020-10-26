@@ -650,13 +650,13 @@ Purpose:
 		<!-- THX deleted per ISO review of part 107
 				 PS Added back in following review of Part 61 -->
  <!-- <P> -->
-		<xsl:variable name="text1">
-		 <xsl:value-of select="substring-before($resdoc_stdnumber,'(E)')"/>
-		 specifies the integrated resource constructs for 
-		 <xsl:value-of select="$resdoc_name"/>.
-	 </xsl:variable>
-	 <xsl:value-of select="normalize-space($text1)"/>
-	 <xsl:text>&#xa;&#xa;</xsl:text>	 
+		<xsl:call-template name="insertParagraph">
+			<xsl:with-param name="text">
+				<xsl:value-of select="substring-before($resdoc_stdnumber,'(E)')"/>
+				specifies the integrated resource constructs for 
+				<xsl:value-of select="$resdoc_name"/>.
+			</xsl:with-param>
+		</xsl:call-template>
  <!-- </P> -->
 
 		<xsl:choose>
@@ -666,16 +666,20 @@ Purpose:
 						<xsl:choose>
 							<xsl:when  test="count(./abstract/li)=1">
 								<!-- <P> -->
-									<xsl:text>The following is within the scope of </xsl:text>
-									<xsl:value-of select="substring-before($resdoc_stdnumber,'(E)')"/><xsl:text>:</xsl:text>
-									<xsl:text>&#xa;&#xa;</xsl:text>
+									<xsl:call-template name="insertParagraph">
+										<xsl:with-param name="text">The following is within the scope of 
+											<xsl:value-of select="substring-before($resdoc_stdnumber,'(E)')"/>:
+										</xsl:with-param>
+									</xsl:call-template>
 								<!-- </P> -->
 							</xsl:when>
 							<xsl:otherwise>
 								<!-- <P> -->
-									<xsl:text>The following are within the scope of </xsl:text>
-									<xsl:value-of select="substring-before($resdoc_stdnumber,'(E)')"/><xsl:text>:</xsl:text>
-									<xsl:text>&#xa;&#xa;</xsl:text>
+									<xsl:call-template name="insertParagraph">
+										<xsl:with-param name="text">The following are within the scope of 
+											<xsl:value-of select="substring-before($resdoc_stdnumber,'(E)')"/>:
+										</xsl:with-param>
+									</xsl:call-template>
 								<!-- </P> -->
 							</xsl:otherwise>
 						</xsl:choose>
@@ -692,9 +696,11 @@ Purpose:
 			</xsl:when>
 			<xsl:otherwise>
 				<!-- <P> -->
-					<xsl:text>The following are within the scope of </xsl:text>
-					<xsl:value-of select="substring-before($resdoc_stdnumber,'(E)')"/><xsl:text>:</xsl:text>
-					<xsl:text>&#xa;&#xa;</xsl:text>
+				 <xsl:call-template name="insertParagraph">
+					<xsl:with-param name="text">The following are within the scope of 
+						<xsl:value-of select="substring-before($resdoc_stdnumber,'(E)')"/>:
+					</xsl:with-param>
+				</xsl:call-template>
 				<!-- </P> -->
 				<!-- <UL> -->
 					<xsl:text>&#xa;</xsl:text>		
@@ -774,7 +780,8 @@ Purpose:
 	
 	
 		<!-- <p> -->
-		<xsl:variable name="text1">
+		<xsl:call-template name="insertParagraph">
+			<xsl:with-param name="text">
 			ISO (the International Organization for Standardization) is a worldwide federation of national 
 			standards bodies (ISO member bodies). The work of preparing International Standards is normally 
 			carried out through ISO technical committees. Each member body interested in a subject for which a 
@@ -782,56 +789,53 @@ Purpose:
 			International organizations, governmental and non-governmental, in liaison with ISO, also take part in 
 			the work. ISO collaborates closely with the International Electrotechnical Commission (IEC) on all 
 			matters of electrotechnical standardization.
-		</xsl:variable>
-		<xsl:value-of select="normalize-space($text1)"/>
-		<xsl:text>&#xa;&#xa;</xsl:text>
+			</xsl:with-param>
+		</xsl:call-template>
 		<!-- </p> -->
 		<!-- <p> -->
-		<xsl:variable name="text2">
+		<xsl:call-template name="insertParagraph">
+			<xsl:with-param name="text">
 			The procedures used to develop this document and those intended for its further maintenance are 
 			described in the ISO/IEC Directives, Part 1. In particular, the different approval criteria needed for the 
 			different types of ISO documents should be noted. This document was drafted in accordance with the 
 			editorial rules of the ISO/IEC Directives, Part 2 (see www.iso.org/directives[http://www.iso.org/directives]<!-- <a href="http://www.iso.org/directives" target="_blank">www.iso.org/directives</a> -->).
-		</xsl:variable>
-		<!-- </p> -->
-		<xsl:value-of select="normalize-space($text2)"/>
-		<xsl:text>&#xa;&#xa;</xsl:text>
+			</xsl:with-param>
+		</xsl:call-template>
 		<!-- <p> -->
-		<xsl:variable name="text3">
+		<xsl:call-template name="insertParagraph">
+			<xsl:with-param name="text">
 			Attention is drawn to the possibility that some of the elements of this document may be the subject of 
 			patent rights. ISO shall not be held responsible for identifying any or all such patent rights. Details of 
 			any patent rights identified during the development of the document will be in the Introduction and/or 
 			on the ISO list of patent declarations received (see www.iso.org/patents[http://www.iso.org/patents]<!-- <a href="http://www.iso.org/patents" target="_blank">www.iso.org/patents</a> -->).
-		</xsl:variable>
-		<!-- </p> -->
-		<xsl:value-of select="normalize-space($text3)"/>
-		<xsl:text>&#xa;&#xa;</xsl:text>
+			</xsl:with-param>
+		</xsl:call-template>
 		
 		<!-- <p> -->
-		<xsl:variable name="text4">
+		<xsl:call-template name="insertParagraph">
+			<xsl:with-param name="text">
 			Any trade name used in this document is information given for the convenience of users and does not 
 			constitute an endorsement.
-		</xsl:variable>
-		<!-- </p> -->
-		<xsl:value-of select="normalize-space($text4)"/>
-		<xsl:text>&#xa;&#xa;</xsl:text>
+			</xsl:with-param>
+		</xsl:call-template>
 		
-		<xsl:variable name="text5">
+		<xsl:call-template name="insertParagraph">
+			<xsl:with-param name="text">
 			For an explanation on the voluntary nature of standards, the meaning of ISO specific terms and 
 			expressions related to conformity assessment, as well as information about ISO's adherence to the 
 			World Trade Organization (WTO) principles in the Technical Barriers to Trade (TBT) see www.iso.org/iso/foreword.html[http://www.iso.org/iso/foreword.html]<!-- <a href="http://www.iso.org/iso/foreword.html" target="_blank">www.iso.org/iso/foreword.html</a> -->.
-		</xsl:variable>
-		<!-- </p> -->
-		<xsl:value-of select="normalize-space($text5)"/>
-		<xsl:text>&#xa;&#xa;</xsl:text>
+			</xsl:with-param>
+		</xsl:call-template>
 		
 		<!-- <p>
 			This document was prepared by Technical Committee ISO/TC 184, <i>Automation systems and integration</i>, Subcommittee SC 4,
 			<i>Industrial data.</i>
 		</p> -->
-		
-		<xsl:text>This document was prepared by Technical Committee ISO/TC 184, _Automation systems and integration_, Subcommittee SC 4, _Industrial data._</xsl:text>
-		<xsl:text>&#xa;&#xa;</xsl:text>
+		<xsl:call-template name="insertParagraph">
+			<xsl:with-param name="text">
+			This document was prepared by Technical Committee ISO/TC 184, _Automation systems and integration_, Subcommittee SC 4, _Industrial data._
+			</xsl:with-param>
+		</xsl:call-template>
 		
 		<xsl:variable name="text6">
 			<xsl:choose>
@@ -967,8 +971,10 @@ Purpose:
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
-		<xsl:value-of select="normalize-space($text6)"/>
-		<xsl:text>&#xa;&#xa;</xsl:text>
+		
+		<xsl:call-template name="insertParagraph">
+			<xsl:with-param name="text"><xsl:value-of select="$text6"/></xsl:with-param>
+		</xsl:call-template>
 		
 		<xsl:if test="./changes">
 			<xsl:variable name="annex_letter">
@@ -982,26 +988,27 @@ Purpose:
 				href="g_change{$FILE_EXT}">
 				<xsl:value-of select="$annex_letter"/>
 			</a>.  -->
-			<xsl:text>A detailed description of the changes is provided in &lt;&lt;Annex</xsl:text><xsl:value-of select="$annex_letter"/><xsl:text>&gt;&gt;.</xsl:text>
-			<xsl:text>&#xa;&#xa;</xsl:text>
+			
+			<xsl:call-template name="insertParagraph">
+			<xsl:with-param name="text">A detailed description of the changes is provided in &lt;&lt;Annex<xsl:value-of select="$annex_letter"/>&gt;&gt;.
+				</xsl:with-param>
+		</xsl:call-template>
 		</xsl:if>
 		
 		<!-- <p> -->
-		<xsl:variable name="text7">
+		<xsl:call-template name="insertParagraph">
+			<xsl:with-param name="text">
 			A list of all parts in the ISO 10303 series can be found on the ISO website[http://standards.iso.org/iso/10303/tech/step_titles.htm]<!-- <a href="http://standards.iso.org/iso/10303/tech/step_titles.htm" target="_blank">ISO website</a> -->. 
-		</xsl:variable>		
-		<!-- </p> -->
-		<xsl:value-of select="normalize-space($text7)"/>
-		<xsl:text>&#xa;&#xa;</xsl:text>
+			</xsl:with-param>
+		</xsl:call-template>
 		
 		<!-- <p> -->
-		<xsl:variable name="text8">
+		<xsl:call-template name="insertParagraph">
+			<xsl:with-param name="text">
 			Any feedback or questions on this document should be directed to the user’s national standards body. 
 			A complete listing of these bodies can be found at www.iso.org/members.html[https://www.iso.org/members.html]<!-- <a href="https://www.iso.org/members.html">www.iso.org/members.html</a> -->.
-		</xsl:variable>
-		<!-- </p> -->
-		<xsl:value-of select="normalize-space($text8)"/>
-		<xsl:text>&#xa;&#xa;</xsl:text>
+			</xsl:with-param>
+		</xsl:call-template>
 		
 	</xsl:template>
 	
@@ -1296,8 +1303,11 @@ Purpose:
 			<!-- <a name="inscope"/> -->
 			<xsl:text>[[inscope]]</xsl:text>
 			<xsl:text>&#xa;</xsl:text>
-			<xsl:text>The following are within the scope of this part of ISO 10303: </xsl:text>
-			<xsl:text>&#xa;&#xa;</xsl:text>
+			<xsl:call-template name="insertParagraph">
+			<xsl:with-param name="text">
+				The following are within the scope of this part of ISO 10303:
+			</xsl:with-param>
+		</xsl:call-template>
 		<!-- </p> -->
 		<!--  output any issues -->
 		<xsl:apply-templates select=".." mode="output_clause_issue">
@@ -1318,8 +1328,11 @@ Purpose:
 			<!-- <a name="outscope"/> -->
 			<xsl:text>[[outscope]]</xsl:text>
 			<xsl:text>&#xa;</xsl:text>
-			<xsl:text>The following are outside the scope of this part of ISO 10303: </xsl:text>
-			<xsl:text>&#xa;&#xa;</xsl:text>
+			<xsl:call-template name="insertParagraph">
+				<xsl:with-param name="text">
+					The following are outside the scope of this part of ISO 10303:
+				</xsl:with-param>
+			</xsl:call-template>
 		<!-- </p> -->
 		<!-- output any issues -->
 		<xsl:apply-templates select=".." mode="output_clause_issue">
@@ -1726,8 +1739,11 @@ the types, entity specializations, and functions that are specific to this part 
 		</p>
 		
 		<!-- <u>EXPRESS specification: </u> -->
-		<xsl:text>[.underline]#EXPRESS specification:#</xsl:text>
-		<xsl:text>&#xa;&#xa;</xsl:text>
+		<xsl:call-template name="insertParagraph">
+			<xsl:with-param name="text">
+				[.underline]#EXPRESS specification:#
+			</xsl:with-param>
+		</xsl:call-template>
 		
 		<!-- <code>
 
@@ -1856,20 +1872,23 @@ the types, entity specializations, and functions that are specific to this part 
 			</a>
 		</li> -->
 		
-		<xsl:text>* &lt;&lt;</xsl:text>
-			<xsl:choose>
-				<xsl:when test="position()!=last()">
-					<xsl:value-of select="concat(@name,';')"/>
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:value-of select="concat(@name,'.')"/>        
-				</xsl:otherwise>
-			</xsl:choose>
-			<xsl:text>, </xsl:text>
-			<xsl:value-of select="$href"/>
-			
-		<xsl:text>&gt;&gt;</xsl:text>
-		<xsl:text>&#xa;&#xa;</xsl:text>
+		<xsl:call-template name="insertParagraph">
+			<xsl:with-param name="text">
+					* &lt;&lt;
+					<xsl:choose>
+						<xsl:when test="position()!=last()">
+							<xsl:value-of select="concat(@name,';')"/>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:value-of select="concat(@name,'.')"/>        
+						</xsl:otherwise>
+					</xsl:choose>
+					<xsl:text>, </xsl:text>
+					<xsl:value-of select="$href"/>
+				
+					<xsl:text>&gt;&gt;</xsl:text>
+				</xsl:with-param>
+		</xsl:call-template>
 		
 	</xsl:template>
 
@@ -1891,19 +1910,22 @@ the types, entity specializations, and functions that are specific to this part 
 				</xsl:otherwise>
 			</xsl:choose>
 		</li> -->
-		<xsl:text>* &lt;&lt;</xsl:text>			
-			<xsl:choose>
-				<xsl:when test="position()!=last()">					
-					<xsl:value-of select="concat($uof,';')"/>					
-				</xsl:when>
-				<xsl:otherwise>					
-					<xsl:value-of select="concat($uof,'.')"/>
-				</xsl:otherwise>
-			</xsl:choose>		
-			<xsl:text>, </xsl:text>
-			<xsl:value-of select="$xref"/>
-		<xsl:text>&gt;&gt;</xsl:text>
-		<xsl:text>&#xa;&#xa;</xsl:text>
+		<xsl:call-template name="insertParagraph">
+			<xsl:with-param name="text">
+					* &lt;&lt;
+				<xsl:choose>
+					<xsl:when test="position()!=last()">					
+						<xsl:value-of select="concat($uof,';')"/>					
+					</xsl:when>
+					<xsl:otherwise>					
+						<xsl:value-of select="concat($uof,'.')"/>
+					</xsl:otherwise>
+				</xsl:choose>		
+				<xsl:text>, </xsl:text>
+				<xsl:value-of select="$xref"/>
+				<xsl:text>&gt;&gt;</xsl:text>
+			</xsl:with-param>
+		</xsl:call-template>
 	</xsl:template>
 
 
@@ -2393,13 +2415,14 @@ the types, entity specializations, and functions that are specific to this part 
 		</p>--> 
 		
 		<!-- MWD 2018-07-04 6538 the above paragraph replaced with this one -->
-		<!-- <p> -->		
-			<xsl:text>The following documents are referred to in the text in such a way that some or all of their content constitutes requirements of this document. </xsl:text>
-			<xsl:text>For dated references, only the edition cited applies. For undated references, the latest edition of the referenced document (including any amendments) applies.</xsl:text>
-		<!-- </p> -->
-		
-		
-		<xsl:text>&#xa;&#xa;</xsl:text>
+		<!-- <p> -->	
+		<xsl:call-template name="insertParagraph">
+			<xsl:with-param name="text">
+			The following documents are referred to in the text in such a way that some or all of their content constitutes requirements of this document. 
+			For dated references, only the edition cited applies. For undated references, the latest edition of the referenced document (including any amendments) applies.
+			</xsl:with-param>
+		</xsl:call-template>
+		<!-- </p> -->		
 		
 		<!-- output any issues -->
 		<xsl:apply-templates select="." mode="output_clause_issue">
@@ -3122,10 +3145,13 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 
 		<!-- <p> -->
 			<!-- RBN Changed due to request from ISO
-		 For the purposes of this part of ISO 10303, -->              
-			<xsl:text>For the purposes of this document, </xsl:text>
-			<xsl:text>the following abbreviated terms apply:</xsl:text>
-			<xsl:text>&#xa;&#xa;</xsl:text>
+		 For the purposes of this part of ISO 10303, -->
+		 <xsl:call-template name="insertParagraph">
+			<xsl:with-param name="text">
+				For the purposes of this document, 
+				the following abbreviated terms apply:
+			</xsl:with-param>
+		</xsl:call-template>
 		<!-- </p> -->
 		<!-- <table width="80%" type="abbreviations"> -->
 			<!-- get the default abbreviations out of the abbreviations_resdoc_defaultxml
@@ -3276,9 +3302,14 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 			</xsl:call-template>
 			<!-- RBN Changed due to request from ISO
 		 For the purposes of this part of ISO 10303, -->              
-			<!-- <p> --><xsl:text>For the purposes of this document, </xsl:text>
-			<xsl:text>the following terms and definitions apply:</xsl:text><!-- </p> -->
-			<xsl:text>&#xa;&#xa;</xsl:text>
+			<!-- <p> -->
+			<xsl:call-template name="insertParagraph">
+				<xsl:with-param name="text">
+					For the purposes of this document, 
+					the following terms and definitions apply:
+				</xsl:with-param>
+			</xsl:call-template>
+				<!-- </p> -->			
 			
 		</xsl:if>
 
@@ -3354,12 +3385,16 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 							
 							<!-- RBN Changed due to request from ISO
 						 For the purposes of this part of ISO 10303, -->              
-							<xsl:text>For the purposes of this document, </xsl:text>
-							<xsl:text>the following terms defined in </xsl:text>
-							<xsl:value-of select="$stdnumber"/>
-							<xsl:text> apply:</xsl:text>
-							<!-- <ul> -->
-							<xsl:text>&#xa;&#xa;</xsl:text>
+						 <xsl:call-template name="insertParagraph">
+								<xsl:with-param name="text">
+									For the purposes of this document, 
+									the following terms defined in 
+									<xsl:value-of select="$stdnumber"/>
+									<xsl:text> apply:</xsl:text>
+								</xsl:with-param>
+							</xsl:call-template>
+							<!-- <ul> -->							
+							
 					<!-- now output the terms -->
 						<xsl:variable name="moreNormRefs" select="string-length(/resource/normrefs/normref.inc[@normref=$ref]/term.ref)+string-length(/resource/normrefs/normref.inc)"/>
 								<xsl:choose>
@@ -3432,12 +3467,16 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 						
 						<!-- RBN Changed due to request from ISO
 								 For the purposes of this part of ISO 10303,-->              
-						<xsl:text>For the purposes of this document, </xsl:text>
-						<xsl:text>the following terms defined in </xsl:text>
-						<xsl:value-of select="$stdnumber"/>
-						<xsl:text> apply:</xsl:text>
+						<xsl:call-template name="insertParagraph">
+							<xsl:with-param name="text">
+								For the purposes of this document, 
+								the following terms defined in 
+								<xsl:value-of select="$stdnumber"/>
+								 apply:
+							 </xsl:with-param>
+						</xsl:call-template>
 						<!-- <ul> -->
-						<xsl:text>&#xa;&#xa;</xsl:text>
+						
 							<!-- now output the terms -->
 							<xsl:apply-templates 
 						select="/resource/normrefs/normref.inc[@resource.name=$resource]/term.ref" 
@@ -3689,25 +3728,31 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 								<li><xsl:apply-templates select="$term"/>;</li>
 							</xsl:otherwise>
 						</xsl:choose> -->
-						<xsl:text>* </xsl:text>
-						<xsl:apply-templates select="$term"/>
-						<xsl:choose>
-							<xsl:when test="position()=last()">.</xsl:when>
-							<xsl:otherwise>;</xsl:otherwise>
-						</xsl:choose>
-						<xsl:text>&#xa;&#xa;</xsl:text>
+						<xsl:call-template name="insertParagraph">
+							<xsl:with-param name="text">
+								<xsl:text>* </xsl:text>
+								<xsl:apply-templates select="$term"/>
+								<xsl:choose>
+									<xsl:when test="position()=last()">.</xsl:when>
+									<xsl:otherwise>;</xsl:otherwise>
+								</xsl:choose>
+							</xsl:with-param>
+						</xsl:call-template>
 					</xsl:when>
 					
 					<xsl:otherwise>
 						<!-- <li> -->
-							<xsl:variable name="text">
-								<xsl:call-template name="error_message">
-									<xsl:with-param name="message" select="concat('Error 11: Can not find term referenced by: ',$ref)"/>
-								</xsl:call-template>
-							</xsl:variable>
-							<xsl:text>* </xsl:text>
-							<xsl:value-of select="$text"/>
-							<xsl:text>&#xa;&#xa;</xsl:text>
+							<xsl:call-template name="insertParagraph">
+								<xsl:with-param name="text">
+									<xsl:variable name="text">
+										<xsl:call-template name="error_message">
+											<xsl:with-param name="message" select="concat('Error 11: Can not find term referenced by: ',$ref)"/>
+										</xsl:call-template>
+									</xsl:variable>
+									<xsl:text>* </xsl:text>
+									<xsl:value-of select="$text"/>
+								</xsl:with-param>
+							</xsl:call-template>
 						<!-- </li> -->
 					</xsl:otherwise>
 				</xsl:choose>
@@ -3784,20 +3829,26 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 					<li><xsl:apply-templates select="$term"/>.</li>
 				</xsl:otherwise>
 			</xsl:choose> -->			
-			<xsl:text>* </xsl:text>
-			<xsl:apply-templates select="$term"/>
-			<xsl:choose>
-				<xsl:when test="$moreNormRefs > 0">;</xsl:when>
-				<xsl:otherwise>.</xsl:otherwise>
-			</xsl:choose>
-			<xsl:text>&#xa;&#xa;</xsl:text>
+			<xsl:call-template name="insertParagraph">
+				<xsl:with-param name="text">
+					<xsl:text>* </xsl:text>
+					<xsl:apply-templates select="$term"/>
+					<xsl:choose>
+						<xsl:when test="$moreNormRefs > 0">;</xsl:when>
+						<xsl:otherwise>.</xsl:otherwise>
+					</xsl:choose>
+				</xsl:with-param>
+			</xsl:call-template>
 		</xsl:when>
 		<xsl:otherwise>
 			<!-- <li><xsl:apply-templates select="$term"/>;</li> -->
-			<xsl:text>* </xsl:text>
-			<xsl:apply-templates select="$term"/>
-			<xsl:text>;</xsl:text>
-			<xsl:text>&#xa;&#xa;</xsl:text>
+			<xsl:call-template name="insertParagraph">
+				<xsl:with-param name="text">
+					<xsl:text>* </xsl:text>
+					<xsl:apply-templates select="$term"/>
+					<xsl:text>;</xsl:text>
+				</xsl:with-param>
+		</xsl:call-template>
 		</xsl:otherwise>
 	</xsl:choose>
 			</xsl:when>
@@ -3808,16 +3859,19 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 							select="concat('Error 12: Can not find term referenced by: ',$ref)"/>
 				</xsl:call-template>
 				</li> -->
-				<xsl:text>* </xsl:text>
-				<xsl:variable name="text">
-					<xsl:call-template name="error_message">
-						<xsl:with-param 
-								name="message"
-								select="concat('Error 12: Can not find term referenced by: ',$ref)"/>
-					</xsl:call-template>
-				</xsl:variable>
-				<xsl:value-of select="$text"/>
-				<xsl:text>&#xa;&#xa;</xsl:text>
+				<xsl:call-template name="insertParagraph">
+					<xsl:with-param name="text">
+						<xsl:text>* </xsl:text>
+						<xsl:variable name="text">
+							<xsl:call-template name="error_message">
+								<xsl:with-param 
+										name="message"
+										select="concat('Error 12: Can not find term referenced by: ',$ref)"/>
+							</xsl:call-template>
+						</xsl:variable>
+						<xsl:value-of select="$text"/>
+					</xsl:with-param>
+				</xsl:call-template>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
@@ -3842,10 +3896,12 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 		</xsl:call-template>
 		
 		<!-- <p> -->		
-		<xsl:variable name="def"><xsl:apply-templates select="def"/></xsl:variable>
-		<xsl:value-of select="normalize-space($def)"/>
-		<!-- </p> -->
-		<xsl:text>&#xa;&#xa;</xsl:text>
+		<xsl:call-template name="insertParagraph">
+			<xsl:with-param name="text">
+				<xsl:apply-templates select="def"/>
+			</xsl:with-param>
+		</xsl:call-template>
+		<!-- </p> -->		
 	</xsl:template>
 	
 	<xsl:template match="def">
@@ -3970,13 +4026,16 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 				<xsl:apply-templates select="." mode="title"/>
 			</a>
 		</li> -->
-		<xsl:text>* </xsl:text>
-		<xsl:text>&lt;&lt;</xsl:text>
-		<xsl:apply-templates select="." mode="title"/>
-		<xsl:text>, </xsl:text>
-		<xsl:value-of select="$href"/>
-		<xsl:text>&gt;&gt;</xsl:text>
-		<xsl:text>&#xa;&#xa;</xsl:text>
+		<xsl:call-template name="insertParagraph">
+			<xsl:with-param name="text">
+				<xsl:text>* </xsl:text>
+				<xsl:text>&lt;&lt;</xsl:text>
+				<xsl:apply-templates select="." mode="title"/>
+				<xsl:text>, </xsl:text>
+				<xsl:value-of select="$href"/>
+				<xsl:text>&gt;&gt;</xsl:text>
+			</xsl:with-param>
+		</xsl:call-template>		
 	</xsl:template>
 
 	<xsl:template match="imgfile" mode="title">
