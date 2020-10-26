@@ -232,19 +232,14 @@
 		</xsl:if> -->
 		
 		<!-- Abstract -->
+		<xsl:message>[INFO] Processing Abstract ...</xsl:message>
 		<xsl:apply-templates select="resource" mode="abstract"/>
 
 		
 		<!-- Foreword-->
 		<!-- draughting_elements/sys/foreword.xml -->
-		<xsl:if test=" java:exists(java:java.io.File.new(concat($path, 'sys/foreword.xml')))">
-			<xsl:message>[INFO] Processing foreword.xml ...</xsl:message>
-			<!-- <xsl:variable name="foreword"> -->
-				<xsl:apply-templates select="document(concat($path, 'sys/foreword.xml'))" mode="foreword"/>
-			<!-- </xsl:variable> -->
-			<!-- <xsl:copy-of select="$foreword"/> -->
-			<!-- <xsl:apply-templates select="xalan:nodeset($foreword)/node()" mode="stepmod2mn"/> -->
-		</xsl:if>
+		<xsl:message>[INFO] Processing Foreword ...</xsl:message>
+		<xsl:apply-templates select="resource" mode="foreword"/>
 		
 		<!-- Introduction -->
 		<!-- draughting_elements/sys/introduction.xml -->
@@ -294,25 +289,6 @@
 		
 	</xsl:template>
 	
-	
-	<!-- =========== -->
-	<!--  Foreword -->
-	<xsl:template match="resource_clause" mode="foreword">		
-		<xsl:variable name="resource_xml" select="document(concat($path, '../',@directory,'/resource.xml'))"/>
-		<xsl:choose>
-			<xsl:when test="@pos">				
-				<xsl:apply-templates select="$resource_xml/*" mode="foreword"><!-- foreword_resource -->
-					 <xsl:with-param name="pos" select="string(@pos)"/>
-				 </xsl:apply-templates>
-			 </xsl:when>
-			 <xsl:otherwise>
-				 <xsl:apply-templates select="$resource_xml/*" mode="foreword"/> <!-- foreword_resource -->
-			 </xsl:otherwise>
-		 </xsl:choose>
-	</xsl:template>
-	
-	<!-- END Foreword -->
-	<!-- =========== -->
 	
 	
 	<!-- Introduction  -->
