@@ -273,16 +273,12 @@
 		
 		
 		<!-- 3 Terms, definitions and abbreviated terms -->
+		<!-- sys/3_defs.xml -->
 		<!-- 3.1 Terms and definitions -->
 		<!-- 3.2 Abbreviated terms -->
-		<xsl:if test=" java:exists(java:java.io.File.new(concat($path, 'sys/3_defs.xml')))">
-			<xsl:message>[INFO] Processing 3_defs.xml ...</xsl:message>
-			<xsl:variable name="terms_definitions">
-				<xsl:apply-templates select="document(concat($path, 'sys/3_defs.xml'))" mode="terms_definitions"/>
-			</xsl:variable>
-			<!-- <xsl:copy-of select="$terms_definitions"/> -->
-			<xsl:apply-templates select="xalan:nodeset($terms_definitions)/node()" mode="stepmod2mn"/>
-		</xsl:if>
+		<xsl:message>[INFO] Processing Terms, definitions and abbreviated terms ...</xsl:message>		
+		<xsl:apply-templates select="resource" mode="terms_definitions_resource"/>
+		
 		
 		<!--- 4 EXPRESS short listing -->
     <!-- 4.1 General -->
@@ -367,20 +363,6 @@
 	
 	
 	
-	<!-- Terms and Definitions -->
-	<!-- =========== -->
-	<xsl:template match="resource_clause" mode="terms_definitions">	
-		<xsl:variable name="resource_xml" select="document(concat($path, '../',@directory,'/resource.xml'))"/>	    
-		
-		<xsl:apply-templates select="$resource_xml/*" mode="terms_definitions_resource"/>
-		
-	</xsl:template>
-	
-	<!-- END Terms and Definitions -->
-	<!-- ================== -->
-	
-	
-	
 	<!-- EXPRESS short listing -->
 	<!-- =========== -->
 	<xsl:template match="resource_clause" mode="schema">	
@@ -406,24 +388,7 @@
 	<!-- ================== -->
 	
 	
-	<!-- resource_clause.xsl -->
-	<xsl:template match="resource_clause" mode="resource">
-		<!-- Ex. <resource_clause directory="draughting_elements"/> -->
-		value=<xsl:value-of select="@directory"/>
-		<xsl:text>&#xa;</xsl:text>
-		
-		
-		
-	</xsl:template>
-	
 
-
-
-
-	<xsl:template match="scope/text()">
-		<xsl:value-of select="normalize-space(.)"/>
-		<xsl:text>&#xa;</xsl:text>
-	</xsl:template>
 
 
 	<xsl:template name="insertHeaderADOC">

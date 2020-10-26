@@ -47,19 +47,8 @@ $Id: sect_3_defs.xsl,v 1.5 2009/12/24 17:42:04 lothartklein Exp $
     </a>
   </h2> -->
 	
-	<xsl:variable name="header">
-		<xsl:choose>
-			<xsl:when test="./abbreviation">
-				Terms, definitions and abbreviated terms
-			</xsl:when>
-			<xsl:otherwise>
-				<!-- every module references Terms defined in other standards,
-						 and abbreviations hence as per ISO -->
-				Terms, definitions and abbreviated terms
-			</xsl:otherwise>
-		</xsl:choose>
-	</xsl:variable>
-	
+	<xsl:variable name="header">Terms, definitions and abbreviated terms</xsl:variable>
+		
 	<xsl:text>&#xa;</xsl:text>
 	<xsl:call-template name="insertHeaderADOC">
 		<xsl:with-param name="id" select="'defns'"/>		
