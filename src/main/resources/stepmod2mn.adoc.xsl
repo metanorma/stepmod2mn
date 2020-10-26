@@ -19,6 +19,7 @@
 	<xsl:import href="stepmod.base_xsl/res_doc/res_toc.xsl"/>
 	<xsl:import href="stepmod.base_xsl/res_doc/resource.xsl"/>
 	<xsl:import href="stepmod.base_xsl/res_doc/sect_1_scope.xsl"/>
+	<xsl:import href="stepmod.base_xsl/res_doc/sect_2_refs.xsl"/>
 	<xsl:import href="stepmod.base_xsl/res_doc/sect_3_defs.xsl"/>
 	<xsl:import href="stepmod.base_xsl/res_doc/sect_schema.xsl"/>
 	<xsl:import href="stepmod.base_xsl/res_doc/sect_4_express.xsl"/>
@@ -265,24 +266,12 @@
 		<xsl:message>[INFO] Processing Scope ...</xsl:message>
 		<xsl:apply-templates select="resource" mode="scope_resource"/>		
 		
-		<!-- <xsl:if test=" java:exists(java:java.io.File.new(concat($path, 'sys/1_scope.xml')))">
-			<xsl:message>[INFO] Processing scope.xml ...</xsl:message>
-			<xsl:variable name="scope">
-				<xsl:apply-templates select="document(concat($path, 'sys/1_scope.xml'))" mode="scope"/>
-			</xsl:variable>			
-			<xsl:apply-templates select="xalan:nodeset($scope)/node()" mode="stepmod2mn"/>
-		</xsl:if> -->
-		
 		<!-- 2 Normative references -->
-		<xsl:if test=" java:exists(java:java.io.File.new(concat($path, 'sys/2_refs.xml')))">
-			<xsl:message>[INFO] Processing 2_refs.xml ...</xsl:message>
-			<xsl:variable name="norm_refs">
-				<xsl:apply-templates select="document(concat($path, 'sys/2_refs.xml'))" mode="norm_refs"/>
-			</xsl:variable>
-			<!-- <xsl:copy-of select="$norm_refs"/> -->
-			<xsl:apply-templates select="xalan:nodeset($norm_refs)/node()" mode="stepmod2mn"/>
-		</xsl:if>
-		          
+		<!-- sys/2_refs.xml -->
+		<xsl:message>[INFO] Processing Normative references ...</xsl:message>		
+		<xsl:apply-templates select="resource" mode="norm_refs_resource"/>
+		
+		
 		<!-- 3 Terms, definitions and abbreviated terms -->
 		<!-- 3.1 Terms and definitions -->
 		<!-- 3.2 Abbreviated terms -->
@@ -375,52 +364,6 @@
 	
 	<!-- END Introduction  -->
 	<!-- =========== -->
-	
-	
-	<!-- Scope -->
-	<!-- =========== -->
-	<!-- <xsl:template match="resource_clause" mode="scope">	
-		<xsl:variable name="resource_xml" select="document(concat($path, '../',@directory,'/resource.xml'))"/>
-	  
-		<xsl:choose>
-			<xsl:when test="@pos">				
-				<xsl:apply-templates select="$resource_xml/*" mode="scope_resource">
-					 <xsl:with-param name="pos" select="string(@pos)"/>
-				 </xsl:apply-templates>
-			 </xsl:when>
-			 <xsl:otherwise>
-				 <xsl:apply-templates select="$resource_xml/*" mode="scope_resource"/>
-			 </xsl:otherwise>
-		 </xsl:choose>
-			
-	</xsl:template>
-	 -->
-	<!-- END Scope  -->
-	<!-- =========== -->
-	
-	
-	
-	<!-- Normative References -->
-	<!-- =========== -->
-	<xsl:template match="resource_clause" mode="norm_refs">	
-		<xsl:variable name="resource_xml" select="document(concat($path, '../',@directory,'/resource.xml'))"/>
-	    
-		<xsl:apply-templates select="$resource_xml/*" mode="norm_refs_resource"/>
-		
-	</xsl:template>
-	
-	
-	<xsl:template match="resource" mode="norm_refs_resource">
-		<xsl:call-template name="output_normrefs">
-			<xsl:with-param name="resource_number" select="./@part"/>
-			<xsl:with-param name="current_resource" select="."/>
-		</xsl:call-template>
-	</xsl:template>
-
-
-
-	<!-- END Normative References -->
-	<!-- ================== -->
 	
 	
 	

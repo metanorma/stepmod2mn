@@ -2382,7 +2382,7 @@ the types, entity specializations, and functions that are specific to this part 
 		<xsl:text>&#xa;</xsl:text>
 		<xsl:text>== </xsl:text>
 		<xsl:text>Normative references</xsl:text>
-		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>&#xa;&#xa;</xsl:text>
 		
 		
     <!--<p>
@@ -2393,10 +2393,13 @@ the types, entity specializations, and functions that are specific to this part 
     </p>--> 
     
     <!-- MWD 2018-07-04 6538 the above paragraph replaced with this one -->
-    <p>
-      The following documents are referred to in the text in such a way that some or all of their content constitutes requirements of this document. 
-      For dated references, only the edition cited applies. For undated references, the latest edition of the referenced document (including any amendments) applies.
-    </p>
+    <!-- <p> -->		
+      <xsl:text>The following documents are referred to in the text in such a way that some or all of their content constitutes requirements of this document. </xsl:text>
+      <xsl:text>For dated references, only the edition cited applies. For undated references, the latest edition of the referenced document (including any amendments) applies.</xsl:text>
+    <!-- </p> -->
+		
+		
+		<xsl:text>&#xa;&#xa;</xsl:text>
     
     <!-- output any issues -->
     <xsl:apply-templates select="." mode="output_clause_issue">

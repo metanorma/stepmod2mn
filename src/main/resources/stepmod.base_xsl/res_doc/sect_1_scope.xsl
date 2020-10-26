@@ -9,26 +9,26 @@ $Id: sect_1_scope.xsl,v 1.6 2008/12/16 15:44:48 darla Exp $
 
 <!-- <xsl:import href="resource.xsl"/>
 <xsl:import href="resource_clause.xsl"/> -->
-<xsl:output method="html"/>
+<!-- <xsl:output method="html"/> -->
 
-<!-- overwrites the template declared in resource.xsl -->
-<xsl:template match="resource" mode="scope_resource">
-<!--  <xsl:apply-templates select="." mode="special_header"/>
-  <h1>
-    Industrial automation systems and integration &#8212; <br/>
-    Product data representation and exchange &#8212;  <br/>
-    Part <xsl:value-of select="@part"/>:<br/>
-	<xsl:apply-templates select="." mode="type"/>: 
-    <xsl:call-template name="res_display_name">
-      <xsl:with-param name="res" select="@name"/>
-    </xsl:call-template>
-  </h1> -->
-  <xsl:apply-templates select="." mode="scope_header"/>	
-	
-  <xsl:apply-templates select="./scope"/>
-  <xsl:apply-templates select="./inscope"/>
-  <xsl:apply-templates select="./outscope"/>
-</xsl:template>
+	<!-- overwrites the template declared in resource.xsl -->
+	<xsl:template match="resource" mode="scope_resource">
+	<!--  <xsl:apply-templates select="." mode="special_header"/>
+		<h1>
+			Industrial automation systems and integration &#8212; <br/>
+			Product data representation and exchange &#8212;  <br/>
+			Part <xsl:value-of select="@part"/>:<br/>
+		<xsl:apply-templates select="." mode="type"/>: 
+			<xsl:call-template name="res_display_name">
+				<xsl:with-param name="res" select="@name"/>
+			</xsl:call-template>
+		</h1> -->
+		<xsl:apply-templates select="." mode="scope_header"/>	
+		
+		<xsl:apply-templates select="./scope"/>
+		<xsl:apply-templates select="./inscope"/>
+		<xsl:apply-templates select="./outscope"/>
+	</xsl:template>
 
   <xsl:template match="resource" mode="scope_header">
     <xsl:call-template name="clause_header">
@@ -46,22 +46,22 @@ $Id: sect_1_scope.xsl,v 1.6 2008/12/16 15:44:48 darla Exp $
       <xsl:apply-templates select="." mode="doctype"/>
     </xsl:variable>
     <xsl:choose>
-	  <xsl:when test="$doctype='aic'">
-        <xsl:text>This part of ISO 10303 specifies the interpretation of the integrated resources to satisfy requirements for the representation of </xsl:text>
-        <xsl:value-of select="translate($resdoc_name,$ucletters,$lcletters)"/>.
-				<xsl:text>&#xa;</xsl:text>
-	  </xsl:when>
-	  <xsl:when test="$doctype='igr'">
-        <xsl:text>This part of ISO 10303 specifies the integrated generic resource constructs for </xsl:text>
-        <xsl:value-of select="translate($resdoc_name,$ucletters,$lcletters)"/>.
-				<xsl:text>&#xa;</xsl:text>
-	  </xsl:when>
-	  <xsl:when test="$doctype='iar'">
-        <xsl:text>This part of ISO 10303 specifies the integrated application resource constructs for </xsl:text>
-        <xsl:value-of select="translate($resdoc_name,$ucletters,$lcletters)"/>.
-				<xsl:text>&#xa;</xsl:text>
-	  </xsl:when>
-	</xsl:choose>
+			<xsl:when test="$doctype='aic'">
+					<xsl:text>This part of ISO 10303 specifies the interpretation of the integrated resources to satisfy requirements for the representation of </xsl:text>
+					<xsl:value-of select="translate($resdoc_name,$ucletters,$lcletters)"/>.
+					<xsl:text>&#xa;</xsl:text>
+			</xsl:when>
+			<xsl:when test="$doctype='igr'">
+					<xsl:text>This part of ISO 10303 specifies the integrated generic resource constructs for </xsl:text>
+					<xsl:value-of select="translate($resdoc_name,$ucletters,$lcletters)"/>.
+					<xsl:text>&#xa;</xsl:text>
+			</xsl:when>
+			<xsl:when test="$doctype='iar'">
+					<xsl:text>This part of ISO 10303 specifies the integrated application resource constructs for </xsl:text>
+					<xsl:value-of select="translate($resdoc_name,$ucletters,$lcletters)"/>.
+					<xsl:text>&#xa;</xsl:text>
+			</xsl:when>
+		</xsl:choose>
   </xsl:template>
 
 <!-- 
