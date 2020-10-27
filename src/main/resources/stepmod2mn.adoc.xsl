@@ -261,16 +261,18 @@
 		<xsl:message>[INFO] Processing Annex A Short names of entities ...</xsl:message>		
 		<xsl:apply-templates select="resource" mode="annex_a"/>
 		
-		<!-- Annex A Short names of entities -->
+		<!-- Annex B Information object registration -->
 		<xsl:message>[INFO] Processing Annex B Information object registration ...</xsl:message>		
 		<xsl:apply-templates select="resource" mode="annex_b"/>
 
-
-		<!-- Annex A Short names of entities -->
+		<!-- Annex C Computer interpretable listings -->
 		<xsl:message>[INFO] Processing Annex C Computer interpretable listings ...</xsl:message>		
-		<xsl:apply-templates select="resource" mode="annexc"/>
-
-		  
+		<xsl:apply-templates select="resource" mode="annexc"/> <!-- sect_c_exp.xsl  -->
+		
+		<!-- Annex D EXPRESS-G diagrams -->
+		<xsl:message>[INFO] Processing Annex D EXPRESS-G diagrams ...</xsl:message>		
+		<xsl:apply-templates select="resource" mode="annexd"/> <!-- sect_d_expg.xsl  -->
+			
 		
 		<xsl:message>[INFO] Processing Bibliography ...</xsl:message>		
 		<xsl:apply-templates select="resource" mode="bibliography"/>

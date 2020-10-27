@@ -1589,19 +1589,21 @@ Purpose:
 			<xsl:with-param name="aname" select="'annexd'"/>
 		</xsl:call-template>
 
-		<p>
+		<!-- <p> -->
+		<xsl:call-template name="insertParagraph">
+			<xsl:with-param name="text">
 			The diagrams in this annex correspond to the EXPRESS schemas specified in this part of ISO 10303.
 			The diagrams use the EXPRESS-G graphical notation for the EXPRESS language. EXPRESS-G is
 			defined in ISO 10303-11.
-		</p>
+			</xsl:with-param>
+		</xsl:call-template>
+		<!-- </p> -->
 
-		<!-- <ul> -->
-		<xsl:text>&#xa;</xsl:text>
+		<!-- <ul> -->		
 					
 			<xsl:for-each select="./schema/express-g/imgfile" >
 				<xsl:variable name="schema">
-					<xsl:value-of 
-							select="substring-before(@file,'expg')"/>
+					<xsl:value-of select="substring-before(@file,'expg')"/>
 				</xsl:variable>
 				<xsl:variable name="ldiagno">
 					<xsl:value-of select="substring-after(@file,'expg')"/>       
@@ -1645,11 +1647,11 @@ Purpose:
 					<xsl:text>* &lt;&lt;</xsl:text>
 					
 					<!-- <a href="{$schema_url}">
-						<xsl:value-of 
-					select="concat('Figure D.',$clauseno, 
-						' &#8212; EXPRESS-G diagram of the ', $schema, ' (', $rel_clauseno,' of ', $img_count, ')' )" />
+						<xsl:value-of select="concat('Figure D.',$clauseno, ' &#8212; EXPRESS-G diagram of the ', $schema, ' (', $rel_clauseno,' of ', $img_count, ')' )" />
 					</a> -->
 					<xsl:value-of select="concat($schema,'expg',$diagno)"/>
+					<xsl:text>,</xsl:text>
+					<xsl:value-of select="concat('Figure D.',$clauseno, ' &#8212; EXPRESS-G diagram of the ', $schema, ' (', $rel_clauseno,' of ', $img_count, ')' )" />
 					<xsl:text>&gt;&gt;</xsl:text>
 					<xsl:choose>
 						<xsl:when test="position()!=last()">
@@ -1672,12 +1674,11 @@ Purpose:
 		<xsl:param name="pos"/>
 		<xsl:variable name="schema_display_name">
 			<xsl:call-template name="res_display_name">
-	<xsl:with-param name="res" select="@name"/>
+				<xsl:with-param name="res" select="@name"/>
 			</xsl:call-template>           
 		</xsl:variable>
 
-		<xsl:variable name="schema_no"
-			select="$pos"/>
+		<xsl:variable name="schema_no" select="$pos"/>
 
 		<xsl:variable name="doctype">
 			<xsl:apply-templates select="./ancestor::resource" mode="doctype"/>
