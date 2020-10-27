@@ -27,7 +27,7 @@
 	<xsl:import href="stepmod.base_xsl/res_doc/sect_a_short_names.xsl"/>
 	<xsl:import href="stepmod.base_xsl/res_doc/sect_b_obj_reg.xsl"/>
 	<xsl:import href="stepmod.base_xsl/res_doc/sect_biblio.xsl"/>
-	
+	<xsl:import href="stepmod.base_xsl/res_doc/sect_g_change.xsl"/>
 	
 	
 	<xsl:import href="stepmod.base_xsl/projmg/resource_issues.xsl"/>
@@ -273,6 +273,12 @@
 		<xsl:message>[INFO] Processing Annex D EXPRESS-G diagrams ...</xsl:message>		
 		<xsl:apply-templates select="resource" mode="annexd"/> <!-- sect_d_expg.xsl  -->
 			
+		<!-- Annex E F G -->
+			
+		<!-- Annex x Change history -->
+		<xsl:message>[INFO] Processing Annex Change history ...</xsl:message>		
+		<xsl:apply-templates select="resource" mode="change_history"/> <!-- sect_g_change.xsl -->
+			
 		
 		<xsl:message>[INFO] Processing Bibliography ...</xsl:message>		
 		<xsl:apply-templates select="resource" mode="bibliography"/>
@@ -352,6 +358,13 @@
 		<xsl:text>&#xa;&#xa;</xsl:text>
 	</xsl:template>
 
+
+	<xsl:template name="insertULitem">
+		<xsl:param name="text"/>
+		<xsl:text>* </xsl:text>
+		<xsl:value-of select="normalize-space($text)"/>
+		<xsl:text>&#xa;&#xa;</xsl:text>
+	</xsl:template>
 
 	<xsl:template match="p | P" mode="stepmod2mn">
 		<xsl:choose>
