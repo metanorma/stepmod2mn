@@ -3952,6 +3952,8 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 		<xsl:apply-templates/>
 	</xsl:template>
 	
+
+	
 	<!-- MWD -->
 	<xsl:template match="annex_clause">
 		<xsl:variable name="title" select="@title"/>

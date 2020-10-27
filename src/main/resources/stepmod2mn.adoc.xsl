@@ -27,6 +27,8 @@
 	<xsl:import href="stepmod.base_xsl/res_doc/sect_a_short_names.xsl"/>
 	<xsl:import href="stepmod.base_xsl/res_doc/sect_b_obj_reg.xsl"/>
 	<xsl:import href="stepmod.base_xsl/res_doc/sect_biblio.xsl"/>
+	<xsl:import href="stepmod.base_xsl/res_doc/sect_examples.xsl"/>
+	<xsl:import href="stepmod.base_xsl/res_doc/sect_tech_discussion.xsl"/>
 	<xsl:import href="stepmod.base_xsl/res_doc/sect_g_change.xsl"/>
 	
 	
@@ -274,6 +276,19 @@
 		<xsl:apply-templates select="resource" mode="annexd"/> <!-- sect_d_expg.xsl  -->
 			
 		<!-- Annex E F G -->
+			
+		<xsl:if test="//examples">
+			<!-- Annex Examples -->		
+			<xsl:message>[INFO] Processing Annex Examples ...</xsl:message>		
+			<xsl:apply-templates select="resource" mode="examples"/> <!-- sect_examples.xsl -->
+		</xsl:if>
+			
+		<xsl:if test="//tech_discussion">
+			<!-- Annex Technical discussion -->		
+			<xsl:message>[INFO] Processing Annex Technical discussion ...</xsl:message>		
+			<xsl:apply-templates select="resource" mode="tech_discussion"/> <!-- sect_tech_discussion.xsl -->
+		</xsl:if>
+
 			
 		<!-- Annex x Change history -->
 		<xsl:message>[INFO] Processing Annex Change history ...</xsl:message>		

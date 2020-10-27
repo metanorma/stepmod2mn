@@ -1210,11 +1210,12 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
         <xsl:apply-templates/>
       </p>
     </xsl:otherwise>
-  </xsl:choose> -->
-	
-	<xsl:variable name="text"><xsl:apply-templates/></xsl:variable>
-	<xsl:value-of select="normalize-space($text)"/>
-	<xsl:text>&#xa;&#xa;</xsl:text>
+  </xsl:choose> -->	
+	<xsl:call-template name="insertParagraph">
+		<xsl:with-param name="text">
+			<xsl:apply-templates/>
+		</xsl:with-param>
+	</xsl:call-template>
 	
 </xsl:template>
 
@@ -1291,7 +1292,10 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
   <!-- <b>
     <xsl:apply-templates/>
   </b> -->
-	<xsl:text> *</xsl:text><xsl:apply-templates/><xsl:text>* </xsl:text>
+	<xsl:text>*</xsl:text><xsl:apply-templates/><xsl:text>*</xsl:text>
+	<xsl:if test="following-sibling::*[1][local-name() = 'p'] or following-sibling::*[1][local-name = 'P']">
+		<xsl:text>&#xa;&#xa;</xsl:text>
+	</xsl:if>
 </xsl:template>
 
 <xsl:template match="tt">
@@ -1306,7 +1310,10 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
   <!-- <i>
     <xsl:apply-templates/>
   </i> -->
-	<xsl:text> _</xsl:text><xsl:apply-templates/><xsl:text>_ </xsl:text>
+	<xsl:text>_</xsl:text><xsl:apply-templates/><xsl:text>_</xsl:text>
+	<xsl:if test="following-sibling::*[1][local-name() = 'p'] or following-sibling::*[1][local-name = 'P']">
+		<xsl:text>&#xa;&#xa;</xsl:text>
+	</xsl:if>
 </xsl:template>
 
 <!-- added template to display eqn  and bigeqn RJG March 2012 -->
