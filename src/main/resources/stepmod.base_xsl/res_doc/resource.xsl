@@ -1351,48 +1351,55 @@ Purpose:
 	<xsl:template match="resource" mode="annexc">
 		<xsl:call-template name="annex_header">
 			<xsl:with-param name="annex_no" select="'C'"/>
-			<xsl:with-param name="heading" 
-					select="'Computer interpretable listings'"/>
+			<xsl:with-param name="heading" select="'Computer interpretable listings'"/>
 			<xsl:with-param name="aname" select="'annexc'"/>
 		</xsl:call-template>
 
 
-		<xsl:variable name="UPPER"
-			select="'ABCDEFGHIEYLMNOPQRSTUVWXYZ'"/>
-		<xsl:variable name="LOWER"
-			select="'abcdefghijklmnopqrstuvwxyz'"/>
-		<xsl:variable name="mim_schema"
-			select="translate(concat(@name,'_mim'),$LOWER, $UPPER)"/>
+		<xsl:variable name="UPPER" select="'ABCDEFGHIEYLMNOPQRSTUVWXYZ'"/>
+		<xsl:variable name="LOWER" select="'abcdefghijklmnopqrstuvwxyz'"/>
+		<xsl:variable name="mim_schema" select="translate(concat(@name,'_mim'),$LOWER, $UPPER)"/>
 
 
-		<xsl:variable name="names_url"
-					select="'http://standards.iso.org/iso/10303/tech/short_names/short-names.txt'"/>
+		<xsl:variable name="names_url" select="'http://standards.iso.org/iso/10303/tech/short_names/short-names.txt'"/>
 		<xsl:variable name="smrl_version_number" select="document(concat($path, '../../../data/library/part.xml'))//part/@version.number"/> <!-- MWD 2018-02-23 -->
 		<xsl:variable name="parts_url" select="concat('http://standards.iso.org/iso/10303/smrl/v', $smrl_version_number, '/tech/smrlv', $smrl_version_number, '.zip')"/> <!-- MWD 2018-02-23 -->
 
-		<p>
+		<!-- <p> -->
+		<xsl:call-template name="insertParagraph">
+			<xsl:with-param name="text">
 			This annex references a listing of the EXPRESS entity names and
 			corresponding short names as specified or referenced in this part of ISO
 			10303. It also provides a listing of each EXPRESS schema specified in this
 			part of ISO 10303 without comments or other explanatory text. These
 			listings are available in computer-interpretable form in Table C.1 and can
 			be found at the following URLs:
-		</p>
-		<table>
+			</xsl:with-param>
+		</xsl:call-template>
+		<!-- </p> -->
+		
+		
+		<!-- <table>
 			<tr>
-	<td>&#160;&#160;</td>
-	<td>Short names:</td>
-	<td><a href="{$names_url}"   target="_blank"><xsl:value-of select="$names_url"/></a></td>
-			</tr>
-			<tr>
-	<td>&#160;&#160;</td>
-	<td>EXPRESS:</td>
-	<td><a href="{$parts_url}"   target="_blank"><xsl:value-of select="$parts_url"/></a></td>
+				<td>&#160;&#160;</td>
+				<td>Short names:</td>
+				<td><a href="{$names_url}"   target="_blank"><xsl:value-of select="$names_url"/></a></td>
+						</tr>
+						<tr>
+				<td>&#160;&#160;</td>
+				<td></td>
+				<td><a href="{$parts_url}"   target="_blank"><xsl:value-of select="$parts_url"/></a></td>
 			</tr>
 		</table>
-		<p/>
-
-
+		<p/> -->
+		
+		<xsl:text>Short names::: </xsl:text>
+		<xsl:value-of select="$names_url"/><xsl:text>[</xsl:text><xsl:value-of select="$names_url"/><xsl:text>]</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>EXPRESS::: </xsl:text>
+		<xsl:value-of select="$parts_url"/><xsl:text>[</xsl:text><xsl:value-of select="$parts_url"/><xsl:text>]</xsl:text>
+		<xsl:text>&#xa;&#xa;</xsl:text>
+		
 		<!-- <div align="center">
 			<a name="table_e1">
 	<b>
@@ -1401,95 +1408,123 @@ Purpose:
 			</a>
 		</div> -->
 		
+		
 		<xsl:text>[#table_e1]</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>[cols=to do]</xsl:text>
+		<xsl:text>[cols="^,^",options="header"]</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
 		<xsl:text>.EXPRESS listings</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
+		
+		<xsl:text>|===</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+			
+		<!-- <br/> -->
 
-		<br/>
-
-		<div align="center">
+		<!-- <div align="center">
 			<table border="1" cellspacing="1">
-	<tr>
-		<xsl:choose>
-			<xsl:when test="$FILE_EXT='.xml'">
-				<td><b>XML file</b></td>
-			</xsl:when>
-			<xsl:otherwise>
-				<td><b>HTML file</b></td>
-			</xsl:otherwise>
-		</xsl:choose>
-		<td><b>ASCII file</b></td>
-		<!--<xsl:choose>
-			<xsl:when test="$FILE_EXT='.xml'"/>
-			<xsl:otherwise>
-				<td><b>Combined ASCII file</b></td>
-			</xsl:otherwise>
-		</xsl:choose> MWD 2017-05-31 -->
-	</tr>
+				<tr>
+					<xsl:choose>
+						<xsl:when test="$FILE_EXT='.xml'">
+							<td><b>XML file</b></td>
+						</xsl:when>
+						<xsl:otherwise>
+							<td><b>HTML file</b></td>
+						</xsl:otherwise>
+					</xsl:choose>
+					<td><b>ASCII file</b></td> -->
+					<!--<xsl:choose>
+						<xsl:when test="$FILE_EXT='.xml'"/>
+						<xsl:otherwise>
+							<td><b>Combined ASCII file</b></td>
+						</xsl:otherwise>
+					</xsl:choose> MWD 2017-05-31 -->
+				<!-- </tr> -->
+				
+				<!-- table header -->
+				
+				<xsl:text>| </xsl:text>
+				<xsl:choose>
+					<xsl:when test="$FILE_EXT='.xml'">
+						<xsl:text>XML file</xsl:text>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:text>HTML file</xsl:text>
+					</xsl:otherwise>
+				</xsl:choose>
+				<xsl:text> | ASCII file</xsl:text>
+				<xsl:text>&#xa;&#xa;</xsl:text>
 
-	<xsl:variable name="wgnumber" select="./@wg.number.express"/>
+			<xsl:variable name="wgnumber" select="./@wg.number.express"/>
 
-	<xsl:for-each select="./schema" >
+			<xsl:for-each select="./schema" >
 
-		<xsl:variable name="resource_dir">
-			<xsl:call-template name="resource_directory">
-				<xsl:with-param name="resource" select="@name"/>
-			</xsl:call-template>
-		</xsl:variable>
+				<xsl:variable name="resource_dir">
+					<xsl:call-template name="resource_directory">
+						<xsl:with-param name="resource" select="@name"/>
+					</xsl:call-template>
+				</xsl:variable>
 
-		<xsl:variable name="express_exp" select="concat($resource_dir,'/',@name,'.exp')"/>
+				<xsl:variable name="express_exp" select="concat($resource_dir,'/',@name,'.exp')"/>
 
 
-		<xsl:variable name="pos" select="position()+3"/>
-		<xsl:variable name="schema_file" select="./@name" />
-		<xsl:variable name="schema_url">
-			<xsl:choose>
-				<xsl:when test="$FILE_EXT='.xml'">
-		<xsl:value-of select="concat('c_exp_schema_',$pos,'.xml')"/>
-				</xsl:when>
-				<xsl:otherwise>
-		<xsl:value-of select="concat('c_exp_schema_',$pos,'.htm')"/>
-				</xsl:otherwise>
-			</xsl:choose>
-		</xsl:variable>
+				<xsl:variable name="pos" select="position()+3"/>
+				<xsl:variable name="schema_file" select="./@name" />
+				<xsl:variable name="schema_url">
+					<xsl:choose>
+						<xsl:when test="$FILE_EXT='.xml'">
+							<xsl:value-of select="concat('c_exp_schema_',$pos,'.xml')"/>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:value-of select="concat('c_exp_schema_',$pos,'.htm')"/>
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:variable>
 
-		<tr>
-			<td>
-				<a href="{$schema_url}">
-		<xsl:value-of select="concat($schema_file,$FILE_EXT)"/>
-				</a>
-			</td>
-			<td>
-				<a href="../../{$express_exp}"><xsl:value-of select="$schema_file"/>.exp</a>
-			</td>
+				<!-- <tr>
+					<td>
+						<a href="{$schema_url}">
+							<xsl:value-of select="concat($schema_file,$FILE_EXT)"/>
+						</a>
+					</td>
+					<td>
+						<a href="../../{$express_exp}"><xsl:value-of select="$schema_file"/>.exp</a>
+					</td> -->
+					
+					
+					<xsl:text>| </xsl:text><xsl:value-of select="concat($schema_file,$FILE_EXT)"/>[<xsl:value-of select="$schema_url"/><xsl:text>] </xsl:text>
+					<xsl:text>| </xsl:text><xsl:value-of select="$schema_file"/>.exp[<xsl:value-of select="concat('../../', $express_exp)"/><xsl:text>]</xsl:text>
+					<xsl:text>&#xa;</xsl:text>
+					
+					<!--<xsl:if test="$FILE_EXT!='.xml'">
+						<td>
+				<xsl:variable name="test_wg_number">
+					<xsl:call-template name="test_wg_number">
+						<xsl:with-param name="wgnumber" select="$wgnumber"/>
+					</xsl:call-template>
+				</xsl:variable>
+				<xsl:choose>
+					<xsl:when test="contains($test_wg_number,'Error')">
+						<xsl:value-of select="concat('ISO/TC 184/SC 4/WG 12 N',$wgnumber)"/>
+					</xsl:when>
+					<xsl:otherwise>
 
-			<!--<xsl:if test="$FILE_EXT!='.xml'">
-				<td>
-		<xsl:variable name="test_wg_number">
-			<xsl:call-template name="test_wg_number">
-				<xsl:with-param name="wgnumber" select="$wgnumber"/>
-			</xsl:call-template>
-		</xsl:variable>
-		<xsl:choose>
-			<xsl:when test="contains($test_wg_number,'Error')">
-				<xsl:value-of select="concat('ISO/TC 184/SC 4/WG 12 N',$wgnumber)"/>
-			</xsl:when>
-			<xsl:otherwise>
-
-				<a href="../wg12n{$wgnumber}.exp">
-					<xsl:value-of select="concat('ISO/TC 184/SC 4/WG 12 N',$wgnumber)"/>
-				</a>
-			</xsl:otherwise>
-		</xsl:choose>
-				</td>
-			</xsl:if>  MWD 2017-05-31 -->
-		</tr>
-	</xsl:for-each>
-			</table>
-		</div>
+						<a href="../wg12n{$wgnumber}.exp">
+							<xsl:value-of select="concat('ISO/TC 184/SC 4/WG 12 N',$wgnumber)"/>
+						</a>
+					</xsl:otherwise>
+				</xsl:choose>
+						</td>
+					</xsl:if>  MWD 2017-05-31 -->
+				<!-- </tr> -->
+			</xsl:for-each>
+			<!-- </table> -->
+		<!-- </div> -->
+		
+		<xsl:text>|===</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		
 		<!--<p>
 		If there is difficulty accessing these sites, contact ISO Central
 		Secretariat.
@@ -1506,8 +1541,7 @@ Purpose:
 				form at the 
 				above URLs is informative. The information that is contained in the
 				body of this part of ISO 10303 is normative. 
-		</xsl:variable>
-		<xsl:text>&#xa;&#xa;</xsl:text>    
+		</xsl:variable>		
 		<xsl:text>NOTE: </xsl:text><xsl:value-of select="normalize-space($note)"/>
 		<xsl:text>&#xa;&#xa;</xsl:text>
 		

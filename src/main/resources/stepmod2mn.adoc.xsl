@@ -264,7 +264,13 @@
 		<!-- Annex A Short names of entities -->
 		<xsl:message>[INFO] Processing Annex B Information object registration ...</xsl:message>		
 		<xsl:apply-templates select="resource" mode="annex_b"/>
-		
+
+
+		<!-- Annex A Short names of entities -->
+		<xsl:message>[INFO] Processing Annex C Computer interpretable listings ...</xsl:message>		
+		<xsl:apply-templates select="resource" mode="annexc"/>
+
+		  
 		
 		<xsl:message>[INFO] Processing Bibliography ...</xsl:message>		
 		<xsl:apply-templates select="resource" mode="bibliography"/>
