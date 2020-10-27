@@ -8,6 +8,7 @@ Purpose:
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"		
 	xmlns:xalan="http://xml.apache.org/xalan" 
+	xmlns:java="http://xml.apache.org/xalan/java" 
 		version="1.0">
 		
 		<!-- xmlns:msxsl="urn:schemas-microsoft-com:xslt"
@@ -4091,8 +4092,7 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 	 the default bibitem.inc and bibitem in current document and start
 	 counting from there
 		-->
-		<xsl:variable name="bibitem_cnt" 
-			select="count(./bibitem)"/>
+		<xsl:variable name="bibitem_cnt" select="count(./bibitem)"/>
 
 		<xsl:apply-templates select="./bibitem.inc">
 			<xsl:with-param name="number_start" select="$bibitem_cnt"/>
@@ -4110,27 +4110,43 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 		-->
 		<xsl:param name="number_inc" select="0"/>
 
+		<xsl:param name="ref"/>
+
 		<xsl:variable name="number">
 			<!-- if the number is provided, use it, else count -->
 			<xsl:choose>
-	<xsl:when test="$number_inc>0">
-		<xsl:value-of select="$number_inc"/>
-	</xsl:when>
-	<xsl:otherwise>
-		<xsl:number count="bibitem"/>
-	</xsl:otherwise>
+				<xsl:when test="$number_inc>0">
+					<xsl:value-of select="$number_inc"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:number count="bibitem"/>
+				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
-		<p>
-			[<xsl:value-of select="$number_start+$number"/>] 
+		<!-- <p>
+			[<xsl:value-of select="$number_start+$number"/>]  -->
 			<!--	<xsl:apply-templates select="orgname"/> 
 		<xsl:apply-templates select="orgname"/>   -->
-			<xsl:apply-templates select="stdnumber"/>
+			<!-- <xsl:apply-templates select="stdnumber"/>				
 			<xsl:apply-templates select="stdtitle"/>
 			<xsl:apply-templates select="subtitle"/>
 			<xsl:apply-templates select="pubdate"/>
-			<xsl:apply-templates select="ulink"/>
-		</p>
+			<xsl:apply-templates select="ulink"/> -->
+		<!-- </p> -->
+		
+		<xsl:call-template name="insertParagraph">
+			<xsl:with-param name="text">
+				<xsl:text>* </xsl:text>
+				<xsl:apply-templates select="stdnumber">
+					<xsl:with-param name="ref" select="$ref"/>
+				</xsl:apply-templates>
+				<xsl:apply-templates select="stdtitle"/>
+				<xsl:apply-templates select="subtitle"/>
+				<xsl:apply-templates select="pubdate"/>
+				<xsl:apply-templates select="ulink"/>
+			</xsl:with-param>
+		</xsl:call-template>
+		
 	</xsl:template>
 
 
@@ -4139,43 +4155,48 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 		<xsl:param name="number_start" select="0"/>
 
 		<xsl:variable name="ref" select="@ref"/>
-		<xsl:variable name="bibitem" 
-			select="document(concat($path, '../../../data/basic/bibliography.xml'))/bibitem.list/bibitem[@id=$ref]"/>
+		<xsl:variable name="bibitem" select="document(concat($path, '../../../data/basic/bibliography.xml'))/bibitem.list/bibitem[@id=$ref]"/>
 		
 		<xsl:choose>
 			<xsl:when test="$bibitem">
-	<xsl:apply-templates select="$bibitem">
-		<xsl:with-param name="number_start" select="$number_start"/>
-		<xsl:with-param name="number_inc" select="position()"/>
-	</xsl:apply-templates>
+				<xsl:apply-templates select="$bibitem">
+					<xsl:with-param name="number_start" select="$number_start"/>
+					<xsl:with-param name="number_inc" select="position()"/>
+					<xsl:with-param name="ref" select="$ref"/>
+				</xsl:apply-templates>
 			</xsl:when>
 			<xsl:otherwise>
-	<xsl:call-template name="error_message">
-		<xsl:with-param 
-				name="message"
-				select="concat('Error 13: Can not find bibitem referenced by: ',$ref,
-					'in ../data/basic/bibliography.xml')"/>
-	</xsl:call-template>
+				<xsl:call-template name="error_message">
+					<xsl:with-param 
+							name="message" select="concat('Error 13: Can not find bibitem referenced by: ',$ref, 'in ../data/basic/bibliography.xml')"/>
+				</xsl:call-template>
 			</xsl:otherwise>
 		</xsl:choose>
 		<xsl:apply-templates />
 	</xsl:template>
 
 	<xsl:template match="orgname">
-		<xsl:value-of select="."/>,
+		<xsl:value-of select="."/>
+		<xsl:text>, </xsl:text>
 	</xsl:template>
 
 	<xsl:template match="stdnumber">
+		<xsl:param name="ref"/>		
+		<!-- <xsl:value-of select="."/>
+		<xsl:text>, </xsl:text> -->		
+		<xsl:text>[[[</xsl:text>
+		<xsl:value-of select="$ref"/>
+		<xsl:text>,</xsl:text>
 		<xsl:value-of select="."/>
-		<xsl:text>, </xsl:text>
+		<xsl:text>]]], </xsl:text>		
 	</xsl:template>
 
 	<xsl:template match="stdtitle">
 		<!-- <i>
 			<xsl:value-of select="."/>
 		</i> -->
-		<xsl:text> _</xsl:text>
-			<xsl:value-of select="."/>
+		<xsl:text> _</xsl:text>		
+		<xsl:value-of select="normalize-space(java:replaceAll(java:java.lang.String.new(.),'&#x2014;','--'))"/>
 		<xsl:text>_ </xsl:text>
 	</xsl:template>
 
