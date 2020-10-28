@@ -142,13 +142,8 @@
 	
 	<!-- resource.xml -->
 	<xsl:template match="/">
-		<!-- <xsl:value-of select="$path"/> -->
-		
-		<!-- Get info from resource.xml -->
-		<xsl:text>:docnumber: </xsl:text><xsl:apply-templates select="resource" mode="title"/>
-		<xsl:text>&#xa;</xsl:text>
-		
-		<xsl:text>:docnumber: </xsl:text><xsl:apply-templates select="resource" mode="docnumber"/>
+
+		<xsl:text>:docnumber: </xsl:text><xsl:apply-templates select="resource" mode="docnumber"/> <!-- res_doc/sect_1_scope.xsl -->
 		<xsl:text>&#xa;</xsl:text>
 		
 		<xsl:text>:partnumber: </xsl:text><xsl:value-of select="resource/@part"/>
@@ -156,8 +151,6 @@
 		
 		<xsl:text>:edition: </xsl:text><xsl:value-of select="resource/@version"/>
 		<xsl:text>&#xa;</xsl:text>
-		
-		
 		
 		<xsl:text>:title-intro-en: Industrial automation systems and integration</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
@@ -177,7 +170,6 @@
 		
 		<xsl:apply-templates select="resource" mode="docstage"/>
 		<xsl:text>&#xa;</xsl:text>
-		
 		
 		<xsl:text>:copyright-year: </xsl:text><xsl:value-of select="substring(resource/@publication.year,1,4)"/>
 		<xsl:text>&#xa;</xsl:text>
@@ -202,15 +194,7 @@
 		<xsl:text>:library-ics: 25.040.40</xsl:text>
 		<xsl:text>&#xa;&#xa;</xsl:text>
 		
-		
-		
-		<!-- <xsl:template match="resource" mode="TOCmultiplePage"> -->
-		<!-- Copyright -->
-		<!-- <xsl:if test=" java:exists(java:java.io.File.new(concat($path, 'sys/cover.xml')))">
-			<xsl:message>[INFO] Processing cover.xml ...</xsl:message>
-			<xsl:apply-templates select="document(concat($path, 'sys/cover.xml'))" mode="cover"/>
-		</xsl:if> -->
-		
+
 		<!-- Abstract -->
 		<xsl:message>[INFO] Processing Abstract ...</xsl:message>
 		<xsl:apply-templates select="resource" mode="abstract"/> <!-- res_doc/resource.xsl  -->
@@ -225,8 +209,7 @@
 		<!-- draughting_elements/sys/introduction.xml -->
 		<xsl:message>[INFO] Processing Introduction ...</xsl:message>
 		<xsl:apply-templates select="resource" mode="introduction"/> <!-- res_doc/sect_introduction.xsl  -->
-		
-		
+				
 		<!-- 1 Scope -->
 		<!-- draughting_elements/sys/1_scope.xml -->
 		<xsl:message>[INFO] Processing Scope ...</xsl:message>
@@ -245,7 +228,6 @@
 		<xsl:message>[INFO] Processing Terms, definitions and abbreviated terms ...</xsl:message>		
 		<xsl:apply-templates select="resource" mode="terms_definitions_resource"/> <!-- res_doc/sect_3_defs.xsl -->
 		
-		
 		<!-- optional section -->
 		<!--- 4 EXPRESS short listing -->
     <!-- 4.1 General -->
@@ -259,8 +241,6 @@
 			 </xsl:apply-templates>		
 		</xsl:for-each>
 		
-	
-
 		<!-- Annex A Short names of entities -->
 		<xsl:message>[INFO] Processing Annex A Short names of entities ...</xsl:message>		
 		<xsl:apply-templates select="resource" mode="annex_a"/> <!-- res_doc/sect_a_short_names.xsl  -->
@@ -297,7 +277,6 @@
 			<xsl:apply-templates select="resource" mode="additional_scope"/> <!-- res_doc/sect_add_scope.xsl -->
 		</xsl:if>
 		
-			
 		<!-- Annex x Change history -->
 		<xsl:if test="resource/changes">
 			<xsl:message>[INFO] Processing Annex Change history ...</xsl:message>		
@@ -389,27 +368,6 @@
 		<xsl:text>&#xa;</xsl:text>
 	</xsl:template> -->
 	
-	<xsl:template match="table[@type = 'abbreviations'] | table[.//tr[not(count(td) &lt; 2 or count(td) &gt; 2)]]" mode="stepmod2mn">
-		<xsl:apply-templates mode="table_dl"/>
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>&#xa;</xsl:text>
-	</xsl:template>
-	<!-- <xsl:template match="node()|*" mode="table_dl">
-		<xsl:apply-templates mode="table_dl"/>
-	</xsl:template> -->
-	
-	<xsl:template match="tr" mode="table_dl">
-		<xsl:apply-templates mode="table_dl"/>
-		<xsl:text>&#xa;</xsl:text>
-	</xsl:template>
-	
-	<xsl:template match="td" mode="table_dl">
-		<xsl:apply-templates mode="stepmod2mn"/>
-		<xsl:if test="not(preceding-sibling::td)">
-			<xsl:text>:: </xsl:text>
-		</xsl:if>
-	</xsl:template>
-	
 	<xsl:template name="insertListItemLabel">
 		<xsl:param name="list-label" select="'*'"/>
 		<xsl:variable name="level_" select="count(ancestor-or-self::ul) + count(ancestor-or-self::ol)"/>		
@@ -426,15 +384,7 @@
 		<xsl:text> </xsl:text>
 	</xsl:template>
 	
-	<xsl:template match="text()" mode="stepmod2mn">
-		<xsl:value-of select="normalize-space(.)"/>
-	</xsl:template>
-	
-	<!-- <xsl:template match="sec/text() | li/text() | ul/text() | ol/text() | inscope/text() | outscope/text()">
-		<xsl:value-of select="normalize-space(.)"/>
-	</xsl:template> -->
-	
-	
+
 	<xsl:template name="insertQuoteStart">
 		<xsl:text>[quote]</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
