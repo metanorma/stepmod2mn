@@ -1208,12 +1208,14 @@
 			<!-- </code> -->
 		<!--  end blockquote -->
 		<!-- </p> -->
-		<xsl:apply-templates select="./explicit" mode="description"/>    
+		
+		<!-- commented, because express_ref:[...] inserted above -->
+		<!-- <xsl:apply-templates select="./explicit" mode="description"/>    
 		<xsl:apply-templates select="./derived" mode="description"/>    
 		<xsl:apply-templates select="./inverse" mode="description"/>  
 		<xsl:apply-templates select="./unique" mode="description"/>
 		<xsl:call-template name="output_where_formal"/>
-		<xsl:call-template name="output_where_informal"/>
+		<xsl:call-template name="output_where_informal"/>-->
 	</xsl:template>
 
 
@@ -1688,19 +1690,19 @@
 	<xsl:template name="output_where_formal">
 		<xsl:if test="./where[@expression] and not(./unique)">
 			<!-- <p><u>Formal propositions:</u></p> -->
-			<!-- <xsl:text>[.underline]#Formal propositions:#</xsl:text>
-			<xsl:text>&#xa;&#xa;</xsl:text> -->
+			<xsl:text>[.underline]#Formal propositions:#</xsl:text>
+			<xsl:text>&#xa;&#xa;</xsl:text>
 		</xsl:if>
-		<!-- <xsl:apply-templates select="./where[@expression]" mode="description"/> -->
+		<xsl:apply-templates select="./where[@expression]" mode="description"/>
 	</xsl:template>
 
 	<xsl:template name="output_where_informal">
 		<xsl:if test="./where[not(@expression)]">
 			<!-- <p><u>Informal propositions:</u></p> -->
-			<!-- <xsl:text>[.underline]#Informal propositions:#</xsl:text>
-			<xsl:text>&#xa;&#xa;</xsl:text> -->
+			<xsl:text>[.underline]#Informal propositions:#</xsl:text>
+			<xsl:text>&#xa;&#xa;</xsl:text>
 		</xsl:if>
-		<!-- <xsl:apply-templates select="./where[not(@expression)]" mode="description"/> -->
+		<xsl:apply-templates select="./where[not(@expression)]" mode="description"/>
 	</xsl:template>
 
 
