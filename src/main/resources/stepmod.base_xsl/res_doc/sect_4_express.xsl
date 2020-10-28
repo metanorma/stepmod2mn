@@ -1069,17 +1069,17 @@
 
 		<xsl:if test="position()=1">
 			<xsl:variable name="clause_header">
-		<xsl:choose>
-			<xsl:when test="count(../entity)>1"> <!-- MWD 2017-06-02 changed "type" to "entity" bug #6263 -->
-				<!-- <xsl:value-of select="concat($main_clause,$clause_number,' ',$schema_name,' entity definitions')"/> -->
-				<xsl:value-of select="concat($schema_name,' entity definitions')"/>
-			</xsl:when>
-			<xsl:otherwise>
-				<!-- <xsl:value-of select="concat($main_clause,$clause_number,' ',$schema_name,' entity definition')"/> -->
-				<xsl:value-of select="concat($schema_name,' entity definition')"/>
-			</xsl:otherwise>
-		</xsl:choose>
-		</xsl:variable>
+				<xsl:choose>
+					<xsl:when test="count(../entity)>1"> <!-- MWD 2017-06-02 changed "type" to "entity" bug #6263 -->
+						<!-- <xsl:value-of select="concat($main_clause,$clause_number,' ',$schema_name,' entity definitions')"/> -->
+						<xsl:value-of select="concat($schema_name,' entity definitions')"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<!-- <xsl:value-of select="concat($main_clause,$clause_number,' ',$schema_name,' entity definition')"/> -->
+						<xsl:value-of select="concat($schema_name,' entity definition')"/>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:variable>
 
 			<xsl:variable name="clause_intro" select="''"/>
 

@@ -846,7 +846,7 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 			.Split-it-right sample divider
 			image::images/a1.png[Alt1]
 		-->
-		<xsl:text>&#xa;&#xa;</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
 		<xsl:text>[[</xsl:text>
 		<xsl:value-of select="concat('figure', $number, $letter)"/>
 		<xsl:text>]]</xsl:text>
@@ -854,12 +854,13 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 		<xsl:text>.</xsl:text><xsl:value-of select="./title"/>
 		<xsl:text>&#xa;</xsl:text>
 		<xsl:text>image::</xsl:text>
+		
 		<xsl:variable name="img">
 			<xsl:apply-templates select="./img">
 				<xsl:with-param name="alt" select="$title"/>
 			</xsl:apply-templates>
-		</xsl:variable>
-		<xsl:value-of select="concat($path, '../', $img)"/>
+		</xsl:variable>		
+		<xsl:value-of select="$img"/>
 		<!-- alt -->
 		<xsl:text>[</xsl:text>
 		<xsl:value-of select="./title"/>
@@ -886,7 +887,9 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 				<xsl:value-of select="@src"/>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:value-of select="concat('../',@src)"/>
+				<!-- <xsl:value-of select="concat('../',@src)"/> -->
+				<!-- we read resource.xml, therefore image in one folder with resource.xml -->
+				<xsl:value-of select="@src"/>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:variable>
