@@ -1807,9 +1807,9 @@ the types, entity specializations, and functions that are specific to this part 
 		</code> -->
 
 		<xsl:call-template name="insertCodeStart"/>
-		<xsl:text>*)</xsl:text>		
-		<xsl:text> +&#xa;</xsl:text>
-		<xsl:text>&lt;&lt;SCHEMA </xsl:text><xsl:value-of select="concat($schema_name,';')"/><xsl:text>, </xsl:text><xsl:value-of select="$xref"/><xsl:text>&gt;&gt;</xsl:text>
+			<xsl:text>*)</xsl:text>		
+			<xsl:text> +&#xa;</xsl:text>
+			<xsl:text>&lt;&lt;SCHEMA </xsl:text><xsl:value-of select="concat($schema_name,';')"/><xsl:text>, </xsl:text><xsl:value-of select="$xref"/><xsl:text>&gt;&gt;</xsl:text>
 		<xsl:call-template name="insertCodeEnd"/>
 
 		<!-- output all the EXPRESS specifications -->
@@ -1820,12 +1820,12 @@ the types, entity specializations, and functions that are specific to this part 
 			<xsl:text>[[interfaces]]</xsl:text>
 			<xsl:text>&#xa;</xsl:text>
 		</xsl:if>
-		start
-		express_xml=<xsl:value-of select="concat($resource_dir,'/',@name,'.xml')"/>
+		<!-- start
+		express_xml=<xsl:value-of select="concat($resource_dir,'/',@name,'.xml')"/> -->
 		<xsl:apply-templates select="$express_xml/express/schema/interface">
 			<xsl:with-param name="doctype" select="$doctype"/>
 		</xsl:apply-templates>
-end
+<!-- end -->
 
 
 		<!--	<a name="funcon{$schema_no+3}" />  -->
@@ -1893,11 +1893,11 @@ end
 		</code> -->
 
 		<xsl:call-template name="insertCodeStart"/>
-		<xsl:text>*)</xsl:text>		
-		<xsl:text> +&#xa;</xsl:text>
-		<xsl:text>END_SCHEMA;  -- </xsl:text><xsl:value-of select="$express_xml/express/schema/@name"/>
-		<xsl:text> +&#xa;</xsl:text>
-		<xsl:text>(*</xsl:text>
+			<xsl:text>*)</xsl:text>		
+			<xsl:text> +&#xa;</xsl:text>
+			<xsl:text>END_SCHEMA;  -- </xsl:text><xsl:value-of select="$express_xml/express/schema/@name"/>
+			<xsl:text> +&#xa;</xsl:text>
+			<xsl:text>(*</xsl:text>
 		<xsl:call-template name="insertCodeEnd"/>
 
 		<!-- <xsl:message>

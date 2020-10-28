@@ -576,13 +576,13 @@
 			
 			<!-- <p> -->
 			<!-- start blockquote -->
-				<!-- <code> -->
-				<xsl:call-template name="insertCodeStart"/>
-					<xsl:text>*) +&#xa;</xsl:text><!-- <br/> -->
-					<xsl:text>CONSTANT</xsl:text>
+			<!-- <code> -->
+			<xsl:call-template name="insertCodeStart"/>
+				<xsl:text>*) +&#xa;</xsl:text><!-- <br/> -->
+				<xsl:text>CONSTANT</xsl:text>
 				<xsl:text> +&#xa;</xsl:text><!-- <br/> --><xsl:text>(*</xsl:text>
-				<xsl:call-template name="insertCodeEnd"/>
-				<!-- </code> -->
+			<xsl:call-template name="insertCodeEnd"/>
+			<!-- </code> -->
 			<!-- end blockquote  -->
 		<!-- </p> -->
 		</xsl:if>
@@ -657,19 +657,20 @@
 					<xsl:text>*) +&#xa;</xsl:text><!-- <br/> -->
 					<xsl:text>&#160;&#160;</xsl:text><xsl:value-of select="@name"/> 
 					<xsl:text>: </xsl:text>
-					<xsl:apply-templates select="./*" mode="underlyingconstant"/><xsl:apply-templates select="./*" mode="underlying"/> := <xsl:choose>
+					<xsl:apply-templates select="./*" mode="underlyingconstant"/><xsl:apply-templates select="./*" mode="underlying"/><xsl:text> := </xsl:text>
+					<xsl:choose>
 			
-			<xsl:when test="./aggregate and contains(@expression,',')"><!-- <br/> --><xsl:text> +&#xa;</xsl:text>
-				<xsl:text>&#160;&#160;&#160;</xsl:text><xsl:value-of select="concat(substring-before(@expression,','),',')"/>
-				<xsl:call-template name="output_constant_expression">
-					<xsl:with-param name="expression" select="substring-after(@expression,',')"/>
-				</xsl:call-template>
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:value-of select="@expression"/>;
-				</xsl:otherwise>
-		</xsl:choose>
-			 <xsl:text> +&#xa;</xsl:text><!-- <br/> --><xsl:text>(*</xsl:text>
+						<xsl:when test="./aggregate and contains(@expression,',')"><!-- <br/> --><xsl:text> +&#xa;</xsl:text>
+							<xsl:text>&#160;&#160;&#160;</xsl:text><xsl:value-of select="concat(substring-before(@expression,','),',')"/>
+							<xsl:call-template name="output_constant_expression">
+								<xsl:with-param name="expression" select="substring-after(@expression,',')"/>
+							</xsl:call-template>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:value-of select="@expression"/>;
+						</xsl:otherwise>
+					</xsl:choose>
+					<xsl:text> +&#xa;</xsl:text><!-- <br/> --><xsl:text>(*</xsl:text>
 				<xsl:call-template name="insertCodeEnd"/>
 				<!-- </code> -->
 			<!-- end blockquote  -->
@@ -680,11 +681,11 @@
 				<!-- <p> -->
 				<!--  start blockquote -->
 				 <!--  <code> -->
-					<xsl:call-template name="insertCodeStart"/>
-						<xsl:text>*) +&#xa;</xsl:text><!-- <br/> -->
-						<xsl:text>END_CONSTANT;</xsl:text>
-						<xsl:text> +&#xa;</xsl:text><!-- <br/> --><xsl:text>(*</xsl:text>
-					<xsl:call-template name="insertCodeEnd"/>
+				<xsl:call-template name="insertCodeStart"/>
+					<xsl:text>*) +&#xa;</xsl:text><!-- <br/> -->
+					<xsl:text>END_CONSTANT;</xsl:text>
+					<xsl:text> +&#xa;</xsl:text><!-- <br/> --><xsl:text>(*</xsl:text>
+				<xsl:call-template name="insertCodeEnd"/>
 					<!-- </code> -->
 				<!--  end blockquote  -->
 			<!-- </p> -->
@@ -1858,46 +1859,46 @@
 	 <!--  <p>
 			<code> -->
 			<xsl:call-template name="insertCodeStart"/>
-			<xsl:text>*) +&#xa;</xsl:text><!-- <br/> -->
-		<!-- <A NAME="{$aname}">SUBTYPE_CONSTRAINT <b>
-		<xsl:value-of select="@name"/></b></A> -->
-		<A NAME="{$aname}">SUBTYPE_CONSTRAINT <xsl:text>*</xsl:text><xsl:value-of select="@name"/><xsl:text>*</xsl:text></A>
-		<xsl:text> FOR </xsl:text>
-		<xsl:call-template name="link_object">
-			<xsl:with-param name="object_name" select="@entity"/>
-			<xsl:with-param name="object_used_in_schema_name" 
-				select="../@name"/>
-			<xsl:with-param name="clause" select="'section'"/>
-		</xsl:call-template>;<xsl:text> +&#xa;</xsl:text><!-- <br/> -->
+				<xsl:text>*) +&#xa;</xsl:text><!-- <br/> -->
+			<!-- <A NAME="{$aname}">SUBTYPE_CONSTRAINT <b>
+			<xsl:value-of select="@name"/></b></A> -->
+				<A NAME="{$aname}">SUBTYPE_CONSTRAINT <xsl:text>*</xsl:text><xsl:value-of select="@name"/><xsl:text>*</xsl:text></A>
+				<xsl:text> FOR </xsl:text>
+				<xsl:call-template name="link_object">
+					<xsl:with-param name="object_name" select="@entity"/>
+					<xsl:with-param name="object_used_in_schema_name" 
+						select="../@name"/>
+					<xsl:with-param name="clause" select="'section'"/>
+				</xsl:call-template>;<xsl:text> +&#xa;</xsl:text><!-- <br/> -->
 
-		<xsl:if test="@abstract.supertype='YES' or @abstract.supertype='yes'">
-			<xsl:text>&#160;&#160;ABSTRACT SUPERTYPE; +&#xa;</xsl:text><!-- <br/> -->
-		</xsl:if>
+				<xsl:if test="@abstract.supertype='YES' or @abstract.supertype='yes'">
+					<xsl:text>&#160;&#160;ABSTRACT SUPERTYPE; +&#xa;</xsl:text><!-- <br/> -->
+				</xsl:if>
 
-		<xsl:if test="@totalover and 
-									(string-length(@totalover)!=0)">
-			<xsl:text>&#160;&#160;TOTAL_OVER&#160;(</xsl:text><xsl:call-template name="link_list">
-			<xsl:with-param name="list" select="@totalover"/>
-			<xsl:with-param name="linebreak" select="'yes'"/>
-			<xsl:with-param name="prefix" select="'&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;'"/>
-			<xsl:with-param name="first_prefix" select="'no'"/>
-			<xsl:with-param name="suffix" select="', '"/>
-			<xsl:with-param name="object_used_in_schema_name" select="../@name"/>
-			<xsl:with-param name="clause" select="'section'"/>
-		</xsl:call-template>);<xsl:text> +&#xa;</xsl:text><!-- <br/> -->
-		</xsl:if>
-
-		
-		<xsl:variable name="sup_expr" select="@super.expression"/>
-		<xsl:if test="@super.expression">
-			<xsl:text>&#160;&#160;</xsl:text><xsl:call-template name="link_super_expression_list">
-					<xsl:with-param name="list" select="$sup_expr"/>
+				<xsl:if test="@totalover and 
+											(string-length(@totalover)!=0)">
+					<xsl:text>&#160;&#160;TOTAL_OVER&#160;(</xsl:text><xsl:call-template name="link_list">
+					<xsl:with-param name="list" select="@totalover"/>
+					<xsl:with-param name="linebreak" select="'yes'"/>
+					<xsl:with-param name="prefix" select="'&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;'"/>
+					<xsl:with-param name="first_prefix" select="'no'"/>
+					<xsl:with-param name="suffix" select="', '"/>
 					<xsl:with-param name="object_used_in_schema_name" select="../@name"/>
 					<xsl:with-param name="clause" select="'section'"/>
-					<xsl:with-param name="indent" select="3"/>
-				</xsl:call-template>;<xsl:text> +&#xa;</xsl:text><!-- <br/> -->
-			</xsl:if>      
-		<xsl:text>END_SUBTYPE_CONSTRAINT; +&#xa;</xsl:text><!-- <br/> --><xsl:text>(*</xsl:text>
+				</xsl:call-template>);<xsl:text> +&#xa;</xsl:text><!-- <br/> -->
+				</xsl:if>
+
+		
+				<xsl:variable name="sup_expr" select="@super.expression"/>
+				<xsl:if test="@super.expression">
+					<xsl:text>&#160;&#160;</xsl:text><xsl:call-template name="link_super_expression_list">
+							<xsl:with-param name="list" select="$sup_expr"/>
+							<xsl:with-param name="object_used_in_schema_name" select="../@name"/>
+							<xsl:with-param name="clause" select="'section'"/>
+							<xsl:with-param name="indent" select="3"/>
+						</xsl:call-template>;<xsl:text> +&#xa;</xsl:text><!-- <br/> -->
+				</xsl:if>
+				<xsl:text>END_SUBTYPE_CONSTRAINT; +&#xa;</xsl:text><!-- <br/> --><xsl:text>(*</xsl:text>
 			<xsl:call-template name="insertCodeEnd"/>
 		<!-- </code></p> -->
 	</xsl:template>
@@ -2280,22 +2281,22 @@
 		<xsl:text>&#xa;&#xa;</xsl:text>
 
 		<!--  start blockquote  -->
-			<!-- <code> -->
-			<xsl:call-template name="insertCodeStart"/>
-				<xsl:text>*) +&#xa;</xsl:text><!-- <br/> -->
-				<xsl:text>FUNCTION </xsl:text><xsl:value-of select="@name"/>
-				<xsl:apply-templates select="./parameter" mode="code"/><xsl:text> : </xsl:text>
-				<xsl:apply-templates select="./aggregate" mode="code"/>
-				<xsl:apply-templates select="./*" mode="underlying"/>;
-				<xsl:call-template name="insertCodeEnd"/>
-			<!-- </code> -->
-				<xsl:apply-templates select="./algorithm" mode="code"/>
+		<!-- <code> -->
+		<xsl:call-template name="insertCodeStart"/>
+			<xsl:text>*) +&#xa;</xsl:text><!-- <br/> -->
+			<xsl:text>FUNCTION </xsl:text><xsl:value-of select="@name"/>
+			<xsl:apply-templates select="./parameter" mode="code"/><xsl:text> : </xsl:text>
+			<xsl:apply-templates select="./aggregate" mode="code"/>
+			<xsl:apply-templates select="./*" mode="underlying"/>;
+		<xsl:call-template name="insertCodeEnd"/>
+		<!-- </code> -->
+		<xsl:apply-templates select="./algorithm" mode="code"/>
 
-				<xsl:call-template name="insertCodeStart"/>
-	<!--       <code> -->
+		<!-- <code> -->
+			<xsl:call-template name="insertCodeStart"/>	
 				<xsl:text>END_FUNCTION;</xsl:text>
 				<xsl:text> +&#xa;</xsl:text><!-- <br/> --><xsl:text>(*</xsl:text>
-				<xsl:call-template name="insertCodeEnd"/>
+			<xsl:call-template name="insertCodeEnd"/>
 			<!-- </code> -->
 		<!-- end blockquote -->
 
@@ -2402,17 +2403,17 @@
 			<xsl:call-template name="insertCodeStart"/>
 				<xsl:text>*) +&#xa;</xsl:text><!-- <br/> -->     
 				<xsl:text>PROCEDURE </xsl:text><xsl:value-of select="@name"/>
-			<xsl:apply-templates select="./parameter" mode="code"/><xsl:text> : </xsl:text>
-			<xsl:apply-templates select="./aggregate" mode="code"/>
-			<xsl:apply-templates select="./*" mode="underlying"/>;
+				<xsl:apply-templates select="./parameter" mode="code"/><xsl:text> : </xsl:text>
+				<xsl:apply-templates select="./aggregate" mode="code"/>
+				<xsl:apply-templates select="./*" mode="underlying"/>;
 			<xsl:call-template name="insertCodeEnd"/>
 		<!-- </code> -->
 			<xsl:apply-templates select="./algorithm" mode="code"/><xsl:text> +&#xa;</xsl:text><!-- <br/> -->
 			
 			<!-- <code> -->
 			<xsl:call-template name="insertCodeStart"/>
-			<xsl:text>END_PROCEDURE;</xsl:text>
-			<xsl:text> +&#xa;</xsl:text><!-- <br/> --><xsl:text>(*</xsl:text>
+				<xsl:text>END_PROCEDURE;</xsl:text>
+				<xsl:text> +&#xa;</xsl:text><!-- <br/> --><xsl:text>(*</xsl:text>
 			<xsl:call-template name="insertCodeEnd"/>
 			<!-- </code> -->
 		<!-- end blockquote -->
@@ -2627,24 +2628,25 @@
 		
 	 <!-- <p> -->
 		<!-- start blockquote -->
-			<!-- <code> -->
-			<xsl:call-template name="insertCodeStart"/>
-				<xsl:text>*) +&#xa;</xsl:text><!-- <br/> -->
-				<xsl:text>RULE </xsl:text><xsl:value-of select="@name"/><xsl:text> FOR</xsl:text>
-			<!-- <br/> --><xsl:text> +&#xa;</xsl:text>
-				<xsl:text>(</xsl:text><xsl:value-of select="translate(@appliesto,' ',', ')"/><xsl:text>); +&#xa;</xsl:text><!-- <br/> -->
-			<xsl:call-template name="insertCodeEnd"/>
+		<!-- <code> -->
+		<xsl:call-template name="insertCodeStart"/>
+			<xsl:text>*) +&#xa;</xsl:text><!-- <br/> -->
+			<xsl:text>RULE </xsl:text><xsl:value-of select="@name"/><xsl:text> FOR</xsl:text>
+		<!-- <br/> --><xsl:text> +&#xa;</xsl:text>
+			<xsl:text>(</xsl:text><xsl:value-of select="translate(@appliesto,' ',', ')"/><xsl:text>); +&#xa;</xsl:text><!-- <br/> -->
+		<xsl:call-template name="insertCodeEnd"/>
 		<!-- </code> -->
 			<xsl:apply-templates select="./algorithm" mode="code"/>
 			
 			<!-- <code> -->		
 			<xsl:call-template name="insertCodeStart"/>
-			<xsl:apply-templates select="./where" mode="code"/>
+				<xsl:apply-templates select="./where" mode="code"/>
 				<xsl:text>END_RULE;</xsl:text>
-			<xsl:text> +&#xa;</xsl:text><!-- <br/> --><xsl:text>(*</xsl:text>
-				<xsl:call-template name="insertCodeEnd"/>
+				<xsl:text> +&#xa;</xsl:text><!-- <br/> --><xsl:text>(*</xsl:text>
+			<xsl:call-template name="insertCodeEnd"/>
 			<!-- </code> -->
 		<!-- end blockquote -->
+		
 		 <!-- </p> -->
 		<!-- <p><u>Argument definitions:</u></p> -->
 		<xsl:text>[.underline]#Argument definitions:#</xsl:text>
