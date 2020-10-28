@@ -213,29 +213,29 @@
 		
 		<!-- Abstract -->
 		<xsl:message>[INFO] Processing Abstract ...</xsl:message>
-		<xsl:apply-templates select="resource" mode="abstract"/>
+		<xsl:apply-templates select="resource" mode="abstract"/> <!-- res_doc/resource.xsl  -->
 
 		
 		<!-- Foreword-->
 		<!-- draughting_elements/sys/foreword.xml -->
 		<xsl:message>[INFO] Processing Foreword ...</xsl:message>
-		<xsl:apply-templates select="resource" mode="foreword"/>
+		<xsl:apply-templates select="resource" mode="foreword"/> <!-- res_doc/resource.xsl  -->
 		
 		<!-- Introduction -->
 		<!-- draughting_elements/sys/introduction.xml -->
 		<xsl:message>[INFO] Processing Introduction ...</xsl:message>
-		<xsl:apply-templates select="resource" mode="introduction"/>
+		<xsl:apply-templates select="resource" mode="introduction"/> <!-- res_doc/sect_introduction.xsl  -->
 		
 		
 		<!-- 1 Scope -->
 		<!-- draughting_elements/sys/1_scope.xml -->
 		<xsl:message>[INFO] Processing Scope ...</xsl:message>
-		<xsl:apply-templates select="resource" mode="scope_resource"/>		
+		<xsl:apply-templates select="resource" mode="scope_resource"/>	<!-- res_doc/sect_1_scope.xsl  -->	
 		
 		<!-- 2 Normative references -->
 		<!-- sys/2_refs.xml -->
 		<xsl:message>[INFO] Processing Normative references ...</xsl:message>		
-		<xsl:apply-templates select="resource" mode="norm_refs_resource"/>
+		<xsl:apply-templates select="resource" mode="norm_refs_resource"/> <!-- res_doc/sect_2_refs.xsl  -->
 		
 		
 		<!-- 3 Terms, definitions and abbreviated terms -->
@@ -243,7 +243,7 @@
 		<!-- 3.1 Terms and definitions -->
 		<!-- 3.2 Abbreviated terms -->
 		<xsl:message>[INFO] Processing Terms, definitions and abbreviated terms ...</xsl:message>		
-		<xsl:apply-templates select="resource" mode="terms_definitions_resource"/>
+		<xsl:apply-templates select="resource" mode="terms_definitions_resource"/> <!-- res_doc/sect_3_defs.xsl -->
 		
 		
 		<!-- optional section -->
@@ -254,7 +254,7 @@
 		<xsl:for-each select="resource/schema">
 			<xsl:variable name="schema_pos" select="position()"/>
 			<xsl:message>[INFO] Processing Section <xsl:value-of select="$schema_pos + 3"/> ...</xsl:message>
-			<xsl:apply-templates select="../../resource" mode="schema_resource">
+			<xsl:apply-templates select="../../resource" mode="schema_resource"> <!-- res_doc/sect_schema.xsl -->
 				 <xsl:with-param name="pos" select="$schema_pos"/>
 			 </xsl:apply-templates>		
 		</xsl:for-each>
@@ -263,51 +263,54 @@
 
 		<!-- Annex A Short names of entities -->
 		<xsl:message>[INFO] Processing Annex A Short names of entities ...</xsl:message>		
-		<xsl:apply-templates select="resource" mode="annex_a"/>
+		<xsl:apply-templates select="resource" mode="annex_a"/> <!-- res_doc/sect_a_short_names.xsl  -->
 		
 		<!-- Annex B Information object registration -->
 		<xsl:message>[INFO] Processing Annex B Information object registration ...</xsl:message>		
-		<xsl:apply-templates select="resource" mode="annex_b"/>
+		<xsl:apply-templates select="resource" mode="annex_b"/> <!-- res_doc/sect_b_obj_reg.xsl  -->
 
 		<!-- Annex C Computer interpretable listings -->
 		<xsl:message>[INFO] Processing Annex C Computer interpretable listings ...</xsl:message>		
-		<xsl:apply-templates select="resource" mode="annexc"/> <!-- sect_c_exp.xsl  -->
+		<xsl:apply-templates select="resource" mode="annexc"/> <!-- res_doc/sect_c_exp.xsl  -->
 		
 		<!-- Annex D EXPRESS-G diagrams -->
 		<xsl:message>[INFO] Processing Annex D EXPRESS-G diagrams ...</xsl:message>		
-		<xsl:apply-templates select="resource" mode="annexd"/> <!-- sect_d_expg.xsl  -->
+		<xsl:apply-templates select="resource" mode="annexd"/> <!-- res_doc/sect_d_expg.xsl  -->
 			
 		<!-- Annex E F G H -->		
 		
 		<!-- Annex Technical discussion -->		
 		<xsl:if test="string-length(normalize-space(resource/tech_discussion//text())) &gt; 0">			
 			<xsl:message>[INFO] Processing Annex Technical discussion ...</xsl:message>		
-			<xsl:apply-templates select="resource" mode="tech_discussion"/> <!-- sect_tech_discussion.xsl -->
+			<xsl:apply-templates select="resource" mode="tech_discussion"/> <!-- res_doc/sect_tech_discussion.xsl -->
 		</xsl:if>
 		
 		<!-- Annex Examples -->
 		<xsl:if test="string-length(normalize-space(resource/examples//text())) &gt; 0">			
 			<xsl:message>[INFO] Processing Annex Examples ...</xsl:message>		
-			<xsl:apply-templates select="resource" mode="examples"/> <!-- sect_examples.xsl -->
+			<xsl:apply-templates select="resource" mode="examples"/> <!-- res_doc/sect_examples.xsl -->
 		</xsl:if>
 			
 		<!-- Annex Additional scope -->
-		<xsl:if test="string-length(normalize-space(resource/add_scope//text())) &gt; 0">			
+		<xsl:if test="string-length(normalize-space(resource/add_scope//text())) &gt; 0">
 			<xsl:message>[INFO] Annex Additional scope ...</xsl:message>		
-			<xsl:apply-templates select="resource" mode="additional_scope"/> <!-- sect_add_scope.xsl -->
+			<xsl:apply-templates select="resource" mode="additional_scope"/> <!-- res_doc/sect_add_scope.xsl -->
 		</xsl:if>
 		
-
 			
 		<!-- Annex x Change history -->
-		<xsl:message>[INFO] Processing Annex Change history ...</xsl:message>		
-		<xsl:apply-templates select="resource" mode="change_history"/> <!-- sect_g_change.xsl -->
+		<xsl:if test="resource/changes">
+			<xsl:message>[INFO] Processing Annex Change history ...</xsl:message>		
+			<xsl:apply-templates select="resource" mode="change_history"/> <!-- res_doc/sect_g_change.xsl -->
+		</xsl:if>
 			
+		<!-- Bibliography -->
+		<xsl:if test="resource/bibliography/*">
+			<xsl:message>[INFO] Processing Bibliography ...</xsl:message>		
+				<xsl:apply-templates select="resource" mode="bibliography"/> <!-- res_doc/sect_biblio.xsl  -->	
+		</xsl:if>
 		
-		<xsl:message>[INFO] Processing Bibliography ...</xsl:message>		
-		<xsl:apply-templates select="resource" mode="bibliography"/>
 	</xsl:template>
-	
 
 
 
