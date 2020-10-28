@@ -1537,13 +1537,15 @@ Purpose:
 				body of this part of ISO 10303 is normative. 
 			</small>
 		</p> -->
-		<xsl:variable name="note">The information provided in computer-interpretable
+		
+		<xsl:call-template name="insertNote">		
+			<xsl:with-param name="text">
+				The information provided in computer-interpretable
 				form at the 
 				above URLs is informative. The information that is contained in the
 				body of this part of ISO 10303 is normative. 
-		</xsl:variable>		
-		<xsl:text>NOTE: </xsl:text><xsl:value-of select="normalize-space($note)"/>
-		<xsl:text>&#xa;&#xa;</xsl:text>
+			</xsl:with-param>
+		</xsl:call-template>
 		
 	</xsl:template>
 

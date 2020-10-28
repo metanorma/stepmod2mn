@@ -384,23 +384,22 @@
 				</small>
 			</p> -->
 			
+			<xsl:call-template name="insertNote">
+				<xsl:with-param name="text">
+					<xsl:variable name="used-count" select="count(used-schema[not(.=preceding-sibling::used-schema)])" />
+					<xsl:choose>
+						<xsl:when test="$used-count = 1" >
+										The schemas referenced above are specified in the following 
+										part:
+						</xsl:when>
+						<xsl:otherwise >
+							The schemas referenced above are specified in the following 
+							parts:
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:with-param>
+			</xsl:call-template>
 			
-			<xsl:variable name="note">      
-				<xsl:variable name="used-count" select="count(used-schema[not(.=preceding-sibling::used-schema)])" />
-				<xsl:choose>
-					<xsl:when test="$used-count = 1" >
-									The schemas referenced above are specified in the following 
-									part:
-					</xsl:when>
-					<xsl:otherwise >
-						The schemas referenced above are specified in the following 
-						parts:
-					</xsl:otherwise>
-				</xsl:choose>
-			</xsl:variable>
-			<xsl:text>&#xa;&#xa;</xsl:text>    
-			<xsl:text>NOTE: </xsl:text><xsl:value-of select="normalize-space($note)"/>
-			<xsl:text>&#xa;&#xa;</xsl:text>
 			
 			<!-- <blockquote>
 					<table>  
@@ -452,9 +451,11 @@
 				</small>
 			</p> -->
 			
-				<xsl:text>&#xa;&#xa;</xsl:text>        
-				<xsl:text>NOTE: See &lt;&lt;AnnexD&gt;&gt; for a graphical representation of this schema.</xsl:text>
-				<xsl:text>&#xa;&#xa;</xsl:text>
+				<xsl:call-template name="insertNote">
+					<xsl:with-param name="text">
+						See &lt;&lt;AnnexD&gt;&gt; for a graphical representation of this schema.
+					</xsl:with-param>
+				</xsl:call-template>
 
 
 		<xsl:choose>
@@ -476,7 +477,8 @@
 							</small>
 				</p> -->
 				
-				<xsl:variable name="note3">					
+				<xsl:call-template name="insertNote">
+					<xsl:with-param name="text">
 						There may be subtypes and items of select lists that appear in
 						the integrated resources that are
 						not imported into the AIC. Constructs are eliminated from the subtype
@@ -488,11 +490,8 @@
 						in the context of an application protocol, the items of the select
 						list will be defined by the scope of the
 						application protocol
-				</xsl:variable>
-				
-				<xsl:text>&#xa;&#xa;</xsl:text>        
-				<xsl:text>NOTE: </xsl:text><xsl:value-of select="normalize-space($note3)"/>
-				<xsl:text>&#xa;&#xa;</xsl:text>
+					</xsl:with-param>
+				</xsl:call-template>
 				
 			</xsl:when>
 		</xsl:choose>
@@ -3632,14 +3631,14 @@
 							this resource.                 
 						</small>
 					</p> -->
-					<xsl:variable name="note">The list of entity data types will be
+					
+					<xsl:call-template name="insertNote">
+						<xsl:with-param name="text">
+						The list of entity data types will be
 							extended in application resources that use the constructs of
 							this resource.                 
-					</xsl:variable>
-					
-					<xsl:text>&#xa;&#xa;</xsl:text>        
-					<xsl:text>NOTE: </xsl:text><xsl:value-of select="normalize-space($note)"/>
-					<xsl:text>&#xa;&#xa;</xsl:text>
+						</xsl:with-param>
+					</xsl:call-template>
 					
 				</xsl:when>
 
@@ -3743,13 +3742,13 @@
 									this resource.                 
 								</small>
 							</p> -->
-							<xsl:variable name="note">The list of entity data types will be
+							<xsl:call-template name="insertNote">
+								<xsl:with-param name="text">
+									The list of entity data types will be
 									extended in application resources that use the constructs of
 									this resource.                 
-							</xsl:variable>            
-							<xsl:text>&#xa;&#xa;</xsl:text>              
-							<xsl:text>NOTE: </xsl:text><xsl:value-of select="normalize-space($note)"/>
-							<xsl:text>&#xa;&#xa;</xsl:text>
+								</xsl:with-param>
+							</xsl:call-template>
 							
 						</xsl:when>
 
@@ -3787,13 +3786,14 @@
 									at least one valid instantiation.
 								</small>
 							</p> -->
-							<xsl:variable name="note">This empty extensible select requires
+							<xsl:call-template name="insertNote">
+								<xsl:with-param name="text">
+									This empty extensible select requires
 									extension in a further schema to ensure that entities that refer to it have
 									at least one valid instantiation.
-							</xsl:variable>
-							<xsl:text>&#xa;&#xa;</xsl:text>            
-							<xsl:text>NOTE: </xsl:text><xsl:value-of select="normalize-space($note)"/>
-							<xsl:text>&#xa;&#xa;</xsl:text>
+								</xsl:with-param>
+							</xsl:call-template>
+							
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:when>

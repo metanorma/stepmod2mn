@@ -347,7 +347,37 @@
 		<xsl:text>&#xa;&#xa;</xsl:text>
 	</xsl:template>
 
+	<xsl:template name="insertNote">
+		<xsl:param name="id"/>
+		<xsl:param name="text"/>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:if test="normalize-space($id) != ''">
+			<xsl:text>[[</xsl:text>
+			<xsl:value-of select="$id"/>
+			<xsl:text>]]</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+		</xsl:if>      
+		<xsl:text>NOTE: </xsl:text><xsl:value-of select="normalize-space($text)"/>
+		<xsl:text>&#xa;&#xa;</xsl:text>
+	</xsl:template>
 	
+	<xsl:template name="insertExample">
+		<xsl:param name="id"/>
+		<xsl:param name="text"/>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>[example]</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:if test="normalize-space($id) != ''">
+			<xsl:text>[[</xsl:text>
+			<xsl:value-of select="$id"/>
+			<xsl:text>]]</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+		</xsl:if>      
+		<xsl:value-of select="normalize-space($text)"/>
+		<xsl:text>&#xa;&#xa;</xsl:text>
+	</xsl:template>
 	
 	<!-- <xsl:template match="ul/li | li" mode="stepmod2mn">
 		<xsl:text>&#xa;</xsl:text>
