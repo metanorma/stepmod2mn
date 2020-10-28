@@ -1017,6 +1017,9 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 <xsl:template match="ul|UL">
   <!-- <ul> -->
 	<xsl:text>&#xa;</xsl:text>
+	<xsl:if test="normalize-space(preceding-sibling::node()) != ''">
+		<xsl:text>&#xa;</xsl:text>
+	</xsl:if>
     <xsl:apply-templates/>
   <!-- </ul> -->
 	<xsl:text>&#xa;&#xa;</xsl:text>	

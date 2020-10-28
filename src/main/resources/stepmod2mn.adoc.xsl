@@ -29,6 +29,7 @@
 	<xsl:import href="stepmod.base_xsl/res_doc/sect_biblio.xsl"/>
 	<xsl:import href="stepmod.base_xsl/res_doc/sect_examples.xsl"/>
 	<xsl:import href="stepmod.base_xsl/res_doc/sect_tech_discussion.xsl"/>
+	<xsl:import href="stepmod.base_xsl/res_doc/sect_add_scope.xsl"/>
 	<xsl:import href="stepmod.base_xsl/res_doc/sect_g_change.xsl"/>
 	
 	
@@ -245,18 +246,19 @@
 		<xsl:apply-templates select="resource" mode="terms_definitions_resource"/>
 		
 		
+		<!-- optional section -->
 		<!--- 4 EXPRESS short listing -->
     <!-- 4.1 General -->
     <!-- 4.2 Fundamental concepts and assumptions -->
-    <!-- 4.3 Draughting elements entity definitions -->
-		<xsl:if test=" java:exists(java:java.io.File.new(concat($path, 'sys/4_schema.xml')))">
-			<xsl:message>[INFO] Processing 4_schema.xml ...</xsl:message>
-			<xsl:variable name="schema">
-				<xsl:apply-templates select="document(concat($path, 'sys/4_schema.xml'))" mode="schema"/>
-			</xsl:variable>
-			<!-- <xsl:copy-of select="$schema"/> -->
-			<xsl:apply-templates select="xalan:nodeset($schema)/node()" mode="stepmod2mn"/>
-		</xsl:if>
+    <!-- 4.3 Draughting elements entity definitions -->		
+		<xsl:for-each select="resource/schema">
+			<xsl:variable name="schema_pos" select="position()"/>
+			<xsl:message>[INFO] Processing Section <xsl:value-of select="$schema_pos + 3"/> ...</xsl:message>
+			<xsl:apply-templates select="../../resource" mode="schema_resource">
+				 <xsl:with-param name="pos" select="$schema_pos"/>
+			 </xsl:apply-templates>		
+		</xsl:for-each>
+		
 	
 
 		<!-- Annex A Short names of entities -->
@@ -275,19 +277,26 @@
 		<xsl:message>[INFO] Processing Annex D EXPRESS-G diagrams ...</xsl:message>		
 		<xsl:apply-templates select="resource" mode="annexd"/> <!-- sect_d_expg.xsl  -->
 			
-		<!-- Annex E F G -->
-			
-		<xsl:if test="//examples">
-			<!-- Annex Examples -->		
+		<!-- Annex E F G H -->		
+		
+		<!-- Annex Technical discussion -->		
+		<xsl:if test="string-length(normalize-space(resource/tech_discussion//text())) &gt; 0">			
+			<xsl:message>[INFO] Processing Annex Technical discussion ...</xsl:message>		
+			<xsl:apply-templates select="resource" mode="tech_discussion"/> <!-- sect_tech_discussion.xsl -->
+		</xsl:if>
+		
+		<!-- Annex Examples -->
+		<xsl:if test="string-length(normalize-space(resource/examples//text())) &gt; 0">			
 			<xsl:message>[INFO] Processing Annex Examples ...</xsl:message>		
 			<xsl:apply-templates select="resource" mode="examples"/> <!-- sect_examples.xsl -->
 		</xsl:if>
 			
-		<xsl:if test="//tech_discussion">
-			<!-- Annex Technical discussion -->		
-			<xsl:message>[INFO] Processing Annex Technical discussion ...</xsl:message>		
-			<xsl:apply-templates select="resource" mode="tech_discussion"/> <!-- sect_tech_discussion.xsl -->
+		<!-- Annex Additional scope -->
+		<xsl:if test="string-length(normalize-space(resource/add_scope//text())) &gt; 0">			
+			<xsl:message>[INFO] Annex Additional scope ...</xsl:message>		
+			<xsl:apply-templates select="resource" mode="additional_scope"/> <!-- sect_add_scope.xsl -->
 		</xsl:if>
+		
 
 			
 		<!-- Annex x Change history -->
@@ -300,31 +309,6 @@
 	</xsl:template>
 	
 
-	
-	
-	<!-- EXPRESS short listing -->
-	<!-- =========== -->
-	<xsl:template match="resource_clause" mode="schema">	
-		<xsl:variable name="resource_xml" select="document(concat($path, '../',@directory,'/resource.xml'))"/>
-	  
-		<xsl:choose>
-			<xsl:when test="@pos">								
-				<xsl:apply-templates select="$resource_xml/*" mode="schema_resource">
-					 <xsl:with-param name="pos" select="@pos"/>
-				 </xsl:apply-templates>
-			 </xsl:when>
-			 <xsl:otherwise>
-				 <xsl:apply-templates select="$resource_xml/*" mode="schema_resource"/>
-			 </xsl:otherwise>
-		 </xsl:choose>
-		
-	</xsl:template>
-	
-	
-	
-	
-	<!-- END EXPRESS short listing -->
-	<!-- ================== -->
 
 
 	<xsl:template name="insertHeaderADOC">
@@ -381,34 +365,6 @@
 		<xsl:text>&#xa;&#xa;</xsl:text>
 	</xsl:template>
 
-	<xsl:template match="p | P" mode="stepmod2mn">
-		<xsl:choose>
-			<xsl:when test="count(node()) = 0"> <!-- skip empty <p/> -->
-				<xsl:text>&#xa;&#xa;</xsl:text>
-			</xsl:when>
-			
-      
-      <xsl:when test="@class = 'note2'">
-				
-			</xsl:when>
-      
-      
-			<xsl:otherwise>
-				<xsl:variable name="previousnode" select="preceding-sibling::node()[1]"/>
-				<xsl:if test="local-name(xalan:nodeset($previousnode)) = '' and string-length(xalan:nodeset($previousnode)//text()) != ''">
-					<xsl:text>&#xa;&#xa;</xsl:text>
-				</xsl:if>
-				<xsl:apply-templates mode="stepmod2mn"/>
-				<xsl:text>&#xa;&#xa;</xsl:text>
-			</xsl:otherwise>
-		</xsl:choose>
-	</xsl:template>
-	
-  
-	<xsl:template match="br | BR" mode="stepmod2mn">
-		<xsl:text> +</xsl:text>
-		<xsl:text>&#xa;</xsl:text>
-	</xsl:template>
 	
 	
 	<!-- <xsl:template match="ul/li | li" mode="stepmod2mn">

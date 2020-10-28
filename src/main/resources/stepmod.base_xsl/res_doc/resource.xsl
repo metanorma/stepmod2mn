@@ -3192,10 +3192,10 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 		<!-- <table width="80%" type="abbreviations"> -->
 			<!-- get the default abbreviations out of the abbreviations_resdoc_defaultxml
 		 database -->
-			<xsl:apply-templates 
-		select="document(concat($path, '../../../data/basic/abbreviations_resdoc_default.xml'))/abbreviations/abbreviation.inc"/>
+			<xsl:apply-templates select="document(concat($path, '../../../data/basic/abbreviations_resdoc_default.xml'))/abbreviations/abbreviation.inc"/>
 			
 			<xsl:apply-templates select="/resource/abbreviations" mode="output"/>    
+			<xsl:text>&#xa;</xsl:text>
 		<!-- </table> -->
 	</xsl:template>
 	
@@ -3214,19 +3214,17 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 	<!-- get the abbreviations out of the abbreviations.xml database -->
 	<xsl:template match="abbreviation.inc">
 		<xsl:variable name="ref" select="@linkend"/>
-		<xsl:variable 
-	name="abbrev" 
-	select="document(concat($path, '../../../data/basic/abbreviations.xml'))/abbreviation.list/abbreviation[@id=$ref]"/>
+		<xsl:variable name="abbrev" select="document(concat($path, '../../../data/basic/abbreviations.xml'))/abbreviation.list/abbreviation[@id=$ref]"/>
 		<xsl:choose>
 			<xsl:when test="$abbrev">
-	<xsl:apply-templates select="$abbrev"/>
+				<xsl:apply-templates select="$abbrev"/>
 			</xsl:when>
 			<xsl:otherwise>
-	<xsl:call-template name="error_message">
-		<xsl:with-param name="message">
-			<xsl:value-of select="concat('Error 9: abbreviation.inc ',$ref, 'not found: ')"/>
-		</xsl:with-param>
-	</xsl:call-template>
+				<xsl:call-template name="error_message">
+					<xsl:with-param name="message">
+						<xsl:value-of select="concat('Error 9: abbreviation.inc ',$ref, 'not found: ')"/>
+					</xsl:with-param>
+				</xsl:call-template>
 			</xsl:otherwise>
 		</xsl:choose>
 
