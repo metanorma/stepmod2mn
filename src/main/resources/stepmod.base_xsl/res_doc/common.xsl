@@ -382,11 +382,11 @@ $Id: common.xsl,v 1.33 2008/05/21 20:50:25 abf Exp $
 	</xsl:template>
 
 	<xsl:template match="resource" mode="page_count">
-	<xsl:variable name="expg_count" select="count(.//express-g/imgfile)" />
-	<xsl:variable name="schema_count" select="count(.//schema)" />
-	<xsl:variable name="tech_disc_count" select="count(.//tech_discussion)" />
-	<xsl:variable name="add_scope" select="count(.//add_scope)" />
-	<xsl:value-of select="$expg_count + $schema_count + $schema_count  + 16" />
+		<xsl:variable name="expg_count" select="count(.//express-g/imgfile)" />
+		<xsl:variable name="schema_count" select="count(.//schema)" />
+		<xsl:variable name="tech_disc_count" select="count(.//tech_discussion)" />
+		<xsl:variable name="add_scope" select="count(.//add_scope)" />
+		<xsl:value-of select="$expg_count + $schema_count + $schema_count  + 16" />
 	</xsl:template>
 
 
@@ -450,16 +450,30 @@ $Id: common.xsl,v 1.33 2008/05/21 20:50:25 abf Exp $
 				</xsl:choose>
 			</xsl:when>
 			<xsl:otherwise>
+				<!-- <xsl:text> *</xsl:text> -->
+				<xsl:variable name="link_text">
+					<xsl:choose>
+						<xsl:when test="string-length(.)>0">
+							<!-- <a href="{$href}"><b><xsl:apply-templates/></b></a> -->
+							<xsl:apply-templates/>
+						</xsl:when>
+						<xsl:otherwise>
+							<!-- <a href="{$href}"><b><xsl:value-of select="$item"/></b></a> -->            
+							<xsl:value-of select="$item"/>
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:variable>
+				
 				<xsl:choose>
-					<xsl:when test="string-length(.)>0">
-						<!-- <a href="{$href}"><b><xsl:apply-templates/></b></a> -->
-						<xsl:text> *</xsl:text><xsl:apply-templates/><xsl:text>*[</xsl:text><xsl:value-of select="$href"/><xsl:text>]</xsl:text>            
+					<xsl:when test="contains($href, concat('/', $current_module, '/'))"><!-- if link inside current module -->
+						<xsl:text>&lt;&lt;</xsl:text><xsl:value-of select="substring-after($href,'#')"/><xsl:text>&gt;&gt;</xsl:text>
 					</xsl:when>
 					<xsl:otherwise>
-						<!-- <a href="{$href}"><b><xsl:value-of select="$item"/></b></a> -->            
-						<xsl:text> *</xsl:text><xsl:value-of select="$item"/><xsl:text>*[</xsl:text><xsl:value-of select="$href"/><xsl:text>]</xsl:text>
+						<xsl:value-of select="$link_text"/>
+						<xsl:text>[</xsl:text><xsl:value-of select="$href"/><xsl:text>]</xsl:text>
 					</xsl:otherwise>
 				</xsl:choose>
+				
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>

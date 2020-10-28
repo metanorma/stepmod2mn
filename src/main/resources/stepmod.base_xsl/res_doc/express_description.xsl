@@ -759,30 +759,36 @@ $Id: express_description.xsl,v 1.8 2015/08/03 09:40:44 mikeward Exp $
 						name="message" 
 						select="concat('Error ATTR1: attribute descriptions (',$inline_aname,') containing block elements such as ', name(./child::*[name()='p' or name()='screen' or name()='ul' or name()='note' or name()='example']), ' should start with p not text#Currently starts with:#',$text_str)"/>
 				</xsl:call-template>
-				<p class="expressdescription">
-					<!-- <b>
+				<!-- <p class="expressdescription">
+					<b>
 						<a name="{$inline_aname}">
 							<xsl:value-of select="$inline_name"/>:
 						</a>
 					</b> -->
-					<xsl:text>[[</xsl:text><xsl:value-of select="$inline_aname"/><xsl:text>]]*</xsl:text><xsl:value-of select="$inline_name"/><xsl:text>:* </xsl:text>
-					<xsl:apply-templates/>
-				</p>
+					<xsl:call-template name="insertParagraph">
+						<xsl:with-param name="text">
+							<xsl:text>[[</xsl:text><xsl:value-of select="$inline_aname"/><xsl:text>]]*</xsl:text><xsl:value-of select="$inline_name"/><xsl:text>:* </xsl:text>
+							<xsl:apply-templates/>
+						</xsl:with-param>
+					</xsl:call-template>
+				<!-- </p> -->
 			</xsl:when>
 
 			<!-- plain text -->
 			<xsl:when test="string-length($text_str) != 0">
-				<p class="expressdescription">
-					<!-- <b>				
+				<!-- <p class="expressdescription">
+					<b>				
 						<a name="{$inline_aname}">
 							<xsl:value-of select="$inline_name"/>:
 						</a>
 					</b> -->
-					
-					<xsl:text>[[</xsl:text><xsl:value-of select="$inline_aname"/><xsl:text>]]*</xsl:text><xsl:value-of select="$inline_name"/><xsl:text>:* </xsl:text>
-					
-					<xsl:apply-templates/>
-				</p>
+					<xsl:call-template name="insertParagraph">
+						<xsl:with-param name="text">
+							<xsl:text>[[</xsl:text><xsl:value-of select="$inline_aname"/><xsl:text>]]*</xsl:text><xsl:value-of select="$inline_name"/><xsl:text>:* </xsl:text>					
+							<xsl:apply-templates/>
+						</xsl:with-param>
+					</xsl:call-template>
+				<!-- </p> -->
 			</xsl:when>
 
 			<!-- check that the first element is p -->
@@ -792,17 +798,19 @@ $Id: express_description.xsl,v 1.8 2015/08/03 09:40:44 mikeward Exp $
 						name="message" 
 						select="concat('Error ATTR2: attribute descriptions (',$inline_aname,') must start with a p element, not ', name(./child::*[1]))"/>
 				</xsl:call-template>
-				<p class="expressdescription">
-					<!-- <b>
+				<!-- <p class="expressdescription">
+					<b>
 						<a name="{$inline_aname}">
 							<xsl:value-of select="$inline_name"/>:
 						</a>
 					</b> -->				
-					
-					<xsl:text>[[</xsl:text><xsl:value-of select="$inline_aname"/><xsl:text>]]*</xsl:text><xsl:value-of select="$inline_name"/><xsl:text>:* </xsl:text>
-					
-					<xsl:apply-templates/>
-				</p>
+					<xsl:call-template name="insertParagraph">
+						<xsl:with-param name="text">
+							<xsl:text>[[</xsl:text><xsl:value-of select="$inline_aname"/><xsl:text>]]*</xsl:text><xsl:value-of select="$inline_name"/><xsl:text>:* </xsl:text>					
+							<xsl:apply-templates/>
+						</xsl:with-param>
+					</xsl:call-template>
+				<!-- </p> -->				
 			</xsl:when>
 
 			<xsl:otherwise>
@@ -821,16 +829,19 @@ $Id: express_description.xsl,v 1.8 2015/08/03 09:40:44 mikeward Exp $
 		<xsl:param name="inline_aname"/>
 		<xsl:param name="inline_name"/>
 		<xsl:apply-templates select="." mode="check_html"/>
-		<p class="expressdescription">
-			<!-- <b>
+		<!-- <p class="expressdescription">
+			<b>
 				<a name="{$inline_aname}">
 					<xsl:value-of select="$inline_name"/>:
 				</a>
 			</b> -->		
-			<xsl:text>[[</xsl:text><xsl:value-of select="$inline_aname"/><xsl:text>]]*</xsl:text><xsl:value-of select="$inline_name"/><xsl:text>:* </xsl:text>
-			
-			<xsl:apply-templates/>
-		</p>  
+			<xsl:call-template name="insertParagraph">
+				<xsl:with-param name="text">
+					<xsl:text>[[</xsl:text><xsl:value-of select="$inline_aname"/><xsl:text>]]*</xsl:text><xsl:value-of select="$inline_name"/><xsl:text>:* </xsl:text>			
+					<xsl:apply-templates/>
+				</xsl:with-param>
+			</xsl:call-template>
+			<!-- </p> -->		
 	</xsl:template>
 
 

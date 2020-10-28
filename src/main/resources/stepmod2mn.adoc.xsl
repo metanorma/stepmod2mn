@@ -138,7 +138,8 @@
 
 
 	<xsl:variable name="view" select="'repository'"/>
-	
+
+	<xsl:variable name="current_module" select="/resource/@name"/>
 	
 	<!-- resource.xml -->
 	<xsl:template match="/">

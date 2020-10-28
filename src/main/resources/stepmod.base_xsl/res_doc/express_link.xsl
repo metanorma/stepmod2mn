@@ -447,6 +447,7 @@
 					<xsl:value-of select="$schema_name"/>
 				</A> -->      
 				<xsl:value-of select="$schema_name"/><xsl:text>[</xsl:text><xsl:value-of select="concat($express_file_to_ref, '#', $xref)"/><xsl:text>]</xsl:text>
+
 				
 			</xsl:otherwise>
 		</xsl:choose>
