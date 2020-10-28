@@ -1429,14 +1429,15 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 </xsl:template>
   
   <xsl:template match="br">
-    <xsl:variable name="node" select="string(name(.))"/>
-    <xsl:element name="{$node}">
+    <!-- <xsl:variable name="node" select="string(name(.))"/>
+    <xsl:element name="{$node}"> -->
       <!-- copy across the attributes -->
-      <xsl:copy-of select="@*"/>    
+      <!-- <xsl:copy-of select="@*"/>    
       <xsl:if test="string-length(./text())=0" > 
         <xsl:value-of select="string('&#x00A0;')" />
       </xsl:if>
-    </xsl:element>
+    </xsl:element> -->
+		<xsl:text> +&#xa;</xsl:text>
   </xsl:template>
 
 <xsl:template match="tr">

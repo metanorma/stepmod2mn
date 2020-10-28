@@ -1672,6 +1672,7 @@ Purpose:
 
 	<xsl:template match="schema">
 		<xsl:param name="pos"/>
+		
 		<xsl:variable name="schema_display_name">
 			<xsl:call-template name="res_display_name">
 				<xsl:with-param name="res" select="@name"/>
@@ -1701,32 +1702,33 @@ Purpose:
 			</xsl:when>
 		</xsl:choose>
 
-		<xsl:message>
+		<!-- <xsl:message>
 			<xsl:value-of select="'&#010;___________________________________________________________'"/>
 			<xsl:value-of select="concat('&#010;Processing: data/resource_docs/',../@name,'/sys/',$schema_no+3,'_schema.xml','&#010;')"/>
-		</xsl:message>
+		</xsl:message> -->
 
 
-		<xsl:variable name="c_expg"
-			select="concat('./c_',($schema_no+3),'schema_expg',$FILE_EXT)"/>
+		<!-- not using -->
+		<!-- <xsl:variable name="c_expg"
+			select="concat('./c_',($schema_no+3),'schema_expg',$FILE_EXT)"/> -->
 
 		<xsl:variable name="resource_dir">
 			<xsl:call-template name="resource_directory">
-	<xsl:with-param name="resource" select="@name"/>
+				<xsl:with-param name="resource" select="@name"/>
 			</xsl:call-template>
 		</xsl:variable>
 		<xsl:variable name="express_xml" select="document(concat($resource_dir,'/',@name,'.xml'))"/>
 
 		<!-- there is only one schema in a schema clause of an IR -->
-		<xsl:variable 
-	name="schema_name" 
-	select="@name"/>
+		<xsl:variable name="schema_name" select="@name"/>
+		
 		<xsl:variable name="arm_mim_schema">
 			<xsl:choose>
-	<xsl:when  test="$doctype='aic'">aic</xsl:when>
-	<xsl:otherwise>schema</xsl:otherwise>
+				<xsl:when  test="$doctype='aic'">aic</xsl:when>
+				<xsl:otherwise>schema</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable> 
+		
 		<xsl:call-template name="check_schema_name">
 			<xsl:with-param name="arm_mim_schema" select="$arm_mim_schema"/>
 			<xsl:with-param name="schema_name" select="$schema_name"/>
@@ -1734,7 +1736,7 @@ Purpose:
 
 		<xsl:variable name="xref">
 			<xsl:call-template name="express_a_name">
-	<xsl:with-param name="section1" select="$schema_name"/>
+				<xsl:with-param name="section1" select="$schema_name"/>
 			</xsl:call-template>
 		</xsl:variable>
 
@@ -1766,13 +1768,25 @@ the types, entity specializations, and functions that are specific to this part 
 			</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
-		<xsl:value-of select="$clause_intro_1"/>
+		<!-- <xsl:value-of select="$clause_intro_1"/>
 		<xsl:element name='b'><xsl:value-of select="$schema_name" /></xsl:element>
 		<xsl:value-of select="$clause_intro_2"/>
-		<p/>
-		<p>
+		<p/> -->
+		
+		<xsl:call-template name="insertParagraph">
+			<xsl:with-param name="text">
+				<xsl:value-of select="concat($clause_intro_1, '*', $schema_name, '*', $clause_intro_2)"/>
+			</xsl:with-param>
+		</xsl:call-template>
+		
+		
+		<!-- <p> -->
+		<xsl:call-template name="insertParagraph">
+			<xsl:with-param name="text">
 			Short names of entities defined in this schema are described in Annex A. Unambiguous identification of this schema is defined in Annex B.
-		</p>
+			</xsl:with-param>
+		</xsl:call-template>
+		<!-- </p> -->
 		
 		<!-- <u>EXPRESS specification: </u> -->
 		<xsl:call-template name="insertParagraph">
@@ -1800,12 +1814,16 @@ the types, entity specializations, and functions that are specific to this part 
 		<!-- display the EXPRESS for the interfaces in the ARM.
 	 The template is in sect4_express.xsl -->
 		<xsl:if test="$express_xml/express/schema/interface">
-			<a name="interfaces"/>
+			<!-- <a name="interfaces"/> -->
+			<xsl:text>[[interfaces]]</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
 		</xsl:if>
+		start
+		express_xml=<xsl:value-of select="concat($resource_dir,'/',@name,'.xml')"/>
 		<xsl:apply-templates select="$express_xml/express/schema/interface">
 			<xsl:with-param name="doctype" select="$doctype"/>
 		</xsl:apply-templates>
-
+end
 
 
 		<!--	<a name="funcon{$schema_no+3}" />  -->
@@ -1827,28 +1845,24 @@ the types, entity specializations, and functions that are specific to this part 
 		<xsl:apply-templates select="./fund_cons"/>
 
 		<!-- display the constant EXPRESS. The template is in sect4_express.xsl -->
-		<xsl:apply-templates 
-	select="$express_xml/express/schema/constant">
+		<xsl:apply-templates select="$express_xml/express/schema/constant">
 			<xsl:with-param name="main_clause" select="($schema_no+3)" />
 		</xsl:apply-templates>
 
 		<!-- display the EXPRESS for the types in the schema.
 	 The template is in sect4_express.xsl -->
-		<xsl:apply-templates 
-	select="$express_xml/express/schema/type">
+		<xsl:apply-templates select="$express_xml/express/schema/type">
 			<xsl:with-param name="main_clause" select="($schema_no+3)" />
 		</xsl:apply-templates>
 		<!-- display the EXPRESS for the entities in the schema.
 	 The template is in sect4_express.xsl -->
-		<xsl:apply-templates 
-	select="$express_xml/express/schema/entity">
+		<xsl:apply-templates select="$express_xml/express/schema/entity">
 			<xsl:with-param name="main_clause" select="$schema_no+3" />
 		</xsl:apply-templates>
 
 		<!-- display the EXPRESS for the subtype.contraints in the schema.
 	 The template is in sect4_express.xsl -->
-		<xsl:apply-templates 
-	select="$express_xml/express/schema/subtype.constraint">
+		<xsl:apply-templates select="$express_xml/express/schema/subtype.constraint">
 			<xsl:with-param name="main_clause" select="$schema_no+3" />
 		</xsl:apply-templates>
 
@@ -1860,15 +1874,13 @@ the types, entity specializations, and functions that are specific to this part 
 		
 		<!-- display the EXPRESS for the rules in the schema. 
 	 The template is in sect4_express.xsl -->
-		<xsl:apply-templates 
-	select="$express_xml/express/schema/rule">
+		<xsl:apply-templates select="$express_xml/express/schema/rule">
 			<xsl:with-param name="main_clause" select="$schema_no+3" />
 		</xsl:apply-templates>
 
 		<!-- display the EXPRESS for the procedures in the schema. 
 	 The template is in sect4_express.xsl -->
-		<xsl:apply-templates 
-	select="$express_xml/express/schema/procedure">
+		<xsl:apply-templates select="$express_xml/express/schema/procedure">
 			<xsl:with-param name="main_clause" select="$schema_no+3" />
 		</xsl:apply-templates>
 		<!-- <code>
@@ -1886,10 +1898,10 @@ the types, entity specializations, and functions that are specific to this part 
 		<xsl:text>(*</xsl:text>
 		<xsl:call-template name="insertCodeEnd"/>
 
-		<xsl:message>
+		<!-- <xsl:message>
 			<xsl:value-of select="'&#010;___________________________________________________________'"/>
 			<xsl:value-of select="concat('&#010;EndProcessing: data/resource_docs/',../@name,'/sys/',$schema_no+3,'_schema.xml','&#010;')"/>
-		</xsl:message>
+		</xsl:message> -->
 
 	</xsl:template>
 
