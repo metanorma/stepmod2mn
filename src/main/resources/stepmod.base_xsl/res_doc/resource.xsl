@@ -1493,7 +1493,7 @@ Purpose:
 					
 					
 					<xsl:text>| </xsl:text><xsl:value-of select="concat($schema_file,$FILE_EXT)"/>[<xsl:value-of select="$schema_url"/><xsl:text>] </xsl:text>
-					<xsl:text>| </xsl:text><xsl:value-of select="$schema_file"/>.exp[<xsl:value-of select="concat('../../', $express_exp)"/><xsl:text>]</xsl:text>
+					<xsl:text>| </xsl:text><xsl:value-of select="$schema_file"/>.exp[<xsl:value-of select="$express_exp"/><xsl:text>]</xsl:text>
 					<xsl:text>&#xa;</xsl:text>
 					
 					<!--<xsl:if test="$FILE_EXT!='.xml'">

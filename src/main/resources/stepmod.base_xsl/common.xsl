@@ -1311,9 +1311,8 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 	</font>
 	<xsl:if test="string-length($eqn_id > 0)">
 		<a name="{$eqn_id}"/>
-	</xsl:if> -->
-	
-	<xsl:if test="string-length($eqn_id > 0)"><xsl:text>[[</xsl:text><xsl:value-of select="$eqn_id"/><xsl:text>]]</xsl:text></xsl:if>
+	</xsl:if> -->	
+	<xsl:if test="string-length($eqn_id) > 0"><xsl:text>[[</xsl:text><xsl:value-of select="$eqn_id"/><xsl:text>]]</xsl:text></xsl:if>
 	<xsl:text>stem:[</xsl:text>
 	<xsl:apply-templates/>
 	<xsl:text>]</xsl:text>
@@ -1374,10 +1373,45 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 		</xsl:call-template>
 	</xsl:variable>
 	
-	<xsl:text>[#</xsl:text><xsl:value-of select="$aname"/><xsl:text>]</xsl:text>
-	<xsl:text>&#xa;</xsl:text>
-	<xsl:text>[cols=to do]</xsl:text>
-	<xsl:text>&#xa;</xsl:text>	
+	<xsl:if test="$aname != ''">
+		<xsl:text>[#</xsl:text><xsl:value-of select="$aname"/><xsl:text>]</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+	</xsl:if>
+	<xsl:text>[cols="</xsl:text>
+	<xsl:variable name="simple-table">
+		<xsl:call-template  name="getSimpleTable"/>
+	</xsl:variable>
+	<xsl:variable name="cols-count">
+		<xsl:choose>
+			<xsl:when test="col">
+				<xsl:value-of select="count(col)"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="count(xalan:nodeset($simple-table)//tr[1]/td)"/>				
+			</xsl:otherwise>				
+		</xsl:choose>
+	</xsl:variable>
+	<xsl:choose>
+			<xsl:when test="col">				
+				<xsl:for-each select="col">
+					<xsl:variable name="width" select="translate(@width, '%cm', '')"/>
+					<xsl:value-of select="round($width)"/>
+					<xsl:if test="position() != last()">,</xsl:if>
+				</xsl:for-each>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:variable name="cols">
+					<xsl:call-template name="repeat">
+						<xsl:with-param name="char" select="'1,'"/>
+						<xsl:with-param name="count" select="$cols-count"/>
+					</xsl:call-template>
+				</xsl:variable>
+				<xsl:value-of select="substring($cols,1,string-length($cols)-1)"/>
+			</xsl:otherwise>
+		</xsl:choose>
+		<xsl:text>"</xsl:text>
+		<xsl:text>]</xsl:text>
+		<xsl:text>&#xa;</xsl:text>	
 	<!-- <p align="center">
 		<b>
 			Table 
@@ -1390,24 +1424,58 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 	<xsl:text>.</xsl:text><xsl:value-of select="@caption"/>
 	<xsl:text>&#xa;</xsl:text>	
 	
-	<div align="center">
+	<!-- <div align="center">
 		<table border="1" cellpadding="2" cellspacing="0">
 			<xsl:apply-templates/>
 		</table>
-	</div>
+	</div> -->
+	
+	<xsl:text>|===</xsl:text>
+	<xsl:text>&#xa;</xsl:text>
+	<xsl:apply-templates />
+	<xsl:text>&#xa;</xsl:text>
+	<xsl:text>|===</xsl:text>
+	<xsl:text>&#xa;</xsl:text>
+	<xsl:text>&#xa;</xsl:text>
+	
+	
 </xsl:template>
 
 <xsl:template match="td">
-	<xsl:variable name="node" select="string(name(.))"/>
-	<xsl:element name="{$node}">
+	<!-- <xsl:variable name="node" select="string(name(.))"/>
+	<xsl:element name="{$node}"> -->
 		<!-- copy across the attributes -->
-		<xsl:copy-of select="@*"/>    
+		<!-- <xsl:copy-of select="@*"/>    
 		<xsl:if test="string-length(./text())=0" > 
 			<xsl:value-of select="string('&#x00A0;')" />
 			</xsl:if>
 			<xsl:apply-templates/>
-	</xsl:element>
+	</xsl:element> -->
+	
+		<xsl:call-template name="spanProcessing"/>		
+		<xsl:text>|</xsl:text>
+		<xsl:apply-templates />
+		<xsl:choose>
+			<xsl:when test="position() = last() and ../following-sibling::tr">
+				<xsl:text>&#xa;</xsl:text>
+			</xsl:when>
+			<xsl:when test="position() = last()">
+				<xsl:text></xsl:text>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:text> </xsl:text>
+			</xsl:otherwise>
+		</xsl:choose>
+	
 </xsl:template>
+
+	<xsl:template match="td/p">
+		<xsl:text> +</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:apply-templates/>
+		<xsl:text>&#xa;</xsl:text>
+	</xsl:template>
+
 	
 	<xsl:template match="br">
 		<!-- <xsl:variable name="node" select="string(name(.))"/>
@@ -1422,22 +1490,52 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 	</xsl:template>
 
 <xsl:template match="tr">
-	<xsl:variable name="node" select="string(name(.))"/>
-	<xsl:element name="{$node}">
+	<!-- <xsl:variable name="node" select="string(name(.))"/>
+	<xsl:element name="{$node}"> -->
 		<!-- copy across the attributes -->
-		<xsl:copy-of select="@*"/>    
+		<!-- <xsl:copy-of select="@*"/>    
 			<xsl:apply-templates/>
-	</xsl:element>
+	</xsl:element> -->
+	<xsl:if test="position() != 1">
+		<xsl:text>&#xa;</xsl:text>
+	</xsl:if>
+	<xsl:apply-templates />
 </xsl:template>
 
+
+
 <xsl:template match="th">
-	<xsl:element name="th">
+	<!-- <xsl:element name="th"> -->
 		<!-- copy across the attributes -->
-		<xsl:copy-of select="@*"/>    
-		<!-- <p align="center"><b><xsl:apply-templates/></b></p> -->
-		<p align="center"><xsl:text>*</xsl:text><xsl:apply-templates/><xsl:text>*</xsl:text></p>
-	</xsl:element>
+		<!-- <xsl:copy-of select="@*"/>    
+		<p align="center"><b><xsl:apply-templates/></b></p>		
+	</xsl:element> -->
+	
+		<xsl:call-template name="spanProcessing"/>
+		<xsl:text>|</xsl:text>
+		<xsl:apply-templates />
+		<xsl:text>&#xa;</xsl:text>
+
 </xsl:template>
+
+	<xsl:template name="spanProcessing">		
+		<xsl:if test="@colspan &gt; 1 or @rowspan &gt; 1">
+			<xsl:choose>
+				<xsl:when test="@colspan &gt; 1 and @rowspan &gt; 1">
+					<xsl:value-of select="@colspan"/><xsl:text>.</xsl:text><xsl:value-of select="@rowspan"/>
+				</xsl:when>
+				<xsl:when test="@colspan &gt; 1">
+					<xsl:value-of select="@colspan"/>
+				</xsl:when>
+				<xsl:when test="@rowspan &gt; 1">
+					<xsl:text>.</xsl:text><xsl:value-of select="@rowspan"/>
+				</xsl:when>
+			</xsl:choose>			
+			<xsl:text>+</xsl:text>
+		</xsl:if>
+		<xsl:if test="list or def-list">a</xsl:if>
+	</xsl:template>
+
 
 
 	<xsl:template name="remove_word">
