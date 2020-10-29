@@ -1286,7 +1286,7 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 		<xsl:variable name="ret_val">
 				<xsl:choose>
 					<xsl:when
-						test="document(concat($path,'../../repository_index.xml'))/repository_index/resources/resource[@name=$lschema]">
+						test="document(concat($path,'../../../repository_index.xml'))/repository_index/resources/resource[@name=$lschema]">
 						<xsl:value-of select="'true'"/>
 					</xsl:when>
 					<xsl:otherwise>
@@ -1312,7 +1312,7 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 		<xsl:variable name="ret_val">
 				<xsl:choose>
 					<xsl:when
-						test="document('../repository_index.xml')/repository_index/resource_docs/resource_doc[@name=$resdoc_name]">
+						test="document(concat($path,'../../../repository_index.xml'))/repository_index/resource_docs/resource_doc[@name=$resdoc_name]">
 						<xsl:value-of select="'true'"/>
 					</xsl:when>
 					<xsl:otherwise>
@@ -1924,7 +1924,7 @@ width="20" height="20"/> -->
 				<xsl:when test="$arm_mim_ir='ir'">
 					<!-- get the name and position of the resource_part containing the schema. -->
 					<xsl:variable name="schema" select="substring-before($express_ref,'.')"/>
-					<xsl:variable name="resdoc_xml" select="document(concat('../data/resource_docs/',$module,'/resource.xml'))"/>
+					<xsl:variable name="resdoc_xml" select="document(concat($path,'../../../data/resource_docs/',$module,'/resource.xml'))"/>
 					<xsl:variable name="temp" >
 						<xsl:for-each select="$resdoc_xml/resource//schema">
 							<xsl:if test="@name=$schema">
@@ -4681,7 +4681,7 @@ is case sensitive.')"/>
 		
 		<xsl:variable name="ret_val">
 			<xsl:choose>
-				<xsl:when test="document('../repository_index.xml')/repository_index/application_protocols/application_protocol[@name=$application_protocol_name]">
+				<xsl:when test="document(concat($path,'../../../repository_index.xml'))/repository_index/application_protocols/application_protocol[@name=$application_protocol_name]">
 					<xsl:value-of select="'true'"/>
 				</xsl:when>
 				<xsl:otherwise>
