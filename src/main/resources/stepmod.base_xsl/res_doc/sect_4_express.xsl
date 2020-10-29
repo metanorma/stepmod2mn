@@ -853,7 +853,7 @@
 				<xsl:text>TYPE </xsl:text>
 				<xsl:value-of select="@name" />
 					<xsl:text>=</xsl:text>
-					<xsl:apply-templates select="./aggregate" mode="code"/>        
+					<xsl:apply-templates select="./aggregate" mode="code"/>
 					<xsl:choose>
 						<xsl:when test="./where">
 							<xsl:apply-templates select="./*" mode="underlying"/>;<xsl:text> +&#xa;</xsl:text><!-- <br/> -->
@@ -2504,9 +2504,12 @@
 	<xsl:template match="algorithm" mode="code">
 		<!-- empty algorithms are sometimes output so ignore -->
 		<xsl:if test="string-length(normalize-space(.))>0">
-			<pre>
+			<!-- <pre>
 				<xsl:value-of select="."/>
-			</pre>
+			</pre> -->
+			<xsl:call-template name="insertCodeStart"/>
+				<xsl:value-of select="."/>
+			<xsl:call-template name="insertCodeEnd"/>
 		</xsl:if>
 	</xsl:template>
 

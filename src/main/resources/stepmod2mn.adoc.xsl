@@ -400,7 +400,7 @@
 	</xsl:template> -->
 	
 	<xsl:template name="insertListItemLabel">
-		<xsl:param name="list-label" select="'*'"/>
+		<xsl:param name="list-label"/>
 		<xsl:variable name="level_" select="count(ancestor-or-self::ul) + count(ancestor-or-self::ol)"/>		
 		<xsl:variable name="level">
 			<xsl:choose>
@@ -408,8 +408,18 @@
 				<xsl:otherwise><xsl:value-of select="$level_"/></xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
+		
+		<xsl:variable name="list-label_">
+			<xsl:choose>
+				<xsl:when test="$list-label != ''"><xsl:value-of select="$list-label"/></xsl:when>
+				<xsl:when test="local-name(..) = 'ol'">.</xsl:when>
+				<xsl:when test="local-name(..) = 'ul'">*</xsl:when>
+				<xsl:otherwise>*</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		
 		<xsl:call-template name="repeat">
-			<xsl:with-param name="char" select="$list-label"/>
+			<xsl:with-param name="char" select="$list-label_"/>
 			<xsl:with-param name="count" select="$level"/>
 		</xsl:call-template>
 		<xsl:text> </xsl:text>
@@ -442,6 +452,12 @@
 		<xsl:text>&#xa;</xsl:text>
 		<xsl:text>--</xsl:text>		
 		<xsl:text>&#xa;&#xa;</xsl:text>	
+	</xsl:template>
+
+	<xsl:template match="pre">
+		<xsl:call-template name="insertCodeStart"/>
+		<xsl:apply-templates/>
+		<xsl:call-template name="insertCodeEnd"/>
 	</xsl:template>
 	
 	<xsl:template name="repeat">
@@ -616,6 +632,5 @@
 	<!-- ===================== -->	
 	<!-- ===================== -->	
 	
-
-
+	
 </xsl:stylesheet>

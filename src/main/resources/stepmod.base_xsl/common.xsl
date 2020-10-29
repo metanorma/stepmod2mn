@@ -997,6 +997,11 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 		 -->
 <xsl:template match="ul|UL">
 	<!-- <ul> -->
+	
+	<xsl:if test="local-name(..) = 'li'"> <!-- nested list -->
+		<xsl:text>&#xa;</xsl:text>
+	</xsl:if>
+	
 	<xsl:text>&#xa;</xsl:text>
 	<xsl:if test="normalize-space(preceding-sibling::node()) != ''">
 		<xsl:text>&#xa;</xsl:text>
@@ -1024,9 +1029,21 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 		</xsl:otherwise>
 	</xsl:choose> -->
 	
+	<xsl:if test="local-name(..) = 'li'"> <!-- nested list -->
+		<xsl:text>&#xa;</xsl:text>
+	</xsl:if>
+	
 	<xsl:text>&#xa;</xsl:text>
 	<xsl:if test="$type">
-		<xsl:text>[</xsl:text><xsl:value-of select="$type"/><xsl:text>]</xsl:text>
+		<xsl:text>[</xsl:text>		
+		<xsl:choose>
+			<xsl:when test="$type = 'A'">upperalpha</xsl:when>
+			<xsl:when test="$type = 'a'">loweralpha</xsl:when>
+			<xsl:when test="$type = 'I'">upperroman</xsl:when>
+			<xsl:when test="$type = 'i'">lowerroman</xsl:when>
+			<xsl:when test="$type = '1'">arabic</xsl:when>
+		</xsl:choose>
+		<xsl:text>]</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
 	</xsl:if>
 	<xsl:apply-templates/>
@@ -1070,11 +1087,17 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 				</xsl:choose>
 			</li> -->
 			
-			<xsl:text>* </xsl:text>
+			<!-- <xsl:choose>
+				<xsl:when test="local-name(..) = 'ol'">. </xsl:when>
+				<xsl:otherwise>* </xsl:otherwise>
+			</xsl:choose> -->
+			<xsl:call-template name="insertListItemLabel"/>
+			
 			<xsl:variable name="text">
 				<xsl:apply-templates/>
 			</xsl:variable>
 			<xsl:value-of select="$text"/>
+			
 			<xsl:text>&#xa;&#xa;</xsl:text>
 		</xsl:when>
 		<xsl:otherwise>
@@ -1301,7 +1324,7 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 </xsl:template>
 
 <!-- added template to display eqn  and bigeqn RJG March 2012 -->
-<xsl:template match="eqn" >
+<xsl:template match="eqn | bigeqn" >
 	<xsl:variable name="eqn_id" select="./@id"/>
 	
 	<!-- <font size="+1">
@@ -1316,17 +1339,19 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 	<xsl:text>stem:[</xsl:text>
 	<xsl:apply-templates/>
 	<xsl:text>]</xsl:text>
-	
+	<xsl:if test="following-sibling::*[1][local-name() = 'p'] or following-sibling::*[1][local-name = 'P']">
+		<xsl:text>&#xa;&#xa;</xsl:text>
+	</xsl:if>
 	
 </xsl:template>
 
-<xsl:template match="bigeqn" >
+<!-- <xsl:template match="bigeqn" >
 	<font size="+2">
 	 <p align="center"> 
 		<xsl:apply-templates/>
 		</p>
 	</font>
-</xsl:template>
+</xsl:template> -->
 
 <!-- subscript -->
 <xsl:template match="sub|SUB" >
@@ -1346,21 +1371,28 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 </xsl:template>
 
 <xsl:template match="screen">
-	<xsl:choose>
+	<!-- <xsl:choose>
 		<xsl:when test="./ancestor::*[name()='example' or name()='note']">
-			<pre>
+			<pre> -->
 				<!-- should makethis a small font, but if you include <small> here
 						 it creates invalid HTML -->
-					<xsl:apply-templates/>
+					<!-- <xsl:apply-templates/>
 
 			</pre>
+			
+			
+			
 		</xsl:when>
 		<xsl:otherwise>
 			<pre>
 				<xsl:apply-templates/>
 			</pre>      
 		</xsl:otherwise>
-	</xsl:choose>
+	</xsl:choose> -->
+	
+	<xsl:call-template name="insertCodeStart"/>
+		<xsl:apply-templates/>
+	<xsl:call-template name="insertCodeEnd"/>
 </xsl:template>
 
 
@@ -1748,20 +1780,20 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 		<xsl:param name="message"/>
 		<xsl:param name="inline" select="'yes'"/>
 		<xsl:param name="linebreakchar" select="'#'"/>
-		<xsl:param name="warning_gif"
-			select="'../../../../images/warning.gif'"/>
+		<xsl:param name="warning_gif" select="'../../../../images/warning.gif'"/>
 		
 		<xsl:message>
-			<xsl:value-of select="translate($message,$linebreakchar,'&#010;')"/>
-			
+			<xsl:value-of select="translate($message,$linebreakchar,'&#010;')"/>			
 		</xsl:message>
+		
 		<xsl:if test="contains($INLINE_ERRORS,'yes')">
 			<xsl:if test="contains($inline,'yes')">
-				<br/>
+				<xsl:text>&#xa;</xsl:text>
+				<!-- <br/>
 				<IMG
 					SRC="{$warning_gif}" ALT="[warning:]"
 					align="bottom" border="0"
-width="20" height="20"/>
+width="20" height="20"/> -->
 				
 					<!--
 					<font color="#FF0000" size="-1">
@@ -1773,15 +1805,15 @@ width="20" height="20"/>
 						</xsl:call-template>
 					</i>
 					</font>					-->
-					<xsl:text> _</xsl:text>					
+					<xsl:text>_</xsl:text>					
 						<xsl:call-template name="output_line_breaks">
 							<xsl:with-param name="str" select="$message"/>
 							<xsl:with-param name="break_char" select="'#'"/>
 							<xsl:with-param name="replace_break_char" select="'true'"/>
 						</xsl:call-template>
-					<xsl:text>_ </xsl:text>
+					<xsl:text>_</xsl:text>
 				
-				<br/>
+				<xsl:text>&#xa;&#xa;</xsl:text>
 			</xsl:if>
 		</xsl:if>
 	</xsl:template>
@@ -3191,7 +3223,7 @@ width="20" height="20"/>
 			<xsl:when test="contains($nstring-with-any-initial-nl-removed,'&#xA;')">
 				<xsl:variable name="first" select="substring-before($nstring-with-any-initial-nl-removed,'&#xA;')"/>
 				<xsl:variable name="rest" select="substring-after($nstring-with-any-initial-nl-removed,'&#xA;')"/>
-				<xsl:value-of select="$first"/><br/>
+				<xsl:value-of select="$first"/><xsl:text> +&#xa;</xsl:text><!-- <br/> -->
 				<xsl:call-template name="output_string_with_linebreaks">
 					 <xsl:with-param name="string" select="$rest"/>
 				</xsl:call-template>
@@ -4611,10 +4643,10 @@ is case sensitive.')"/>
 					select="substring-before($str,$break_char)"/>
 				<xsl:choose>
 					<xsl:when test="$replace_break_char != 'false'">
-						<xsl:value-of select="concat($indent,$substr)"/><br/>
+						<xsl:value-of select="concat($indent,$substr)"/><xsl:text> +&#xa;</xsl:text><!-- <br/> -->
 					</xsl:when>
 					<xsl:otherwise>
-						<xsl:value-of select="concat($indent,$substr,$break_char)"/><br/>
+						<xsl:value-of select="concat($indent,$substr,$break_char)"/><xsl:text> +&#xa;</xsl:text><!-- <br/> -->
 					</xsl:otherwise>
 				</xsl:choose>
 				<xsl:call-template name="output_line_breaks">
