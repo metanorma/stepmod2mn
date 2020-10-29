@@ -7,8 +7,8 @@ JAR_FILE := stepmod2mn-$(JAR_VERSION).jar
 
 SRCDIR := src/test/resources
 
-#SRCFILE := $(SRCDIR)/test.stepmod.xml
-SRCFILE := https://github.com/metanorma/iso-10303-stepmod/blob/master/data/resource_docs/draughting_elements/resource.xml
+SRCFILE := $(SRCDIR)/test.stepmod.xml
+#SRCFILE := https://github.com/metanorma/iso-10303-stepmod/blob/master/data/resource_docs/draughting_elements/resource.xml
 
 DESTMNADOC := $(patsubst %.stepmod.xml,%.mn.adoc,$(patsubst src/test/resources/%,documents/%,$(SRCFILE)))
 
