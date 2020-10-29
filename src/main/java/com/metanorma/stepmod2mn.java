@@ -46,9 +46,8 @@ import org.xml.sax.helpers.XMLReaderFactory;
  */
 public class stepmod2mn {
 
-    static final String CMD = "java -jar stepmod2mn.jar [options] xml_file";
-    static final String INPUT_NOT_FOUND = "Error: %s file '%s' not found!";
-    static final String UNKNOWN_OUTPUT_FORMAT = "Unknown output format '%s'!";
+    static final String CMD = "java -jar stepmod2mn.jar resource_xml_file [options]";
+    static final String INPUT_NOT_FOUND = "Error: %s file '%s' not found!";    
     static final String XML_INPUT = "XML";    
     static final String INPUT_LOG = "Input: %s (%s)";    
     static final String OUTPUT_LOG = "Output: %s (%s)";
@@ -100,7 +99,7 @@ public class stepmod2mn {
      * @param args command-line arguments
      * @throws org.apache.commons.cli.ParseException
      */
-    public static void main(String[] args) throws ParseException, URISyntaxException {
+    public static void main(String[] args) throws ParseException {
 
         CommandLineParser parser = new DefaultParser();
                
