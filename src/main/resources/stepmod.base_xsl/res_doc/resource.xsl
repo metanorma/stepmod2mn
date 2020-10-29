@@ -2791,23 +2791,23 @@ the types, entity specializations, and functions that are specific to this part 
 
 		<xsl:variable name="footnote">
 			<xsl:choose>
-	<xsl:when test="/resource/normrefs/normref/stdref[@published='n']">
-		<xsl:value-of select="'y'"/>
-	</xsl:when>
-	<xsl:otherwise>
-		<xsl:call-template name="output_unpublished_normrefs_rec">
-			<xsl:with-param name="normrefs" select="$normrefs"/>
-		</xsl:call-template>
-	</xsl:otherwise>
+				<xsl:when test="/resource/normrefs/normref/stdref[@published='n']">
+					<xsl:value-of select="'y'"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:call-template name="output_unpublished_normrefs_rec">
+						<xsl:with-param name="normrefs" select="$normrefs"/>
+					</xsl:call-template>
+				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
 
 		<xsl:if test="$footnote='y'">
-			<p>
+			<!-- <p>
 	<a name="tobepub">
 		<sup>1)</sup> To be published.
 	</a>      
-			</p>
+			</p> -->
 		</xsl:if>
 	</xsl:template>
 
@@ -2816,79 +2816,72 @@ the types, entity specializations, and functions that are specific to this part 
 
 		<xsl:choose>
 			<xsl:when test="$normrefs">
-	<xsl:variable 
-			name="first"
-			select="substring-before(substring-after($normrefs,','),',')"/>
-	<xsl:variable 
-			name="rest"
-			select="substring-after(substring-after($normrefs,','),',')"/>      
-	
-	<xsl:variable name="footnote">
-		<xsl:choose>
-			<xsl:when test="contains($first,'normref:')">
 				<xsl:variable 
-			name="normref" 
-			select="substring-after($first,'normref:')"/>
-				<xsl:choose>
-		<xsl:when
-				test="document(concat($path, '../../../data/basic/normrefs.xml'))/normref.list/normref[@id=$normref]/stdref[@published='n']">
-			<xsl:value-of select="'y'"/>
-		</xsl:when>
-		<xsl:otherwise>
-			<xsl:value-of select="'n'"/>
-		</xsl:otherwise>
-				</xsl:choose>
-
-			</xsl:when>
-
-			<xsl:when test="contains($first,'resource:')">
+						name="first"
+						select="substring-before(substring-after($normrefs,','),',')"/>
 				<xsl:variable 
-			name="resource" 
-			select="substring-after($first,'resource:')"/>
+						name="rest"
+						select="substring-after(substring-after($normrefs,','),',')"/>      
 				
-				<xsl:variable name="resource_dir">
-		<xsl:call-template name="resource_directory">
-			<xsl:with-param name="resource" select="$resource"/>
-		</xsl:call-template>
+				<xsl:variable name="footnote">
+					<xsl:choose>
+						<xsl:when test="contains($first,'normref:')">
+							<xsl:variable name="normref" select="substring-after($first,'normref:')"/>
+							<xsl:choose>
+								<xsl:when test="document(concat($path, '../../../data/basic/normrefs.xml'))/normref.list/normref[@id=$normref]/stdref[@published='n']">
+									<xsl:value-of select="'y'"/>
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:value-of select="'n'"/>
+								</xsl:otherwise>
+							</xsl:choose>
+						</xsl:when>
+
+						<xsl:when test="contains($first,'resource:')">
+							<xsl:variable name="resource" select="substring-after($first,'resource:')"/>
+							
+							<xsl:variable name="resource_dir">
+								<xsl:call-template name="resource_directory">
+									<xsl:with-param name="resource" select="$resource"/>
+								</xsl:call-template>
+							</xsl:variable>
+
+							<xsl:variable name="resource_xml" select="concat($resource_dir,'/resource.xml')"/>
+
+							<xsl:choose>
+								<xsl:when test="document($resource_xml)/resource[@published='n']">
+									<xsl:value-of select="'y'"/>
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:value-of select="'n'"/>
+								</xsl:otherwise>
+							</xsl:choose>
+						</xsl:when>
+
+						<xsl:otherwise>
+							<xsl:value-of select="'n'"/>
+						</xsl:otherwise>
+					</xsl:choose>
 				</xsl:variable>
 
-				<xsl:variable name="resource_xml" 
-					select="concat($resource_dir,'/resource.xml')"/>
-
 				<xsl:choose>
-		<xsl:when test="document($resource_xml)/resource[@published='n']">
-			<xsl:value-of select="'y'"/>
-		</xsl:when>
-		<xsl:otherwise>
-			<xsl:value-of select="'n'"/>
-		</xsl:otherwise>
+					<xsl:when test="$footnote='n'">
+						<!-- only recurse if no unpublished standard found -->      
+						<xsl:call-template name="output_unpublished_normrefs_rec">
+							<xsl:with-param name="normrefs" select="$rest"/>
+						</xsl:call-template>        
+					</xsl:when>
+					<xsl:otherwise>
+						<!-- footnote found so stop -->
+						<xsl:value-of select="'y'"/>
+					</xsl:otherwise>
 				</xsl:choose>
-			</xsl:when>
-
-			<xsl:otherwise>
-				<xsl:value-of select="'n'"/>
-			</xsl:otherwise>
-		</xsl:choose>
-	</xsl:variable>
-
-	<xsl:choose>
-		<xsl:when test="$footnote='n'">
-			<!-- only recurse if no unpublished standard found -->      
-			<xsl:call-template name="output_unpublished_normrefs_rec">
-				<xsl:with-param name="normrefs" select="$rest"/>
-			</xsl:call-template>        
-		</xsl:when>
-		<xsl:otherwise>
-			<!-- footnote found so stop -->
-			<xsl:value-of select="'y'"/>
-		</xsl:otherwise>
-	</xsl:choose>
 	
 			</xsl:when>
 			<xsl:otherwise>
-	<!-- end of recursion -->
-	<!-- <xsl:value-of select="$footnote"/> -->
-	<xsl:value-of select="'n'"/>
+			<!-- end of recursion -->
+			<!-- <xsl:value-of select="$footnote"/> -->
+				<xsl:value-of select="'n'"/>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
@@ -2923,11 +2916,11 @@ the types, entity specializations, and functions that are specific to this part 
 		</xsl:variable>
 
 		<xsl:if test="$footnote='y'">
-			<p>
+			<!-- <p>
 	<a name="derogation">
 		2) Reference applicable during ballot or review period.
 	</a>      
-			</p>
+			</p> -->
 		</xsl:if>
 	</xsl:template>
 
