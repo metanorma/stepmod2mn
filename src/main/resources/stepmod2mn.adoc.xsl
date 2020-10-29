@@ -34,7 +34,8 @@
 	
 	<xsl:import href="stepmod.base_xsl/projmg/resource_issues.xsl"/>
 
-	<xsl:output method="xml" encoding="UTF-8"/>
+	<!-- <xsl:output method="xml" encoding="UTF-8"/> -->
+	<xsl:output method="text" encoding="UTF-8"/>
 
 	<xsl:strip-space elements="*"/>
 			
