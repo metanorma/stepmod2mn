@@ -8,12 +8,11 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.Comparator;
 
 import java.util.List;
 import java.util.Scanner;
@@ -101,7 +100,7 @@ public class stepmod2mn {
      * @param args command-line arguments
      * @throws org.apache.commons.cli.ParseException
      */
-    public static void main(String[] args) throws ParseException {
+    public static void main(String[] args) throws ParseException, URISyntaxException {
 
         CommandLineParser parser = new DefaultParser();
                
@@ -133,68 +132,78 @@ public class stepmod2mn {
                 
                 String argXMLin = arglist.get(0);
                 
-                String resourcePath = new File(argXMLin).getParent() + File.separator;
+                InputStream xmlInputStream;
                 
-                boolean remoteFile = false;
+                String resourcePath = "";
+                
+                String format = "adoc";
+                String outFileName = "";
+                if (cmd.hasOption("output")) {
+                    outFileName = cmd.getOptionValue("output");
+                }
+                
+                // if remote file (http or https)
                 if (argXMLin.toLowerCase().startsWith("http") || argXMLin.toLowerCase().startsWith("www.")) {
-                    remoteFile = true;
-                    //download to temp folder
-                    System.out.println("Downloading " + argXMLin + "...");
+                    
                     if (!Util.isUrlExists(argXMLin)) {
                         System.out.println(String.format(INPUT_NOT_FOUND, XML_INPUT, argXMLin));
                         System.exit(ERROR_EXIT_CODE);
                     }
                     URL url = new URL(argXMLin);
+                    
+                    xmlInputStream = url.openStream();
+                    
+                    resourcePath = Util.getParentUrl(argXMLin);
+                    
+                    if (!cmd.hasOption("output")) {
+                        outFileName = Paths.get(System.getProperty("user.dir"), Util.getFilenameFromURL(argXMLin)).toString();
+                    }
+                    
+                    /*
+                    //download to temp folder
+                    //System.out.println("Downloading " + argXMLin + "...");
                     String urlFilename = new File(url.getFile()).getName();                    
                     InputStream in = url.openStream();                    
                     Path localPath = Paths.get(tmpfilepath.toString(), urlFilename);
                     Files.createDirectories(tmpfilepath);
                     Files.copy(in, localPath, StandardCopyOption.REPLACE_EXISTING);
-                    argXMLin = localPath.toString();
-                    System.out.println("Done!");
+                    //argXMLin = localPath.toString();
+                    System.out.println("Done!");*/
+                } else { // in case of local file
+                    File fXMLin = new File(argXMLin);
+                    if (!fXMLin.exists()) {
+                        System.out.println(String.format(INPUT_NOT_FOUND, XML_INPUT, fXMLin));
+                        System.exit(ERROR_EXIT_CODE);
+                    }
+                    xmlInputStream = new FileInputStream(fXMLin);
+                    
+                    //parent path for input resource.xml
+                    resourcePath = new File(argXMLin).getParent() + File.separator;
+                    
+                    if (!cmd.hasOption("output")) { // if local file, then save result in input folder
+                      outFileName = new File(argXMLin).getAbsolutePath();
+                    }                    
                 }
 
-                
-                File fXMLin = new File(argXMLin);
-                if (!fXMLin.exists()) {
-                    System.out.println(String.format(INPUT_NOT_FOUND, XML_INPUT, fXMLin));
-                    System.exit(ERROR_EXIT_CODE);
+                if (!cmd.hasOption("output")) {
+                    outFileName = outFileName.substring(0, outFileName.lastIndexOf('.') + 1);
+                    outFileName = outFileName + format;
                 }
-
-                
-                
-                
-                
-                String outFileName = fXMLin.getAbsolutePath();
-               
-                if (remoteFile) {
-                    outFileName = Paths.get(System.getProperty("user.dir"), new File(outFileName).getName()).toString();
-                }
-                
-                outFileName = outFileName.substring(0, outFileName.lastIndexOf('.') + 1);
-                
-                String format = "adoc";                
-                
-                outFileName = outFileName + format;
-                
-                if (cmd.hasOption("output")) {
-                    outFileName = cmd.getOptionValue("output");
-                }
-                
+                                 
                 File fileOut = new File(outFileName);
                 
                 /*DEBUG = cmd.hasOption("debug"); */
 
-                System.out.println(String.format(INPUT_LOG, XML_INPUT, fXMLin));                
+                System.out.println(String.format(INPUT_LOG, XML_INPUT, argXMLin));                
                 System.out.println(String.format(OUTPUT_LOG, format.toUpperCase(), fileOut));
                 System.out.println();
 
                 try {
                     stepmod2mn app = new stepmod2mn();
                     app.setResourcePath(resourcePath);
-                    app.convertstepmod2mn(fXMLin, fileOut);
+                    app.convertstepmod2mn(xmlInputStream, fileOut);                    
                     System.out.println("End!");
-                
+                    
                 } catch (Exception e) {
                     e.printStackTrace(System.err);
                     System.exit(ERROR_EXIT_CODE);
@@ -219,7 +228,8 @@ public class stepmod2mn {
         }
     }
 
-    private void convertstepmod2mn(File fXMLin, File fileOut) throws IOException, TransformerException, SAXParseException {
+    //private void convertstepmod2mn(File fXMLin, File fileOut) throws IOException, TransformerException, SAXParseException {
+    private void convertstepmod2mn(InputStream XMLinputStream, File fileOut) throws IOException, TransformerException, SAXParseException {
         
         try {
             
@@ -249,12 +259,12 @@ public class stepmod2mn {
             factory.setURIResolver(new ClasspathResourceURIResolver());            
             Transformer transformer = factory.newTransformer();
             //Source src = new StreamSource(fXMLin);
-            Source src = new SAXSource(rdr, new InputSource(new FileInputStream(fXMLin)));
+            //Source src = new SAXSource(rdr, new InputSource(new FileInputStream(fXMLin)));
+            Source src = new SAXSource(rdr, new InputSource(XMLinputStream));
             
             System.out.println("Transforming...");
             
-            src = new SAXSource(rdr, new InputSource(new FileInputStream(fXMLin)));
-                
+            
             // linearize XML
             Source srcXSLidentity = new StreamSource(Util.getStreamFromResources(getClass().getClassLoader(), "linearize.xsl"));
             
@@ -303,6 +313,7 @@ public class stepmod2mn {
                 }
                 writeBuffer(sbBuffer, outputFile);
             }
+            System.out.println("Saved " + Util.getFileSize(adocFileOut) + " bytes.");
             
         } catch (SAXParseException e) {            
             throw (e);

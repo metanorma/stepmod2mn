@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -13,6 +15,8 @@ import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -91,17 +95,37 @@ public class Util {
     }
     
     public static boolean isUrlExists(String urlname){
-    try {
-        HttpURLConnection.setFollowRedirects(false);        
-        HttpURLConnection con = (HttpURLConnection) new URL(urlname).openConnection();
-        con.setRequestMethod("HEAD");
-        return (con.getResponseCode() == HttpURLConnection.HTTP_OK ||
-                con.getResponseCode() == HttpURLConnection.HTTP_MOVED_TEMP);
+        try {
+            HttpURLConnection.setFollowRedirects(false);        
+            HttpURLConnection con = (HttpURLConnection) new URL(urlname).openConnection();
+            con.setRequestMethod("HEAD");
+            return (con.getResponseCode() == HttpURLConnection.HTTP_OK ||
+                    con.getResponseCode() == HttpURLConnection.HTTP_MOVED_TEMP);
+        }
+        catch (Exception e) {
+           e.printStackTrace();
+           return false;
+        }
     }
-    catch (Exception e) {
-       e.printStackTrace();
-       return false;
-    }
-  }
     
+    public static String getParentUrl(String url) {
+        String parentUrl;
+        try {
+            URI uri = new URI(url);
+            URI parent = uri.getPath().endsWith("/") ? uri.resolve("..") : uri.resolve(".");
+            return parent.toString();
+        } catch (URISyntaxException ex) {
+            return "";
+        }
+    }
+    
+    public static String getFilenameFromURL(String url) {
+        String fileName = url.substring(url.lastIndexOf('/') + 1, url.length());
+        return fileName;
+    }
+    
+    public static long getFileSize(File file) {
+        long length = file.length();
+        return length;
+    }
 }
