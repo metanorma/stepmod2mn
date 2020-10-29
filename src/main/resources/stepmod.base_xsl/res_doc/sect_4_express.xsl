@@ -1861,8 +1861,8 @@
 			<xsl:call-template name="insertCodeStart"/>
 				<xsl:text>*) +&#xa;</xsl:text><!-- <br/> -->
 			<!-- <A NAME="{$aname}">SUBTYPE_CONSTRAINT <b>
-			<xsl:value-of select="@name"/></b></A> -->
-				<A NAME="{$aname}">SUBTYPE_CONSTRAINT <xsl:text>*</xsl:text><xsl:value-of select="@name"/><xsl:text>*</xsl:text></A>
+			<xsl:value-of select="@name"/></b></A> -->				
+				<xsl:text>SUBTYPE_CONSTRAINT *</xsl:text><xsl:value-of select="@name"/><xsl:text>*[</xsl:text><xsl:value-of select="$aname"/><xsl:text>]</xsl:text>
 				<xsl:text> FOR </xsl:text>
 				<xsl:call-template name="link_object">
 					<xsl:with-param name="object_name" select="@entity"/>

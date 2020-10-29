@@ -1175,27 +1175,33 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 		 A definition list
 		 -->
 <xsl:template match="dl">
-	<dl>
-		<xsl:apply-templates/>
-	</dl>
+	<!-- <dl> -->
+	<xsl:apply-templates mode="dl"/>
+	<!-- </dl> -->
+	<xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <!--
 		 A definition term
 		 -->
-<xsl:template match="dt">
-	<dt>
+<xsl:template match="dt" mode="dl">
+	<!-- <dt>
 		<xsl:apply-templates/>
-	</dt>
+	</dt> -->
+	<xsl:apply-templates/><xsl:text>:: </xsl:text>
+	<xsl:apply-templates select="following-sibling::*[local-name()='dd'][1]" mode="dl_process"/>
+	<xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <!--
 		 A definition desription
 		 -->
-<xsl:template match="dd">
-	<dd>
+ <xsl:template match="dd" mode="dl"/>
+<xsl:template match="dd" mode="dl_process">
+	<!-- <dd>
 		<xsl:apply-templates/>
-	</dd>
+	</dd> -->	
+	<xsl:apply-templates/>
 </xsl:template>
 
 <!--
