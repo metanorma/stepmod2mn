@@ -16,7 +16,6 @@
 	<xsl:import href="stepmod.base_xsl/res_doc/express_description.xsl"/>
 	<xsl:import href="stepmod.base_xsl/res_doc/express_link.xsl"/>
 	<xsl:import href="stepmod.base_xsl/res_doc/expressg_icon.xsl"/>
-	<xsl:import href="stepmod.base_xsl/res_doc/res_toc.xsl"/>
 	<xsl:import href="stepmod.base_xsl/res_doc/resource.xsl"/>
 	<xsl:import href="stepmod.base_xsl/res_doc/sect_introduction.xsl"/>
 	<xsl:import href="stepmod.base_xsl/res_doc/sect_1_scope.xsl"/>
@@ -458,6 +457,18 @@
 		<xsl:call-template name="insertCodeStart"/>
 		<xsl:apply-templates/>
 		<xsl:call-template name="insertCodeEnd"/>
+	</xsl:template>
+	
+	<xsl:template name="insertHyperlink">
+		<xsl:param name="a"/>
+		<xsl:variable name="href">
+			<xsl:choose>
+				<xsl:when test="xalan:nodeset($a)/*/@HREF"><xsl:value-of select="xalan:nodeset($a)/*/@HREF"/></xsl:when>
+				<xsl:otherwise><xsl:value-of select="xalan:nodeset($a)/*/@href"/></xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:value-of select="$href"/><xsl:text>[</xsl:text><xsl:value-of select="normalize-space(xalan:nodeset($a)/*/text())"/><xsl:text>]</xsl:text>
+		
 	</xsl:template>
 	
 	<xsl:template name="repeat">

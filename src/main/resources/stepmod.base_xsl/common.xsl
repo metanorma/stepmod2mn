@@ -34,50 +34,7 @@ $Id: common.xsl,v 1.204 2018/10/07 10:51:54 mike Exp $
 	</xsl:template>
 
 	<xsl:output method="html"/>
-<!--
-		 Output a cascading stylesheet. The stylesheet is specified in the
-		 global parameter: output_css in parameter.xsl, so to prevent a
-		 cascading stylesheet being used set output_css to ''
-		 To override this and force a cascading stylesheet set
-		 overide_css
-		 -->
-<xsl:template name="output_css">
-	<xsl:param name="path"/>
-	<xsl:param name="override_css"/>
-	<xsl:choose>
-		<xsl:when test="$override_css">
-			<xsl:variable name="hpath"
-			select="concat($path,$override_css)"/>
-			<link
-				rel="stylesheet"
-				type="text/css"
-				href="{$hpath}"/>
-		</xsl:when>
-		<xsl:when test="$output_css">
-			<xsl:variable name="hpath"
-				select="concat($path,$output_css)"/>
-			<linkg
-				rel="stylesheet"
-				type="text/css"
-				href="{$hpath}"/>
-		</xsl:when>
-	</xsl:choose>
-</xsl:template>
-<!--
-		 Output an HTML meta element for inclusion in the header of the HTML file
--->
-<xsl:template name="meta-elements">
-	<xsl:param name="name" />
-	<xsl:param name="content" />
-	<xsl:element name="META">
-		<xsl:attribute name="name">
-			<xsl:value-of select="$name"/>
-		</xsl:attribute>
-		<xsl:attribute name="content">
-			<xsl:value-of select="$content"/>
-		</xsl:attribute>
-	</xsl:element>
-</xsl:template>
+
 
 <!--
 		 Output the module title - used to create the HTML TITLE
@@ -130,402 +87,6 @@ $Id: common.xsl,v 1.204 2018/10/07 10:51:54 mike Exp $
 
 </xsl:template>
 
-
-<xsl:template match="module" mode="meta_data">
-	<xsl:param name="clause"/>
-	<link rel = "schema.DC"
-		href    = "http://www.dublincore.org/documents/2003/02/04/dces/"/>
-
-	<xsl:variable name="module_name">
-		<xsl:call-template name="module_display_name">
-			<xsl:with-param name="module" select="./@name"/>
-		</xsl:call-template>           
-	</xsl:variable>
-		
-	<xsl:variable name="stdnumber">
-		<xsl:call-template name="get_module_pageheader">
-			<xsl:with-param name="module" select="."/>
-		</xsl:call-template>
-	</xsl:variable>
-	<xsl:variable name="module_title">
-		<xsl:value-of select="concat('Product data representation and exchange: Application module: ', $module_name)"/>
-	</xsl:variable>
-	<xsl:call-template name="meta-elements">
-		<xsl:with-param name="name" select="'DC.Title'"/>
-		<xsl:with-param name="content" select="$module_title"/>
-	</xsl:call-template>
-
-	<xsl:variable name="dc.dates"
-		select="normalize-space(substring-after((translate(@rcs.date,'$/',' -')),'Date:'))"/>
-	<xsl:call-template name="meta-elements">
-		<xsl:with-param name="name" select="'DC.Dates'"/>
-		<xsl:with-param name="content" select="$dc.dates"/>
-	</xsl:call-template>
-
-	<xsl:variable name="published"
-		select="@publication.date"/>
-	<xsl:call-template name="meta-elements">
-		<xsl:with-param name="name" select="'DC.Published'"/>
-		<xsl:with-param name="content" select="$published"/>
-	</xsl:call-template>
-
-
-	<xsl:variable name="editor_ref" select="./contacts/editor/@ref"/>
-	<xsl:variable name="editor_contact"
-		select="document(concat($path, '../../../data/basic/contacts.xml'))/contact.list/contact[@id=$editor_ref]"/>
-	<xsl:variable name="dc.contributor">
-		<xsl:value-of select="normalize-space(concat($editor_contact/lastname,', ',$editor_contact/firstname))"/>
-	</xsl:variable>
-	<xsl:call-template name="meta-elements">
-		<xsl:with-param name="name" select="'DC.Contributor'"/>
-		<xsl:with-param name="content" select="$dc.contributor"/>
-	</xsl:call-template>
-
-	<xsl:variable name="projlead_ref" select="./contacts/projlead/@ref"/>
-	<xsl:variable name="projlead_contact"
-		select="document(concat($path, '../../../data/basic/contacts.xml'))/contact.list/contact[@id=$projlead_ref]"/>
-	<xsl:variable name="dc.creator">
-		<xsl:value-of select="normalize-space(concat($projlead_contact/lastname,', ',$projlead_contact/firstname))"/>
-	</xsl:variable>
-	<xsl:call-template name="meta-elements">
-		<xsl:with-param name="name" select="'DC.Creator'"/>
-		<xsl:with-param name="content" select="$dc.creator"/>
-	</xsl:call-template>
-
-	<xsl:call-template name="meta-elements">
-		<xsl:with-param name="name" select="'DC.Description'"/>
-		<xsl:with-param name="content" select="concat('The application module ',$module_name)"/>
-	</xsl:call-template>
-
-	<xsl:variable name="keywords">
-		<xsl:apply-templates select="./keywords"/>
-	</xsl:variable>
-	<xsl:call-template name="meta-elements">
-		<xsl:with-param name="name" select="'DC.Subject'"/>
-		<xsl:with-param name="content" select="normalize-space($keywords)"/>
-	</xsl:call-template>
-
-	<xsl:variable name="wg_group">
-		<xsl:call-template name="get_module_wg_group"/>
-	</xsl:variable>  
-	<xsl:variable name="id"
-		select="concat('ISO/TC 184/SC 4/WG ',$wg_group,' N',./@wg.number)"/>
-	<xsl:variable name="clause_of">
-		<xsl:if test="$clause">
-			<xsl:value-of select="concat('Clause of ',$clause)"/>
-		</xsl:if>
-	</xsl:variable>
-	<xsl:call-template name="meta-elements">
-		<xsl:with-param name="name" select="'DC.Identifier'"/>
-		<xsl:with-param name="content" select="$id"/>
-	</xsl:call-template>
-
-	<xsl:variable name="supersedes"
-		select="concat('ISO/TC 184/SC 4/WG ',$wg_group,' N',./@wg.number.supersedes)"/>
-	<xsl:call-template name="meta-elements">
-		<xsl:with-param name="name" select="'DC.Replaces'"/>
-		<xsl:with-param name="content" select="$supersedes"/>
-	</xsl:call-template>
-
-	<xsl:call-template name="meta-elements">
-		<xsl:with-param name="name" select="'SC4.version'"/>
-		<xsl:with-param name="content" select="./@version"/>
-	</xsl:call-template>
-
-	<xsl:variable name="checklist.internal_review" select="concat('ISO/TC 184/SC 4/WG ',$wg_group,' N',./@checklist.internal_review)"/>
-	<xsl:call-template name="meta-elements">
-		<xsl:with-param name="name" select="'SC4.checklist.internal_review'"/>
-		<xsl:with-param name="content" select="$checklist.internal_review"/>
-	</xsl:call-template>
-
-	<xsl:variable name="checklist.project_leader" select="concat('ISO/TC 184/SC 4/WG ',$wg_group,' N',./@checklist.project_leader)"/>
-	<xsl:call-template name="meta-elements">
-		<xsl:with-param name="name" select="'SC4.checklist.project_leader'"/>
-		<xsl:with-param name="content" select="$checklist.project_leader"/>
-	</xsl:call-template>
-
-	<xsl:variable name="checklist.convener" select="concat('ISO/TC 184/SC 4/WG ',$wg_group,' N',./@checklist.convener)"/>
-	<xsl:call-template name="meta-elements">
-		<xsl:with-param name="name" select="'SC4.checklist.convener'"/>
-		<xsl:with-param name="content" select="$checklist.convener"/>
-	</xsl:call-template>
-
-			
-	<xsl:call-template name="meta-elements">
-		<xsl:with-param name="name" select="'STEPMOD.module.rcs.date'"/>
-		<xsl:with-param name="content" select="normalize-space(translate(./@rcs.date,'$/',' -'))"/>
-	</xsl:call-template>
-
-	<xsl:call-template name="meta-elements">
-		<xsl:with-param name="name" select="'STEPMOD.module.rcs.revision'"/>
-		<xsl:with-param name="content" select="normalize-space(translate(./@rcs.revision,'$',''))"/>
-	</xsl:call-template>
-	
-	<xsl:variable name="revstring" select="'Revision:'"/>
-	<xsl:call-template name="meta-elements">
-		<xsl:with-param name="name" select="'PART1000.module.rcs.revision'"/>
-		<xsl:with-param name="content" select="concat('$',string($revstring),' $')"/>
-	</xsl:call-template>
-	<xsl:variable name="datestring" select="'Date:'"/>
-	<xsl:call-template name="meta-elements">
-		<xsl:with-param name="name" select="'PART1000.module.rcs.date'"/>
-		<xsl:with-param name="content" select="concat('$',string($datestring),' $')"/>
-	</xsl:call-template>
-
-	<!-- now get meta data for arm and mim -->
-	<xsl:variable name="module_dir">
-		<xsl:call-template name="module_directory">
-			<xsl:with-param name="module" select="./@name"/>
-		</xsl:call-template>
-	</xsl:variable>
-	<xsl:variable name="arm_xml" select="concat($module_dir,'/arm.xml')"/>
-	<xsl:variable name="arm_express" select="document($arm_xml)/express"/>
-	<xsl:call-template name="meta-elements">
-		<xsl:with-param name="name" select="'STEPMOD.arm.rcs.revision'"/>
-		<xsl:with-param name="content" select="normalize-space(translate($arm_express/@rcs.revision,'$',''))"/>
-	</xsl:call-template>
-
-	<xsl:variable name="mim_xml" select="concat($module_dir,'/mim.xml')"/>
-	<xsl:variable name="mim_express" select="document($mim_xml)/express"/>
-	<xsl:call-template name="meta-elements">
-		<xsl:with-param name="name" select="'STEPMOD.mim.rcs.revision'"/>
-		<xsl:with-param name="content" select="normalize-space(translate($mim_express/@rcs.revision,'$',''))"/>
-	</xsl:call-template>
-	</xsl:template>
-
-
-	<!-- output RCS version control information -->
-<xsl:template name="rcs_output">
-	<xsl:param name="module" select="@name"/>
-	<!-- the relative path in HTML from the file calling to the module
-			 directory -->
-	<xsl:param name="module_root" select="'..'"/>
-
-	<xsl:variable name="icon_path" select="concat($module_root,'/../../../images/')"/>
-
-	<xsl:if test="$output_rcs='YES'">
-		<xsl:variable name="mod_dir">
-			<xsl:call-template name="module_directory">
-				<xsl:with-param name="module" select="$module"/>
-			</xsl:call-template>
-		</xsl:variable>
-
-		<xsl:variable name="fldr_gif" select="concat($icon_path,'folder.gif')"/>
-		<xsl:variable name="proj_gif" select="concat($icon_path,'project.gif')"/>
-
-		<table cellspacing="0" border="0">
-			<xsl:variable
-				name="module_file"
-				select="concat($mod_dir,'/module.xml')"/>
-			<xsl:variable
-				name="module_date"
-				select="translate(document($module_file)/module/@rcs.date,'$','')"/>
-			<xsl:variable
-				name="module_rev"
-				select="translate(document($module_file)/module/@rcs.revision,'$','')"/>
-			<tr>
-				<td>
-					<p class="rcs">
-					<a href="{$module_root}">
-						<img alt="module folder" 
-							border="0"
-							align="middle"
-							src="{$fldr_gif}"/>
-					</a>&#160;
-
-					<xsl:if test="@development.folder">
-						<xsl:variable name="prjmg_href"
-							select="concat($module_root,'/',@development.folder,'/projmg',$FILE_EXT)"/>
-						<a href="{$prjmg_href}">
-							<img alt="project management summary" 
-								border="0"
-								align="middle"
-								src="{$proj_gif}"/>
-						</a>&#160;
-						<xsl:variable name="issue_href"
-							select="concat($module_root,'/',@development.folder,'/issues',$FILE_EXT)"/>
-						<xsl:variable name="issues_file" 
-							select="concat($mod_dir,'/',@development.folder,'/issues.xml')"/>
- 
-						<xsl:variable name="open_issues"
-							select="count(document($issues_file)/issues/issue[@status!='closed'])"/>
-
-						<xsl:variable name="total_issues"
-							select="count(document($issues_file)/issues/issue)"/>
-
-						<xsl:variable name="issue_gif">
-							<xsl:choose>
-								<xsl:when test="$open_issues>0">
-									<xsl:value-of select="concat($icon_path,'issues.gif')"/>
-								</xsl:when>
-								<xsl:otherwise>
-									<xsl:value-of select="concat($icon_path,'closed.gif')"/>
-								</xsl:otherwise>
-							</xsl:choose>
-						</xsl:variable>
-
-					 <xsl:if test="$total_issues > 0">
-						 <a href="{$issue_href}">
-							 <img alt="issues" 
-								 border="0"
-								 align="middle"
-								 src="{$issue_gif}"/>
-							 <small>[<xsl:value-of select="$open_issues"/>/<xsl:value-of select="$total_issues"/>]</small>
-						 </a>&#160;
-					 </xsl:if>
-					</xsl:if>
-				</p>
-				</td>
-				<td>
-					<font size="-2">
-						<p class="rcs">Module edition:</p>
-					</font>
-				</td>
-				<td>
-					<font size="-2">
-						<p class="rcs">
-							<xsl:value-of select="@version"/>
-						</p>
-					</font>
-				</td>
-				<td>&#160;&#160;</td>
-				<td>
-					<font size="-2">
-						<p class="rcs">
-							<xsl:value-of select="'module.xml'"/>
-						</p>
-					</font>
-				</td>
-				<td>
-					<font size="-2">
-						<p class="rcs">
-							<xsl:value-of select="concat('(',$module_date,' ',$module_rev,')')"/>
-						</p>
-					</font>
-				</td>
-				<td>&#160;&#160;</td>
-			<xsl:variable
-				name="arm_file"
-				select="concat($mod_dir,'/arm.xml')"/>
-			<xsl:variable
-				name="arm_date"
-				select="translate(document($arm_file)/express/@rcs.date,'$','')"/>
-			<xsl:variable
-				name="arm_rev"
-				select="translate(document($arm_file)/express/@rcs.revision,'$','')"/>
-
-				<td>
-					<font size="-2">
-						<p class="rcs">
-							<xsl:value-of select="'arm.xml'"/>
-						</p>
-					</font>
-				</td>
-				<td>
-					<font size="-2">
-						<p class="rcs">
-							<xsl:value-of select="concat('(', $arm_date,' ',$arm_rev,')')"/>
-						</p>
-					</font>
-				</td>
-				<td>&#160;&#160;</td>
-
-			<xsl:variable
-				name="mim_file"
-				select="concat($mod_dir,'/mim.xml')"/>
-			<xsl:variable
-				name="mim_date"
-				select="translate(document($mim_file)/express/@rcs.date,'$','')"/>
-			<xsl:variable
-				name="mim_rev"
-				select="translate(document($mim_file)/express/@rcs.revision,'$','')"/>
-
-				<td>
-					<font size="-2">
-						<p class="rcs">
-							<xsl:value-of select="'mim.xml'"/>
-						</p>
-					</font>
-				</td>
-				<td>
-					<font size="-2">
-						<p class="rcs">
-							<xsl:value-of select="concat('(',$mim_date,'
-',$mim_rev,')')"/>
-						</p>
-					</font>
-				</td>
-			</tr>
-		</table>
-	</xsl:if>
-</xsl:template>
-
-<!--
-		 Output the title for a table of contents banner for a module
-		 displayed on separate pages
-		 If the global parameter: output_rcs in parameter.xsl
-		 is set, then RCS version control information is displayed
--->
-<xsl:template match="module" mode="TOCbannertitle">
-	<!-- the entry that has been selected -->
-	<xsl:param name="selected"/>
-	<xsl:param name="module_root" select="'..'"/>
-
-	<!-- output RCS version control information -->
-	<xsl:call-template name="rcs_output">
-		<xsl:with-param name="module" select="@name"/>
-		<xsl:with-param name="module_root" select="$module_root"/>
-	</xsl:call-template>
-
-	<TABLE cellspacing="0" border="0" width="100%">
-		<TR>
-			<TD>
-				<!-- RBN - this xref is here to aid navigation, it may need to be
-						 removed for the ISO process 
-				<A HREF="{$module_root}/../../../repository_index{$FILE_EXT}">
-					Module repository
-				</A><BR/>
-				-->
-				<xsl:call-template name="output_menubar">
-					<xsl:with-param name="module_root" select="$module_root"/>
-					<xsl:with-param name="module_name" select="@name"/>
-
-				</xsl:call-template>
-			</TD>
-		</TR>
-		<TR>
-			<TD valign="MIDDLE">
-				<xsl:variable name="text">
-				<!-- <B> -->
-					Application module:
-					<xsl:call-template name="module_display_name">
-						<xsl:with-param name="module" select="@name"/>
-					</xsl:call-template>
-				<!-- </B> -->
-				</xsl:variable>
-				<xsl:text> *</xsl:text><xsl:value-of select="normalize-space($text)"/><xsl:text>* </xsl:text>
-			</TD>
-			<TD valign="MIDDLE" align="RIGHT">
-				<xsl:variable name="stdnumber">
-					<xsl:call-template name="get_module_pageheader">
-						<xsl:with-param name="module" select="."/>
-					</xsl:call-template>
-				</xsl:variable>
-				<xsl:variable name="text">
-				<!-- <b> -->
-					<xsl:value-of select="$stdnumber"/>
-					<xsl:variable name="status" select="string(@status)"/>
-					<xsl:if test="$status='TS' or $status='DIS' or $status='IS'">
-						<br/>
-						&#169; ISO
-					</xsl:if>
-				<!-- </b> -->
-				</xsl:variable>
-				<xsl:text> *</xsl:text><xsl:value-of select="normalize-space($text)"/><xsl:text>* </xsl:text>
-			</TD>
-		</TR>
-	</TABLE>
-</xsl:template>
 
 
 
@@ -621,9 +182,11 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 			<xsl:text>&#xa;&#xa;</xsl:text>
 			<xsl:text>[example]</xsl:text>
 			<xsl:text>&#xa;</xsl:text>
-			<xsl:text>[[</xsl:text>
-			<xsl:value-of select="$aname"/>
-			<xsl:text>]]</xsl:text>
+			<xsl:if test="$aname != ''">
+				<xsl:text>[[</xsl:text>
+				<xsl:value-of select="$aname"/>
+				<xsl:text>]]</xsl:text>
+			</xsl:if>
 			<xsl:text>&#xa;</xsl:text>
 			<xsl:variable name="example"><xsl:apply-templates/></xsl:variable>
 			<xsl:value-of select="normalize-space($example)"/>
@@ -675,9 +238,11 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 	<xsl:text>&#xa;&#xa;</xsl:text>
 	<xsl:text>[example]</xsl:text>
 	<xsl:text>&#xa;</xsl:text>
-	<xsl:text>[[</xsl:text>
-	<xsl:value-of select="$aname"/>
-	<xsl:text>]]</xsl:text>
+	<xsl:if test="$aname != ''">
+		<xsl:text>[[</xsl:text>
+		<xsl:value-of select="$aname"/>
+		<xsl:text>]]</xsl:text>
+	</xsl:if>
 	<xsl:text>&#xa;</xsl:text>
 	<xsl:variable name="example"><xsl:apply-templates/></xsl:variable>
 	<xsl:value-of select="normalize-space($example)"/>
@@ -1262,42 +827,27 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 	</xsl:variable>
 	
 	
-	<!-- <a href="{$href}" target="_self"> --><!-- @href replaced with $href here and throughout rest of template MWD 2017-04-05 -->
-	 <!--  
-	<xsl:variable name="link_name">
-		<xsl:apply-templates/>
-	</xsl:variable>
-<xsl:value-of select="$link_name"/>
-		<xsl:choose>
-			<xsl:when test="string-length($link_name) > 0"> -->
-				<!-- link alread has a name so don't add another -->
-			<!-- </xsl:when>
-				
-			<xsl:when test="string-length(text()) > 0" >(<xsl:value-of select="$href"/>)</xsl:when>
-		<xsl:otherwise>
-			<xsl:value-of select="$href"/>
-		</xsl:otherwise>
-		</xsl:choose>
-	</a> -->
-	
-	<xsl:variable name="text">
-		<xsl:variable name="link_name">
-			<xsl:apply-templates/>
-		</xsl:variable>
-		<xsl:value-of select="$link_name"/>
-		<xsl:choose>
-			<xsl:when test="string-length($link_name) > 0">
-				<!-- link alread has a name so don't add another -->
-			</xsl:when>
-				
-			<xsl:when test="string-length(text()) > 0" >(<xsl:value-of select="$href"/>)</xsl:when>
-		<xsl:otherwise>
-			<xsl:value-of select="$href"/>
-		</xsl:otherwise>
-		</xsl:choose>
-	</xsl:variable>
-	
-	<xsl:value-of select="$text"/><xsl:text>[</xsl:text><xsl:value-of select="$href"/><xsl:text>]</xsl:text>
+		<xsl:call-template name="insertHyperlink">
+			<xsl:with-param name="a">
+				<a href="{$href}" target="_self"><!-- @href replaced with $href here and throughout rest of template MWD 2017-04-05 -->
+					
+					<xsl:variable name="link_name">
+						<xsl:apply-templates/>
+					</xsl:variable>
+					<xsl:value-of select="$link_name"/>
+						<xsl:choose>
+							<xsl:when test="string-length($link_name) > 0">
+								<!-- link alread has a name so don't add another -->
+							</xsl:when>
+								
+							<xsl:when test="string-length(text()) > 0" >(<xsl:value-of select="$href"/>)</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="$href"/>
+						</xsl:otherwise>
+					</xsl:choose>
+				</a>
+			</xsl:with-param>
+		</xsl:call-template>
 	
 </xsl:template>
 
@@ -2231,12 +1781,20 @@ width="20" height="20"/> -->
 			<xsl:otherwise>
 				<xsl:choose>
 					<xsl:when test="string-length(normalize-space(.))>0">
-						<!-- <a href="{$href}"><b><xsl:apply-templates/></b></a> -->            
-						<xsl:text> *</xsl:text><xsl:apply-templates/><xsl:text>*[</xsl:text><xsl:value-of select="$href"/><xsl:text>]</xsl:text>
+						<!-- <a href="{$href}"><b><xsl:apply-templates/></b></a>             -->
+						<xsl:call-template name="insertHyperlink">
+							<xsl:with-param name="a">
+								<a href="{$href}"><xsl:text>*</xsl:text><xsl:apply-templates/><xsl:text>*</xsl:text></a>            
+							</xsl:with-param>
+						</xsl:call-template>
 					</xsl:when>
 					<xsl:otherwise>
 						<!-- <a href="{$href}"><b><xsl:value-of select="$item"/></b></a> -->            
-						<xsl:text> *</xsl:text><xsl:apply-templates/><xsl:text>*[</xsl:text><xsl:value-of select="$item"/><xsl:text>]</xsl:text>
+						<xsl:call-template name="insertHyperlink">
+							<xsl:with-param name="a">
+								<a href="{$href}"><xsl:text>*</xsl:text><xsl:value-of select="$item"/><xsl:text>*</xsl:text></a>							
+							</xsl:with-param>
+						</xsl:call-template>						
 					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:otherwise>
@@ -3046,7 +2604,11 @@ width="20" height="20"/> -->
 				<xsl:choose>
 					<xsl:when test="string-length(.)>0">
 						<!-- <a href="{$href}"><xsl:apply-templates/></a> -->
-						<xsl:apply-templates/><xsl:text>[</xsl:text><xsl:value-of select="$href"/><xsl:text>]</xsl:text>
+						<xsl:call-template name="insertHyperlink">
+							<xsl:with-param name="a">
+								<a href="{$href}"><xsl:apply-templates/></a>
+							</xsl:with-param>
+						</xsl:call-template>						
 					</xsl:when>
 					<xsl:otherwise>
 						<xsl:variable name="module_name">
@@ -3055,7 +2617,11 @@ width="20" height="20"/> -->
 							</xsl:call-template>
 						</xsl:variable>
 						<!-- <a href="{$href}"><xsl:value-of select="$module_name"/></a> -->
-						<xsl:value-of select="$module_name"/><xsl:text>[</xsl:text><xsl:value-of select="$href"/><xsl:text>]</xsl:text>
+						<xsl:call-template name="insertHyperlink">
+							<xsl:with-param name="a">
+								<a href="{$href}"><xsl:value-of select="$module_name"/></a>
+							</xsl:with-param>
+						</xsl:call-template>						
 					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:otherwise>
@@ -4061,178 +3627,7 @@ is case sensitive.')"/>
 </xsl:template>
 
 
-	<!-- 
-			 Output a menubar at the top of the page.
-			 The menu bar is defined in a menubar file specified by the parameter 
-			 menubar_file defined in menubar_params.xsl
-			 -->
-	<xsl:template name="output_menubar">
-		<xsl:param name="module_root"/>
-		<xsl:param name="module_name"/>
-		<!-- overwrites the menubar file defined in menubar_params.xsl -->
-		<xsl:param name="new_menubar_file"/>
-		<!-- the relative path from XSL directory to stepmod -->
-		<xsl:param name="xsl_path" select="'..'"/>
 
-		<xsl:variable name="rel_menubar_file">
-			<xsl:choose>
-				<xsl:when test="string-length($new_menubar_file)>0">
-					<xsl:value-of select="concat($xsl_path,'/',$new_menubar_file)"/>
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:value-of select="concat($xsl_path,'/',$menubar_file)"/>
-				</xsl:otherwise>
-			</xsl:choose>
-		</xsl:variable>
-		<!--    <xsl:message>
-			mb:<xsl:value-of select="$rel_menubar_file"/>
-		</xsl:message>  -->
-		<!-- no idea why I need to force a string here -->
-		<xsl:apply-templates
-			select="document(string($rel_menubar_file))/menubar">
-			<xsl:with-param name="module_root" select="$module_root"/>
-			<xsl:with-param name="module_name" select="$module_name"/>
-		</xsl:apply-templates>
-	</xsl:template>
-
-	<xsl:template match="menubar">
-		<xsl:param name="module_root"/>
-		<xsl:param name="module_name"/>
-		<small>
-			<xsl:apply-templates select="menuitem|menubreak|menuspace">
-				<xsl:with-param name="module_root" select="$module_root"/>
-				<xsl:with-param name="module_name" select="$module_name"/>
-		</xsl:apply-templates>
-		</small>
-	</xsl:template>
-
-	<xsl:template match="menubreak">
-		<br/>
-	</xsl:template>
-
-	<xsl:template match="menuspace">
-		<xsl:value-of select="."/>
-	</xsl:template>
-
-	<xsl:template match="menuitem">
-		<xsl:param name="module_root"/>
-		<xsl:param name="module_name"/>
-		<xsl:variable name="url">
-			<xsl:choose>
-				<xsl:when test="@relative.url">
-					<xsl:variable name="relurl">
-						<xsl:choose>
-							<xsl:when test="starts-with(@relative.url,'..')">
-								<xsl:value-of select="concat('/',@relative.url)"/>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:value-of select="@relative.url"/>
-							</xsl:otherwise>
-						</xsl:choose>
-					</xsl:variable> <!-- relurl -->
-
-					<xsl:choose>
-						<xsl:when test="contains($relurl,'.xml')">
-							<xsl:value-of 
-								select="concat($module_root,
-												substring-before($relurl,'.xml'),
-												$FILE_EXT,
-												substring-after($relurl,'.xml'))"/>
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:value-of 
-								select="concat($module_root,$relurl)"/>
-						</xsl:otherwise>
-					</xsl:choose>
-				</xsl:when>
-
-				<xsl:when test="@module.url">
-					<xsl:variable name="relurl1">
-						<xsl:choose>
-							<xsl:when test="starts-with(@module.url,'..')">
-								<xsl:value-of select="concat('/',@module.url)"/>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:value-of select="@module.url"/>
-							</xsl:otherwise>
-						</xsl:choose>
-					</xsl:variable> <!-- relurl -->
-
-					<xsl:variable name="relurl2">
-						<xsl:choose>
-							<xsl:when test="contains($relurl1,'.xml')">
-								<xsl:value-of 
-									select="concat($module_root,
-													substring-before($relurl1,'.xml'),
-													$FILE_EXT,
-													substring-after($relurl1,'.xml'))"/>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:value-of 
-									select="concat($module_root,$relurl1)"/>
-							</xsl:otherwise>
-						</xsl:choose>
-					</xsl:variable> <!-- relurl2 -->
-
-					<xsl:value-of select="concat(
-																substring-before($relurl2, '{' ),
-																$module_name,
-																substring-after($relurl2, '}' ) )"/>
-				</xsl:when>
-
-				<xsl:when test="@absolute.url">
-					<xsl:value-of select="@absolute.url"/>
-				</xsl:when>
-				<xsl:otherwise>
-					ERROR
-				</xsl:otherwise>
-			</xsl:choose>
-		</xsl:variable> <!-- url -->
-
-
-		<xsl:choose>
-			<xsl:when test="contains($url,'ERROR')">
-				<xsl:call-template name="error_message">
-					<xsl:with-param
-						name="message"
-						select="concat('ERROR mb1: The menubar #',
-										$menubar_file ,' must contain a path.')"/>
-				</xsl:call-template>
-			</xsl:when>
-			
-			<xsl:when test="@img">
-				<xsl:variable name="item" select="@item"/>
-				<xsl:variable name="img">
-					<xsl:choose>
-						<xsl:when test="starts-with(@img,'..')">
-							<xsl:value-of select="concat($module_root,'/',@img)"/>
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:value-of select="concat($module_root,@img)"/>
-						</xsl:otherwise>
-					</xsl:choose>
-				</xsl:variable>
-				<a href="{$url}">
-					<img alt="{$item}" border="0" align="middle" src="{$img}"/>
-				</a>
-			</xsl:when>
-
-			<xsl:otherwise>
-				<a href="{$url}">
-					<xsl:value-of select="@item"/>
-				</a>
-			</xsl:otherwise>
-		</xsl:choose>
-
-		<xsl:choose>
-			<xsl:when test="string-length(@img)!= 0">
-				&#160;&#160;&#160;
-			</xsl:when>
-			<xsl:when test="position() != last()">
-				&#160;&#124;&#160;        
-			</xsl:when>
-		</xsl:choose>
-	</xsl:template>
 
 	<!-- check the schema name starts with Upper case and rest is lower case
 			 the schema ends in _arm or _mim -->
@@ -4565,10 +3960,10 @@ is case sensitive.')"/>
 			</xsl:choose>
 		</xsl:variable>
 
-		&#160;&#160;<a href="{$href_expg}">
+		<!-- &#160;&#160;<a href="{$href_expg}">
 			<img align="middle" border="0" 
 				alt="EXPRESS-G" src="../../../../images/expg.gif"/>
-		</a>
+		</a> -->
 
 	</xsl:template>
 
@@ -4625,10 +4020,10 @@ is case sensitive.')"/>
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
-		&#160;&#160;<a href="{$href_expg}">
+		<!-- &#160;&#160;<a href="{$href_expg}">
 			<img align="middle" border="0" 
 				alt="EXPRESS-G" src="{$module_root}/../../../images/expg.gif"/>
-		</a>
+		</a> -->
 
 	</xsl:template>
 
@@ -5343,8 +4738,7 @@ is case sensitive.')"/>
 			<xsl:when
 				test="( string(./@status)='TS' or 
 				string(./@status)='IS') and
-				( string(./@status)='CD' or string(./@status)='CD-TS')"
-				> &#160;<sup><a href="#derogation">2</a>)</sup>
+				( string(./@status)='CD' or string(./@status)='CD-TS')"><xsl:text> footnote:[Reference applicable during ballot or review period.]</xsl:text><!-- <sup><a href="#derogation">2</a>)</sup> -->
 			</xsl:when>
 			<!-- 
 				See 
@@ -5394,7 +4788,7 @@ is case sensitive.')"/>
 				test="( string(./@status)='TS' or 
 				string(./@status)='IS') and
 				( string(./@status)='CD' or string(./@status)='CD-TS')"
-				> &#160;<sup><a href="#derogation">2</a>)</sup>
+				><xsl:text> footnote:[Reference applicable during ballot or review period.]</xsl:text><!-- <sup><a href="#derogation">2</a>)</sup> -->
 			</xsl:when>
 			<!-- 
 				See 
@@ -5445,13 +4839,13 @@ is case sensitive.')"/>
 				test="( string(./@status)='TS' or 
 				string(./@status)='IS') and
 				( string(./@status)='CD' or string(./@status)='CD-TS')"
-				> &#160;<sup><a href="#derogation">2</a>)</sup>
+				><xsl:text> footnote:[Reference applicable during ballot or review period.]</xsl:text><!--  &#160;<sup><a href="#derogation">2</a>)</sup> -->
 			</xsl:when>
 			<!-- 
 				See 
 				http://locke.dcnicn.com/bugzilla/iso10303/show_bug.cgi?id=3401#c5        
 				-->
-			<xsl:when test="@published='n'">&#160;<sup><a href="#tobepub">1</a>)</sup>
+			<xsl:when test="@published='n'"><xsl:text> footnote:[To be published.]</xsl:text><!-- &#160;<sup><a href="#tobepub">1</a>)</sup> -->
 			</xsl:when>
 		</xsl:choose>,&#160; <!-- <i>
 			<xsl:value-of select="$stdtitle"/>
@@ -5473,7 +4867,14 @@ is case sensitive.')"/>
 	<xsl:template match="ulink">
 		<xsl:text>Available from the World Wide Web: </xsl:text>
 		<xsl:variable name="href" select="normalize-space(.)"/>
-		&lt;<a href="{$href}"><xsl:value-of select="$href"/></a>&gt;<xsl:text/>
+		
+		<!-- &lt;<a href="{$href}"><xsl:value-of select="$href"/></a>&gt;<xsl:text/> -->
+		
+		<xsl:call-template name="insertHyperlink">
+			<xsl:with-param name="a">
+				<a href="{$href}"><xsl:value-of select="$href"/></a>
+			</xsl:with-param>
+		</xsl:call-template>
 	</xsl:template>
 	
 	<!-- BOM -->

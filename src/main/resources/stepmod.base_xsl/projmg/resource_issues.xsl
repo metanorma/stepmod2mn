@@ -230,18 +230,23 @@
         </a>
       </b>
 			<br/>  -->
-      <xsl:variable name="href" select="concat('../dvlp/issues', $FILE_EXT, '#', $issue_target)"/>
-      <xsl:variable name="text">				
-        <xsl:apply-templates select="." mode="status_icon"/>
-        Issue:
-        <xsl:value-of select="concat(
-                              string(@id), 
-                              ' by ', string(@by),
-                              ' (', string(@date), 
-                              ') [', string(@category),', ',string(@status), ', ',$resolution,']')" />        
-			</xsl:variable>
-      
-			<xsl:text>*</xsl:text><xsl:value-of select="normalize-space($text)"/><xsl:text>*[</xsl:text><xsl:value-of select="$href"/><xsl:text>]</xsl:text>      
+			
+			<xsl:call-template name="insertHyperlink">
+				<xsl:with-param name="a">
+					<a href="../dvlp/issues{$FILE_EXT}#{$issue_target}">
+						<xsl:text>*</xsl:text>
+							<xsl:apply-templates select="." mode="status_icon"/>
+							Issue:
+							<xsl:value-of select="concat(
+																		string(@id), 
+																		' by ', string(@by),
+																		' (', string(@date), 
+																		') [', string(@category),', ',string(@status), ', ',$resolution,']')" />
+							<xsl:text>*</xsl:text>
+						</a>
+				</xsl:with-param>
+			</xsl:call-template>
+			
       <xsl:text>&#xa;</xsl:text>
       
 <!-- commented out as tc184-sc4.rg no longer operational

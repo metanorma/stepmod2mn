@@ -443,11 +443,15 @@
 				<xsl:value-of select="$schema_name"/>
 			</xsl:when>
 			<xsl:otherwise>
-				<!-- <A HREF="{$express_file_to_ref}#{$xref}">
-					<xsl:value-of select="$schema_name"/>
-				</A> -->      
-				<xsl:value-of select="$schema_name"/><xsl:text>[</xsl:text><xsl:value-of select="concat($express_file_to_ref, '#', $xref)"/><xsl:text>]</xsl:text>
-
+			
+				<xsl:call-template name="insertHyperlink">
+					<xsl:with-param name="a">
+						 <A HREF="{$express_file_to_ref}#{$xref}">
+							<xsl:value-of select="$schema_name"/>
+						</A>
+					</xsl:with-param>
+				</xsl:call-template>
+				
 				
 			</xsl:otherwise>
 		</xsl:choose>
@@ -492,10 +496,13 @@
 				<xsl:value-of select="$schema_name"/>
 			</xsl:when>
 			<xsl:otherwise>
-				<!-- <A HREF="{$express_file_to_ref}#{$xref}">
-					<xsl:value-of select="$schema_name"/>
-				</A> -->
-				<xsl:value-of select="$schema_name"/><xsl:text>[</xsl:text><xsl:value-of select="concat($express_file_to_ref, '#', $xref)"/><xsl:text>]</xsl:text>
+				<xsl:call-template name="insertHyperlink">
+					<xsl:with-param name="a">
+						<A HREF="{$express_file_to_ref}#{$xref}">
+							<xsl:value-of select="$schema_name"/>
+						</A>
+					</xsl:with-param>
+				</xsl:call-template>				
 			</xsl:otherwise>
 		</xsl:choose>
 
@@ -539,10 +546,13 @@
 				<xsl:value-of select="$schema_name"/>
 			</xsl:when>
 			<xsl:otherwise>
-				<!-- <A HREF="{$express_file_to_ref}#{$xref}">
-					<xsl:value-of select="$schema_name"/>
-				</A> -->
-				<xsl:value-of select="$schema_name"/><xsl:text>[</xsl:text><xsl:value-of select="concat($express_file_to_ref, '#', $xref)"/><xsl:text>]</xsl:text>
+				<xsl:call-template name="insertHyperlink">
+					<xsl:with-param name="a">
+						<A HREF="{$express_file_to_ref}#{$xref}">
+							<xsl:value-of select="$schema_name"/>
+						</A>
+					</xsl:with-param>
+				</xsl:call-template>
 			</xsl:otherwise>
 		</xsl:choose>
 
@@ -586,10 +596,14 @@
 					</xsl:call-template>
 				</xsl:variable>
 				
-				<!-- <A HREF="{$xref}">
-					<xsl:value-of select="$lobject_name"/>
-				</A> -->
-				<xsl:value-of select="$lobject_name"/><xsl:text>[</xsl:text><xsl:value-of select="$xref"/><xsl:text>]</xsl:text>
+				<xsl:call-template name="insertHyperlink">
+					<xsl:with-param name="a">
+						<A HREF="{$xref}">
+							<xsl:value-of select="$lobject_name"/>
+						</A>
+					</xsl:with-param>
+				</xsl:call-template>
+				
 				
 				<!-- debug 
 				<xsl:message>     
@@ -1201,10 +1215,15 @@
 						<xsl:with-param name="object_name" select="$lobject_name"/>
 					</xsl:call-template>
 				</xsl:variable>
-				<!-- <A HREF="{$xref}">
-					<xsl:value-of select="$lobject_name"/>
-				</A> -->
-				<xsl:value-of select="$lobject_name"/><xsl:text>[</xsl:text><xsl:value-of select="$xref"/><xsl:text>]</xsl:text>
+				
+				<xsl:call-template name="insertHyperlink">
+					<xsl:with-param name="a">
+						<A HREF="{$xref}">
+							<xsl:value-of select="$lobject_name"/>
+						</A>
+					</xsl:with-param>
+				</xsl:call-template>
+				
 			</xsl:when>
 
 			<xsl:otherwise>

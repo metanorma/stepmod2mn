@@ -3514,11 +3514,14 @@
 				</xsl:call-template>
 				<xsl:value-of select="concat(' ',$lkind)"/>
 				is specified in 
-				<!-- <a href="{$resource_href}">
-					<xsl:value-of select="concat('ISO 10303-',$resource_no)"/>
-				</a> -->
-				<xsl:value-of select="concat('ISO 10303-',$resource_no)"/>
-				<xsl:text>[</xsl:text><xsl:value-of select="$resource_href"/><xsl:text>]</xsl:text>
+				
+				<xsl:call-template name="insertHyperlink">
+					<xsl:with-param name="a">
+						<a href="{$resource_href}">
+							<xsl:value-of select="concat('ISO 10303-',$resource_no)"/>
+						</a>
+					</xsl:with-param>
+				</xsl:call-template>
 				
 				The following modifications apply to this part of ISO 10303.
 			</xsl:with-param>

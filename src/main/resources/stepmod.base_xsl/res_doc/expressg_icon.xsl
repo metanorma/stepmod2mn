@@ -179,9 +179,9 @@ $Id: expressg_icon.xsl,v 1.1 2003/08/26 05:32:50 thendrix Exp $
               </xsl:call-template>   
             </xsl:when>
             <xsl:otherwise>
-              &#160;&#160;<a href="{$href_expg}">
+              <!-- &#160;&#160;<a href="{$href_expg}">
               <img align="middle" border="0" 
-                alt="EXPRESS-G" src="{$resdoc_root}/../../../images/expg.gif"/></a>
+                alt="EXPRESS-G" src="{$resdoc_root}/../../../images/expg.gif"/></a> -->
             </xsl:otherwise>
       </xsl:choose>
     </xsl:when>
@@ -189,10 +189,10 @@ $Id: expressg_icon.xsl,v 1.1 2003/08/26 05:32:50 thendrix Exp $
       <xsl:variable name="href_expg">
             <xsl:value-of select="concat($resdoc_root,'/schema_diagexpg1',$FILE_EXT)"/>
       </xsl:variable>
-      &#160;&#160;<a href="{$href_expg}">
+      <!-- &#160;&#160;<a href="{$href_expg}">
       <img align="middle" border="0" 
         alt="EXPRESS-G" src="{$resdoc_root}/../../../images/expg.gif"/>
-       </a>
+       </a> -->
      </xsl:otherwise>
    </xsl:choose>
  </xsl:template>

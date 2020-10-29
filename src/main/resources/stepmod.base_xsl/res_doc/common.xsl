@@ -49,316 +49,7 @@ $Id: common.xsl,v 1.33 2008/05/21 20:50:25 abf Exp $
 	<xsl:value-of select="$stdnumber"/>
 
 </xsl:template>
-	<!-- output RCS version control information -->
-<xsl:template name="rcs_output_resdoc">
-	<xsl:param name="resdoc" select="@name"/>
-	<!-- the relative path in HTML from the file calling to the resource_doc
-			 directory -->
-	<xsl:param name="resdoc_root" select="'..'"/>
 
-	<xsl:variable name="icon_path" select="concat($resdoc_root,'/../../../images/')"/>
-
-	<xsl:if test="$output_rcs='YES'">
-		<xsl:variable name="resdoc_dir">
-			<xsl:call-template name="resdoc_directory">
-				<xsl:with-param name="resdoc" select="$resdoc"/>
-			</xsl:call-template>
-		</xsl:variable>
-
-		<xsl:variable name="fldr_gif" select="concat($icon_path,'folder.gif')"/>
-		<xsl:variable name="proj_gif" select="concat($icon_path,'project.gif')"/>
-
-		<table cellspacing="0" border="0">
-			<xsl:variable
-				name="resdoc_file"
-				select="concat($resdoc_dir,'/resource.xml')"/>
-			<xsl:variable
-				name="resdoc_date"
-				select="translate(document($resdoc_file)/resource_doc/@rcs.date,'$','')"/>
-			<xsl:variable
-				name="resdoc_rev"
-				select="translate(document($resdoc_file)/resource_doc/@rcs.revision,'$','')"/>
-			<tr>
-				<td>
-					<p class="rcs">
-					<a href="{$resdoc_root}">
-						<img alt="resource doc folder" 
-							border="0"
-							align="middle"
-							src="{$fldr_gif}"/>
-					</a>&#160;
-
-					<xsl:if test="@development.folder">
-						<xsl:variable name="prjmg_href"
-							select="concat($resdoc_root,'/',@development.folder,'/projmg',$FILE_EXT)"/>
-						<a href="{$prjmg_href}">
-							<img alt="project management summary" 
-								border="0"
-								align="middle"
-								src="{$proj_gif}"/>
-						</a>&#160;
-						<xsl:variable name="issue_href"
-							select="concat($resdoc_root,'/',@development.folder,'/issues',$FILE_EXT)"/>
-						<xsl:variable name="issues_file" 
-							select="concat($resdoc_dir,'/',@development.folder,'/issues.xml')"/>
- 
-						<xsl:variable name="open_issues"
-							select="count(document($issues_file)/issues/issue[@status!='closed'])"/>
-
-						<xsl:variable name="total_issues"
-							select="count(document($issues_file)/issues/issue)"/>
-
-						<xsl:variable name="issue_gif">
-							<xsl:choose>
-								<xsl:when test="$open_issues>0">
-									<xsl:value-of select="concat($icon_path,'issues.gif')"/>
-								</xsl:when>
-								<xsl:otherwise>
-									<xsl:value-of select="concat($icon_path,'closed.gif')"/>
-								</xsl:otherwise>
-							</xsl:choose>
-						</xsl:variable>
-
-					 <xsl:if test="$total_issues > 0">
-						 <a href="{$issue_href}">
-							 <img alt="issues" 
-								 border="0"
-								 align="middle"
-								 src="{$issue_gif}"/>
-							 <small>[<xsl:value-of select="$open_issues"/>/<xsl:value-of select="$total_issues"/>]</small>
-						 </a>&#160;
-					 </xsl:if>
-					</xsl:if>
-				</p>
-				</td>
-				<td>
-					<font size="-2">
-						<p class="rcs">
-							<xsl:value-of select="'resource.xml'"/>
-						</p>
-					</font>
-				</td>
-				<td>
-					<font size="-2">
-						<p class="rcs">
-							<xsl:value-of select="concat('(',$resdoc_date,' ',$resdoc_rev,')')"/>
-						</p>
-					</font>
-				</td>
-			</tr>
-		</table>
-	</xsl:if>
-</xsl:template>
-
-<xsl:template match="resource" mode="meta_data">
-	<xsl:param name="clause"/>
-	<link rel = "schema.DC"
-		href    = "http://www.dublincore.org/documents/2003/02/04/dces/"/>
-
-	
-		<xsl:variable name="resdoc_name">
-			<xsl:call-template name="resdoc_name">
-				<xsl:with-param name="resdoc" select="./@name"/>
-			</xsl:call-template>
-		</xsl:variable>
-
-	
-	<xsl:variable name="stdnumber">
-		<xsl:call-template name="get_resdoc_pageheader">
-			<xsl:with-param name="resdoc" select="."/>
-		</xsl:call-template>
-	</xsl:variable>
-
-
-	<xsl:variable name="resdoc_title">
-	<xsl:apply-templates select="." mode="type"/>
-	</xsl:variable>
-
- <xsl:variable name="this-type">
-	<xsl:apply-templates select="." mode="type"/>
-	</xsl:variable>
-
-	<xsl:call-template name="meta-elements">
-		<xsl:with-param name="name" select="'DC.Title'"/>
-		<xsl:with-param name="content" select="$resdoc_title"/>
-	</xsl:call-template>
-
-	<xsl:variable name="dc.dates"
-		select="normalize-space(substring-after((translate(@rcs.date,'$','')),'Date: '))"/>
-	<xsl:call-template name="meta-elements">
-		<xsl:with-param name="name" select="'DC.Dates'"/>
-		<xsl:with-param name="content" select="$dc.dates"/>
-	</xsl:call-template>
-
-	<xsl:variable name="published"
-		select="@publication.date"/>
-	<xsl:call-template name="meta-elements">
-		<xsl:with-param name="name" select="'DC.Published'"/>
-		<xsl:with-param name="content" select="$published"/>
-	</xsl:call-template>
-
-
-	<xsl:variable name="editor_ref" select="./contacts/editor/@ref"/>
-	<xsl:variable name="editor_contact"
-		select="document('../../data/basic/contacts.xml')/contact.list/contact[@id=$editor_ref]"/>
-	<xsl:variable name="dc.contributor">
-		<xsl:value-of select="normalize-space(concat($editor_contact/lastname,', ',$editor_contact/firstname))"/>
-	</xsl:variable>
-	<xsl:call-template name="meta-elements">
-		<xsl:with-param name="name" select="'DC.Contributor'"/>
-		<xsl:with-param name="content" select="$dc.contributor"/>
-	</xsl:call-template>
-
-	<xsl:variable name="projlead_ref" select="./contacts/projlead/@ref"/>
-	<xsl:variable name="projlead_contact"
-		select="document('../../data/basic/contacts.xml')/contact.list/contact[@id=$projlead_ref]"/>
-	<xsl:variable name="dc.creator">
-		<xsl:value-of select="normalize-space(concat($projlead_contact/lastname,', ',$projlead_contact/firstname))"/>
-	</xsl:variable>
-	<xsl:call-template name="meta-elements">
-		<xsl:with-param name="name" select="'DC.Creator'"/>
-		<xsl:with-param name="content" select="$dc.creator"/>
-	</xsl:call-template>
-
-	<xsl:call-template name="meta-elements">
-		<xsl:with-param name="name" select="'DC.Description'"/>
-		<xsl:with-param name="content" select="concat('The integrated resource ',$resdoc_name)"/>
-	</xsl:call-template>
-
-	<xsl:variable name="keywords">
-		<xsl:apply-templates select="./keywords"/>
-	</xsl:variable>
-	<xsl:call-template name="meta-elements">
-		<xsl:with-param name="name" select="'DC.Subject'"/>
-		<xsl:with-param name="content" select="normalize-space($keywords)"/>
-	</xsl:call-template>
-
-	<xsl:variable name="wg_group">
-		<xsl:call-template name="get_resdoc_wg_group"/>
-	</xsl:variable>  
-	<xsl:variable name="id"
-		select="concat('ISO/TC 184/SC 4/WG ',$wg_group,'&#160;N',./@wg.number)"/>
-	<xsl:variable name="clause_of">
-		<xsl:if test="$clause">
-			<xsl:value-of select="concat('Clause of ',$clause)"/>
-		</xsl:if>
-	</xsl:variable>
-	<xsl:call-template name="meta-elements">
-		<xsl:with-param name="name" select="'DC.Identifier'"/>
-		<xsl:with-param name="content" select="$id"/>
-	</xsl:call-template>
-
-	<xsl:variable name="supersedes"
-		select="concat('ISO/TC 184/SC 4/WG ',$wg_group,' N',./@wg.number.supersedes)"/>
-	<xsl:call-template name="meta-elements">
-		<xsl:with-param name="name" select="'DC.Replaces'"/>
-		<xsl:with-param name="content" select="$supersedes"/>
-	</xsl:call-template>
-
-	<xsl:call-template name="meta-elements">
-		<xsl:with-param name="name" select="'SC4.version'"/>
-		<xsl:with-param name="content" select="./@version"/>
-	</xsl:call-template>
-
-	<xsl:variable name="checklist.internal_review" select="concat('ISO/TC 184/SC4/WG',$wg_group,' N',./@checklist.internal_review)"/>
-	<xsl:call-template name="meta-elements">
-		<xsl:with-param name="name" select="'SC4.checklist.internal_review'"/>
-		<xsl:with-param name="content" select="$checklist.internal_review"/>
-	</xsl:call-template>
-
-	<xsl:variable name="checklist.project_leader" select="concat('ISO/TC 184/SC 4/WG ',$wg_group,' N',./@checklist.project_leader)"/>
-	<xsl:call-template name="meta-elements">
-		<xsl:with-param name="name" select="'SC4.checklist.project_leader'"/>
-		<xsl:with-param name="content" select="$checklist.project_leader"/>
-	</xsl:call-template>
-
-	<xsl:variable name="checklist.convener" select="concat('ISO/TC 184/SC 4/WG ',$wg_group,' N',./@checklist.convener)"/>
-	<xsl:call-template name="meta-elements">
-		<xsl:with-param name="name" select="'SC4.checklist.convener'"/>
-		<xsl:with-param name="content" select="$checklist.convener"/>
-	</xsl:call-template>
-
-
-	<xsl:call-template name="meta-elements">
-		<xsl:with-param name="name" select="'STEPMOD.resource.rcs.date'"/>
-		<xsl:with-param name="content" select="translate(./@rcs.date,'$','')"/>
-	</xsl:call-template>
-
-	<xsl:call-template name="meta-elements">
-		<xsl:with-param name="name" select="'STEPMOD.resource.rcs.revision'"/>
-		<xsl:with-param name="content" select="translate(./@rcs.revision,'$','')"/>
-	</xsl:call-template>
-
-	</xsl:template>
-
-
-<xsl:template match="resource" mode="TOCbannertitle">
-	<!-- the entry that has been selected -->
-	<xsl:param name="selected"/>
-	<xsl:param name="resdoc_root" select="'..'"/>
-	<!--
-	<xsl:message>
-		resdoc_root  :<xsl:value-of select="$resdoc_root"/>
-	</xsl:message>
-	-->
-	<!-- output RCS version control information -->
-	<xsl:call-template name="rcs_output_resdoc">
-		<xsl:with-param name="resdoc" select="@name"/>
-		<xsl:with-param name="resdoc_root" select="$resdoc_root"/>
-	</xsl:call-template>
-	<xsl:variable name="this-type">
-	<xsl:apply-templates select="." mode="type"/>
-	</xsl:variable>
-
-	
-	<TABLE cellspacing="0" border="0" width="100%">
-		<TR>
-			<TD>
-				<!-- RBN - this xref is here to aid navigation, it may need to be
-						 removed for the ISO process 
-				<A HREF="{$resdoc_root}/../../../repository_index{$FILE_EXT}">
-					Module repository
-				</A><BR/>
-				-->
-
-				<xsl:call-template name="output_menubar">
-					<xsl:with-param name="module_root" select="$resdoc_root"/>
-					<xsl:with-param name="mdule_name" select="@name"/>
-				</xsl:call-template>
-
-			</TD>
-		</TR>
-		<TR>
-			<TD valign="MIDDLE">
-				<!-- <B> -->
-				<xsl:text> *</xsl:text>
-					<xsl:value-of select="concat($this-type,': ')" />
-					<xsl:call-template name="res_display_name">
-						<xsl:with-param name="res" select="@name"/>
-					</xsl:call-template>
-				<!-- </B> -->
-				<xsl:text>* </xsl:text>
-			</TD>
-			<TD valign="MIDDLE" align="RIGHT">
-				<xsl:variable name="stdnumber">
-					<xsl:call-template name="get_resdoc_pageheader">
-						<xsl:with-param name="resdoc" select="."/>
-					</xsl:call-template>
-				</xsl:variable>
-				<!-- <b> -->
-				<xsl:text> *</xsl:text>
-					<xsl:value-of select="$stdnumber"/>
-					<xsl:variable name="status" select="string(@status)"/>
-					<xsl:if test="$status='TS' or $status='DIS' or $status='IS'">
-						<br/>
-						&#169; ISO
-					</xsl:if>
-				<!-- </b> -->
-				<xsl:text>* </xsl:text>
-			</TD>
-		</TR>
-	</TABLE>
-</xsl:template>
 
 
 	<xsl:template match="resource" mode="display_name">
@@ -469,8 +160,13 @@ $Id: common.xsl,v 1.33 2008/05/21 20:50:25 abf Exp $
 						<xsl:text>&lt;&lt;</xsl:text><xsl:value-of select="substring-after($href,'#')"/><xsl:text>&gt;&gt;</xsl:text>
 					</xsl:when>
 					<xsl:otherwise>
-						<xsl:value-of select="$link_text"/>
-						<xsl:text>[</xsl:text><xsl:value-of select="$href"/><xsl:text>]</xsl:text>
+					
+						<xsl:call-template name="insertHyperlink">
+							<xsl:with-param name="a">
+								<a href="{$href}"><xsl:value-of select="$link_text"/></a>							
+							</xsl:with-param>
+						</xsl:call-template>						
+					
 					</xsl:otherwise>
 				</xsl:choose>
 				
@@ -889,7 +585,13 @@ $Id: common.xsl,v 1.33 2008/05/21 20:50:25 abf Exp $
 			</xsl:when>
 			<xsl:otherwise>
 				<!-- <a href="{$href}"><xsl:apply-templates/></a> -->
-				<xsl:apply-templates/><xsl:text>[</xsl:text><xsl:value-of select="$href"/><xsl:text>]</xsl:text>
+				
+				<xsl:call-template name="insertHyperlink">
+					<xsl:with-param name="a">
+						<a href="{$href}"><xsl:apply-templates/></a>							
+					</xsl:with-param>
+				</xsl:call-template>						
+				
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>

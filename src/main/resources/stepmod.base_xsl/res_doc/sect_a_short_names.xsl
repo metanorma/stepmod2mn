@@ -116,8 +116,15 @@ $Id: sect_a_short_names.xsl,v 1.10 2018/01/18 20:20:21 mike Exp $
 				<xsl:variable name="names_url" select="'http://standards.iso.org/iso/10303/tech/short_names/short-names.txt'"/>
 				<xsl:call-template name="insertParagraph">
 					<xsl:with-param name="text">
-						<xsl:value-of select="$names_url"/>
-						<xsl:text>[</xsl:text><xsl:value-of select="$names_url"/><xsl:text>]</xsl:text>					
+						
+						<xsl:call-template name="insertHyperlink">
+							<xsl:with-param name="a">
+								<a href="{$names_url}" target="_blank">
+									<xsl:value-of select="$names_url"/>
+								</a>
+							</xsl:with-param>
+						</xsl:call-template>
+									
 					</xsl:with-param>
 				</xsl:call-template>
 				
@@ -161,8 +168,15 @@ $Id: sect_a_short_names.xsl,v 1.10 2018/01/18 20:20:21 mike Exp $
 		<xsl:variable name="names_url" select="'http://standards.iso.org/iso/10303/tech/short_names/short-names.txt'"/>
 		<xsl:call-template name="insertParagraph">
 			<xsl:with-param name="text">
-				<xsl:value-of select="$names_url"/>
-				<xsl:text>[</xsl:text><xsl:value-of select="$names_url"/><xsl:text>]</xsl:text>					
+			
+				<xsl:call-template name="insertHyperlink">
+					<xsl:with-param name="a">
+						<a href="{$names_url}" target="_blank">
+							<xsl:value-of select="$names_url"/>
+						</a>
+					</xsl:with-param>
+				</xsl:call-template>
+				
 			</xsl:with-param>
 		</xsl:call-template>
 

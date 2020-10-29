@@ -325,7 +325,7 @@ Purpose:
 					Phone: + 41 22 749 01 11<br/>
 					Fax: + 41 22 734 10 79<br/>
 					Email: copyright@iso.ch<br/>
-					Website: www.iso.org[https://www.iso.org] <!-- <a href="https://www.iso.org">www.iso.org</a><br/> -->
+					Website: https://www.iso.org[www.iso.org] <!-- <a href="https://www.iso.org">www.iso.org</a><br/> -->
 					
 					<xsl:text>&#xa;</xsl:text>
 				</div>
@@ -371,7 +371,7 @@ Purpose:
 					Phone: + 41 22 749 01 11<br/>
 					Fax: + 41 22 734 10 79<br/>
 					Email: copyright@iso.ch<br/>
-					Website: www.iso.org[https://www.iso.org]<!-- <a href="https://www.iso.org">www.iso.org</a><br/> -->
+					Website: https://www.iso.org[www.iso.org]<!-- <a href="https://www.iso.org">www.iso.org</a><br/> -->
 					<xsl:text>&#xa;</xsl:text>
 				</div>
 
@@ -399,7 +399,7 @@ Purpose:
 							Phone: + 41 22 749 01 11<br/>
 							Fax: + 41 22 734 10 79<br/>
 							Email: copyright@iso.ch<br/>
-							Website: www.iso.org[https://www.iso.org]<!-- <a href="https://www.iso.org">www.iso.org</a><br/> -->
+							Website: https://www.iso.org[www.iso.org]<!-- <a href="https://www.iso.org">www.iso.org</a><br/> -->
 							<xsl:text>&#xa;</xsl:text>
 							Published in Switzerland<br/>                
 						</div>
@@ -471,7 +471,7 @@ Purpose:
 					Phone: + 41 22 749 01 11<br/>
 					Fax: + 41 22 734 10 79<br/>
 					Email: copyright@iso.ch<br/>
-					Website: www.iso.org[https://www.iso.org]<!-- <a href="https://www.iso.org">www.iso.org</a><br/> -->
+					Website: https://www.iso.org[www.iso.org]<!-- <a href="https://www.iso.org">www.iso.org</a><br/> -->
 					<xsl:text>&#xa;</xsl:text>
 				</div>
 
@@ -799,7 +799,7 @@ Purpose:
 			The procedures used to develop this document and those intended for its further maintenance are 
 			described in the ISO/IEC Directives, Part 1. In particular, the different approval criteria needed for the 
 			different types of ISO documents should be noted. This document was drafted in accordance with the 
-			editorial rules of the ISO/IEC Directives, Part 2 (see www.iso.org/directives[http://www.iso.org/directives]<!-- <a href="http://www.iso.org/directives" target="_blank">www.iso.org/directives</a> -->).
+			editorial rules of the ISO/IEC Directives, Part 2 (see http://www.iso.org/directives[www.iso.org/directives]<!-- <a href="http://www.iso.org/directives" target="_blank">www.iso.org/directives</a> -->).
 			</xsl:with-param>
 		</xsl:call-template>
 		<!-- <p> -->
@@ -824,7 +824,7 @@ Purpose:
 			<xsl:with-param name="text">
 			For an explanation on the voluntary nature of standards, the meaning of ISO specific terms and 
 			expressions related to conformity assessment, as well as information about ISO's adherence to the 
-			World Trade Organization (WTO) principles in the Technical Barriers to Trade (TBT) see www.iso.org/iso/foreword.html[http://www.iso.org/iso/foreword.html]<!-- <a href="http://www.iso.org/iso/foreword.html" target="_blank">www.iso.org/iso/foreword.html</a> -->.
+			World Trade Organization (WTO) principles in the Technical Barriers to Trade (TBT) see http://www.iso.org/iso/foreword.html[www.iso.org/iso/foreword.html]<!-- <a href="http://www.iso.org/iso/foreword.html" target="_blank">www.iso.org/iso/foreword.html</a> -->.
 			</xsl:with-param>
 		</xsl:call-template>
 		
@@ -999,7 +999,7 @@ Purpose:
 		<!-- <p> -->
 		<xsl:call-template name="insertParagraph">
 			<xsl:with-param name="text">
-			A list of all parts in the ISO 10303 series can be found on the ISO website[http://standards.iso.org/iso/10303/tech/step_titles.htm]<!-- <a href="http://standards.iso.org/iso/10303/tech/step_titles.htm" target="_blank">ISO website</a> -->. 
+			A list of all parts in the ISO 10303 series can be found on the http://standards.iso.org/iso/10303/tech/step_titles.htm[ISO website]<!-- <a href="http://standards.iso.org/iso/10303/tech/step_titles.htm" target="_blank">ISO website</a> -->. 
 			</xsl:with-param>
 		</xsl:call-template>
 		
@@ -1007,7 +1007,7 @@ Purpose:
 		<xsl:call-template name="insertParagraph">
 			<xsl:with-param name="text">
 			Any feedback or questions on this document should be directed to the user’s national standards body. 
-			A complete listing of these bodies can be found at www.iso.org/members.html[https://www.iso.org/members.html]<!-- <a href="https://www.iso.org/members.html">www.iso.org/members.html</a> -->.
+			A complete listing of these bodies can be found at https://www.iso.org/members.html[www.iso.org/members.html]<!-- <a href="https://www.iso.org/members.html">www.iso.org/members.html</a> -->.
 			</xsl:with-param>
 		</xsl:call-template>
 		
@@ -1394,10 +1394,18 @@ Purpose:
 		<p/> -->
 		
 		<xsl:text>Short names::: </xsl:text>
-		<xsl:value-of select="$names_url"/><xsl:text>[</xsl:text><xsl:value-of select="$names_url"/><xsl:text>]</xsl:text>
+			<xsl:call-template name="insertHyperlink">
+				<xsl:with-param name="a">
+					<a href="{$names_url}"   target="_blank"><xsl:value-of select="$names_url"/></a>
+				</xsl:with-param>
+			</xsl:call-template>
 		<xsl:text>&#xa;</xsl:text>
 		<xsl:text>EXPRESS::: </xsl:text>
-		<xsl:value-of select="$parts_url"/><xsl:text>[</xsl:text><xsl:value-of select="$parts_url"/><xsl:text>]</xsl:text>
+			<xsl:call-template name="insertHyperlink">
+				<xsl:with-param name="a">
+					<a href="{$parts_url}"   target="_blank"><xsl:value-of select="$parts_url"/></a>
+				</xsl:with-param>
+			</xsl:call-template>		
 		<xsl:text>&#xa;&#xa;</xsl:text>
 		
 		<!-- <div align="center">
@@ -1492,8 +1500,20 @@ Purpose:
 					</td> -->
 					
 					
-					<xsl:text>| </xsl:text><xsl:value-of select="concat($schema_file,$FILE_EXT)"/>[<xsl:value-of select="$schema_url"/><xsl:text>] </xsl:text>
-					<xsl:text>| </xsl:text><xsl:value-of select="$schema_file"/>.exp[<xsl:value-of select="$express_exp"/><xsl:text>]</xsl:text>
+					<xsl:text>| </xsl:text>
+					<xsl:call-template name="insertHyperlink">
+						<xsl:with-param name="a">
+							<a href="{$schema_url}">
+								<xsl:value-of select="concat($schema_file,$FILE_EXT)"/>
+							</a>
+						</xsl:with-param>
+					</xsl:call-template>					
+					<xsl:text> | </xsl:text>
+					<xsl:call-template name="insertHyperlink">
+						<xsl:with-param name="a">
+							<a href="{$express_exp}"><xsl:value-of select="$schema_file"/>.exp</a>
+						</xsl:with-param>
+					</xsl:call-template>					
 					<xsl:text>&#xa;</xsl:text>
 					
 					<!--<xsl:if test="$FILE_EXT!='.xml'">
@@ -1555,7 +1575,11 @@ Purpose:
 		<xsl:param name="file"/>
 		<xsl:param name="express_exp"/>
 		<td>
-			<a href="../../{$express_exp}"><xsl:value-of select="$file"/></a>
+			<xsl:call-template name="insertHyperlink">
+				<xsl:with-param name="a">
+					<a href="../../{$express_exp}"><xsl:value-of select="$file"/></a>
+				</xsl:with-param>
+			</xsl:call-template>			
 		</td>
 		<td>
 			<xsl:variable name="test_wg_number">
@@ -3082,9 +3106,10 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 				test="( string(./@status)='TS' or 
 							string(./@status)='IS') and
 							( string(./@status)='CD' or string(./@status)='CD-TS')">
-				&#160;<sup><a href="#derogation">2</a>)</sup>
+						<xsl:text> footnote:[Reference applicable during ballot or review period.]</xsl:text>
+				<!-- &#160;<sup><a href="#derogation">2</a>)</sup> -->
 			</xsl:when>
-			<xsl:when test="@published='n'">&#160;<sup><a href="#tobepub">1</a>)</sup>
+			<xsl:when test="@published='n'"><xsl:text> footnote:[To be published.]</xsl:text><!-- &#160;<sup><a href="#tobepub">1</a>)</sup> -->
 			</xsl:when>
 		</xsl:choose>, 
 		<!-- <i>
@@ -3140,7 +3165,7 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 		<!-- <xsl:value-of select="$stdnumber"/> -->
 		
 		<xsl:if test="stdref[@published='n']">
-			<sup><a href="#tobepub">1</a>)</sup>
+			<xsl:text> footnote:[To be published.]</xsl:text><!-- <sup><a href="#tobepub">1</a>)</sup> -->
 		</xsl:if>, 
 		
 		<!-- <i> -->
