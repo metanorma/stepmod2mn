@@ -725,7 +725,7 @@
 						<xsl:with-param name="fix" select="$suffix"/>
 					</xsl:call-template>
 					<xsl:if test="$linebreak='yes'">
-						<xsl:text> +&#xa;</xsl:text><!-- <br/> -->
+						<xsl:text>&#xa;</xsl:text><!-- <br/> -->
 					</xsl:if>        
 				</xsl:if>
 
@@ -743,7 +743,7 @@
 							<xsl:with-param name="fix" select="$suffix"/>
 						</xsl:call-template>
 						<xsl:if test="$linebreak='yes'">
-							<xsl:text> +&#xa;</xsl:text><!-- <br/> -->
+							<xsl:text>&#xa;</xsl:text><!-- <br/> -->
 						</xsl:if>
 						
 						<xsl:call-template name="link_object">
@@ -827,7 +827,7 @@
 		<xsl:choose>
 			<xsl:when test="$fix='br'">
 				<!-- <br/>     	 -->
-				<xsl:text> +&#xa;</xsl:text>
+				<xsl:text>&#xa;</xsl:text>
 			</xsl:when>
 			<xsl:when test="$fix='br'">
 				<!-- <p/>       -->
@@ -955,7 +955,7 @@
 				</xsl:variable>
 
 				<xsl:if test="$linebreak='YES'">
-					<xsl:text> +&#xa;</xsl:text><!-- <br/> -->
+					<xsl:text>&#xa;</xsl:text><!-- <br/> -->
 					<!-- indent -->
 					<xsl:call-template name="string_n_chars">
 						<xsl:with-param name="char" select="'&#160;'"/>

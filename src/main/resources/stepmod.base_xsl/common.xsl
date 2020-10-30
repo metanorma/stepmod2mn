@@ -4044,10 +4044,10 @@ is case sensitive.')"/>
 					select="substring-before($str,$break_char)"/>
 				<xsl:choose>
 					<xsl:when test="$replace_break_char != 'false'">
-						<xsl:value-of select="concat($indent,$substr)"/><xsl:text> +&#xa;</xsl:text><!-- <br/> -->
+						<xsl:value-of select="concat($indent,$substr)"/><xsl:text>&#xa;</xsl:text><!-- <br/> -->
 					</xsl:when>
 					<xsl:otherwise>
-						<xsl:value-of select="concat($indent,$substr,$break_char)"/><xsl:text> +&#xa;</xsl:text><!-- <br/> -->
+						<xsl:value-of select="concat($indent,$substr,$break_char)"/><xsl:text>&#xa;</xsl:text><!-- <br/> -->
 					</xsl:otherwise>
 				</xsl:choose>
 				<xsl:call-template name="output_line_breaks">
