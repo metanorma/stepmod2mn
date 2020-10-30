@@ -3755,7 +3755,7 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 			<xsl:value-of select="'Other terms and definitions'"/>
 		</h2> -->
 		<xsl:call-template name="insertHeaderADOC">
-			<xsl:with-param name="id" select="$section"/>
+			<xsl:with-param name="id" select="concat('sec_',$section)"/>
 			<xsl:with-param name="level" select="3"/>
 			<xsl:with-param name="header" select="'Other terms and definitions'"/>					
 		</xsl:call-template>
@@ -3957,7 +3957,7 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 			<xsl:apply-templates select="term"/>
 		</xsl:variable>
 		<xsl:call-template name="insertHeaderADOC">
-			<xsl:with-param name="id" select="concat($section,'.',position())"/>		
+			<xsl:with-param name="id" select="concat('sec_', $section,'.',position())"/>		
 			<xsl:with-param name="level" select="4"/>
 			<xsl:with-param name="header" select="normalize-space($header)"/>					
 		</xsl:call-template>
