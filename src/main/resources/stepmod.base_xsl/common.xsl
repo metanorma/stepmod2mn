@@ -1916,7 +1916,8 @@ width="20" height="20"/> -->
 							<xsl:value-of select="concat('/resource_docs/',$resource_doc,'#',$express_ref)"/>
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:value-of select="concat($baselink,'resources/',$module,'/', $module,$FILE_EXT,'#',$express_ref)"/>
+							<!-- <xsl:value-of select="concat($baselink,'resources/',$module,'/', $module,$FILE_EXT,'#',$express_ref)"/> -->
+							<xsl:value-of select="concat('/resources/',$module, '#',$express_ref)"/>
 						</xsl:otherwise>
 					</xsl:choose>
 					
