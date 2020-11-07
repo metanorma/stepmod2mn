@@ -445,18 +445,17 @@
 			</xsl:when>
 			<xsl:otherwise>
 			
-				<xsl:call-template name="insertHyperlink">
+				<xsl:call-template name="insertHyperlinkSkip">
 					<xsl:with-param name="a">
 						 <A HREF="{$express_file_to_ref}"> <!-- #{$xref} -->
 							<!-- <xsl:value-of select="$schema_name"/> -->
 							<xsl:if test="$express_file_to_ref != $xref">
 								<xsl:value-of select="$xref"/>
 							</xsl:if>
-							
-						</A>
+						</A>						
 					</xsl:with-param>
 				</xsl:call-template>
-				
+				<xsl:value-of select="$xref"/>
 				
 			</xsl:otherwise>
 		</xsl:choose>
@@ -466,7 +465,7 @@
 	<!-- 
 			 Output a HREF for the fundamental concepts.
 			 -->
-	<xsl:template name="link_fund_cons">
+	<xsl:template name="link_fund_cons"> <!-- NOT USING -->
 		<xsl:param name="schema_name"/>
 		<xsl:param name="clause" select="section"/>
 
@@ -516,7 +515,7 @@
 	<!-- 
 			 Output a HREF for the fundamental concepts.
 			 -->
-	<xsl:template name="link_intro">
+	<xsl:template name="link_intro"> <!-- NOT USING -->
 		<xsl:param name="schema_name"/>
 		<xsl:param name="clause" select="section"/>
 
@@ -601,14 +600,14 @@
 					</xsl:call-template>
 				</xsl:variable>
 				
-				<xsl:call-template name="insertHyperlink">
+				<xsl:call-template name="insertHyperlinkSkip">
 					<xsl:with-param name="a">
 						<A HREF="{$xref}">
 							<xsl:value-of select="$lobject_name"/>
 						</A>
 					</xsl:with-param>
 				</xsl:call-template>
-				
+				<xsl:value-of select="$lobject_name"/>
 				
 				<!-- debug 
 				<xsl:message>     
@@ -1205,7 +1204,7 @@
 
 	<!-- output the object, linked to the integrated resource
 	-->
-	<xsl:template name="link_resource_object">
+	<xsl:template name="link_resource_object"> <!-- NOT USING -->
 		<xsl:param name="object_name"/>
 		<!-- make sure that the arguments don't have any whitespace -->
 		<xsl:variable name="lobject_name" 

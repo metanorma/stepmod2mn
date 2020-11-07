@@ -564,6 +564,8 @@
 		</xsl:choose>
 	</xsl:template>
 	
+	<xsl:template name="insertHyperlinkSkip"/>
+	
 	<xsl:template match="ExternalDocumentReference" mode="text">
 		<xsl:text>&lt;&lt;</xsl:text>
 		

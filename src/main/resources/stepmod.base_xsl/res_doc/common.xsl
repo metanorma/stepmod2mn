@@ -157,7 +157,7 @@ $Id: common.xsl,v 1.33 2008/05/21 20:50:25 abf Exp $
 				
 				<xsl:choose>
 				
-					<xsl:when test="contains($href, concat('/', $current_module, '/'))"><!-- if link inside current module -->
+					<xsl:when test="contains($href, concat('/', $current_module, '/')) or contains($href, concat('/', $current_module, '#'))"><!-- if link inside current module -->
 						<xsl:text>&lt;&lt;</xsl:text><xsl:value-of select="substring-after($href,'#')"/><xsl:text>&gt;&gt;</xsl:text>
 					</xsl:when>
 					
