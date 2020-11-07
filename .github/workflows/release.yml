@@ -35,7 +35,7 @@ jobs:
 
 #      - name: Deploy to Maven
 #        env:
-#          # for deploy sts2mn
+#          # for deploy stepmod2mn
 #          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
 #          GITHUB_USERNAME: ${{ secrets.PAT_USERNAME }}
 #        run: |
@@ -66,14 +66,14 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./target/sts2mn-${{ steps.get_version.outputs.VERSION }}.jar
-          asset_name: sts2mn-${{ steps.get_version.outputs.VERSION }}.jar
+          asset_path: ./target/stepmod2mn-${{ steps.get_version.outputs.VERSION }}.jar
+          asset_name: stepmod2mn-${{ steps.get_version.outputs.VERSION }}.jar
           asset_content_type: application/java-archive
 
-#      - name: Notify sts2mn-ruby
+#      - name: Notify stepmod2mn-ruby
 #        uses: peter-evans/repository-dispatch@v1
 #        with:
 #          token: ${{ secrets.METANORMA_CI_PAT_TOKEN }}
-#          repository: metanorma/sts2mn-ruby
-#          event-type: metanorma/sts2mn
+#          repository: metanorma/stepmod2mn-ruby
+#          event-type: metanorma/stepmod2mn
 #          client-payload: '{ "ref": "${{ github.ref }}" }'
