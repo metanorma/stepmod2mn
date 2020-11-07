@@ -156,14 +156,35 @@ $Id: common.xsl,v 1.33 2008/05/21 20:50:25 abf Exp $
 				</xsl:variable>
 				
 				<xsl:choose>
+				
 					<xsl:when test="contains($href, concat('/', $current_module, '/'))"><!-- if link inside current module -->
 						<xsl:text>&lt;&lt;</xsl:text><xsl:value-of select="substring-after($href,'#')"/><xsl:text>&gt;&gt;</xsl:text>
 					</xsl:when>
-					<xsl:otherwise>
 					
+					<xsl:otherwise>
 						<xsl:call-template name="insertHyperlink">
 							<xsl:with-param name="a">
-								<a href="{$href}"><xsl:value-of select="$link_text"/></a>							
+								<!-- <a href="{$href}"><xsl:value-of select="$link_text"/></a> -->
+								<a>
+									<xsl:attribute name="href">
+										<xsl:choose>
+											<xsl:when test="contains($href, '#')">
+												<xsl:value-of select="substring-before($href, '#')"/>
+											</xsl:when>
+											<xsl:otherwise>
+												<xsl:value-of select="$href"/>
+											</xsl:otherwise>
+										</xsl:choose>
+									</xsl:attribute>
+									<xsl:choose>
+										<xsl:when test="contains($href, '#')">
+											<xsl:value-of select="substring-after($href, '#')"/>
+										</xsl:when>
+										<xsl:otherwise>
+											<xsl:value-of select="$link_text"/>
+										</xsl:otherwise>
+									</xsl:choose>
+								</a>
 							</xsl:with-param>
 						</xsl:call-template>						
 					

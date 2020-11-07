@@ -47,7 +47,7 @@
 			 This variable is overwritten when express_link.xsl is imported
 			 into another stylesheet.
 			 -->
-		<xsl:variable name="global_xref_list"/>
+		<xsl:variable name="global_xref_list_2"/> <!-- there is sect_4_express.xsl yet -->
 	
 	
 	<xsl:template name="build_schema_xref_list">
@@ -336,7 +336,8 @@
 		</xsl:variable>
 		
 		<xsl:variable name="xref" select="concat($express_file_to_ref,'#',$aname)"/>
-		<xsl:value-of select="$xref"/>
+		<!-- <xsl:value-of select="$xref"/> -->
+		<xsl:value-of select="$express_file_to_ref"/>
 	</xsl:template>
 
 	<!-- called from template name="get_object_xref" -->
@@ -446,8 +447,12 @@
 			
 				<xsl:call-template name="insertHyperlink">
 					<xsl:with-param name="a">
-						 <A HREF="{$express_file_to_ref}#{$xref}">
-							<xsl:value-of select="$schema_name"/>
+						 <A HREF="{$express_file_to_ref}"> <!-- #{$xref} -->
+							<!-- <xsl:value-of select="$schema_name"/> -->
+							<xsl:if test="$express_file_to_ref != $xref">
+								<xsl:value-of select="$xref"/>
+							</xsl:if>
+							
 						</A>
 					</xsl:with-param>
 				</xsl:call-template>
@@ -1169,13 +1174,14 @@
 							</xsl:apply-templates>
 					</xsl:variable>
 					
-					<xsl:value-of select="concat($data_path,'/resource_docs/',$resdoc_name,'/sys/',$clauseno,'_schema',$FILE_EXT)"/>
+					<!-- <xsl:value-of select="concat($data_path,'/resource_docs/',$resdoc_name,'/sys/',$clauseno,'_schema',$FILE_EXT)"/> -->
+					<xsl:value-of select="concat('/resource_docs/',$resdoc_name)"/>
 					
 				</xsl:when>
 
 				<xsl:otherwise>
-					<xsl:value-of 
-						select="concat($data_path,'/resources/',$schema_name,'/',$schema_name,$FILE_EXT)"/>
+					<!-- <xsl:value-of select="concat($data_path,'/resources/',$schema_name,'/',$schema_name,$FILE_EXT)"/> -->
+					<xsl:value-of select="concat('/resources/',$schema_name)"/>
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>

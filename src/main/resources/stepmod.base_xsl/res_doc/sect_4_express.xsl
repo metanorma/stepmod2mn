@@ -3533,7 +3533,9 @@
 				</xsl:call-template>
 				<xsl:value-of select="concat(' ',$lkind)"/>
 				is specified in 
-				
+			</xsl:with-param>
+		</xsl:call-template>
+		
 				<xsl:call-template name="insertHyperlink">
 					<xsl:with-param name="a">
 						<a href="{$resource_href}">
@@ -3542,6 +3544,8 @@
 					</xsl:with-param>
 				</xsl:call-template>
 				
+		<xsl:call-template name="insertParagraph">
+			<xsl:with-param name="text">
 				The following modifications apply to this part of ISO 10303.
 			</xsl:with-param>
 		</xsl:call-template>

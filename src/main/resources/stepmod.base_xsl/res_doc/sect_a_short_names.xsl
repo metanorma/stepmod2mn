@@ -123,6 +123,7 @@ $Id: sect_a_short_names.xsl,v 1.10 2018/01/18 20:20:21 mike Exp $
 									<xsl:value-of select="$names_url"/>
 								</a>
 							</xsl:with-param>
+							<xsl:with-param name="asText">true</xsl:with-param>
 						</xsl:call-template>
 									
 					</xsl:with-param>
@@ -165,7 +166,7 @@ $Id: sect_a_short_names.xsl,v 1.10 2018/01/18 20:20:21 mike Exp $
 		
 		<xsl:text>[align=center]</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
-		<xsl:variable name="names_url" select="'http://standards.iso.org/iso/10303/tech/short_names/short-names.txt'"/>
+		<xsl:variable name="names_url" select="'http://standards.iso.org/iso/10303/tech/short_names/short-names.txt'"/>		
 		<xsl:call-template name="insertParagraph">
 			<xsl:with-param name="text">
 			
@@ -175,6 +176,7 @@ $Id: sect_a_short_names.xsl,v 1.10 2018/01/18 20:20:21 mike Exp $
 							<xsl:value-of select="$names_url"/>
 						</a>
 					</xsl:with-param>
+					<xsl:with-param name="asText">true</xsl:with-param>
 				</xsl:call-template>
 				
 			</xsl:with-param>

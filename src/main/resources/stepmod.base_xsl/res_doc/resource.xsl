@@ -1398,6 +1398,7 @@ Purpose:
 				<xsl:with-param name="a">
 					<a href="{$names_url}"   target="_blank"><xsl:value-of select="$names_url"/></a>
 				</xsl:with-param>
+				<xsl:with-param name="asText">true</xsl:with-param>
 			</xsl:call-template>
 		<xsl:text>&#xa;</xsl:text>
 		<xsl:text>EXPRESS::: </xsl:text>
@@ -1405,6 +1406,7 @@ Purpose:
 				<xsl:with-param name="a">
 					<a href="{$parts_url}"   target="_blank"><xsl:value-of select="$parts_url"/></a>
 				</xsl:with-param>
+				<xsl:with-param name="asText">true</xsl:with-param>
 			</xsl:call-template>		
 		<xsl:text>&#xa;&#xa;</xsl:text>
 		
@@ -1417,7 +1419,7 @@ Purpose:
 		</div> -->
 		
 		
-		<xsl:text>[#table_e1]</xsl:text>
+		<!-- <xsl:text>[#table_e1]</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
 		<xsl:text>[cols="^,^",options="header"]</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
@@ -1425,7 +1427,11 @@ Purpose:
 		<xsl:text>&#xa;</xsl:text>
 		
 		<xsl:text>|===</xsl:text>
-		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>&#xa;</xsl:text> -->
+			
+		<xsl:text>EXPRESS listings:</xsl:text>
+			
+		<xsl:text>&#xa;&#xa;</xsl:text>
 			
 		<!-- <br/> -->
 
@@ -1451,7 +1457,7 @@ Purpose:
 				
 				<!-- table header -->
 				
-				<xsl:text>| </xsl:text>
+				<!-- <xsl:text>| </xsl:text>
 				<xsl:choose>
 					<xsl:when test="$FILE_EXT='.xml'">
 						<xsl:text>XML file</xsl:text>
@@ -1462,15 +1468,21 @@ Purpose:
 				</xsl:choose>
 				<xsl:text> | ASCII file</xsl:text>
 				<xsl:text>&#xa;&#xa;</xsl:text>
+				
+				<xsl:text>| </xsl:text>
+				<xsl:text>file</xsl:text>
+				<xsl:text>&#xa;&#xa;</xsl:text> -->
+
 
 			<xsl:variable name="wgnumber" select="./@wg.number.express"/>
 
 			<xsl:for-each select="./schema" >
 
 				<xsl:variable name="resource_dir">
-					<xsl:call-template name="resource_directory">
+					<!-- <xsl:call-template name="resource_directory">
 						<xsl:with-param name="resource" select="@name"/>
-					</xsl:call-template>
+					</xsl:call-template> -->
+					<xsl:value-of select="concat('/resources/', @name)"/>
 				</xsl:variable>
 
 				<xsl:variable name="express_exp" select="concat($resource_dir,'/',@name,'.exp')"/>
@@ -1500,11 +1512,11 @@ Purpose:
 					</td> -->
 					
 					
-					<xsl:text>| </xsl:text>
+					<!-- <xsl:text>| </xsl:text>
 					<xsl:call-template name="insertHyperlink">
 						<xsl:with-param name="a">
 							<a href="{$schema_url}">
-								<xsl:value-of select="concat($schema_file,$FILE_EXT)"/>
+								<xsl:value-of select="concat($schema_file,$FILE_EXT)"/>								
 							</a>
 						</xsl:with-param>
 					</xsl:call-template>					
@@ -1513,8 +1525,9 @@ Purpose:
 						<xsl:with-param name="a">
 							<a href="{$express_exp}"><xsl:value-of select="$schema_file"/>.exp</a>
 						</xsl:with-param>
-					</xsl:call-template>					
-					<xsl:text>&#xa;</xsl:text>
+					</xsl:call-template>					 
+
+					<xsl:text>&#xa;</xsl:text>-->
 					
 					<!--<xsl:if test="$FILE_EXT!='.xml'">
 						<td>
@@ -1541,9 +1554,20 @@ Purpose:
 			<!-- </table> -->
 		<!-- </div> -->
 		
-		<xsl:text>|===</xsl:text>
+		<!-- resource -->
+		<xsl:for-each select="schema">
+			<xsl:variable name="schema_pos" select="position()"/>
+				<xsl:apply-templates select="../../resource" mode="express_listings">
+					<xsl:with-param name="pos" select="$schema_pos"/>
+				</xsl:apply-templates>
+		</xsl:for-each>
+		
+		
+		
+		
+		<!-- <xsl:text>|===</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>&#xa;</xsl:text> -->
 		
 		<!--<p>
 		If there is difficulty accessing these sites, contact ISO Central

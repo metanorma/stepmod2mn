@@ -1912,7 +1912,8 @@ width="20" height="20"/> -->
 							<xsl:variable name="schema_position">
 								<xsl:apply-templates select="$resdoc_xml//resource/schema[@name=$schema_name]" mode="position"/>
 							</xsl:variable>
-							<xsl:value-of select="concat($baselink,'resource_docs/',$resource_doc,'/sys/', $schema_position, '_schema',$FILE_EXT,'#',$express_ref)"/><!-- FOO -->
+							<!-- <xsl:value-of select="concat($baselink,'resource_docs/',$resource_doc,'/sys/', $schema_position, '_schema',$FILE_EXT,'#',$express_ref)"/> --><!-- FOO -->
+							<xsl:value-of select="concat('/resource_docs/',$resource_doc,'#',$express_ref)"/>
 						</xsl:when>
 						<xsl:otherwise>
 							<xsl:value-of select="concat($baselink,'resources/',$module,'/', $module,$FILE_EXT,'#',$express_ref)"/>
