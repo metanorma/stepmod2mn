@@ -86,6 +86,7 @@
 
       <xsl:choose>
         <xsl:when test="./interfaced.item">
+					<xsl:text>&#160;&#160;&#160;--&#160;</xsl:text>
           <!-- if interface items then out put source tail comment now -->
           <xsl:apply-templates select="." mode="source"/>
           <xsl:apply-templates select="./interfaced.item" mode="code"/>;
@@ -93,6 +94,7 @@
 					<xsl:text>&#xa;&#xa;</xsl:text>
         </xsl:when>
         <xsl:otherwise><xsl:text>;</xsl:text>
+					<xsl:text>&#160;&#160;&#160;--&#160;</xsl:text>
           <xsl:apply-templates select="." mode="source"/>
           <!-- <br/><br/> --><xsl:text>&#xa;&#xa;</xsl:text>
         </xsl:otherwise>
@@ -109,6 +111,7 @@
 
       <xsl:choose>
         <xsl:when test="./interfaced.item">
+					<xsl:text>&#160;&#160;&#160;--&#160;</xsl:text>
           <!-- if interface items then out put source tail comment now -->
           <xsl:apply-templates select="." mode="source"/>
           <xsl:apply-templates select="./interfaced.item" mode="code"/><xsl:text>;</xsl:text>
@@ -116,6 +119,7 @@
 					<xsl:text>&#xa;&#xa;</xsl:text>
         </xsl:when>
         <xsl:otherwise><xsl:text>;</xsl:text>
+					<xsl:text>&#160;&#160;&#160;--&#160;</xsl:text>
           <xsl:apply-templates select="." mode="source"/>
           <!--  <br/><br/>       -->    
 					<xsl:text>&#xa;&#xa;</xsl:text>
