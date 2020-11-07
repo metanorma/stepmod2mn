@@ -442,7 +442,15 @@
 	
 	<xsl:template name="insertCodeStart">
 		<xsl:text>&#xa;&#xa;</xsl:text>
-		<xsl:text>[source]</xsl:text>		
+		<xsl:text>[source]</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>--</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+	</xsl:template>
+	
+	<xsl:template name="insertLutaMLCodeStart">
+		<xsl:text>&#xa;&#xa;</xsl:text>
+		<xsl:text>[lutaml_source,express]</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
 		<xsl:text>--</xsl:text>
 		<xsl:text>&#xa;</xsl:text>

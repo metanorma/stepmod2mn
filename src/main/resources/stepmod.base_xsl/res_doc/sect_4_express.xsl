@@ -194,7 +194,7 @@
 		<!-- <p>
 			<code> -->
 			<xsl:if test="position()=1">
-				<xsl:call-template name="insertCodeStart"/>
+				<xsl:call-template name="insertLutaMLCodeStart"/>
 			</xsl:if>
 
 				<xsl:choose>
@@ -593,7 +593,7 @@
 			<!-- <p> -->
 			<!-- start blockquote -->
 			<!-- <code> -->
-			<xsl:call-template name="insertCodeStart"/>
+			<xsl:call-template name="insertLutaMLCodeStart"/>
 				<xsl:text>*)&#xa;</xsl:text><!-- <br/> -->
 				<xsl:text>CONSTANT</xsl:text>
 				<xsl:text>&#xa;</xsl:text><!-- <br/> --><xsl:text>(*</xsl:text>
@@ -669,7 +669,7 @@
 			<!-- <p> -->
 			<!--  start blockquote -->
 			 <!--  <code> -->
-				<xsl:call-template name="insertCodeStart"/>
+				<xsl:call-template name="insertLutaMLCodeStart"/>
 					<xsl:text>*)&#xa;</xsl:text><!-- <br/> -->
 					<xsl:text>&#160;&#160;</xsl:text><xsl:value-of select="@name"/> 
 					<xsl:text>: </xsl:text>
@@ -697,7 +697,7 @@
 				<!-- <p> -->
 				<!--  start blockquote -->
 				 <!--  <code> -->
-				<xsl:call-template name="insertCodeStart"/>
+				<xsl:call-template name="insertLutaMLCodeStart"/>
 					<xsl:text>*)&#xa;</xsl:text><!-- <br/> -->
 					<xsl:text>END_CONSTANT;</xsl:text>
 					<xsl:text>&#xa;</xsl:text><!-- <br/> --><xsl:text>(*</xsl:text>
@@ -864,7 +864,7 @@
 		<!-- <p> -->
 		<!-- start blockquote -->
 			<!-- <code> -->
-			<xsl:call-template name="insertCodeStart"/>
+			<xsl:call-template name="insertLutaMLCodeStart"/>
 				<xsl:text>*)&#xa;</xsl:text><!-- <br/> -->
 				<xsl:text>TYPE </xsl:text>
 				<xsl:value-of select="@name" />
@@ -1204,10 +1204,10 @@
 		<!-- <p> -->
 		<!--  start blockquote -->
 			<!-- <code> -->			
-			<xsl:call-template name="insertCodeStart"/>
+			<xsl:call-template name="insertLutaMLCodeStart"/>
 				<!-- ex.: express_ref:[linear_dimension] -->
-				<xsl:text>express_ref:[</xsl:text><xsl:value-of select="@name"/><xsl:text>]</xsl:text>
-				<!-- <xsl:text>*)&#xa;</xsl:text>
+				<!-- <xsl:text>express_ref:[</xsl:text><xsl:value-of select="@name"/><xsl:text>]</xsl:text> -->
+				<xsl:text>*)&#xa;</xsl:text>
 				<xsl:text>ENTITY </xsl:text><xsl:value-of select="@name"/>
 				<xsl:call-template name="abstract.entity"/>
 				<xsl:call-template name="super.expression-code"/>
@@ -1218,7 +1218,7 @@
 				<xsl:apply-templates select="./inverse" mode="code"/>
 				<xsl:apply-templates select="./unique" mode="code"/>
 				<xsl:apply-templates select="./where[@expression]" mode="code"/>
-				<xsl:text>END_ENTITY;&#xa;</xsl:text><xsl:text>(*</xsl:text> -->
+				<xsl:text>END_ENTITY;&#xa;</xsl:text><xsl:text>(*</xsl:text>
 			<xsl:call-template name="insertCodeEnd"/>
 			
 			
@@ -1874,7 +1874,7 @@
 		
 	 <!--  <p>
 			<code> -->
-			<xsl:call-template name="insertCodeStart"/>
+			<xsl:call-template name="insertLutaMLCodeStart"/>
 				<xsl:text>*)&#xa;</xsl:text><!-- <br/> -->
 			<!-- <A NAME="{$aname}">SUBTYPE_CONSTRAINT <b>
 			<xsl:value-of select="@name"/></b></A> -->				
@@ -2298,7 +2298,7 @@
 
 		<!--  start blockquote  -->
 		<!-- <code> -->
-		<xsl:call-template name="insertCodeStart"/>
+		<xsl:call-template name="insertLutaMLCodeStart"/>
 			<xsl:text>*)&#xa;</xsl:text><!-- <br/> -->
 			<xsl:text>FUNCTION </xsl:text><xsl:value-of select="@name"/>
 			<xsl:apply-templates select="./parameter" mode="code"/><xsl:text> : </xsl:text>
@@ -2416,7 +2416,7 @@
 		<xsl:text>&#xa;&#xa;</xsl:text>
 		<!--  start blockquote  -->
 			<!-- <code> -->
-			<xsl:call-template name="insertCodeStart"/>
+			<xsl:call-template name="insertLutaMLCodeStart"/>
 				<xsl:text>*)&#xa;</xsl:text><!-- <br/> -->     
 				<xsl:text>PROCEDURE </xsl:text><xsl:value-of select="@name"/>
 				<xsl:apply-templates select="./parameter" mode="code"/><xsl:text> : </xsl:text>
@@ -2651,7 +2651,7 @@
 	 <!-- <p> -->
 		<!-- start blockquote -->
 		<!-- <code> -->
-		<xsl:call-template name="insertCodeStart"/>
+		<xsl:call-template name="insertLutaMLCodeStart"/>
 			<xsl:text>*)&#xa;</xsl:text><!-- <br/> -->
 			<xsl:text>RULE </xsl:text><xsl:value-of select="@name"/><xsl:text> FOR</xsl:text>
 		<!-- <br/> --><xsl:text>&#xa;</xsl:text>
