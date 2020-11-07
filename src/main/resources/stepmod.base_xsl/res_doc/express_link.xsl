@@ -1164,13 +1164,12 @@
 				<xsl:when test="$resdoc_xml//schema[@name=$schema_name]/@name">
 					<xsl:variable name="clauseno">
 						<!--        <xsl:apply-templates select="$resdoc_xml//schema[@name=$schema_name]" mode="pos"> -->
-	<xsl:apply-templates select="$resdoc_xml//schema" mode="pos">
-				<xsl:with-param name="schema_name" select="$schema_name"/>         
-
-					</xsl:apply-templates>
-				</xsl:variable>
-					<xsl:value-of 
-						select="concat($data_path,'/resource_docs/',$resdoc_name,'/sys/',$clauseno,'_schema',$FILE_EXT)"/>
+						<xsl:apply-templates select="$resdoc_xml//schema" mode="pos">
+							<xsl:with-param name="schema_name" select="$schema_name"/>
+							</xsl:apply-templates>
+					</xsl:variable>
+					
+					<xsl:value-of select="concat($data_path,'/resource_docs/',$resdoc_name,'/sys/',$clauseno,'_schema',$FILE_EXT)"/>
 					
 				</xsl:when>
 

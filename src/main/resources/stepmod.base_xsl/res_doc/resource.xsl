@@ -2528,7 +2528,7 @@ the types, entity specializations, and functions that are specific to this part 
 
 		<xsl:variable name="normrefs">
 			<xsl:call-template name="normrefs_list">
-	<xsl:with-param name="current_resource" select="$current_resource"/>
+				<xsl:with-param name="current_resource" select="$current_resource"/>
 			</xsl:call-template>
 		</xsl:variable>
 		<!--
@@ -2539,7 +2539,7 @@ the types, entity specializations, and functions that are specific to this part 
 
 		<xsl:variable name="pruned_normrefs">
 			<xsl:call-template name="prune_normrefs_list">
-	<xsl:with-param name="normrefs_list" select="$normrefs"/>
+				<xsl:with-param name="normrefs_list" select="$normrefs"/>
 			</xsl:call-template>  
 		</xsl:variable>
 
@@ -2561,8 +2561,9 @@ the types, entity specializations, and functions that are specific to this part 
 		<!-- sorting basis is special normalized string, consisting of organization, series and part number all of equal lengths per each element -->
 		<xsl:sort select='part'/>
 		
-		<xsl:for-each select="string/*">
-			<xsl:copy-of select="."/>			
+		<xsl:for-each select="string"> <!-- /* -->
+			<!-- <xsl:copy-of select="."/>			 -->
+			<xsl:value-of select="."/>			
 		</xsl:for-each>
 		
 		<!-- <xsl:for-each select="string">
@@ -2648,15 +2649,14 @@ the types, entity specializations, and functions that are specific to this part 
 							 <xsl:element name="string">
 								<xsl:if test="$resource_number!=$part_no">
 									<!-- OOUTPUT from normative references -->
-										<xsl:apply-templates 
-											select="document(concat($path, '../../../data/basic/normrefs.xml'))/normref.list/normref[@id=$normref]"/>
+										<xsl:apply-templates select="document(concat($path, '../../../data/basic/normrefs.xml'))/normref.list/normref[@id=$normref]"/>
 								</xsl:if>
 							</xsl:element>
 							<xsl:variable name="part">
 								<xsl:value-of select="document(concat($path, '../../../data/basic/normrefs.xml'))/normref.list/normref[@id=$normref]/stdref/stdnumber"/>
 							</xsl:variable>
 							<xsl:variable name="orgname">
-				<xsl:value-of select="document(concat($path, '../../../data/basic/normrefs.xml'))/normref.list/normref[@id=$normref]/stdref/orgname"/>
+								<xsl:value-of select="document(concat($path, '../../../data/basic/normrefs.xml'))/normref.list/normref[@id=$normref]/stdref/orgname"/>
 							</xsl:variable>
 							<!-- eliminate status info like TS, CD-TS, etc -->
 							<xsl:variable name="orgname_cleaned">
@@ -3160,10 +3160,10 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 		
 		<xsl:if test="stdref[@published='n']">
 			<xsl:text> footnote:[To be published.]</xsl:text><!-- <sup><a href="#tobepub">1</a>)</sup> -->
-		</xsl:if>, 
+		</xsl:if><xsl:text>, </xsl:text>
 		
 		<!-- <i> -->
-		<xsl:text>_</xsl:text><xsl:value-of select="stdref/stdtitle"/>
+		<xsl:text>_</xsl:text><xsl:value-of select="normalize-space(stdref/stdtitle)"/>
 			<xsl:variable name="subtitle" select="normalize-space(stdref/subtitle)"/>
 			<!-- 2018-08-22 MAW full-stop not added and removed if it already exists -->
 			<!--<xsl:choose>
