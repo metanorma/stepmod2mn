@@ -4876,6 +4876,7 @@ is case sensitive.')"/>
 			<xsl:with-param name="a">
 				<a href="{$href}"><xsl:value-of select="$href"/></a>
 			</xsl:with-param>
+			<xsl:with-param name="asText">true</xsl:with-param>
 		</xsl:call-template>
 	</xsl:template>
 	

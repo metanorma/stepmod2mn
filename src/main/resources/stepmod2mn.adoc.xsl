@@ -300,6 +300,7 @@
 		</xsl:if>
 		
 		<!-- insert header, if there isn't bibliography in the document, but there are external docs refs -->
+		<!-- 
 		<xsl:if test="xalan:nodeset($adoc)//ExternalDocumentReference and not(resource/bibliography/*)">
 			<xsl:call-template name="insertHeaderADOC">
 				<xsl:with-param name="id" select="'bibliography'"/>		
@@ -307,7 +308,7 @@
 				<xsl:with-param name="header" select="'Bibliography'"/>		
 			</xsl:call-template>		
 		</xsl:if>
-		
+	
 		<xsl:variable name="ExternalDocumentReferences">
 			<xsl:for-each select="xalan:nodeset($adoc)//ExternalDocumentReference">
 				<xsl:copy-of select="."/>
@@ -315,7 +316,6 @@
 		</xsl:variable>
 		
 		<xsl:for-each select="xalan:nodeset($ExternalDocumentReferences)//ExternalDocumentReference">	
-			<!-- docid=<xsl:value-of select="@docid"/><xsl:text>&#xa;</xsl:text> -->
 			<xsl:if test="not(preceding-sibling::ExternalDocumentReference/@docid = current()/@docid)">
 				<xsl:text>* [[[</xsl:text>
 				<xsl:variable name="docid">
@@ -358,7 +358,7 @@
 				<xsl:text>&#xa;&#xa;</xsl:text>
 			</xsl:if>
 		</xsl:for-each>
-		
+		-->
 		
 	</xsl:template>
 
@@ -567,7 +567,7 @@
 	<xsl:template name="insertHyperlinkSkip"/>
 	
 	<xsl:template match="ExternalDocumentReference" mode="text">
-		<xsl:text>&lt;&lt;</xsl:text>
+		<!-- <xsl:text>&lt;&lt;</xsl:text>
 		
 		<xsl:choose>
 			<xsl:when test="starts-with(@docid, '/resources/')">
@@ -583,7 +583,49 @@
 		
 		<xsl:if test="normalize-space(@anchor) != ''">
 			<xsl:text>,#</xsl:text><xsl:value-of select="@anchor"/>
-		</xsl:if>
+		</xsl:if> -->
+		
+		<!--
+		schema ("." (prefix ".")* label)?
+		"action_schema.functions.type1" has 
+		schema = action_schema, 
+		prefix = functions, 
+		label = type1.
+		-->
+		
+		<!-- <<express:action-schema:functions.type1,type1>> -->
+		
+		<!-- <<draughting,#draughting_element_schema.dimension_curve_directed_callout>> 
+		<<express:draughting_element_schema:dimension_curve_directed_callout, dimension_curve_directed_callout>> -->
+		
+		<xsl:variable name="schema_">
+			<xsl:if test="contains(@anchor, '.')">
+				<xsl:value-of select="substring-before(@anchor, '.')"/>
+			</xsl:if>
+		</xsl:variable>
+		<xsl:variable name="schema" select="normalize-space($schema_)"/>
+		
+		<xsl:variable name="prefix_label_">
+			<xsl:if test="contains(@anchor, '.')">
+				<xsl:value-of select="substring-after(@anchor, '.')"/>
+			</xsl:if>
+		</xsl:variable>
+		<xsl:variable name="prefix_label" select="normalize-space($prefix_label_)"/>
+		
+		<xsl:variable name="label_">
+			<xsl:if test="contains(@anchor, '.')">
+				<xsl:call-template name="substring-after-last">
+					<xsl:with-param name="value" select="@anchor"/>
+					<xsl:with-param name="delimiter" select="'.'"/>
+				</xsl:call-template>
+			</xsl:if>
+		</xsl:variable>
+		<xsl:variable name="label" select="normalize-space($label_)"/>
+		
+		<xsl:text>&lt;&lt;express:</xsl:text>
+		<xsl:if test="$schema != ''"><xsl:value-of select="$schema"/>:</xsl:if>
+		<xsl:value-of select="$prefix_label"/>
+		<xsl:if test="$label != ''">, <xsl:value-of select="$label"/></xsl:if>
 		<xsl:text>&gt;&gt;</xsl:text>
 	</xsl:template>
 	
@@ -760,5 +802,21 @@
 	<!-- ===================== -->	
 	<!-- ===================== -->	
 	
+	<xsl:template name="substring-after-last">	
+		<xsl:param name="value"/>
+		<xsl:param name="delimiter"/>    
+		<xsl:choose>
+			<xsl:when test="contains($value, $delimiter)">
+				<xsl:call-template name="substring-after-last">
+					<xsl:with-param name="value" select="substring-after($value, $delimiter)" />
+					<xsl:with-param name="delimiter" select="$delimiter" />
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="$value" />
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
 	
 </xsl:stylesheet>
