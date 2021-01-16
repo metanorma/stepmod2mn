@@ -860,12 +860,21 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 		<xsl:text>&#xa;&#xa;</xsl:text>
 	</xsl:if>
 </xsl:template>
+<xsl:template match="b2|B2">
+	<xsl:text>**</xsl:text><xsl:apply-templates/><xsl:text>**</xsl:text>
+	<xsl:if test="following-sibling::*[1][local-name() = 'p'] or following-sibling::*[1][local-name = 'P']">
+		<xsl:text>&#xa;&#xa;</xsl:text>
+	</xsl:if>
+</xsl:template>
 
-<xsl:template match="tt">
+<xsl:template match="tt | TT">
 	<!-- <tt>
 		<xsl:apply-templates/>
 	</tt> -->
 	<xsl:text>`</xsl:text><xsl:apply-templates/><xsl:text>`</xsl:text>
+</xsl:template>
+<xsl:template match="tt2 | TT2">
+	<xsl:text>``</xsl:text><xsl:apply-templates/><xsl:text>``</xsl:text>
 </xsl:template>
 
 
@@ -874,6 +883,12 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 		<xsl:apply-templates/>
 	</i> -->
 	<xsl:text>_</xsl:text><xsl:apply-templates/><xsl:text>_</xsl:text>
+	<xsl:if test="following-sibling::*[1][local-name() = 'p'] or following-sibling::*[1][local-name = 'P']">
+		<xsl:text>&#xa;&#xa;</xsl:text>
+	</xsl:if>
+</xsl:template>
+<xsl:template match="i2|I2">
+	<xsl:text>__</xsl:text><xsl:apply-templates/><xsl:text>__</xsl:text>
 	<xsl:if test="following-sibling::*[1][local-name() = 'p'] or following-sibling::*[1][local-name = 'P']">
 		<xsl:text>&#xa;&#xa;</xsl:text>
 	</xsl:if>
@@ -916,7 +931,9 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 	</sub> -->
 	<xsl:text>~</xsl:text><xsl:apply-templates/><xsl:text>~</xsl:text>
 </xsl:template>
-
+<xsl:template match="sub2|SUB2" >
+	<xsl:text>~~</xsl:text><xsl:apply-templates/><xsl:text>~~</xsl:text>
+</xsl:template>
 
 <!-- superscript -->
 <xsl:template match="sup|SUP" >
@@ -924,6 +941,12 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 		<xsl:apply-templates/>
 	</sup> -->
 	<xsl:text>^</xsl:text><xsl:apply-templates/><xsl:text>^</xsl:text>
+</xsl:template>
+<xsl:template match="sup2|SUP2" >
+	<!-- <sup>
+		<xsl:apply-templates/>
+	</sup> -->
+	<xsl:text>^^</xsl:text><xsl:apply-templates/><xsl:text>^^</xsl:text>
 </xsl:template>
 
 <xsl:template match="screen">
