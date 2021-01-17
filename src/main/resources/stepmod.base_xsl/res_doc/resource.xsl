@@ -1302,6 +1302,7 @@ Purpose:
 	<xsl:template match="inscope">
 		<!-- <p> -->
 			<!-- <a name="inscope"/> -->
+			<xsl:text>&#xa;</xsl:text>
 			<xsl:text>[[inscope]]</xsl:text>
 			<xsl:text>&#xa;</xsl:text>
 			<xsl:call-template name="insertParagraph">
@@ -1805,7 +1806,7 @@ Purpose:
 
 
 		<xsl:apply-templates select="./introduction"/>
-		
+		<xsl:text> </xsl:text>
 		<xsl:variable name="clause_intro_1">This clause defines the information requirements to which implementations shall conform using the EXPRESS language as defined in ISO 10303-11. The following EXPRESS declaration begins the </xsl:variable>
 		<xsl:variable name="clause_intro_2"> 
 			<xsl:choose>
