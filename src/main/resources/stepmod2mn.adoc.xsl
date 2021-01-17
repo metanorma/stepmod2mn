@@ -605,12 +605,14 @@
 		</xsl:variable>
 		<xsl:variable name="schema" select="normalize-space($schema_)"/>
 		
-		<xsl:variable name="prefix_label_">
+		<!-- <xsl:variable name="prefix_label_">
 			<xsl:if test="contains(@anchor, '.')">
 				<xsl:value-of select="substring-after(@anchor, '.')"/>
 			</xsl:if>
 		</xsl:variable>
-		<xsl:variable name="prefix_label" select="normalize-space($prefix_label_)"/>
+		<xsl:variable name="prefix_label" select="normalize-space($prefix_label_)"/> -->
+		
+		<xsl:variable name="schema_prefix_label" select="@anchor" />
 		
 		<xsl:variable name="label_">
 			<xsl:if test="contains(@anchor, '.')">
@@ -624,7 +626,7 @@
 		
 		<xsl:text>&lt;&lt;express:</xsl:text>
 		<xsl:if test="$schema != ''"><xsl:value-of select="$schema"/>:</xsl:if>
-		<xsl:value-of select="$prefix_label"/>
+		<xsl:value-of select="$schema_prefix_label"/>
 		<xsl:if test="$label != ''">, <xsl:value-of select="$label"/></xsl:if>
 		<xsl:text>&gt;&gt;</xsl:text>
 	</xsl:template>
