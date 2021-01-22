@@ -1,13 +1,17 @@
 package com.metanorma;
 
 import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -17,12 +21,18 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Scanner;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.URIResolver;
+import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
@@ -34,7 +44,9 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.w3c.dom.Document;
 import org.xml.sax.EntityResolver;
+import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
@@ -131,7 +143,7 @@ public class stepmod2mn {
                 
                 String argXMLin = arglist.get(0);
                 
-                InputStream xmlInputStream;
+                
                 
                 String resourcePath = "";
                 
@@ -148,9 +160,6 @@ public class stepmod2mn {
                         System.out.println(String.format(INPUT_NOT_FOUND, XML_INPUT, argXMLin));
                         System.exit(ERROR_EXIT_CODE);
                     }
-                    URL url = new URL(argXMLin);
-                    
-                    xmlInputStream = url.openStream();
                     
                     resourcePath = Util.getParentUrl(argXMLin);
                     
@@ -174,7 +183,6 @@ public class stepmod2mn {
                         System.out.println(String.format(INPUT_NOT_FOUND, XML_INPUT, fXMLin));
                         System.exit(ERROR_EXIT_CODE);
                     }
-                    xmlInputStream = new FileInputStream(fXMLin);
                     
                     //parent path for input resource.xml
                     resourcePath = new File(argXMLin).getParent() + File.separator;
@@ -200,7 +208,7 @@ public class stepmod2mn {
                 try {
                     stepmod2mn app = new stepmod2mn();
                     app.setResourcePath(resourcePath);
-                    app.convertstepmod2mn(xmlInputStream, fileOut);                    
+                    app.convertstepmod2mn(argXMLin, fileOut);                    
                     System.out.println("End!");
                     
                 } catch (Exception e) {
@@ -210,10 +218,7 @@ public class stepmod2mn {
                 cmdFail = false;
             } catch (ParseException exp) {
                 cmdFail = true;            
-            } catch (IOException ex) {
-                System.err.println(ex.toString());
             }
-
         }
         
         // flush temporary folder
@@ -228,61 +233,32 @@ public class stepmod2mn {
     }
 
     //private void convertstepmod2mn(File fXMLin, File fileOut) throws IOException, TransformerException, SAXParseException {
-    private void convertstepmod2mn(InputStream XMLinputStream, File fileOut) throws IOException, TransformerException, SAXParseException {
+    private void convertstepmod2mn(String xmlFilePath, File fileOut) throws IOException, TransformerException, SAXParseException {
+        
+        System.out.println("Transforming...");
         
         try {
             
             Source srcXSL = null;
             
-            String outputFolder = fileOut.getParent();
             String bibdataFileName = fileOut.getName();
-           
-            // skip validating 
-            //found here: https://moleshole.wordpress.com/2009/10/08/ignore-a-dtd-when-using-a-transformer/
-            XMLReader rdr = XMLReaderFactory.createXMLReader();
-            rdr.setEntityResolver(new EntityResolver() {
-		@Override
-		public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
-                    if (systemId.endsWith(".dtd")) {
-                            StringReader stringInput = new StringReader(" ");
-                            return new InputSource(stringInput);
-                    }
-                    else {
-                            return null; // use default behavior
-                    }
-		}
-            });
             
+            // get linearized XML with default attributes substitution from DTD
+            String linearizedXML = processLinearizedXML(xmlFilePath);
             
-            TransformerFactory factory = TransformerFactory.newInstance();
-            factory.setURIResolver(new ClasspathResourceURIResolver());            
-            Transformer transformer = factory.newTransformer();
-            //Source src = new StreamSource(fXMLin);
-            //Source src = new SAXSource(rdr, new InputSource(new FileInputStream(fXMLin)));
-            Source src = new SAXSource(rdr, new InputSource(XMLinputStream));
-            
-            System.out.println("Transforming...");
-            
-            
-            // linearize XML
-            Source srcXSLidentity = new StreamSource(Util.getStreamFromResources(getClass().getClassLoader(), "linearize.xsl"));
-            
-            transformer = factory.newTransformer(srcXSLidentity);
-
-            StringWriter resultWriteridentity = new StringWriter();
-            StreamResult sridentity = new StreamResult(resultWriteridentity);
-            transformer.transform(src, sridentity);
-            String xmlidentity = resultWriteridentity.toString();
-
             // load linearized xml
-            src = new StreamSource(new StringReader(xmlidentity));
+            Source src = new StreamSource(new StringReader(linearizedXML));
             ClassLoader cl = this.getClass().getClassLoader();
             String systemID = "stepmod2mn.adoc.xsl";
-            InputStream in = cl.getResourceAsStream(systemID);
+            //InputStream in = cl.getResourceAsStream(systemID);
             URL url = cl.getResource(systemID);
             
             srcXSL = new StreamSource(Util.getStreamFromResources(getClass().getClassLoader(), systemID));//"stepmod2mn.adoc.xsl"
             srcXSL.setSystemId(url.toExternalForm());
+            
+            TransformerFactory factory = TransformerFactory.newInstance();
+            factory.setURIResolver(new ClasspathResourceURIResolver());            
+            Transformer transformer = factory.newTransformer();
             
             Templates cachedXSLT = factory.newTemplates(srcXSL);
             //transformer = factory.newTransformer(srcXSL);
@@ -351,6 +327,73 @@ public class stepmod2mn {
 
     public void setResourcePath(String resourcePath) {
         this.resourcePath = resourcePath;
+    }
+ 
+    private String processLinearizedXML(String xmlFilePath){
+        try {
+            InputStream xmlInputStream = null;
+
+            File fXMLin = new File(xmlFilePath);
+
+            if (xmlFilePath.toLowerCase().startsWith("http") || xmlFilePath.toLowerCase().startsWith("www.")) {
+                try {
+                    URL url = new URL(xmlFilePath);
+                    xmlInputStream = url.openStream();
+                } catch (IOException ex) {} //checked above
+
+
+            } else { try {
+                // in case of local file
+                xmlInputStream = new FileInputStream(fXMLin);
+                } catch (FileNotFoundException ex) { }//checked above
+            }
+
+            // to skip validating 
+            //found here: https://moleshole.wordpress.com/2009/10/08/ignore-a-dtd-when-using-a-transformer/
+            XMLReader rdr = XMLReaderFactory.createXMLReader();
+
+            /*rdr.setEntityResolver(new EntityResolver() {
+                @Override
+                public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
+                    if (systemId.endsWith(".dtd")) {
+                            //StringReader stringInput = new StringReader(" ");
+                            StringReader stringInput = new StringReader(systemId);
+                            //StringReader stringInput = new StringReader("file:///C:/Delete/test.dtd");
+                            //return new InputSource(stringInput);
+                            String dtd = "C:/Delete/test.dtd";
+                            return new InputSource(new FileInputStream(dtd));
+                    }
+                    else {
+                            return null; // use default behavior
+                    }
+                }
+            });*/
+
+            TransformerFactory factory = TransformerFactory.newInstance();
+            factory.setURIResolver(new ClasspathResourceURIResolver());            
+            Transformer transformer = factory.newTransformer();
+            //Source src = new StreamSource(fXMLin);
+            //Source src = new SAXSource(rdr, new InputSource(new FileInputStream(fXMLin)));
+            InputSource is = new InputSource(xmlInputStream);
+            is.setSystemId(xmlFilePath);
+            Source src = new SAXSource(rdr, is);
+            //Source src = new StreamSource(is);
+
+            // linearize XML
+            Source srcXSLidentity = new StreamSource(Util.getStreamFromResources(getClass().getClassLoader(), "linearize.xsl"));
+
+            transformer = factory.newTransformer(srcXSLidentity);
+
+            StringWriter resultWriteridentity = new StringWriter();
+            StreamResult sridentity = new StreamResult(resultWriteridentity);
+            transformer.transform(src, sridentity);
+            String xmlidentity = resultWriteridentity.toString();
+            return xmlidentity;
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+            System.exit(ERROR_EXIT_CODE);
+        }
+        return "";
     }
     
 }
