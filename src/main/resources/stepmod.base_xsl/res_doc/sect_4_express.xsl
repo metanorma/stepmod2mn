@@ -191,8 +191,8 @@
 			</xsl:variable>
 
 			</xsl:if>
-		<!-- <p>
-			<code> -->
+		<!-- <p> -->
+			<code>
 			<xsl:if test="position()=1">
 				<xsl:call-template name="insertLutaMLCodeStart"/>
 			</xsl:if>
@@ -279,7 +279,7 @@
 			<xsl:if test="position()=last()">
 				<xsl:call-template name="insertCodeEnd"/>
 			</xsl:if>
-	<!--     </code> -->
+			</code>
 			
 		<!-- end blockquote -->
 		<!-- </p> -->
@@ -438,7 +438,7 @@
 					</xsl:for-each>
 				</table>
 		</blockquote> -->
-		
+		<blockquote>
 		<xsl:call-template name="insertQuoteStart"/>
 			<xsl:for-each select="$schema_node/interface[not(@schema = node()/preceding::node()/@schema)]">
 				<xsl:variable name="schema_name" select="./@schema"/>      
@@ -447,10 +447,11 @@
 				<xsl:variable name="text">
 					<xsl:apply-templates select="." mode="source"/>
 				</xsl:variable>
-				<xsl:value-of select="$text"/>
+				<xsl:copy-of select="$text"/>
 				<xsl:text>&#xa;</xsl:text>			
 			</xsl:for-each>
 		<xsl:call-template name="insertQuoteEnd"/>
+		</blockquote>
 		
 			<!-- <p class="note">
 				<small>
@@ -592,13 +593,13 @@
 			
 			<!-- <p> -->
 			<!-- start blockquote -->
-			<!-- <code> -->
+			<code>
 			<xsl:call-template name="insertLutaMLCodeStart"/>
 				<xsl:text>*)&#xa;</xsl:text><!-- <br/> -->
 				<xsl:text>CONSTANT</xsl:text>
 				<xsl:text>&#xa;</xsl:text><!-- <br/> --><xsl:text>(*</xsl:text>
 			<xsl:call-template name="insertCodeEnd"/>
-			<!-- </code> -->
+			</code>
 			<!-- end blockquote  -->
 		<!-- </p> -->
 		</xsl:if>
@@ -668,7 +669,7 @@
 			<xsl:text>&#xa;&#xa;</xsl:text>
 			<!-- <p> -->
 			<!--  start blockquote -->
-			 <!--  <code> -->
+			<code>
 				<xsl:call-template name="insertLutaMLCodeStart"/>
 					<xsl:text>*)&#xa;</xsl:text><!-- <br/> -->
 					<xsl:text>&#160;&#160;</xsl:text><xsl:value-of select="@name"/> 
@@ -688,7 +689,7 @@
 					</xsl:choose>
 					<xsl:text>&#xa;</xsl:text><!-- <br/> --><xsl:text>(*</xsl:text>
 				<xsl:call-template name="insertCodeEnd"/>
-				<!-- </code> -->
+			</code>
 			<!-- end blockquote  -->
 			<!-- </p> -->
 			
@@ -696,13 +697,13 @@
 				<xsl:text>&#xa;</xsl:text><!-- <br/> -->
 				<!-- <p> -->
 				<!--  start blockquote -->
-				 <!--  <code> -->
+				<code>
 				<xsl:call-template name="insertLutaMLCodeStart"/>
 					<xsl:text>*)&#xa;</xsl:text><!-- <br/> -->
 					<xsl:text>END_CONSTANT;</xsl:text>
 					<xsl:text>&#xa;</xsl:text><!-- <br/> --><xsl:text>(*</xsl:text>
 				<xsl:call-template name="insertCodeEnd"/>
-					<!-- </code> -->
+				</code>
 				<!--  end blockquote  -->
 			<!-- </p> -->
 			</xsl:if>
@@ -863,7 +864,7 @@
 			<xsl:text>&#xa;&#xa;</xsl:text>
 		<!-- <p> -->
 		<!-- start blockquote -->
-			<!-- <code> -->
+			<code>
 			<xsl:call-template name="insertLutaMLCodeStart"/>
 				<xsl:text>*)&#xa;</xsl:text><!-- <br/> -->
 				<xsl:text>TYPE </xsl:text>
@@ -882,7 +883,7 @@
 					<xsl:text>END_TYPE;&#xa;</xsl:text><!-- <br/> -->
 					<xsl:text>(*</xsl:text>
 				<xsl:call-template name="insertCodeEnd"/>
-			<!-- </code> -->
+			</code>
 		<!--  end blockquote  -->
 	<!-- </p> -->
 		<xsl:apply-templates select="enumeration" mode="describe_enums"/>
@@ -1105,6 +1106,7 @@
 					<xsl:value-of select="$clause_header"/>
 				</A>
 			</h2> -->		
+			<xsl:text>&#xa;&#xa;</xsl:text>
 			<xsl:call-template name="insertHeaderADOC">
 				<xsl:with-param name="id" select="'entities'"/>
 				<xsl:with-param name="header" select="$clause_header"/>					
@@ -1203,7 +1205,7 @@
 		
 		<!-- <p> -->
 		<!--  start blockquote -->
-			<!-- <code> -->			
+			<code>
 			<xsl:call-template name="insertLutaMLCodeStart"/>
 				<!-- ex.: express_ref:[linear_dimension] -->
 				<!-- <xsl:text>express_ref:[</xsl:text><xsl:value-of select="@name"/><xsl:text>]</xsl:text> -->
@@ -1220,9 +1222,8 @@
 				<xsl:apply-templates select="./where[@expression]" mode="code"/>
 				<xsl:text>END_ENTITY;&#xa;</xsl:text><xsl:text>(*</xsl:text>
 			<xsl:call-template name="insertCodeEnd"/>
-			
-			
-			<!-- </code> -->
+
+			</code>
 		<!--  end blockquote -->
 		<!-- </p> -->
 		
@@ -1872,8 +1873,8 @@
 		<xsl:text>[.underline]#EXPRESS specification:#</xsl:text>
 		<xsl:text>&#xa;&#xa;</xsl:text>
 		
-	 <!--  <p>
-			<code> -->
+	 <!--  <p>            -->
+			<code>
 			<xsl:call-template name="insertLutaMLCodeStart"/>
 				<xsl:text>*)&#xa;</xsl:text><!-- <br/> -->
 			<!-- <A NAME="{$aname}">SUBTYPE_CONSTRAINT <b>
@@ -1916,7 +1917,7 @@
 				</xsl:if>
 				<xsl:text>END_SUBTYPE_CONSTRAINT;&#xa;</xsl:text><!-- <br/> --><xsl:text>(*</xsl:text>
 			<xsl:call-template name="insertCodeEnd"/>
-		<!-- </code></p> -->
+		</code><!--</p> -->
 	</xsl:template>
 
 	<xsl:template match="subtype.constraint" mode="description">
@@ -1978,19 +1979,19 @@
 					
 					<xsl:call-template name="insertParagraph">
 						<xsl:with-param name="text">
-							The *<xsl:value-of select="@name"/>* constraint specifies that 
-							*<xsl:call-template name="link_object">
+							The <b><xsl:value-of select="@name"/></b> constraint specifies that 
+							<b><xsl:call-template name="link_object">
 									<xsl:with-param name="object_name" select="@entity"/>
 									<xsl:with-param name="object_used_in_schema_name" 
 										select="../@name"/>
 									<xsl:with-param name="clause" select="'section'"/>
-								</xsl:call-template>* is an abstract supertype and that instances of subtypes of
-							*<xsl:call-template name="link_object">
+								</xsl:call-template></b> is an abstract supertype and that instances of subtypes of
+							<b><xsl:call-template name="link_object">
 									<xsl:with-param name="object_name" select="@entity"/>
 									<xsl:with-param name="object_used_in_schema_name" 
 										select="../@name"/>
 									<xsl:with-param name="clause" select="'section'"/>
-								</xsl:call-template>* shall not be simultaneously of type 
+								</xsl:call-template></b> shall not be simultaneously of type 
 							<xsl:call-template name="link_list">
 								<xsl:with-param name="list" select="$sc_list"/>
 								<xsl:with-param name="suffix" select="', '"/>
@@ -2028,13 +2029,13 @@
 					</p> -->
 					<xsl:call-template name="insertParagraph">
 						<xsl:with-param name="text">
-							The *<xsl:value-of select="@name"/>* constraint specifies that instances of subtypes of
-							*<xsl:call-template name="link_object">
+							The <b><xsl:value-of select="@name"/></b> constraint specifies that instances of subtypes of
+							<b><xsl:call-template name="link_object">
 									<xsl:with-param name="object_name" select="@entity"/>
 									<xsl:with-param name="object_used_in_schema_name" 
 										select="../@name"/>
 									<xsl:with-param name="clause" select="'section'"/>
-								</xsl:call-template>* shall not be simultaneously of type 
+								</xsl:call-template></b> shall not be simultaneously of type 
 							<xsl:call-template name="link_list">
 								<xsl:with-param name="list" select="$sc_list"/>
 								<xsl:with-param name="suffix" select="', '"/>
@@ -2076,20 +2077,20 @@
 					</p> -->
 					<xsl:call-template name="insertParagraph">
 						<xsl:with-param name="text">
-							The *<xsl:value-of select="@name"/>* constraint specifies that 
-							*<xsl:call-template name="link_object">
+							The <b><xsl:value-of select="@name"/></b> constraint specifies that 
+							<b><xsl:call-template name="link_object">
 									<xsl:with-param name="object_name" select="@entity"/>
 									<xsl:with-param name="object_used_in_schema_name" 
 										select="../@name"/>
 									<xsl:with-param name="clause" select="'section'"/>
-								</xsl:call-template>* is an abstract supertype and that defines 
+								</xsl:call-template></b> is an abstract supertype and that defines 
 							a constraint that applies to instances of subtypes of 
-								*<xsl:call-template name="link_object">
+								<b><xsl:call-template name="link_object">
 									<xsl:with-param name="object_name" select="@entity"/>
 									<xsl:with-param name="object_used_in_schema_name" 
 										select="../@name"/>
 									<xsl:with-param name="clause" select="'section'"/>
-								</xsl:call-template>*.
+								</xsl:call-template></b>.
 							</xsl:with-param>
 						</xsl:call-template>
 					
@@ -2115,13 +2116,13 @@
 					
 					<xsl:call-template name="insertParagraph">
 						<xsl:with-param name="text">
-							The *<xsl:value-of select="@name"/>* constraint specifies a constraint that applies to instances of subtypes of
-							*<xsl:call-template name="link_object">
+							The <b><xsl:value-of select="@name"/></b> constraint specifies a constraint that applies to instances of subtypes of
+							<b><xsl:call-template name="link_object">
 									<xsl:with-param name="object_name" select="@entity"/>
 									<xsl:with-param name="object_used_in_schema_name" 
 										select="../@name"/>
 									<xsl:with-param name="clause" select="'section'"/>
-								</xsl:call-template>*.
+								</xsl:call-template></b>.
 						</xsl:with-param>
 					</xsl:call-template>
 
@@ -2146,13 +2147,13 @@
 						is an abstract supertype. -->
 					<xsl:call-template name="insertParagraph">
 						<xsl:with-param name="text">
-							The *<xsl:value-of select="@name"/>* constraint specifies that 
-							*<xsl:call-template name="link_object">
+							The <b><xsl:value-of select="@name"/></b> constraint specifies that 
+							<b><xsl:call-template name="link_object">
 									<xsl:with-param name="object_name" select="@entity"/>
 									<xsl:with-param name="object_used_in_schema_name" 
 										select="../@name"/>
 									<xsl:with-param name="clause" select="'section'"/>
-								</xsl:call-template>* is an abstract supertype.					
+								</xsl:call-template></b> is an abstract supertype.					
 						</xsl:with-param>
 					</xsl:call-template>
 						
@@ -2297,7 +2298,7 @@
 		<xsl:text>&#xa;&#xa;</xsl:text>
 
 		<!--  start blockquote  -->
-		<!-- <code> -->
+		<code>
 		<xsl:call-template name="insertLutaMLCodeStart"/>
 			<xsl:text>*)&#xa;</xsl:text><!-- <br/> -->
 			<xsl:text>FUNCTION </xsl:text><xsl:value-of select="@name"/>
@@ -2313,7 +2314,7 @@
 				<xsl:text>END_FUNCTION;</xsl:text>
 				<xsl:text>&#xa;</xsl:text><!-- <br/> --><xsl:text>(*</xsl:text>
 			<xsl:call-template name="insertCodeEnd"/>
-			<!-- </code> -->
+		</code>
 		<!-- end blockquote -->
 
 		<xsl:apply-templates select="./parameter" mode="description"/>
@@ -2415,7 +2416,7 @@
 		<xsl:text>[.underline]#EXPRESS specification:#</xsl:text>
 		<xsl:text>&#xa;&#xa;</xsl:text>
 		<!--  start blockquote  -->
-			<!-- <code> -->
+		<code>
 			<xsl:call-template name="insertLutaMLCodeStart"/>
 				<xsl:text>*)&#xa;</xsl:text><!-- <br/> -->     
 				<xsl:text>PROCEDURE </xsl:text><xsl:value-of select="@name"/>
@@ -2431,7 +2432,7 @@
 				<xsl:text>END_PROCEDURE;</xsl:text>
 				<xsl:text>&#xa;</xsl:text><!-- <br/> --><xsl:text>(*</xsl:text>
 			<xsl:call-template name="insertCodeEnd"/>
-			<!-- </code> -->
+		</code>
 		<!-- end blockquote -->
 		<xsl:apply-templates select="./explicit" mode="description"/>
 	</xsl:template>
@@ -2525,8 +2526,9 @@
 			</pre> -->
 			<!-- <xsl:call-template name="insertCodeStart"/> -->
 				<xsl:text>&#xa;&#xa;</xsl:text>
-				
+				<code>
 				<xsl:value-of select="."/>
+				</code>
 			<!-- <xsl:call-template name="insertCodeEnd"/> -->
 				<xsl:text>&#xa;&#xa;</xsl:text>
 		</xsl:if>
@@ -2650,7 +2652,7 @@
 		
 	 <!-- <p> -->
 		<!-- start blockquote -->
-		<!-- <code> -->
+		<code>
 		<xsl:call-template name="insertLutaMLCodeStart"/>
 			<xsl:text>*)&#xa;</xsl:text><!-- <br/> -->
 			<xsl:text>RULE </xsl:text><xsl:value-of select="@name"/><xsl:text> FOR</xsl:text>
@@ -2666,7 +2668,7 @@
 				<xsl:text>END_RULE;</xsl:text>
 				<xsl:text>&#xa;</xsl:text><!-- <br/> --><xsl:text>(*</xsl:text>
 			<xsl:call-template name="insertCodeEnd"/>
-			<!-- </code> -->
+		</code>
 		<!-- end blockquote -->
 		
 		 <!-- </p> -->
@@ -2713,7 +2715,7 @@
 			</b> -->
 		<xsl:call-template name="insertParagraph">
 			<xsl:with-param name="text">
-			<xsl:text>*</xsl:text><xsl:value-of select="concat($arg,' : ')"/><xsl:text>* </xsl:text>
+			<b><xsl:value-of select="concat($arg,' : ')"/></b><xsl:text> </xsl:text>
 			
 			<!-- output the default description -->
 			the set of all instances of 
@@ -3640,13 +3642,13 @@
 					
 					<xsl:call-template name="insertParagraph">
 						<xsl:with-param name="text">
-							The *<xsl:value-of select="$typename"/>* type is an extension of the 
-						*<xsl:call-template name="link_object">
+							The <b><xsl:value-of select="$typename"/></b> type is an extension of the 
+						<b><xsl:call-template name="link_object">
 								<xsl:with-param name="object_name" select="@basedon"/>
 								<xsl:with-param name="object_used_in_schema_name" 
 									select="../../@name"/>
 								<xsl:with-param name="clause" select="'section'"/>
-							</xsl:call-template>* type. 
+							</xsl:call-template></b> type. 
 							<xsl:if test="@selectitems and (string-length(@selectitems)!=0)">
 								It adds the data 
 								<xsl:choose>
@@ -3727,13 +3729,13 @@
 					
 					<xsl:call-template name="insertParagraph">
 						<xsl:with-param name="text">
-							The *<xsl:value-of select="$typename"/>* type is an extension of the 
-							*<xsl:call-template name="link_object">
+							The <b><xsl:value-of select="$typename"/></b> type is an extension of the 
+							<b><xsl:call-template name="link_object">
 									<xsl:with-param name="object_name" select="@basedon"/>
 									<xsl:with-param name="object_used_in_schema_name" 
 										select="../../@name"/>
 									<xsl:with-param name="clause" select="'section'"/>
-								</xsl:call-template>* type. 
+								</xsl:call-template></b> type. 
 								<xsl:if test="@selectitems and (string-length(@selectitems)!=0)">
 									It adds the data 
 									<xsl:choose>
@@ -3775,10 +3777,10 @@
 							
 							<xsl:call-template name="insertParagraph">
 								<xsl:with-param name="text">
-									The *<xsl:value-of select="$typename"/>* type is an
+									The <b><xsl:value-of select="$typename"/></b> type is an
 									extensible list of alternate data types. It provides a
 									mechanism to refer to instances of the data types included in
-									the *<xsl:value-of select="$typename"/>* type or in its
+									the <b><xsl:value-of select="$typename"/></b> type or in its
 									extensions.
 								</xsl:with-param>
 							</xsl:call-template>
@@ -3813,11 +3815,11 @@
 							
 							<xsl:call-template name="insertParagraph">
 								<xsl:with-param name="text">
-									The *<xsl:value-of select="$typename"/>* type is an
+									The <b><xsl:value-of select="$typename"/></b> type is an
 									extensible list of alternate data types. It provides a
 									mechanism to refer to instances of the data types included in
 									the types that extend the 
-									*<xsl:value-of select="$typename"/>* type. 
+									<b><xsl:value-of select="$typename"/></b> type. 
 								</xsl:with-param>
 							</xsl:call-template>
 							
@@ -3854,7 +3856,7 @@
 					
 					<xsl:call-template name="insertParagraph">
 						<xsl:with-param name="text">
-							The *<xsl:value-of select="$typename"/>* type is a list of
+							The <b><xsl:value-of select="$typename"/></b> type is a list of
 							alternate data types. It provides a mechanism to refer to an
 							instance of one of these data types. 
 						</xsl:with-param>

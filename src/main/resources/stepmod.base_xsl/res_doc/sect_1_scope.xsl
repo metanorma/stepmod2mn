@@ -4,7 +4,7 @@
 $Id: sect_1_scope.xsl,v 1.6 2008/12/16 15:44:48 darla Exp $
 	Purpose: Output the Scope section as a web page
 -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:java="http://xml.apache.org/xalan/java" 
 								version="1.0">
 
 <!-- <xsl:import href="resource.xsl"/>
@@ -25,7 +25,14 @@ $Id: sect_1_scope.xsl,v 1.6 2008/12/16 15:44:48 darla Exp $
 		</h1> -->
 		<xsl:apply-templates select="." mode="scope_header"/>	
 		
-		<xsl:apply-templates select="./scope"/>
+		<xsl:variable name="scope">
+			<xsl:apply-templates select="./scope"/>
+		</xsl:variable>
+		<xsl:copy-of select="$scope"/>
+		<xsl:if test="not(java:endsWith(java:java.lang.String.new($scope),'&#xa;') or java:endsWith(java:java.lang.String.new($scope),'&#xd;'))">
+			<xsl:text>&#xa;</xsl:text>
+		</xsl:if>
+			
 		<xsl:apply-templates select="./inscope"/>
 		<xsl:apply-templates select="./outscope"/>
 	</xsl:template>

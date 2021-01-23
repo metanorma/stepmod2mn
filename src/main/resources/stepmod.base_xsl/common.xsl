@@ -7,7 +7,7 @@ $Id: common.xsl,v 1.204 2018/10/07 10:51:54 mike Exp $
 -->
 <xsl:stylesheet 
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"   
-	xmlns:xalan="http://xml.apache.org/xalan" 
+	xmlns:xalan="http://xml.apache.org/xalan" xmlns:java="http://xml.apache.org/xalan/java"
 	version="1.0">
 
 <!-- xmlns:msxsl="urn:schemas-microsoft-com:xslt"
@@ -179,7 +179,13 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 					<xsl:apply-templates/>
 				</small>
 			</p> -->
-			<xsl:text>&#xa;&#xa;</xsl:text>
+			
+			<xsl:variable name="example"><xsl:apply-templates/></xsl:variable>
+			<xsl:call-template name="insertExample">
+				<xsl:with-param name="id" select="$aname"/>
+				<xsl:with-param name="text" select="$example"/>
+			</xsl:call-template>
+			<!-- <xsl:text>&#xa;&#xa;</xsl:text>
 			<xsl:text>[example]</xsl:text>
 			<xsl:text>&#xa;</xsl:text>
 			<xsl:if test="$aname != ''">
@@ -190,7 +196,7 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 			<xsl:text>&#xa;</xsl:text>
 			<xsl:variable name="example"><xsl:apply-templates/></xsl:variable>
 			<xsl:value-of select="normalize-space($example)"/>
-			<xsl:text>&#xa;&#xa;</xsl:text>
+			<xsl:text>&#xa;&#xa;</xsl:text> -->
 				
 		</xsl:when>
 		<!-- check that the first element is p or ul-->
@@ -235,7 +241,13 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 		</small>
 	</p> -->  
 	
-	<xsl:text>&#xa;&#xa;</xsl:text>
+	<xsl:variable name="example"><xsl:apply-templates/></xsl:variable>
+	<xsl:call-template name="insertExample">
+		<xsl:with-param name="id" select="$aname"/>
+		<xsl:with-param name="text" select="$example"/>
+	</xsl:call-template>
+	
+	<!-- <xsl:text>&#xa;&#xa;</xsl:text>
 	<xsl:text>[example]</xsl:text>
 	<xsl:text>&#xa;</xsl:text>
 	<xsl:if test="$aname != ''">
@@ -246,7 +258,7 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 	<xsl:text>&#xa;</xsl:text>
 	<xsl:variable name="example"><xsl:apply-templates/></xsl:variable>
 	<xsl:value-of select="normalize-space($example)"/>
-	<xsl:text>&#xa;&#xa;</xsl:text>
+	<xsl:text>&#xa;&#xa;</xsl:text> -->
 	
 </xsl:template>
 
@@ -656,12 +668,12 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 				<xsl:when test="local-name(..) = 'ol'">. </xsl:when>
 				<xsl:otherwise>* </xsl:otherwise>
 			</xsl:choose> -->
-			<xsl:call-template name="insertListItemLabel"/>
+			<li_label><xsl:call-template name="insertListItemLabel"/></li_label>
 			
 			<xsl:variable name="text">
 				<xsl:apply-templates/>
 			</xsl:variable>
-			<xsl:value-of select="$text"/>
+			<xsl:copy-of select="$text"/>
 			
 			<xsl:text>&#xa;&#xa;</xsl:text>
 		</xsl:when>
@@ -716,14 +728,19 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 				<xsl:variable name="text">
 					<xsl:apply-templates/>
 				</xsl:variable>
-				<xsl:value-of select="$text"/>
+				<xsl:copy-of select="$text"/>
 			<!-- </li> -->
 			<xsl:text>&#xa;&#xa;</xsl:text>
 		</xsl:otherwise>
 	</xsl:choose>
 </xsl:template>
 
-
+<xsl:template match="li/text() | LI/text()">
+	<xsl:variable name="text" select="java:replaceAll(java:java.lang.String.new(.),'\s+',' ')"/>
+	<xsl:call-template name="trimSpaces">
+		<xsl:with-param name="text" select="$text"/>
+	</xsl:call-template>
+</xsl:template>
 
 
 <xsl:template match="example|note|b|i|sup|sub" mode="flatten"/>
@@ -855,13 +872,15 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 	<!-- <b>
 		<xsl:apply-templates/>
 	</b> -->
-	<xsl:text>*</xsl:text><xsl:apply-templates/><xsl:text>*</xsl:text>
+	<!-- <xsl:text>*</xsl:text><xsl:apply-templates/><xsl:text>*</xsl:text> -->
+	<b><xsl:apply-templates/></b>
 	<xsl:if test="following-sibling::*[1][local-name() = 'p'] or following-sibling::*[1][local-name = 'P']">
 		<xsl:text>&#xa;&#xa;</xsl:text>
 	</xsl:if>
 </xsl:template>
 <xsl:template match="b2|B2">
-	<xsl:text>**</xsl:text><xsl:apply-templates/><xsl:text>**</xsl:text>
+	<!-- <xsl:text>**</xsl:text><xsl:apply-templates/><xsl:text>**</xsl:text> -->
+	<b2><xsl:apply-templates/></b2>
 	<xsl:if test="following-sibling::*[1][local-name() = 'p'] or following-sibling::*[1][local-name = 'P']">
 		<xsl:text>&#xa;&#xa;</xsl:text>
 	</xsl:if>
@@ -871,10 +890,12 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 	<!-- <tt>
 		<xsl:apply-templates/>
 	</tt> -->
-	<xsl:text>`</xsl:text><xsl:apply-templates/><xsl:text>`</xsl:text>
+	<!-- <xsl:text>`</xsl:text><xsl:apply-templates/><xsl:text>`</xsl:text> -->
+	<tt><xsl:apply-templates/></tt>
 </xsl:template>
 <xsl:template match="tt2 | TT2">
-	<xsl:text>``</xsl:text><xsl:apply-templates/><xsl:text>``</xsl:text>
+	<!-- <xsl:text>``</xsl:text><xsl:apply-templates/><xsl:text>``</xsl:text> -->
+	<tt2><xsl:apply-templates/></tt2>
 </xsl:template>
 
 
@@ -882,13 +903,15 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 	<!-- <i>
 		<xsl:apply-templates/>
 	</i> -->
-	<xsl:text>_</xsl:text><xsl:apply-templates/><xsl:text>_</xsl:text>
+	<!-- <xsl:text>_</xsl:text><xsl:apply-templates/><xsl:text>_</xsl:text> -->
+	<i><xsl:apply-templates/></i>
 	<xsl:if test="following-sibling::*[1][local-name() = 'p'] or following-sibling::*[1][local-name = 'P']">
 		<xsl:text>&#xa;&#xa;</xsl:text>
 	</xsl:if>
 </xsl:template>
 <xsl:template match="i2|I2">
-	<xsl:text>__</xsl:text><xsl:apply-templates/><xsl:text>__</xsl:text>
+	<!-- <xsl:text>__</xsl:text><xsl:apply-templates/><xsl:text>__</xsl:text> -->
+	<i2><xsl:apply-templates/></i2>
 	<xsl:if test="following-sibling::*[1][local-name() = 'p'] or following-sibling::*[1][local-name = 'P']">
 		<xsl:text>&#xa;&#xa;</xsl:text>
 	</xsl:if>
@@ -929,10 +952,12 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 	<!-- <sub>
 		<xsl:apply-templates/>
 	</sub> -->
-	<xsl:text>~</xsl:text><xsl:apply-templates/><xsl:text>~</xsl:text>
+	<!-- <xsl:text>~</xsl:text><xsl:apply-templates/><xsl:text>~</xsl:text> -->
+	<sub><xsl:apply-templates/></sub>
 </xsl:template>
 <xsl:template match="sub2|SUB2" >
-	<xsl:text>~~</xsl:text><xsl:apply-templates/><xsl:text>~~</xsl:text>
+	<!-- <xsl:text>~~</xsl:text><xsl:apply-templates/><xsl:text>~~</xsl:text> -->
+	<sub2><xsl:apply-templates/></sub2>
 </xsl:template>
 
 <!-- superscript -->
@@ -940,13 +965,15 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 	<!-- <sup>
 		<xsl:apply-templates/>
 	</sup> -->
-	<xsl:text>^</xsl:text><xsl:apply-templates/><xsl:text>^</xsl:text>
+	<!-- <xsl:text>^</xsl:text><xsl:apply-templates/><xsl:text>^</xsl:text> -->
+	<sup><xsl:apply-templates/></sup>
 </xsl:template>
 <xsl:template match="sup2|SUP2" >
 	<!-- <sup>
 		<xsl:apply-templates/>
 	</sup> -->
-	<xsl:text>^^</xsl:text><xsl:apply-templates/><xsl:text>^^</xsl:text>
+	<!-- <xsl:text>^^</xsl:text><xsl:apply-templates/><xsl:text>^^</xsl:text> -->
+	<sup2><xsl:apply-templates/></sup2>
 </xsl:template>
 
 <xsl:template match="screen">
@@ -968,10 +995,11 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 			</pre>      
 		</xsl:otherwise>
 	</xsl:choose> -->
-	
+	<code>
 	<xsl:call-template name="insertCodeStart"/>
 		<xsl:apply-templates/>
 	<xsl:call-template name="insertCodeEnd"/>
+	</code>
 </xsl:template>
 
 
@@ -4653,9 +4681,11 @@ is case sensitive.')"/>
 	<!-- <code>
 		<xsl:apply-templates/>
 	</code> -->	
+	<code>
 	<xsl:call-template name="insertCodeStart"/>
 	<xsl:apply-templates />
 	<xsl:call-template name="insertCodeEnd"/>
+	</code>
 </xsl:template>
 
 <xsl:template name="number_to_word">

@@ -10,7 +10,7 @@ $Id: express_description.xsl,v 1.8 2015/08/03 09:40:44 mikeward Exp $
 
 
 <xsl:stylesheet 
-	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+	xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:java="http://xml.apache.org/xalan/java"
 	version="1.0"
 >
 
@@ -664,7 +664,11 @@ $Id: express_description.xsl,v 1.8 2015/08/03 09:40:44 mikeward Exp $
 	</xsl:template>
 
 	<xsl:template match="ext_description/text()">
-		<xsl:value-of select="translate(., '&#x9;', '')"/>
+		<!-- <xsl:value-of select="translate(., '&#x9;', '')"/> -->
+		<xsl:variable name="text" select="java:replaceAll(java:java.lang.String.new(.),'\s+',' ')"/>
+		<xsl:call-template name="trimSpaces">
+			<xsl:with-param name="text" select="$text"/>
+		</xsl:call-template>
 	</xsl:template>
 
 	<!-- return the string "notes" if there are any note in the external

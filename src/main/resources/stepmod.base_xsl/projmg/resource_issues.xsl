@@ -214,7 +214,7 @@
     </xsl:choose>
   </xsl:variable>
 
-  <!-- <blockquote> -->
+	<blockquote>
 	<xsl:call-template name="insertQuoteStart"/>
 	
     <!--<span style="background-color: {$bg_color}">
@@ -278,10 +278,9 @@
 
       <xsl:apply-templates/>
     <!-- </span> -->
-  <!-- </blockquote> -->
-	
 	
 	<xsl:call-template name="insertQuoteEnd"/>
+	</blockquote>
 			
 </xsl:template>
 
@@ -295,6 +294,7 @@
 			<xsl:apply-templates />
 		</blockquote>
  -->	
+		<blockquote>
 		<xsl:call-template name="insertQuoteStart"/>
 			<xsl:text>*Comment:* _</xsl:text>
 			<xsl:value-of select="string(@status)" />
@@ -304,6 +304,7 @@
 			<xsl:text>&#xa;&#xa;</xsl:text>
 			<xsl:apply-templates />
 		<xsl:call-template name="insertQuoteEnd"/>
+		</blockquote>
 	
 		
   </xsl:template>
@@ -316,7 +317,7 @@
 			</xsl:for-each>
 			<xsl:apply-templates />
 		</blockquote> -->
-		
+		<blockquote>		
 		<xsl:call-template name="insertQuoteStart"/>
 			<xsl:text> *Issue Management:* </xsl:text>
 			<xsl:for-each select="@*" >
@@ -324,6 +325,7 @@
 			</xsl:for-each>
 			<xsl:apply-templates />
 		<xsl:call-template name="insertQuoteEnd"/>
+		</blockquote>
 		
 		
   </xsl:template>

@@ -168,7 +168,7 @@ $Id: sect_c_exp_schema.xsl,v 1.7 2014/05/29 20:31:13 nigelshaw Exp $
 
 
 
-	<!-- <code> -->
+	<code>
 	<xsl:call-template name="insertCodeStart"/>
 		<xsl:text>(*&#xa;</xsl:text><!-- <br/> -->
 		<xsl:value-of 
@@ -180,9 +180,8 @@ $Id: sect_c_exp_schema.xsl,v 1.7 2014/05/29 20:31:13 nigelshaw Exp $
 				select="concat('ISO/TC 184/SC 4/WG 12','&#160;N',./schema[number($pos)]/@number.supersedes)"/>
 		</xsl:if>
 		<xsl:text>&#xa;</xsl:text><!-- <br/> --><xsl:text>*)</xsl:text>
-	<!-- </code> -->
 	<xsl:call-template name="insertCodeEnd"/>
-	
+	</code>	
 	<!-- <br/> -->
 
 	<!-- output all the EXPRESS specifications -->

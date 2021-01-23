@@ -1804,9 +1804,15 @@ Purpose:
 			<xsl:with-param name="schema" select="$schema_name"/>
 		</xsl:apply-templates>
 
-
-		<xsl:apply-templates select="./introduction"/>
-		<xsl:text> </xsl:text>
+		<xsl:variable name="introduction">
+			<xsl:apply-templates select="./introduction"/>
+		</xsl:variable>
+		<xsl:copy-of select="$introduction"/>
+		
+		<xsl:if test="normalize-space($introduction) != '' and 
+		substring($introduction, string-length($introduction)) != '&#xd;' and
+		substring($introduction, string-length($introduction)) != '&#xa;'"><xsl:text> </xsl:text></xsl:if>
+		
 		<xsl:variable name="clause_intro_1">This clause defines the information requirements to which implementations shall conform using the EXPRESS language as defined in ISO 10303-11. The following EXPRESS declaration begins the </xsl:variable>
 		<xsl:variable name="clause_intro_2"> 
 			<xsl:choose>
@@ -1826,7 +1832,10 @@ the types, entity specializations, and functions that are specific to this part 
 		
 		<xsl:call-template name="insertParagraph">
 			<xsl:with-param name="text">
-				<xsl:value-of select="concat($clause_intro_1, '*', $schema_name, '*', $clause_intro_2)"/>
+				<xsl:value-of select="$clause_intro_1"/>
+				<b><xsl:value-of select="$schema_name"/></b>
+				<xsl:value-of select="$clause_intro_2"/>
+				<!-- <xsl:value-of select="concat($clause_intro_1, '*', $schema_name, '*', $clause_intro_2)"/> -->
 			</xsl:with-param>
 		</xsl:call-template>
 		
@@ -1854,7 +1863,7 @@ the types, entity specializations, and functions that are specific to this part 
 	SCHEMA <xsl:value-of select="concat($schema_name,';')"/>
 			</a>
 		</code> -->
-
+		<code>
 		<xsl:call-template name="insertLutaMLCodeStart"/>
 			<xsl:text>*)&#xa;</xsl:text>		
 			<xsl:if test="$xref != ''">
@@ -1862,6 +1871,7 @@ the types, entity specializations, and functions that are specific to this part 
 			</xsl:if>
 			<xsl:text>SCHEMA </xsl:text><xsl:value-of select="concat($schema_name,';')"/>
 		<xsl:call-template name="insertCodeEnd"/>
+		</code>
 
 		<!-- output all the EXPRESS specifications -->
 		<!-- display the EXPRESS for the interfaces in the ARM.
@@ -1942,13 +1952,14 @@ the types, entity specializations, and functions that are specific to this part 
 			END_SCHEMA;&#160;&#160;- - &#160;<xsl:value-of select="$express_xml/express/schema/@name"/>
 			<br/>(*
 		</code> -->
-
+		<code>
 		<xsl:call-template name="insertLutaMLCodeStart"/>
 			<xsl:text>*)&#xa;</xsl:text>					
 			<xsl:text>END_SCHEMA;  -- </xsl:text><xsl:value-of select="$express_xml/express/schema/@name"/>
 			<xsl:text>&#xa;</xsl:text>
 			<xsl:text>(*</xsl:text>
 		<xsl:call-template name="insertCodeEnd"/>
+		</code>
 
 		<!-- <xsl:message>
 			<xsl:value-of select="'&#010;___________________________________________________________'"/>

@@ -36,7 +36,7 @@
     </xsl:call-template>
   </xsl:variable>    
 
-  <!-- <code> -->
+	<code>
 	<xsl:call-template name="insertLutaMLCodeStart"/>
     <!-- <br/><br/> -->
 		
@@ -48,8 +48,9 @@
 		
 		<xsl:call-template name="insertCodeEnd"/>
 		<xsl:text>&#xa;</xsl:text>
-  <!-- <br/><br/>
-</code> -->
+  <!-- <br/><br/> -->
+	</code>
+
   <xsl:apply-templates select="./interface" mode="code"/>
   <xsl:apply-templates select="./constant" mode="code"/>
   <xsl:apply-templates select="./type" mode="code"/>
@@ -60,13 +61,13 @@
   <xsl:apply-templates select="./rule" mode="code"/>
   <xsl:apply-templates select="./function" mode="code"/>
   <xsl:apply-templates select="./procedure" mode="code"/>
-  <!-- <code>
-  <br/> -->
+	<code>
+<!--  <br/> -->
 	<xsl:call-template name="insertLutaMLCodeStart"/>
   <xsl:text>END_SCHEMA;&#160;&#160;--&#160;</xsl:text><xsl:value-of select="@name"/>
   <!-- <br/> --><xsl:text>&#xa;</xsl:text>
 	<xsl:call-template name="insertCodeEnd"/>
-  <!-- </code> -->
+	</code>
 </xsl:template>
 
 
@@ -74,7 +75,7 @@
   <xsl:variable 
     name="schema_name" 
     select="../@name"/>
-  <!-- <code> -->      
+  <code>
 	<xsl:call-template name="insertLutaMLCodeStart"/>
   <xsl:choose>
     <xsl:when test="@kind='reference'">
@@ -138,7 +139,7 @@
     </xsl:otherwise>
   </xsl:choose>
 	<xsl:call-template name="insertCodeEnd"/>
-<!-- </code> -->
+</code>
 </xsl:template>
 
 <!-- output the trailing comment that shows where the express came from -->
@@ -237,7 +238,7 @@ data/resources/',$resource,'/',$resource,'.xml.')"/>
 </xsl:template>
 
 <xsl:template match="constant" mode="code">
-  <!-- <code> -->
+	<code>
 	<xsl:call-template name="insertLutaMLCodeStart"/>
     <xsl:variable 
       name="schema_name" 
@@ -271,7 +272,7 @@ data/resources/',$resource,'/',$resource,'.xml.')"/>
       <!-- <br/> -->
 			<xsl:text>&#xa;</xsl:text>
     </xsl:if>
-  <!-- </code> -->
+	</code>
 	<xsl:call-template name="insertCodeEnd"/>
 </xsl:template>
 
@@ -314,7 +315,7 @@ data/resources/',$resource,'/',$resource,'.xml.')"/>
 
 
 <xsl:template match="type" mode="code">
-  <!-- <code> -->
+	<code>
 	<xsl:call-template name="insertLutaMLCodeStart"/>
   <xsl:variable 
     name="schema_name" 
@@ -345,7 +346,7 @@ data/resources/',$resource,'/',$resource,'.xml.')"/>
       </xsl:choose>
     <xsl:text>END_TYPE;&#xa;</xsl:text>
   <!-- <br/> -->
-<!-- </code> -->
+	</code>
 <xsl:call-template name="insertCodeEnd"/>
 </xsl:template>
 

@@ -5,7 +5,8 @@
 		xmlns:xlink="http://www.w3.org/1999/xlink" 
 		xmlns:xalan="http://xml.apache.org/xalan" 
 		xmlns:java="http://xml.apache.org/xalan/java" 
-		exclude-result-prefixes="mml tbx xlink xalan java" 
+		xmlns:metanorma-class="xalan://com.metanorma.RegExEscaping"
+		exclude-result-prefixes="mml tbx xlink xalan java metanorma-class" 
 		version="1.0">
 
 	
@@ -197,9 +198,9 @@
 		<xsl:text>:library-ics: 25.040.40</xsl:text>
 		<xsl:text>&#xa;&#xa;</xsl:text>
 		
-
+		
 		<xsl:variable name="adoc">
-
+	
 			<!-- Abstract -->
 			<xsl:message>[INFO] Processing Abstract ...</xsl:message>
 			<xsl:apply-templates select="resource" mode="abstract"/> <!-- res_doc/resource.xsl  -->
@@ -219,6 +220,9 @@
 			<!-- draughting_elements/sys/1_scope.xml -->
 			<xsl:message>[INFO] Processing Scope ...</xsl:message>
 			<xsl:apply-templates select="resource" mode="scope_resource"/>	<!-- res_doc/sect_1_scope.xsl  -->	
+			
+			
+			
 			
 			<!-- 2 Normative references -->
 			<!-- sys/2_refs.xml -->
@@ -287,10 +291,12 @@
 				<xsl:message>[INFO] Processing Annex Change history ...</xsl:message>		
 				<xsl:apply-templates select="resource" mode="change_history"/> <!-- res_doc/sect_g_change.xsl -->
 			</xsl:if>
-			
+	
 		</xsl:variable>
-			
+		
+	
 		<xsl:apply-templates select="xalan:nodeset($adoc)" mode="text"/>
+		
 		
 			
 		<!-- Bibliography -->
@@ -406,7 +412,8 @@
 
 	<xsl:template name="insertParagraph">
 		<xsl:param name="text"/>
-		<xsl:value-of select="normalize-space($text)"/>
+		<!-- <xsl:value-of select="normalize-space($text)"/> -->
+		<xsl:apply-templates select="xalan:nodeset($text)" mode="linearize"/>
 		<xsl:text>&#xa;&#xa;</xsl:text>
 	</xsl:template>
 
@@ -414,7 +421,8 @@
 	<xsl:template name="insertULitem">
 		<xsl:param name="text"/>
 		<xsl:text>* </xsl:text>
-		<xsl:value-of select="normalize-space($text)"/>
+		<!-- <xsl:value-of select="normalize-space($text)"/> -->
+		<xsl:apply-templates select="xalan:nodeset($text)" mode="linearize"/>
 		<xsl:text>&#xa;&#xa;</xsl:text>
 	</xsl:template>
 
@@ -429,7 +437,7 @@
 			<xsl:text>]]</xsl:text>
 			<xsl:text>&#xa;</xsl:text>
 		</xsl:if>      
-		<xsl:text>NOTE: </xsl:text><xsl:value-of select="normalize-space($text)"/>
+		<xsl:text>NOTE: </xsl:text><xsl:apply-templates select="xalan:nodeset($text)" mode="linearize"/><!-- <xsl:value-of select="normalize-space($text)"/> -->
 		<xsl:text>&#xa;&#xa;</xsl:text>
 	</xsl:template>
 	
@@ -446,7 +454,8 @@
 			<xsl:text>]]</xsl:text>
 			<xsl:text>&#xa;</xsl:text>
 		</xsl:if>      
-		<xsl:value-of select="normalize-space($text)"/>
+		<!-- <xsl:value-of select="normalize-space($text)"/> -->
+		<xsl:apply-templates select="xalan:nodeset($text)" mode="linearize"/>
 		<xsl:text>&#xa;&#xa;</xsl:text>
 	</xsl:template>
 	
@@ -533,9 +542,11 @@
 	</xsl:template>
 
 	<xsl:template match="pre">
+		<code>
 		<xsl:call-template name="insertCodeStart"/>
 		<xsl:apply-templates/>
 		<xsl:call-template name="insertCodeEnd"/>
+		</code>
 	</xsl:template>
 	
 	<xsl:template name="insertHyperlink">
@@ -565,6 +576,13 @@
 	</xsl:template>
 	
 	<xsl:template name="insertHyperlinkSkip"/>
+	
+	
+	<xsl:template match="@*|node()" mode="text">
+		<xsl:copy>
+				<xsl:apply-templates select="@*|node()" mode="text"/>
+		</xsl:copy>
+	</xsl:template>
 	
 	<xsl:template match="ExternalDocumentReference" mode="text">
 		<!-- <xsl:text>&lt;&lt;</xsl:text>
@@ -631,6 +649,44 @@
 		<xsl:text>&gt;&gt;</xsl:text>
 	</xsl:template>
 	
+	<xsl:template match="b" mode="text">
+		<xsl:text>*</xsl:text><xsl:apply-templates mode="text"/><xsl:text>*</xsl:text>
+	</xsl:template>
+	<xsl:template match="b2" mode="text">
+		<xsl:text>**</xsl:text><xsl:apply-templates mode="text"/><xsl:text>**</xsl:text>
+	</xsl:template>
+	
+	<xsl:template match="i" mode="text">
+		<xsl:text>_</xsl:text><xsl:apply-templates mode="text"/><xsl:text>_</xsl:text>
+	</xsl:template>
+	<xsl:template match="i2" mode="text">
+		<xsl:text>__</xsl:text><xsl:apply-templates mode="text"/><xsl:text>__</xsl:text>
+	</xsl:template>
+	
+	<xsl:template match="tt" mode="text">
+		<xsl:text>`</xsl:text><xsl:apply-templates mode="text"/><xsl:text>`</xsl:text>
+	</xsl:template>
+	<xsl:template match="tt2" mode="text">
+		<xsl:text>``</xsl:text><xsl:apply-templates mode="text"/><xsl:text>``</xsl:text>
+	</xsl:template>
+	
+	<xsl:template match="sub" mode="text">
+		<xsl:text>~</xsl:text><xsl:apply-templates mode="text"/><xsl:text>~</xsl:text>
+	</xsl:template>
+	<xsl:template match="sub2" mode="text">
+		<xsl:text>~~</xsl:text><xsl:apply-templates mode="text"/><xsl:text>~~</xsl:text>
+	</xsl:template>
+	
+	<xsl:template match="sup" mode="text">
+		<xsl:text>^</xsl:text><xsl:apply-templates mode="text"/><xsl:text>^</xsl:text>
+	</xsl:template>
+	<xsl:template match="sup" mode="text">
+		<xsl:text>^^</xsl:text><xsl:apply-templates mode="text"/><xsl:text>^^</xsl:text>
+	</xsl:template>
+	
+	<xsl:template match="text()[not(ancestor::blockquote or ancestor::code or ancestor::li_label)]" mode="text">
+		<xsl:value-of select="java:com.metanorma.RegExEscaping.escapeFormattingCommands(.)"/>
+	</xsl:template>
 	
 	<xsl:template name="repeat">
 		<xsl:param name="char" select="'='"/>
@@ -818,6 +874,54 @@
 				<xsl:value-of select="$value" />
 			</xsl:otherwise>
 		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template match="@*|node()" mode="linearize">
+		<xsl:copy>
+				<xsl:apply-templates select="@*|node()" mode="linearize"/>
+		</xsl:copy>
+	</xsl:template>
+
+
+	<xsl:template match="text()[not(parent::code or parent::mml:* or 
+			parent::b or parent::b2 or 
+			parent::i or parent::i2 or 
+			parent::tt or parent::tt2 or 
+			parent::sup or parent::sup2 or 
+			parent::sub or parent::sub2)]" mode="linearize">
+		<xsl:variable name="text_1" select="translate(., '&#xa;&#x9;', '  ')"/>
+		<xsl:variable name="text_2" select="java:replaceAll(java:java.lang.String.new($text_1),'\s+',' ')"/>
+		<xsl:call-template name="trimSpaces">
+			<xsl:with-param name="text" select="$text_2"/>
+		</xsl:call-template>
+	</xsl:template>
+	
+	<xsl:template name="trimSpaces">
+		<xsl:param name="text" select="."/>
+		
+		<xsl:variable name="text_lefttrim">
+			<xsl:choose>
+				<xsl:when test="not(preceding-sibling::*)">
+					<xsl:value-of select="java:replaceAll(java:java.lang.String.new($text),'^\s+','')"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="$text"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		
+		<xsl:variable name="text_righttrim">
+			<xsl:choose>
+				<xsl:when test="not(following-sibling::*)">
+					<xsl:value-of select="java:replaceAll(java:java.lang.String.new($text_lefttrim),'\s+$','')"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="$text_lefttrim"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+	
+		<xsl:value-of select="$text_righttrim"/>
 	</xsl:template>
 
 	
