@@ -58,6 +58,11 @@
 	corresponds to 
 	<rect x="x1" y="y1" fill="#fff" opacity="0" width="x2-x1" height="y2-y1" />
 	-->
+	
+	<xsl:template match="img.area">
+		<xsl:message>Error: Unknown area '<xsl:value-of select="@shape"/>'</xsl:message>
+	</xsl:template>
+	
 	<xsl:template match="img.area[@shape = 'rect']">
 		<xsl:variable name="coords" select="str:split(@coords,',')"/>
 		<xsl:variable name="x1" select="$coords[1]"/>
@@ -70,7 +75,7 @@
 		</a>
 	</xsl:template>
 
-	<xsl:template match="img.area[@shape = 'poly']">
+	<xsl:template match="img.area[@shape = 'poly' or @shape = 'polygon']">
 		<a xlink:href="{@href}" xmlns="http://www.w3.org/2000/svg">
 			<polygon points="{@coords}" class="st0"/>
 		</a>

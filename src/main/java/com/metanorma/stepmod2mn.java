@@ -454,7 +454,6 @@ public class stepmod2mn {
                         BufferedWriter writer = Files.newBufferedWriter(Paths.get(svgFilename))) {
                             writer.write(xmlSVG);                    
                     }
-                    
                 }
             } 
             catch (Exception e) 
@@ -462,7 +461,6 @@ public class stepmod2mn {
                 e.printStackTrace();
             }
         }
-        xmlFiles.forEach(x -> System.out.println(x));
+        //xmlFiles.forEach(x -> System.out.println(x));
     }
-    
 }
