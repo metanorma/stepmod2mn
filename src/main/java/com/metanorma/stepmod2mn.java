@@ -418,8 +418,8 @@ public class stepmod2mn {
         try (Stream<Path> walk = Files.walk(Paths.get(xmlFilePath))) {
             xmlFiles = walk
                 .filter(p -> !Files.isDirectory(p))   
-                .map(p -> p.toString().toLowerCase())
-                .filter(f -> f.endsWith(extension))
+                .map(p -> p.toString())
+                .filter(f -> f.toLowerCase().endsWith(extension))
                 .collect(Collectors.toList());
         }
         for(String xmlFile: xmlFiles) {
