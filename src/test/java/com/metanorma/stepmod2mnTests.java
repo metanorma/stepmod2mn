@@ -76,6 +76,31 @@ public class stepmod2mnTests {
 
         assertTrue(Files.exists(fileout));        
     }
-    
+
+    @Test
+    public void pathNotExists() throws ParseException {
+        System.out.println(name.getMethodName());
+        exitRule.expectSystemExitWithStatus(-1);
+
+        String[] args = new String[]{"nonexistingpath", "-svg"};
+        stepmod2mn.main(args);
+
+        assertTrue(systemOutRule.getLog().contains(
+                String.format(stepmod2mn.INPUT_PATH_NOT_FOUND, stepmod2mn.XML_INPUT, args[1])));
+    }
+ 
+    @Test
+    public void successConvertToSVG() throws ParseException {
+        String svgPath = System.getProperty("buildDirectory") + File.separator + ".." 
+                + File.separator + "src"
+                + File.separator + "test"
+                + File.separator + "resources"
+                + File.separator + "svg";
+        
+        String[] args = new String[]{svgPath , "-svg"};
+        stepmod2mn.main(args);
+
+        assertTrue(Files.exists(Paths.get(svgPath + File.separator + "schemaexpg1.svg")));
+    }
     
 }

@@ -1,8 +1,6 @@
 package com.metanorma;
 
 import java.io.BufferedWriter;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -11,8 +9,6 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -21,18 +17,14 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Scanner;
 import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.Result;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.xml.transform.Source;
 import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.URIResolver;
-import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
@@ -44,11 +36,7 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.w3c.dom.Document;
-import org.xml.sax.EntityResolver;
-import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
@@ -58,8 +46,10 @@ import org.xml.sax.helpers.XMLReaderFactory;
  */
 public class stepmod2mn {
 
-    static final String CMD = "java -jar stepmod2mn.jar resource_xml_file [options]";
+    static final String CMD = "java -jar stepmod2mn.jar <resource_xml_file> [options -o or -v]" + "\n" +
+            "OR java -jar stepmod2mn.jar <start folder to process xml maps files> -svg";
     static final String INPUT_NOT_FOUND = "Error: %s file '%s' not found!";    
+    static final String INPUT_PATH_NOT_FOUND = "Error: %s path '%s' not found!";    
     static final String XML_INPUT = "XML";    
     static final String INPUT_LOG = "Input: %s (%s)";    
     static final String OUTPUT_LOG = "Output: %s (%s)";
@@ -86,7 +76,13 @@ public class stepmod2mn {
                     .desc("output file name")
                     .hasArg()
                     .required(false)
-                    .build());            
+                    .build());
+            addOption(Option.builder("svg")
+                    .longOpt("svg")
+                    .desc("generate SVG files")
+                    .hasArg(false)
+                    .required(false)
+                    .build());   
             addOption(Option.builder("v")
                     .longOpt("version")
                     .desc("display application version")
@@ -144,78 +140,98 @@ public class stepmod2mn {
                 String argXMLin = arglist.get(0);
                 
                 
-                
-                String resourcePath = "";
-                
-                String format = "adoc";
-                String outFileName = "";
-                if (cmd.hasOption("output")) {
-                    outFileName = cmd.getOptionValue("output");
-                }
-                
-                // if remote file (http or https)
-                if (argXMLin.toLowerCase().startsWith("http") || argXMLin.toLowerCase().startsWith("www.")) {
-                    
-                    if (!Util.isUrlExists(argXMLin)) {
-                        System.out.println(String.format(INPUT_NOT_FOUND, XML_INPUT, argXMLin));
+                if (cmd.hasOption("svg")) { //svg mode
+                    if (!Files.exists(Paths.get(argXMLin))) {                   
+                        System.out.println(String.format(INPUT_PATH_NOT_FOUND, XML_INPUT, argXMLin));
                         System.exit(ERROR_EXIT_CODE);
                     }
                     
-                    resourcePath = Util.getParentUrl(argXMLin);
+                    try {
+                        stepmod2mn app = new stepmod2mn();
+                        app.generateSVG(argXMLin);
+                        System.out.println("End!");
+
+                    } catch (Exception e) {
+                        e.printStackTrace(System.err);
+                        System.exit(ERROR_EXIT_CODE);
+                    }
+                    cmdFail = false;
                     
+                    
+                } else {
+                    
+                    String resourcePath = "";
+
+                    String format = "adoc";
+                    String outFileName = "";
+                    if (cmd.hasOption("output")) {
+                        outFileName = cmd.getOptionValue("output");
+                    }
+
+                    // if remote file (http or https)
+                    if (argXMLin.toLowerCase().startsWith("http") || argXMLin.toLowerCase().startsWith("www.")) {
+
+                        if (!Util.isUrlExists(argXMLin)) {
+                            System.out.println(String.format(INPUT_NOT_FOUND, XML_INPUT, argXMLin));
+                            System.exit(ERROR_EXIT_CODE);
+                        }
+
+                        resourcePath = Util.getParentUrl(argXMLin);
+
+                        if (!cmd.hasOption("output")) {
+                            outFileName = Paths.get(System.getProperty("user.dir"), Util.getFilenameFromURL(argXMLin)).toString();
+                        }
+
+                        /*
+                        //download to temp folder
+                        //System.out.println("Downloading " + argXMLin + "...");
+                        String urlFilename = new File(url.getFile()).getName();                    
+                        InputStream in = url.openStream();                    
+                        Path localPath = Paths.get(tmpfilepath.toString(), urlFilename);
+                        Files.createDirectories(tmpfilepath);
+                        Files.copy(in, localPath, StandardCopyOption.REPLACE_EXISTING);
+                        //argXMLin = localPath.toString();
+                        System.out.println("Done!");*/
+                    } else { // in case of local file
+                        File fXMLin = new File(argXMLin);
+                        if (!fXMLin.exists()) {
+                            System.out.println(String.format(INPUT_NOT_FOUND, XML_INPUT, fXMLin));
+                            System.exit(ERROR_EXIT_CODE);
+                        }
+
+                        //parent path for input resource.xml
+                        resourcePath = new File(argXMLin).getParent() + File.separator;
+
+                        if (!cmd.hasOption("output")) { // if local file, then save result in input folder
+                          outFileName = new File(argXMLin).getAbsolutePath();
+                        }                    
+                    }
+
                     if (!cmd.hasOption("output")) {
-                        outFileName = Paths.get(System.getProperty("user.dir"), Util.getFilenameFromURL(argXMLin)).toString();
+                        outFileName = outFileName.substring(0, outFileName.lastIndexOf('.') + 1);
+                        outFileName = outFileName + format;
                     }
-                    
-                    /*
-                    //download to temp folder
-                    //System.out.println("Downloading " + argXMLin + "...");
-                    String urlFilename = new File(url.getFile()).getName();                    
-                    InputStream in = url.openStream();                    
-                    Path localPath = Paths.get(tmpfilepath.toString(), urlFilename);
-                    Files.createDirectories(tmpfilepath);
-                    Files.copy(in, localPath, StandardCopyOption.REPLACE_EXISTING);
-                    //argXMLin = localPath.toString();
-                    System.out.println("Done!");*/
-                } else { // in case of local file
-                    File fXMLin = new File(argXMLin);
-                    if (!fXMLin.exists()) {
-                        System.out.println(String.format(INPUT_NOT_FOUND, XML_INPUT, fXMLin));
+
+                    File fileOut = new File(outFileName);
+
+                    /*DEBUG = cmd.hasOption("debug"); */
+
+                    System.out.println(String.format(INPUT_LOG, XML_INPUT, argXMLin));                
+                    System.out.println(String.format(OUTPUT_LOG, format.toUpperCase(), fileOut));
+                    System.out.println();
+
+                    try {
+                        stepmod2mn app = new stepmod2mn();
+                        app.setResourcePath(resourcePath);
+                        app.convertstepmod2mn(argXMLin, fileOut);                    
+                        System.out.println("End!");
+
+                    } catch (Exception e) {
+                        e.printStackTrace(System.err);
                         System.exit(ERROR_EXIT_CODE);
                     }
-                    
-                    //parent path for input resource.xml
-                    resourcePath = new File(argXMLin).getParent() + File.separator;
-                    
-                    if (!cmd.hasOption("output")) { // if local file, then save result in input folder
-                      outFileName = new File(argXMLin).getAbsolutePath();
-                    }                    
-                }
-
-                if (!cmd.hasOption("output")) {
-                    outFileName = outFileName.substring(0, outFileName.lastIndexOf('.') + 1);
-                    outFileName = outFileName + format;
-                }
-                                 
-                File fileOut = new File(outFileName);
-                
-                /*DEBUG = cmd.hasOption("debug"); */
-
-                System.out.println(String.format(INPUT_LOG, XML_INPUT, argXMLin));                
-                System.out.println(String.format(OUTPUT_LOG, format.toUpperCase(), fileOut));
-                System.out.println();
-
-                try {
-                    stepmod2mn app = new stepmod2mn();
-                    app.setResourcePath(resourcePath);
-                    app.convertstepmod2mn(argXMLin, fileOut);                    
-                    System.out.println("End!");
-                    
-                } catch (Exception e) {
-                    e.printStackTrace(System.err);
-                    System.exit(ERROR_EXIT_CODE);
-                }
                 cmdFail = false;
+                }
             } catch (ParseException exp) {
                 cmdFail = true;            
             }
@@ -394,6 +410,59 @@ public class stepmod2mn {
             System.exit(ERROR_EXIT_CODE);
         }
         return "";
+    }
+    
+    private void generateSVG(String xmlFilePath) throws IOException, TransformerException, SAXParseException {
+        List<String> xmlFiles;
+        String extension = ".xml";
+        try (Stream<Path> walk = Files.walk(Paths.get(xmlFilePath))) {
+            xmlFiles = walk
+                .filter(p -> !Files.isDirectory(p))   
+                .map(p -> p.toString().toLowerCase())
+                .filter(f -> f.endsWith(extension))
+                .collect(Collectors.toList());
+        }
+        for(String xmlFile: xmlFiles) {
+            try
+            {
+                String content = new String(Files.readAllBytes(Paths.get(xmlFile)));
+                if (content.contains("img.area"))  {
+                    String folder = new File(xmlFile).getParent() + File.separator;
+                    String svgFilename = xmlFile.substring(0, xmlFile.length() - extension.length()) + ".svg";
+                    System.out.println("Generate SVG file for " + xmlFile + "...");
+                    
+                    
+                    // get linearized XML with default attributes substitution from DTD
+                    String linearizedXML = processLinearizedXML(xmlFile);
+                    // load linearized xml
+                    Source src = new StreamSource(new StringReader(linearizedXML));
+                    
+                    Source srcXSL = new StreamSource(Util.getStreamFromResources(getClass().getClassLoader(), "map2svg.xsl"));
+                    
+                    TransformerFactory factory = TransformerFactory.newInstance();
+                    Transformer transformer = factory.newTransformer();
+                    transformer = factory.newTransformer(srcXSL);
+
+                    transformer.setParameter("path", folder);
+
+                    StringWriter resultWriter = new StringWriter();
+                    StreamResult sr = new StreamResult(resultWriter);
+
+                    transformer.transform(src, sr);
+                    String xmlSVG = resultWriter.toString();
+                    try ( 
+                        BufferedWriter writer = Files.newBufferedWriter(Paths.get(svgFilename))) {
+                            writer.write(xmlSVG);                    
+                    }
+                    
+                }
+            } 
+            catch (Exception e) 
+            {
+                e.printStackTrace();
+            }
+        }
+        xmlFiles.forEach(x -> System.out.println(x));
     }
     
 }
