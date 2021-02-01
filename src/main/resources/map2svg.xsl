@@ -38,11 +38,21 @@
 		<xsl:variable name="width" select="java:getWidth($bufferedImage)"/>
 		<xsl:variable name="height" select="java:getHeight($bufferedImage)"/>
 		
+		<xsl:if test="number($width) != $width">
+			<xsl:message>Unknown width=<xsl:value-of select="$width"/></xsl:message>
+		</xsl:if>
+		<xsl:if test="number($height) != $height">
+			<xsl:message>Unknown height=<xsl:value-of select="$height"/></xsl:message>
+		</xsl:if>
+		
 		<xsl:variable name="filePath" select="java:toPath($file)"/>
 		<xsl:variable name="fileContent" select="java:java.nio.file.Files.readAllBytes($filePath)"/>
 		<xsl:variable name="encoder" select="java:java.util.Base64.getEncoder()"/>
 		<xsl:variable name="base64String" select="java:encodeToString($encoder, $fileContent)"/>
 		
+		<xsl:if test="normalize-space($base64String) = ''">
+			<xsl:message>Error: empty base64 string.</xsl:message>
+		</xsl:if>
 		
 		<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
 		x="0px" y="0px" viewBox="0 0 {$width} {$height}"  style="enable-background:new 0 0 595.28 841.89;" xml:space="preserve">
