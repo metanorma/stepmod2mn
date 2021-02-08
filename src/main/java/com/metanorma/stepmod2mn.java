@@ -518,8 +518,11 @@ public class stepmod2mn {
                             svgFilename = Paths.get(outPath, svgFilename).toString();
                         } else {
                             svgFilename = outPath;
-                            Files.createDirectories(Paths.get(new File(svgFilename).getParent()));
-                        }
+                            String parentFolder = new File(svgFilename).getParent();
+                            if (parentFolder != null && !parentFolder.isEmpty()) {
+                                Files.createDirectories(Paths.get(parentFolder));
+                            }
+                        }    
                     }
                     System.out.println("Generate SVG file for " + xmlFile + "...");
                     
