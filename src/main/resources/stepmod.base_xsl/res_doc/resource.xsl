@@ -1296,7 +1296,7 @@ Purpose:
 	</xsl:template>-->
 
 	<xsl:template match="schema_diag">
-		<xsl:apply-templates select="express-g"/>  
+		<xsl:apply-templates select="express-g" mode="svg"/>  
 	</xsl:template>
 
 	<xsl:template match="inscope">
@@ -1904,9 +1904,16 @@ the types, entity specializations, and functions that are specific to this part 
 			<xsl:with-param name="schema" select="$schema_name"/>
 		</xsl:apply-templates>
 
+		<xsl:variable name="fund_cons">
+			<xsl:apply-templates select="./fund_cons"/>
+		</xsl:variable>
+		<xsl:copy-of select="$fund_cons"/>
+		<xsl:if test="not(java:endsWith(java:java.lang.String.new($fund_cons),'&#xa;') or java:endsWith(java:java.lang.String.new($fund_cons),'&#xd;'))">
+			<xsl:text>&#xa;&#xa;</xsl:text>
+		</xsl:if>
 
-		<xsl:apply-templates select="./fund_cons"/>
-
+		<xsl:apply-templates select="./express-g" mode="svg"/>
+	
 		<!-- display the constant EXPRESS. The template is in sect4_express.xsl -->
 		<xsl:apply-templates select="$express_xml/express/schema/constant">
 			<xsl:with-param name="main_clause" select="($schema_no+3)" />
@@ -4122,7 +4129,7 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 	<xsl:template match="imgfile" mode="expressg">
 		<xsl:variable name="file">
 			<xsl:call-template name="set_file_ext">
-	<xsl:with-param name="filename" select="@file"/>
+				<xsl:with-param name="filename" select="@file"/>
 			</xsl:call-template>
 		</xsl:variable>
 		<xsl:variable name="href" select="concat('../',$file)"/>
@@ -4149,46 +4156,129 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 		</xsl:variable>
 		<xsl:variable name="fig_no">
 			<xsl:choose>
-	<xsl:when test="name(../..)='arm'">
-		<xsl:choose>
-			<xsl:when test="$number=1">
-				<xsl:value-of 
-			select="concat('Figure C.',$number, 
-				' &#8212; ARM schema level EXPRESS-G diagram ',$number)"/>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:value-of 
-			select="concat('Figure C.',$number, 
-				' &#8212; ARM entity level EXPRESS-G diagram ',($number - 1))"/>
-			</xsl:otherwise>
-		</xsl:choose>
-	</xsl:when>
-	<xsl:when test="name(../..)='mim'">
-		<xsl:choose>
-			<xsl:when test="$number=1">
-				<xsl:value-of 
-			select="concat('Figure D.',$number, 
-				' &#8212; MIM schema level EXPRESS-G diagram ',$number)"/>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:value-of 
-			select="concat('Figure D.',$number, 
-				' &#8212; MIM entity level EXPRESS-G diagram ',($number - 1))"/>
-			</xsl:otherwise>
-		</xsl:choose>
-	</xsl:when>
-	<xsl:otherwise >
-		<xsl:if test="string-length(@title) > 3" >
-			<xsl:value-of 
-		select="concat('Figure ',$number, 
-			' &#8212; ',@title)" />
-		</xsl:if>       
-	</xsl:otherwise>
+				<xsl:when test="name(../..)='arm'">
+					<xsl:choose>
+						<xsl:when test="$number=1">
+							<xsl:value-of 
+						select="concat('Figure C.',$number, 
+							' &#8212; ARM schema level EXPRESS-G diagram ',$number)"/>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:value-of 
+						select="concat('Figure C.',$number, 
+							' &#8212; ARM entity level EXPRESS-G diagram ',($number - 1))"/>
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:when>
+				<xsl:when test="name(../..)='mim'">
+					<xsl:choose>
+						<xsl:when test="$number=1">
+							<xsl:value-of 
+						select="concat('Figure D.',$number, 
+							' &#8212; MIM schema level EXPRESS-G diagram ',$number)"/>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:value-of 
+						select="concat('Figure D.',$number, 
+							' &#8212; MIM entity level EXPRESS-G diagram ',($number - 1))"/>
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:when>
+				<xsl:otherwise >
+					<xsl:if test="string-length(@title) > 3" >
+						<xsl:value-of 
+					select="concat('Figure ',$number, 
+						' &#8212; ',@title)" />
+					</xsl:if>       
+				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
 		<xsl:value-of select="$fig_no"/>
 	</xsl:template>
 
+
+	<xsl:template match="express-g" mode="svg">
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:apply-templates select="imgfile | img" mode="svg"/>
+		<xsl:text>&#xa;</xsl:text>
+	</xsl:template>
+
+	<xsl:template match="imgfile | img" mode="svg">
+		<xsl:text>[.svgmap]</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>====</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		
+		<xsl:variable name="svg_filename" select="concat(substring-before(@file, '.xml'), '.svg')"/>
+		<!-- image::basic_attribute_schemaexpg1.svg[] -->
+		<xsl:text>image::</xsl:text><xsl:value-of select="$svg_filename"/><xsl:text>[]</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+
+		
+		<!-- unordered list example -->
+		<!-- * <<express:basic_attribute_schema>>; 1
+					* <<express:action_schema>>; 2
+					* <<express:support_resource_schema>>; 3
+		-->
+		<xsl:variable name="map_file">
+		<xsl:choose>
+			<xsl:when test="ancestor::schema_diag"><!-- for introduction section file placed in current folder -->
+				<xsl:value-of select="concat($path, @file)"/>				
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:variable name="schema_name" select="ancestor::schema/@name"/>
+				<xsl:value-of select="concat($path, '../../resources/',$schema_name,'/',@file)"/>
+			</xsl:otherwise>
+		</xsl:choose>
+		</xsl:variable>
+		
+		<xsl:choose>
+			<xsl:when test="document($map_file)//img.area[@href]">
+				<xsl:apply-templates select="document($map_file)//img.area[@href]" mode="svg"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="concat('ERROR: Image map file ', @file, '(', $map_file, ') does not exist or empty!')"/>
+			</xsl:otherwise>
+		</xsl:choose>
+		
+		<xsl:text>====</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+	</xsl:template>
+
+	
+	<!-- * <<express:basic_attribute_schema>>; number -->
+	<xsl:template match="img.area" mode="svg">
+		<!-- <xsl:variable name="this-schema" select="substring-after(@href,'#')" /> -->
+		<xsl:variable name="this-schema">
+			<xsl:variable name="part1">
+				<xsl:choose>
+					<xsl:when test="contains(@href, '.xml')">
+						<xsl:value-of select="substring-before(@href, '.xml')"/>
+					</xsl:when>
+					<xsl:when test="contains(@href, '#')">
+						<xsl:value-of select="substring-before(@href, '#')"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="@href"/>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:variable>
+			<xsl:choose>
+				<xsl:when test="contains($part1, '/')">
+					<xsl:call-template name="substring-after-last">
+						<xsl:with-param name="value" select="$part1"/>
+						<xsl:with-param name="delimiter" select="'/'"/>
+					</xsl:call-template>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="$part1"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:text>* &lt;&lt;express:</xsl:text><xsl:value-of select="$this-schema"/><xsl:text>&gt;&gt;; </xsl:text><xsl:number/>
+		<xsl:text>&#xa;</xsl:text>
+	</xsl:template>
 
 	<xsl:template match="bibliography">
 		<!-- 

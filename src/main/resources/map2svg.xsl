@@ -99,13 +99,19 @@
 		<xsl:variable name="x2" select="$coords[3]"/>
 		<xsl:variable name="y2" select="$coords[4]"/>
 		
-		<a xlink:href="{@href}" xmlns="http://www.w3.org/2000/svg">
+		<xsl:variable name="number"><xsl:number count="img.area"/></xsl:variable>
+		
+		<!-- <a xlink:href="{@href}" xmlns="http://www.w3.org/2000/svg"> -->
+		<a xlink:href="{$number}" xmlns="http://www.w3.org/2000/svg">
 			<rect x="{$x1}" y="{$y1}" class="st0" width="{$x2 - $x1}" height="{$y2 - $y1}" />
 		</a>
 	</xsl:template>
 
-	<xsl:template match="img.area[@shape = 'poly' or @shape = 'polygon']">
-		<a xlink:href="{@href}" xmlns="http://www.w3.org/2000/svg">
+	<xsl:template match="img.area[@shape = 'poly' or @shape = 'polygon' or @shape = 'POLYGON']">
+		<xsl:variable name="number"><xsl:number count="img.area"/></xsl:variable>
+		
+		<!-- <a xlink:href="{@href}" xmlns="http://www.w3.org/2000/svg"> -->
+		<a xlink:href="{$number}" xmlns="http://www.w3.org/2000/svg">
 			<polygon points="{@coords}" class="st0"/>
 		</a>
 	</xsl:template>
@@ -117,7 +123,10 @@
 		<xsl:variable name="cy" select="$coords[2]"/>
 		<xsl:variable name="r" select="$coords[3]"/>
 		
-		<a xlink:href="{@href}" xmlns="http://www.w3.org/2000/svg">
+		<xsl:variable name="number"><xsl:number count="img.area"/></xsl:variable>
+		
+		<!-- <a xlink:href="{@href}" xmlns="http://www.w3.org/2000/svg"> -->
+		<a xlink:href="{$number}" xmlns="http://www.w3.org/2000/svg">
 			<circle cx="{$cx}" cy="{$cy}" r="{$r}" class="st0"/>
 		</a>
 	</xsl:template>
@@ -129,7 +138,10 @@
 		<xsl:variable name="rx" select="$coords[3]"/>
 		<xsl:variable name="ry" select="$coords[3]"/>
 		
-		<a xlink:href="{@href}" xmlns="http://www.w3.org/2000/svg">
+		<xsl:variable name="number"><xsl:number count="img.area"/></xsl:variable>
+		
+		<!-- <a xlink:href="{@href}" xmlns="http://www.w3.org/2000/svg"> -->
+		<a xlink:href="{$number}" xmlns="http://www.w3.org/2000/svg">
 			<ellipse cx="{$cx}" cy="{$cy}" rx="{$rx}" ry="{$ry}" class="st0"/>
 		</a>
 	</xsl:template>
