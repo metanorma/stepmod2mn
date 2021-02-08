@@ -14,15 +14,34 @@
 	<xsl:output method="xml" encoding="UTF-8"/>
 			
 	<xsl:param name="path" />
+	<xsl:param name="image"/>
 	
 	<xsl:template match="/">
 		<xsl:if test="count(//img) &gt; 1">
 			<xsl:message>Error: count img = <xsl:value-of select="count(//img)"/></xsl:message>
 		</xsl:if>
+		<xsl:if test="normalize-space($image) != '' and count(//img[@src = $image]) != 1">
+			<xsl:message>Error: count img '<xsl:value-of select="$image"/>' = <xsl:value-of select="count(//img[@src = $image])"/></xsl:message>
+		</xsl:if>
 		<xsl:apply-templates />
 	</xsl:template>
 	
 	<xsl:template match="img">
+		<xsl:choose>
+			<xsl:when test="normalize-space($image) != ''">
+				<!-- process only specified image -->
+				<xsl:if test="@src = $image">
+					<xsl:apply-templates select="." mode="process"/>
+				</xsl:if>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:apply-templates select="." mode="process"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	
+	
+	<xsl:template match="img" mode="process">
 	
 		<xsl:variable name="image_source" select="concat($path, @src)"/>
 		<xsl:variable name="image_type">

@@ -103,4 +103,19 @@ public class stepmod2mnTests {
         assertTrue(Files.exists(Paths.get(svgPath + File.separator + "schemaexpg1.svg")));
     }
     
+    @Test
+    public void successConvertToSVGOne() throws ParseException {
+        String svgPath = System.getProperty("buildDirectory") + File.separator + ".." 
+                + File.separator + "src"
+                + File.separator + "test"
+                + File.separator + "resources"
+                + File.separator + "svg";
+        String svgFile = svgPath + File.separator + "schemaexpg1.xml";
+        String image = "schemaexpg1.gif";
+        
+        String[] args = new String[]{"-x" , svgFile , "-i", image};
+        stepmod2mn.main(args);
+
+        assertTrue(Files.exists(Paths.get(svgPath + File.separator + "schemaexpg1.svg")));
+    }
 }
