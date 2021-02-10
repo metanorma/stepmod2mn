@@ -643,7 +643,7 @@
 		<xsl:variable name="label" select="normalize-space($label_)"/>
 		
 		<xsl:text>&lt;&lt;express:</xsl:text>
-		<xsl:if test="$schema != ''"><xsl:value-of select="$schema"/>:</xsl:if>
+		<!-- <xsl:if test="$schema != ''"><xsl:value-of select="$schema"/>:</xsl:if> -->
 		<xsl:value-of select="$schema_prefix_label"/>
 		<xsl:if test="$label != ''">, <xsl:value-of select="$label"/></xsl:if>
 		<xsl:text>&gt;&gt;</xsl:text>
