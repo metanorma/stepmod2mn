@@ -4212,7 +4212,7 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 		<xsl:variable name="svg_filename" select="concat(substring-before(@file, '.xml'), '.svg')"/>
 		<!-- image::basic_attribute_schemaexpg1.svg[] -->
 		<xsl:text>image::</xsl:text><xsl:value-of select="$svg_filename"/><xsl:text>[]</xsl:text>
-		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>&#xa;&#xa;</xsl:text>
 
 		
 		<!-- unordered list example -->
