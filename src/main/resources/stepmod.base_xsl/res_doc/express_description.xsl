@@ -11,7 +11,8 @@ $Id: express_description.xsl,v 1.8 2015/08/03 09:40:44 mikeward Exp $
 
 <xsl:stylesheet 
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:java="http://xml.apache.org/xalan/java"
-	version="1.0"
+	xmlns:str="http://exslt.org/strings"
+	version="1.0" extension-element-prefixes="str"
 >
 
 
@@ -461,7 +462,21 @@ $Id: express_description.xsl,v 1.8 2015/08/03 09:40:44 mikeward Exp $
 
 				<!-- if -->
 				<!--      <xsl:if test="not(contains('is',substring-before(normalize-space($description/text()[position()=2]),' ')))"> -->
-	<xsl:if test="string-length($rule)=0 and not(contains('is',substring-before(substring-after(substring-after(normalize-space($description),' '),' '),' ')))">
+	
+	<xsl:variable name="description_parts_by_space" select="str:split(normalize-space($description),' ')"/>
+	
+	<xsl:variable name="contains_is">
+		<xsl:choose>
+			<xsl:when test="$description_parts_by_space[3] = 'is'">yes</xsl:when>
+			<xsl:when test="substring($description_parts_by_space[2], string-length($description_parts_by_space[2])) = ','"> <!-- Example An *application_context*, as defined in ISO 10303-1, is a  -->
+				<xsl:variable name="description_parts_by_comma" select="str:split($description,',')"/>
+				<xsl:if test="starts-with(normalize-space($description_parts_by_comma[3]), 'is')">yes</xsl:if>
+			</xsl:when>
+		</xsl:choose>
+	</xsl:variable>
+	
+	<!-- <xsl:if test="string-length($rule)=0 and not(contains('is',substring-before(substring-after(substring-after(normalize-space($description),' '),' '),' ')))"> -->
+	<xsl:if test="string-length($rule)=0 and not(contains($contains_is, 'yes'))">
 				<xsl:call-template name="error_message">
 						<xsl:with-param  name="message"  >
 							<xsl:value-of select="concat('Warning Ent3: ', $description/@linkend, '. Check that the description starts with' )"/>
