@@ -871,8 +871,9 @@
           <xsl:call-template name="insertBoilerplate">
             <xsl:with-param name="folder" select="'General'"/>
             <xsl:with-param name="identifier" select="'SC4_xxxx'"/>
-            <xsl:with-param name="text">Example: Put boilerplate for type select, see https://github.com/metanorma/iso-tc184-sc4-directives/blob/master/supplementary-directives.adoc</xsl:with-param>
-            <xsl:with-param name="file">https://raw.githubusercontent.com/metanorma/stepmod2mn/master/README.adoc</xsl:with-param>
+            <!-- Example: Put boilerplate for type select, see https://github.com/metanorma/iso-tc184-sc4-directives/blob/master/supplementary-directives.adoc -->
+            <xsl:with-param name="text"></xsl:with-param>
+            <xsl:with-param name="file">https://raw.githubusercontent.com/metanorma/stepmod2mn/master/src/main/resources/empty.adoc</xsl:with-param>
           </xsl:call-template>
         </xsl:if>
     </xsl:if>
@@ -925,8 +926,8 @@
           <xsl:call-template name="insertBoilerplate">
             <xsl:with-param name="folder" select="'General'"/>
             <xsl:with-param name="identifier" select="'SC4_xxxx'"/>
-            <xsl:with-param name="text">Example: Put boilerplate for type enumeration, see https://github.com/metanorma/iso-tc184-sc4-directives/blob/master/supplementary-directives.adoc
-            </xsl:with-param>
+            <!-- Example: Put boilerplate for type enumeration, see https://github.com/metanorma/iso-tc184-sc4-directives/blob/master/supplementary-directives.adoc -->
+            <xsl:with-param name="text"></xsl:with-param>
           </xsl:call-template>
         </xsl:if>
     </xsl:if>
