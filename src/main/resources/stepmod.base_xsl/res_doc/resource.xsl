@@ -1924,16 +1924,7 @@ the types, entity specializations, and functions that are specific to this part 
 		<xsl:apply-templates select="$express_xml/express/schema/type">
 			<xsl:with-param name="main_clause" select="($schema_no+3)" />
 		</xsl:apply-templates>
-		
-		<!-- https://github.com/metanorma/stepmod2mn/issues/10 -->
-		<xsl:if test="not($express_xml/express/schema/type/select) and not($express_xml/express/schema/type/enumeration)">
-			<xsl:call-template name="insertBoilerplate">
-				<xsl:with-param name="folder" select="'General'"/>
-				<xsl:with-param name="identifier" select="'SC4_xxxx'"/>
-				<xsl:with-param name="text">Example: Put boilerplate from https://github.com/metanorma/iso-tc184-sc4-directives/blob/master/supplementary-directives.adoc</xsl:with-param>
-			</xsl:call-template>
-		</xsl:if>
-		
+
 		<!-- display the EXPRESS for the entities in the schema.
 	 The template is in sect4_express.xsl -->
 		<xsl:apply-templates select="$express_xml/express/schema/entity">

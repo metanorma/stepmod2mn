@@ -6,7 +6,8 @@
 		xmlns:xalan="http://xml.apache.org/xalan" 
 		xmlns:java="http://xml.apache.org/xalan/java" 
 		xmlns:metanorma-class="xalan://com.metanorma.RegExEscaping"
-		exclude-result-prefixes="mml tbx xlink xalan java metanorma-class" 
+    xmlns:metanorma-class-util="xalan://com.metanorma.Util"
+		exclude-result-prefixes="mml tbx xlink xalan java metanorma-class metanorma-class-util" 
 		version="1.0">
 
 	
@@ -647,6 +648,23 @@
 		<xsl:value-of select="$schema_prefix_label"/>
 		<xsl:if test="$label != ''">, <xsl:value-of select="$label"/></xsl:if>
 		<xsl:text>&gt;&gt;</xsl:text>
+	</xsl:template>
+	
+	
+	<xsl:template name="insertBoilerplate">
+		<xsl:param name="folder"/>
+		<xsl:param name="identifier"/>
+		<xsl:param name="text"/>
+		<xsl:param name="file"/>
+		<xsl:text>[</xsl:text><xsl:value-of select="$folder"/><xsl:text>:</xsl:text><xsl:value-of select="$identifier"/><xsl:text>]</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+    <xsl:copy-of select="$text"/>
+    <xsl:if test="normalize-space($file) != ''">
+      <xsl:copy-of select="java:com.metanorma.Util.getFileContent($file)"/>
+    </xsl:if>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>[end_</xsl:text><xsl:value-of select="$folder"/><xsl:text>]</xsl:text>
+		<xsl:text>&#xa;&#xa;</xsl:text>
 	</xsl:template>
 	
 	<xsl:template match="b" mode="text">

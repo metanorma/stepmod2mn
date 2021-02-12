@@ -470,7 +470,7 @@ $Id: express_description.xsl,v 1.8 2015/08/03 09:40:44 mikeward Exp $
 			<xsl:when test="$description_parts_by_space[3] = 'is'">yes</xsl:when>
 			<xsl:when test="substring($description_parts_by_space[2], string-length($description_parts_by_space[2])) = ','"> <!-- Example An *application_context*, as defined in ISO 10303-1, is a  -->
 				<xsl:variable name="description_parts_by_comma" select="str:split($description,',')"/>
-				<xsl:if test="starts-with(normalize-space($description_parts_by_comma[3]), 'is')">yes</xsl:if>
+				<xsl:if test="starts-with(normalize-space($description_parts_by_comma[3]), 'is ')">yes</xsl:if>
 			</xsl:when>
 		</xsl:choose>
 	</xsl:variable>

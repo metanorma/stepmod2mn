@@ -808,51 +808,77 @@
 		</xsl:call-template>
 
 
-		<xsl:apply-templates select="./select" mode="description"/>
+    <!-- boilerplate text for type select -->
+    <xsl:variable name="type_select_boilerplate">
+      <xsl:apply-templates select="./select" mode="description"/>
+    </xsl:variable>
+    
+    <xsl:copy-of select="$type_select_boilerplate"/>
+    
+    <!-- output description from external file -->
+    <xsl:call-template name="output_external_description">
+      <xsl:with-param name="schema" select="../@name"/>
+      <xsl:with-param name="entity" select="./@name"/>
+      <xsl:with-param name="type" select="./@name"/>
 
-		<!-- output description from external file -->
-		<xsl:call-template name="output_external_description">
-			<xsl:with-param name="schema" select="../@name"/>
-			<xsl:with-param name="entity" select="./@name"/>
-			<xsl:with-param name="type" select="./@name"/>
+    </xsl:call-template> 
+    <!-- output description from express -->
 
-		</xsl:call-template> 
-		<!-- output description from express -->
+    <!-- <p> -->
+    <xsl:call-template name="insertParagraph">
+      <xsl:with-param name="text">
+        <xsl:choose>
+          <xsl:when test="string-length(./description)>0">
+            <xsl:apply-templates select="./description"/>
+          </xsl:when>
+          <xsl:otherwise>
 
-		<!-- <p> -->
-		<xsl:call-template name="insertParagraph">
-			<xsl:with-param name="text">
-				<xsl:choose>
-					<xsl:when test="string-length(./description)>0">
-						<xsl:apply-templates select="./description"/>
-					</xsl:when>
-					<xsl:otherwise>
-
-						<!-- 
-								 disable error checking for selects as boiler plate
-								 should output text -->
-						<xsl:if test="not(./select)">
-							<xsl:variable name="external_description">
-								<xsl:call-template name="check_external_description">
-									<xsl:with-param name="schema" select="../@name"/>
-									<xsl:with-param name="entity" select="@name"/>
-								</xsl:call-template>        
-							</xsl:variable>
-							<xsl:if test="$external_description='false'">
-								<xsl:call-template name="error_message">
-									<xsl:with-param 
-										name="message" 
-										select="concat('Error e3: No description provided for ',$aname)"/>
-								</xsl:call-template>
-							</xsl:if>
-						</xsl:if>
-					</xsl:otherwise>
-				</xsl:choose>
-			</xsl:with-param>
-		</xsl:call-template>
-		<!-- </p> -->
-		<!-- output any issue against type -->
-	 
+            <!-- 
+                 disable error checking for selects as boiler plate
+                 should output text -->
+            <xsl:if test="not(./select)">
+              <xsl:variable name="external_description">
+                <xsl:call-template name="check_external_description">
+                  <xsl:with-param name="schema" select="../@name"/>
+                  <xsl:with-param name="entity" select="@name"/>
+                </xsl:call-template>        
+              </xsl:variable>
+              <xsl:if test="$external_description='false'">
+                <xsl:call-template name="error_message">
+                  <xsl:with-param 
+                    name="message" 
+                    select="concat('Error e3: No description provided for ',$aname)"/>
+                </xsl:call-template>
+              </xsl:if>
+            </xsl:if>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:with-param>
+    </xsl:call-template>
+    <!-- </p> -->
+    
+   
+   <!-- https://github.com/metanorma/stepmod2mn/issues/10 -->
+    <!-- If no text is provided in descriptions.xml for SELECT and ENUMERATION types, the XSLT pastes boilerplate descriptions in the document. -->
+    <xsl:if test="./select and normalize-space($type_select_boilerplate) = ''">
+        <xsl:variable name="external_description">
+          <xsl:call-template name="check_external_description">
+            <xsl:with-param name="schema" select="../@name"/>
+            <xsl:with-param name="entity" select="@name"/>
+          </xsl:call-template>        
+        </xsl:variable>
+        <xsl:if test="$external_description='false'">
+          <xsl:call-template name="insertBoilerplate">
+            <xsl:with-param name="folder" select="'General'"/>
+            <xsl:with-param name="identifier" select="'SC4_xxxx'"/>
+            <xsl:with-param name="text">Example: Put boilerplate for type select, see https://github.com/metanorma/iso-tc184-sc4-directives/blob/master/supplementary-directives.adoc</xsl:with-param>
+            <xsl:with-param name="file">https://raw.githubusercontent.com/metanorma/stepmod2mn/master/README.adoc</xsl:with-param>
+          </xsl:call-template>
+        </xsl:if>
+    </xsl:if>
+   
+   
+    <!-- output any issue against type -->
 		<xsl:call-template name="output_express_issue">
 			<xsl:with-param name="resdoc_name" select="$resdoc_name"/>
 			<xsl:with-param name="schema" select="../@name"/>
@@ -886,7 +912,25 @@
 			</code>
 		<!--  end blockquote  -->
 	<!-- </p> -->
+  
 		<xsl:apply-templates select="enumeration" mode="describe_enums"/>
+    <xsl:if test="./enumeration">
+        <xsl:variable name="external_description">
+          <xsl:call-template name="check_external_description">
+            <xsl:with-param name="schema" select="../@name"/>
+            <xsl:with-param name="entity" select="@name"/>
+          </xsl:call-template>        
+        </xsl:variable>
+        <xsl:if test="$external_description='false'">
+          <xsl:call-template name="insertBoilerplate">
+            <xsl:with-param name="folder" select="'General'"/>
+            <xsl:with-param name="identifier" select="'SC4_xxxx'"/>
+            <xsl:with-param name="text">Example: Put boilerplate for type enumeration, see https://github.com/metanorma/iso-tc184-sc4-directives/blob/master/supplementary-directives.adoc
+            </xsl:with-param>
+          </xsl:call-template>
+        </xsl:if>
+    </xsl:if>
+
 		<xsl:call-template name="output_where_formal"/>
 		<xsl:call-template name="output_where_informal"/>
 
@@ -3866,6 +3910,8 @@
 				
 			</xsl:choose>    
 		</xsl:if>
+    
+    
 	</xsl:template>
 
 

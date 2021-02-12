@@ -1,6 +1,7 @@
 package com.metanorma;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,6 +12,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.jar.Attributes;
@@ -127,5 +129,31 @@ public class Util {
     public static long getFileSize(File file) {
         long length = file.length();
         return length;
+    }
+    
+    public static String getFileContent(String filepath) {
+        String fileContent = "";
+        try {
+            if (filepath.toLowerCase().startsWith("http") || filepath.toLowerCase().startsWith("www.")) { 
+                URL url = new URL(filepath);
+                ByteArrayOutputStream output = new ByteArrayOutputStream();
+                try (InputStream inputStream = url.openStream()) {
+                    int n = 0;
+                    byte [] buffer = new byte[1024];
+                    while (-1 != (n = inputStream.read(buffer))) {
+                        output.write(buffer, 0, n);
+                    }
+                }
+                byte[] bytes = output.toByteArray();
+                fileContent = new String(bytes);
+            } else {
+                Path filePath = Paths.get(filepath);
+                byte[] bytes = Files.readAllBytes(filePath);
+                fileContent = new String(bytes);
+            }
+        } catch (Exception ex) {
+            return "Can't read a file " + filepath + ":" + ex.toString();
+        }
+        return fileContent;
     }
 }

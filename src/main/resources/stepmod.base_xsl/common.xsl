@@ -1389,8 +1389,10 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 		<xsl:param name="linebreakchar" select="'#'"/>
 		<xsl:param name="warning_gif" select="'../../../../images/warning.gif'"/>
 		
+		<xsl:variable name="message_" select="normalize-space($message)"/>
+		
 		<xsl:message>
-			<xsl:value-of select="translate($message,$linebreakchar,'&#010;')"/>			
+			<xsl:value-of select="translate($message_,$linebreakchar,'&#010;')"/>			
 		</xsl:message>
 		
 		<xsl:if test="contains($INLINE_ERRORS,'yes')">
@@ -1414,7 +1416,7 @@ width="20" height="20"/> -->
 					</font>					-->
 					<xsl:text>_</xsl:text>					
 						<xsl:call-template name="output_line_breaks">
-							<xsl:with-param name="str" select="$message"/>
+							<xsl:with-param name="str" select="$message_"/>
 							<xsl:with-param name="break_char" select="'#'"/>
 							<xsl:with-param name="replace_break_char" select="'true'"/>
 						</xsl:call-template>
