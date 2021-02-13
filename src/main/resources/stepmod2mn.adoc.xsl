@@ -44,6 +44,8 @@
 	<xsl:strip-space elements="*"/>
 			
 	<xsl:param name="path"/>
+  
+	<xsl:param name="boilerplate_path"/>
 	
 	<!-- placeholders, global variables -->
 	<xsl:variable name="FILE_EXT" select="'.xml'"/>
@@ -656,15 +658,23 @@
 		<xsl:param name="identifier"/>
 		<xsl:param name="text"/>
 		<xsl:param name="file"/>
-		<xsl:text>[</xsl:text><xsl:value-of select="$folder"/><xsl:text>:</xsl:text><xsl:value-of select="$identifier"/><xsl:text>]</xsl:text>
-		<xsl:text>&#xa;</xsl:text>
-    <xsl:copy-of select="$text"/>
-    <xsl:if test="normalize-space($file) != ''">
-      <xsl:copy-of select="java:com.metanorma.Util.getFileContent($file)"/>
-    </xsl:if>
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>[end_</xsl:text><xsl:value-of select="$folder"/><xsl:text>]</xsl:text>
-		<xsl:text>&#xa;&#xa;</xsl:text>
+    <xsl:choose>
+      <xsl:when test="normalize-space($text) != '' or normalize-space($file) != ''">
+        <xsl:text>[</xsl:text><xsl:value-of select="$folder"/><xsl:text>:</xsl:text><xsl:value-of select="$identifier"/><xsl:text>]</xsl:text>
+        <xsl:text>&#xa;</xsl:text>
+        <xsl:copy-of select="$text"/>
+        <xsl:if test="normalize-space($file) != ''">
+          <xsl:copy-of select="java:com.metanorma.Util.getFileContent(concat($boilerplate_path, $file))"/>
+        </xsl:if>
+        <xsl:text>&#xa;</xsl:text>
+        <xsl:text>[end_</xsl:text><xsl:value-of select="$folder"/><xsl:text>]</xsl:text>
+        <xsl:text>&#xa;&#xa;</xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:text>Error: boilerplate text is empty.</xsl:text>
+        <xsl:text>&#xa;&#xa;</xsl:text>
+      </xsl:otherwise>
+    </xsl:choose>
 	</xsl:template>
 	
 	<xsl:template match="b" mode="text">

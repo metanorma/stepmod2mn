@@ -46,7 +46,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
  */
 public class stepmod2mn {
 
-    static final String CMD = "java -jar stepmod2mn.jar <resource_xml_file> [options -o or -v]";        
+    static final String CMD = "java -jar stepmod2mn.jar <resource_xml_file> [options -o, -v, -b <path>]";
     static final String CMD_SVGscope = "java -jar stepmod2mn.jar <start folder to process xml maps files> --svg";
     static final String CMD_SVG = "java -jar stepmod2mn.jar --xml <Express Imagemap XML file path> --image <Image file name> [--svg <resulted SVG map file or folder>] [-v]";
     
@@ -121,7 +121,13 @@ public class stepmod2mn {
                     .desc("output file name")
                     .hasArg()
                     .required(false)
-                    .build());  
+                    .build());
+            addOption(Option.builder("b")
+                    .longOpt("boilerplatepath")
+                    .desc("path to boilerplate text storage folder")
+                    .hasArg()
+                    .required(false)
+                    .build());
             addOption(Option.builder("v")
                     .longOpt("version")
                     .desc("display application version")
@@ -139,6 +145,8 @@ public class stepmod2mn {
     static final Path tmpfilepath  = Paths.get(TMPDIR, UUID.randomUUID().toString());
     
     String resourcePath = "";
+    
+    String boilerplatePath = "";
     
     /**
      * Main method.
@@ -245,6 +253,11 @@ public class stepmod2mn {
                     outFileName = cmd.getOptionValue("output");
                 }
 
+                String boilerplatePath = "";
+                if (cmd.hasOption("boilerplatepath")) {
+                    boilerplatePath = cmd.getOptionValue("boilerplatepath") + File.separator;
+                }
+                
                 // if remote file (http or https)
                 if (argXMLin.toLowerCase().startsWith("http") || argXMLin.toLowerCase().startsWith("www.")) {
 
@@ -300,6 +313,7 @@ public class stepmod2mn {
                 try {
                     stepmod2mn app = new stepmod2mn();
                     app.setResourcePath(resourcePath);
+                    app.setBoilerplatePath(boilerplatePath);
                     app.convertstepmod2mn(argXMLin, fileOut);                    
                     System.out.println("End!");
 
@@ -360,6 +374,7 @@ public class stepmod2mn {
             transformer.setParameter("docfile", bibdataFileName);
             transformer.setParameter("pathSeparator", File.separator);
             transformer.setParameter("path", resourcePath);
+            transformer.setParameter("boilerplate_path", boilerplatePath);
 
             transformer.setParameter("debug", DEBUG);
 
@@ -425,7 +440,11 @@ public class stepmod2mn {
     public void setResourcePath(String resourcePath) {
         this.resourcePath = resourcePath;
     }
- 
+    
+    public void setBoilerplatePath(String boilerplatePath) {
+        this.boilerplatePath = boilerplatePath;
+    }
+    
     private String processLinearizedXML(String xmlFilePath){
         try {
             InputStream xmlInputStream = null;

@@ -873,7 +873,8 @@
             <xsl:with-param name="identifier" select="'SC4_xxxx'"/>
             <!-- Example: Put boilerplate for type select, see https://github.com/metanorma/iso-tc184-sc4-directives/blob/master/supplementary-directives.adoc -->
             <xsl:with-param name="text"></xsl:with-param>
-            <xsl:with-param name="file">https://raw.githubusercontent.com/metanorma/stepmod2mn/master/src/main/resources/empty.adoc</xsl:with-param>
+            <!-- Example /src/main/resources/empty.adoc -->
+            <xsl:with-param name="file"></xsl:with-param>
           </xsl:call-template>
         </xsl:if>
     </xsl:if>
