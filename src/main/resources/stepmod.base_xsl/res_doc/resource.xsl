@@ -1641,6 +1641,7 @@ Purpose:
 		</xsl:call-template>
 
 		<!-- <p> -->
+		<!-- boilerplate text -->
 		<xsl:call-template name="insertParagraph">
 			<xsl:with-param name="text">
 			The diagrams in this annex correspond to the EXPRESS schemas specified in this part of ISO 10303.
@@ -1695,11 +1696,11 @@ Purpose:
 				</xsl:variable>
 
 				<!-- <li> -->
-					<xsl:text>* &lt;&lt;</xsl:text>
-					
 					<!-- <a href="{$schema_url}">
 						<xsl:value-of select="concat('Figure D.',$clauseno, ' &#8212; EXPRESS-G diagram of the ', $schema, ' (', $rel_clauseno,' of ', $img_count, ')' )" />
 					</a> -->
+					<!-- 
+					<xsl:text>* &lt;&lt;</xsl:text>
 					<xsl:value-of select="concat($schema,'expg',$diagno)"/>
 					<xsl:text>,</xsl:text>
 					<xsl:value-of select="concat('Figure D.',$clauseno, ' &#8212; EXPRESS-G diagram of the ', $schema, ' (', $rel_clauseno,' of ', $img_count, ')' )" />
@@ -1712,6 +1713,16 @@ Purpose:
 							<xsl:value-of select="'.'"/>        
 						</xsl:otherwise>
 					</xsl:choose>
+					-->
+					<!-- Changed to :  -->
+					<!-- for https://github.com/metanorma/stepmod2mn/issues/14 -->
+					<xsl:variable name="filename_no_ext">
+						<xsl:value-of select="substring-before(@file,'.xml')"/>
+					</xsl:variable>
+					<xsl:value-of select="concat('.EXPRESS-G diagram of the ', $schema, ' (', $rel_clauseno,' of ', $img_count, ')' )" />
+					<xsl:text>&#xa;</xsl:text>
+					<xsl:value-of select="concat('image::', $filename_no_ext, '.svg[]')"/>
+					
 				<!-- </li> -->
 				<xsl:text>&#xa;&#xa;</xsl:text>
 			</xsl:for-each>
