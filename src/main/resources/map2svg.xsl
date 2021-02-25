@@ -74,7 +74,7 @@
 		</xsl:if>
 		
 		<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
-		x="0px" y="0px" viewBox="0 0 {$width} {$height}"  style="enable-background:new 0 0 595.28 841.89;" xml:space="preserve">
+		x="0px" y="0px" viewBox="0 0 {$width} {$height}" width="{$width}" height="{$height}" style="enable-background:new 0 0 595.28 841.89;" xml:space="preserve">
 			<style type="text/css">.st0{fill:#FFFFFF;stroke:#000000;stroke-miterlimit:10;opacity:0}</style>
 			<image style="overflow:visible;" width="{$width}" height="{$height}" xlink:href="data:image/{$image_type};base64,{$base64String}" ><!-- transform="matrix(1 0 0 1 114 263.8898)" -->
 			</image>
