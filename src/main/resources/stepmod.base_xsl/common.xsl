@@ -1002,6 +1002,27 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 	</code>
 </xsl:template>
 
+<!-- start text in screen before any tag (if exist), or all text if there aren't any tag inside it -->
+<xsl:template match="screen/text()[not(preceding-sibling::*)]">
+	<xsl:choose>
+		<xsl:when test="not(following-sibling::*)"><!-- if screen contains only text, not tags -->
+			<xsl:call-template name="remove_start_newline_end_whitespace">
+				<xsl:with-param name="string" select="."/>
+			</xsl:call-template>
+		</xsl:when>
+		<xsl:otherwise>
+			<xsl:call-template name="remove_trailing_newline">
+				<xsl:with-param name="string" select="."/>
+			</xsl:call-template>
+		</xsl:otherwise>
+	</xsl:choose>
+</xsl:template>
+<!-- end text in screen after any tag (if exist) -->
+<xsl:template match="screen/text()[preceding-sibling::* and not(following-sibling::*)]">
+	<xsl:call-template name="remove_end_whitespace">
+		<xsl:with-param name="string" select="."/>
+	</xsl:call-template>
+</xsl:template>
 
 <xsl:template match="table">
 	<xsl:variable name="aname">
@@ -2713,7 +2734,6 @@ width="20" height="20"/> -->
 		</xsl:choose>
 	</xsl:template>
 
-	
 	<!-- remove any whitespace characters from the start of a string -->
 	<xsl:template name="remove_trailing_whitespace">
 		<xsl:param name="string"/>
@@ -2797,6 +2817,40 @@ width="20" height="20"/> -->
 		</xsl:call-template>
 	</xsl:template>
 
+	<!-- remove any newline characters from the start of a string -->
+	<xsl:template name="remove_trailing_newline">
+		<xsl:param name="string"/>
+		<xsl:choose>
+			<xsl:when test="starts-with($string,'&#xA;')">
+				<xsl:call-template name="remove_trailing_newline">
+					<xsl:with-param name="string" 
+						select="substring-after($string,'&#xA;')"/>
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:when test="starts-with($string,'&#xD;')">
+				<xsl:call-template name="remove_trailing_newline">
+					<xsl:with-param name="string" 
+						select="substring-after($string,'&#xD;')"/>
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="$string"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<!-- remove any whitespace characters from the start and end of a string -->
+	<xsl:template name="remove_start_newline_end_whitespace">
+		<xsl:param name="string"/>
+		<xsl:variable name="string1">
+			<xsl:call-template name="remove_end_whitespace">
+				<xsl:with-param name="string" select="$string"/>
+			</xsl:call-template>
+		</xsl:variable>
+		<xsl:call-template name="remove_trailing_newline">
+			<xsl:with-param name="string" select="$string1"/>
+		</xsl:call-template>
+	</xsl:template>
 
 	<!-- Given a list of words, return a string, replacing all the whitespace with
 			 ,

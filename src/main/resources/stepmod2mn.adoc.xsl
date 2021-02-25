@@ -712,7 +712,7 @@
 		<xsl:text>^^</xsl:text><xsl:apply-templates mode="text"/><xsl:text>^^</xsl:text>
 	</xsl:template>
 	
-	<xsl:template match="text()[not(ancestor::blockquote or ancestor::code or ancestor::li_label)]" mode="text">
+	<xsl:template match="text()[not(ancestor::blockquote or ancestor::code or ancestor::screen or ancestor::li_label)]" mode="text">
 		<xsl:value-of select="java:com.metanorma.RegExEscaping.escapeFormattingCommands(.)"/>
 	</xsl:template>
 	
@@ -911,7 +911,7 @@
 	</xsl:template>
 
 
-	<xsl:template match="text()[not(parent::code or parent::mml:* or 
+	<xsl:template match="text()[not(parent::code or parent::screen or parent::mml:* or 
 			parent::b or parent::b2 or 
 			parent::i or parent::i2 or 
 			parent::tt or parent::tt2 or 
