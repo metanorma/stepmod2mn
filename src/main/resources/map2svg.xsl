@@ -16,6 +16,12 @@
 	<xsl:param name="path" />
 	<xsl:param name="image"/>
 	
+   <xsl:attribute-set name="shapeAttributes">
+      <xsl:attribute name="onmouseout">this.style.opacity=0</xsl:attribute>
+      <xsl:attribute name="onmouseover">this.style.opacity=1</xsl:attribute>
+      <xsl:attribute name="style">opacity: 0; fill: rgb(33, 128, 255); fill-opacity: 0.3; stroke: rgb(0, 128, 255); stroke-width: 1px; stroke-linecap: butt; stroke-linejoin: miter; stroke-opacity: 1;</xsl:attribute>
+   </xsl:attribute-set>
+   
 	<xsl:template match="/">
 		<xsl:if test="count(//img) &gt; 1">
 			<xsl:message>Error: count img = <xsl:value-of select="count(//img)"/></xsl:message>
@@ -75,7 +81,7 @@
 		
 		<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
 		x="0px" y="0px" viewBox="0 0 {$width} {$height}" width="{$width}" height="{$height}" style="enable-background:new 0 0 595.28 841.89;" xml:space="preserve">
-			<style type="text/css">.st0{fill:#FFFFFF;stroke:#000000;stroke-miterlimit:10;opacity:0}</style>
+			<!-- <style type="text/css">.st0{fill:#FFFFFF;stroke:#000000;stroke-miterlimit:10;opacity:0}</style> -->
 			<image style="overflow:visible;" width="{$width}" height="{$height}" xlink:href="data:image/{$image_type};base64,{$base64String}" ><!-- transform="matrix(1 0 0 1 114 263.8898)" -->
 			</image>
 			<xsl:apply-templates />
@@ -101,18 +107,18 @@
 		
 		<xsl:variable name="number"><xsl:number count="img.area"/></xsl:variable>
 		
-		<!-- <a xlink:href="{@href}" xmlns="http://www.w3.org/2000/svg"> -->
-		<a xlink:href="{$number}" xmlns="http://www.w3.org/2000/svg">
-			<rect x="{$x1}" y="{$y1}" class="st0" width="{$x2 - $x1}" height="{$y2 - $y1}" />
+		<!-- <a xlink:href="{@href}" xmlns="http://www.w3.org/2000/svg"> class="st0" -->
+		<a href="{$number}" xmlns="http://www.w3.org/2000/svg">
+			<rect x="{$x1}" y="{$y1}" width="{$x2 - $x1}" height="{$y2 - $y1}" xsl:use-attribute-sets="shapeAttributes"/>
 		</a>
 	</xsl:template>
 
 	<xsl:template match="img.area[@shape = 'poly' or @shape = 'polygon' or @shape = 'POLYGON']">
 		<xsl:variable name="number"><xsl:number count="img.area"/></xsl:variable>
 		
-		<!-- <a xlink:href="{@href}" xmlns="http://www.w3.org/2000/svg"> -->
-		<a xlink:href="{$number}" xmlns="http://www.w3.org/2000/svg">
-			<polygon points="{@coords}" class="st0"/>
+		<!-- <a xlink:href="{@href}" xmlns="http://www.w3.org/2000/svg"> class="st0" -->
+		<a href="{$number}" xmlns="http://www.w3.org/2000/svg">
+			<polygon points="{@coords}" xsl:use-attribute-sets="shapeAttributes"/>
 		</a>
 	</xsl:template>
 
@@ -125,9 +131,9 @@
 		
 		<xsl:variable name="number"><xsl:number count="img.area"/></xsl:variable>
 		
-		<!-- <a xlink:href="{@href}" xmlns="http://www.w3.org/2000/svg"> -->
-		<a xlink:href="{$number}" xmlns="http://www.w3.org/2000/svg">
-			<circle cx="{$cx}" cy="{$cy}" r="{$r}" class="st0"/>
+		<!-- <a xlink:href="{@href}" xmlns="http://www.w3.org/2000/svg"> class="st0"-->
+		<a href="{$number}" xmlns="http://www.w3.org/2000/svg">
+			<circle cx="{$cx}" cy="{$cy}" r="{$r}" xsl:use-attribute-sets="shapeAttributes"/>
 		</a>
 	</xsl:template>
 	
@@ -140,9 +146,9 @@
 		
 		<xsl:variable name="number"><xsl:number count="img.area"/></xsl:variable>
 		
-		<!-- <a xlink:href="{@href}" xmlns="http://www.w3.org/2000/svg"> -->
-		<a xlink:href="{$number}" xmlns="http://www.w3.org/2000/svg">
-			<ellipse cx="{$cx}" cy="{$cy}" rx="{$rx}" ry="{$ry}" class="st0"/>
+		<!-- <a xlink:href="{@href}" xmlns="http://www.w3.org/2000/svg"> class="st0" -->
+		<a href="{$number}" xmlns="http://www.w3.org/2000/svg">
+			<ellipse cx="{$cx}" cy="{$cy}" rx="{$rx}" ry="{$ry}" xsl:use-attribute-sets="shapeAttributes"/>
 		</a>
 	</xsl:template>
 	
