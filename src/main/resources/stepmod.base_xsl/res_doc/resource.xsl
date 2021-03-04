@@ -1721,7 +1721,8 @@ Purpose:
 					</xsl:variable>
 					<xsl:value-of select="concat('.EXPRESS-G diagram of the ', $schema, ' (', $rel_clauseno,' of ', $img_count, ')' )" />
 					<xsl:text>&#xa;</xsl:text>
-					<xsl:value-of select="concat('image::', $filename_no_ext, '.svg[]')"/>
+					<!-- for ../../../../ see https://github.com/metanorma/stepmod2mn/issues/14 -->
+					<xsl:value-of select="concat('image::', '../../../../resources/', $schema, '/', $filename_no_ext, '.svg[]')"/>
 					
 				<!-- </li> -->
 				<xsl:text>&#xa;&#xa;</xsl:text>
