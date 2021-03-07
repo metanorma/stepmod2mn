@@ -29,9 +29,10 @@ $Id: sect_biblio.xsl,v 1.2 2002/12/19 21:02:58 nigelshaw Exp $
       <A NAME="bibliography">Bibliography</A>
     </h2>
   </div> -->
-  
+  <xsl:text>[bibliography]</xsl:text>
+	<xsl:text>&#xa;</xsl:text>
 	<xsl:call-template name="insertHeaderADOC">
-		<xsl:with-param name="id" select="'bibliography'"/>		
+		<!-- <xsl:with-param name="id" select="'bibliography'"/>		 -->
 		<xsl:with-param name="level" select="1"/>
 		<xsl:with-param name="header" select="'Bibliography'"/>		
 	</xsl:call-template>
