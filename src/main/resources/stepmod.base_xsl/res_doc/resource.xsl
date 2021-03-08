@@ -1420,7 +1420,7 @@ Purpose:
 		</div> -->
 		
 		
-		<!-- <xsl:text>[#table_e1]</xsl:text>
+		<xsl:text>[#table_e1]</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
 		<xsl:text>[cols="^,^",options="header"]</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
@@ -1428,14 +1428,16 @@ Purpose:
 		<xsl:text>&#xa;</xsl:text>
 		
 		<xsl:text>|===</xsl:text>
-		<xsl:text>&#xa;</xsl:text> -->
+		<xsl:text>&#xa;</xsl:text>
 			
-		<xsl:text>EXPRESS listings:</xsl:text>
+		<!-- <xsl:text>EXPRESS listings:</xsl:text> -->
 			
-		<xsl:text>&#xa;&#xa;</xsl:text>
+		<!-- <xsl:text>&#xa;&#xa;</xsl:text> -->
 			
 		<!-- <br/> -->
-
+		
+		<xsl:variable name="FILE_EXT" select="'.htm'"/>
+		
 		<!-- <div align="center">
 			<table border="1" cellspacing="1">
 				<tr>
@@ -1458,7 +1460,7 @@ Purpose:
 				
 				<!-- table header -->
 				
-				<!-- <xsl:text>| </xsl:text>
+				<xsl:text>| </xsl:text>
 				<xsl:choose>
 					<xsl:when test="$FILE_EXT='.xml'">
 						<xsl:text>XML file</xsl:text>
@@ -1470,7 +1472,7 @@ Purpose:
 				<xsl:text> | ASCII file</xsl:text>
 				<xsl:text>&#xa;&#xa;</xsl:text>
 				
-				<xsl:text>| </xsl:text>
+				<!-- <xsl:text>| </xsl:text>
 				<xsl:text>file</xsl:text>
 				<xsl:text>&#xa;&#xa;</xsl:text> -->
 
@@ -1513,7 +1515,7 @@ Purpose:
 					</td> -->
 					
 					
-					<!-- <xsl:text>| </xsl:text>
+					<xsl:text>| </xsl:text>
 					<xsl:call-template name="insertHyperlink">
 						<xsl:with-param name="a">
 							<a href="{$schema_url}">
@@ -1528,7 +1530,7 @@ Purpose:
 						</xsl:with-param>
 					</xsl:call-template>					 
 
-					<xsl:text>&#xa;</xsl:text>-->
+					<xsl:text>&#xa;</xsl:text>
 					
 					<!--<xsl:if test="$FILE_EXT!='.xml'">
 						<td>
@@ -1556,19 +1558,19 @@ Purpose:
 		<!-- </div> -->
 		
 		<!-- resource -->
-		<xsl:for-each select="schema">
+		<!-- <xsl:for-each select="schema">
 			<xsl:variable name="schema_pos" select="position()"/>
 				<xsl:apply-templates select="../../resource" mode="express_listings">
 					<xsl:with-param name="pos" select="$schema_pos"/>
 				</xsl:apply-templates>
-		</xsl:for-each>
+		</xsl:for-each> -->
 		
 		
 		
 		
-		<!-- <xsl:text>|===</xsl:text>
+		<xsl:text>|===</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>&#xa;</xsl:text> -->
+		<xsl:text>&#xa;</xsl:text>
 		
 		<!--<p>
 		If there is difficulty accessing these sites, contact ISO Central
