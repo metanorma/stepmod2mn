@@ -1718,9 +1718,26 @@ Purpose:
 					-->
 					<!-- Changed to :  -->
 					<!-- for https://github.com/metanorma/stepmod2mn/issues/14 -->
+					
+					<xsl:variable name="schema_name" select="ancestor::schema/@name"/>
+					<xsl:variable name="map_file" select="concat($path, '../../resources/',$schema_name,'/',@file)"/>
+					
+					<!-- for index -->
+					<!-- ((({{object.id}},Object EXPRESS-G))) -->
+					<xsl:variable name="index_items">
+						<xsl:apply-templates select="document($map_file)//img.area[@href]" mode="svg_index"/>
+					</xsl:variable>
+					<xsl:for-each select="xalan:nodeset($index_items)//item">
+						<xsl:if test="not(preceding-sibling::item[text() = current()/text()])"><!-- exclude duplicates -->
+							<xsl:value-of select="."/>
+							<xsl:text>&#xa;</xsl:text>
+						</xsl:if>
+					</xsl:for-each>
+					
 					<xsl:variable name="filename_no_ext">
 						<xsl:value-of select="substring-before(@file,'.xml')"/>
 					</xsl:variable>
+
 					<xsl:value-of select="concat('.EXPRESS-G diagram of the ', $schema, ' (', $rel_clauseno,' of ', $img_count, ')' )" />
 					<xsl:text>&#xa;</xsl:text>
 					<!-- for ../../../../ see https://github.com/metanorma/stepmod2mn/issues/14 -->
@@ -1732,6 +1749,43 @@ Purpose:
 		<!-- </ul> -->
 		<xsl:text>&#xa;&#xa;</xsl:text>
 
+	</xsl:template>
+
+	<!-- ((({{object.id}},Object EXPRESS-G))) -->
+	<xsl:template match="img.area" mode="svg_index">
+		<xsl:variable name="curr_file" select="ancestor::imgfile.content/@file"/>
+		<xsl:variable name="this-schema">
+			<xsl:variable name="part1">
+				<xsl:choose>
+					<xsl:when test="contains(translate(@href, '1234567890',''), 'expg.xml') and not(contains(@href, $curr_file))">
+						<!-- excluding anchors which are in fact pointers to other imagemaps -->
+					</xsl:when>
+					<xsl:when test="contains(@href, '.xml')">
+						<xsl:value-of select="substring-before(@href, '.xml')"/>
+					</xsl:when>
+					<xsl:when test="contains(@href, '#')">
+						<xsl:value-of select="substring-before(@href, '#')"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="@href"/>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:variable>
+			<xsl:choose>
+				<xsl:when test="contains($part1, '/')">
+					<xsl:call-template name="substring-after-last">
+						<xsl:with-param name="value" select="$part1"/>
+						<xsl:with-param name="delimiter" select="'/'"/>
+					</xsl:call-template>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="$part1"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:if test="normalize-space($this-schema) != ''">
+			<item>(((<xsl:value-of select="$this-schema"/>,Object EXPRESS-G)))</item>
+		</xsl:if>
 	</xsl:template>
 
 
