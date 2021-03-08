@@ -379,7 +379,7 @@
 		<xsl:param name="header"/>		
 		<xsl:param name="annex_no"/>		
 		<xsl:param name="obligation"/>
-		
+		<xsl:param name="indexed" select="'false'"/>
 		<xsl:choose>
 			<xsl:when test="$annex_no != ''">
 				<xsl:text>[[Annex</xsl:text>
@@ -409,6 +409,10 @@
 		</xsl:call-template>
 		<xsl:text> </xsl:text>		
 		<xsl:value-of select="$header"/>
+		<xsl:if test="$indexed = 'true'">
+			<xsl:variable name="index_term" select="concat(' (((', $header,  ',term)))')"/>
+			<xsl:value-of select="$index_term"/>
+		</xsl:if>
 		<xsl:text>&#xa;&#xa;</xsl:text>
 	</xsl:template>
 

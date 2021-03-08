@@ -617,10 +617,12 @@
 				<xsl:value-of select="@name"/>
 			</A>
 		</h2> -->
+		
 		<xsl:call-template name="insertHeaderADOC">
 			<xsl:with-param name="id" select="$aname"/>
-			<xsl:with-param name="level" select="3"/>							
-			<xsl:with-param name="header" select="@name"/>					
+			<xsl:with-param name="level" select="3"/>
+			<xsl:with-param name="header" select="@name"/>
+			<xsl:with-param name="indexed" select="'true'"/>
 		</xsl:call-template>
 		
 		<!-- output description from external file -->
@@ -796,12 +798,13 @@
 			</A>
 			<xsl:apply-templates select="." mode="expressg_icon"/>
 		</h2> -->
+		
 		<xsl:call-template name="insertHeaderADOC">
 			<xsl:with-param name="id" select="$aname"/>
 			<xsl:with-param name="level" select="3"/>
-			<xsl:with-param name="header" select="@name"/>					
+			<xsl:with-param name="header" select="@name"/>
+			<xsl:with-param name="indexed" select="'true'"/>
 		</xsl:call-template>
-
 
 		<xsl:call-template name="check_type_name">
 			<xsl:with-param name="type_name" select="@name"/>
@@ -1194,7 +1197,8 @@
 		<xsl:call-template name="insertHeaderADOC">
 			<xsl:with-param name="id" select="$aname"/>
 			<xsl:with-param name="level" select="3"/>
-			<xsl:with-param name="header" select="@name"/>					
+			<xsl:with-param name="header" select="@name"/>
+			<xsl:with-param name="indexed" select="'true'"/>
 		</xsl:call-template>
 		
 		
@@ -1909,6 +1913,7 @@
 		<xsl:call-template name="insertHeaderADOC">
 			<xsl:with-param name="id" select="$aname"/>
 			<xsl:with-param name="header" select="@name"/>
+			<xsl:with-param name="indexed" select="'true'"/>
 		</xsl:call-template>
 		
 		
@@ -2300,6 +2305,7 @@
 			<xsl:with-param name="id" select="$aname"/>
 			<xsl:with-param name="level" select="3"/>
 			<xsl:with-param name="header" select="@name"/>
+			<xsl:with-param name="indexed" select="'true'"/>
 		</xsl:call-template>
 			
 		<!-- output description from external file -->
@@ -2421,6 +2427,7 @@
 		<xsl:call-template name="insertHeaderADOC">
 			<xsl:with-param name="id" select="$aname"/>
 			<xsl:with-param name="header" select="@name"/>
+			<xsl:with-param name="indexed" select="'true'"/>
 		</xsl:call-template>
 		
 		<!-- output description from external file -->
@@ -2651,7 +2658,8 @@
 		<xsl:call-template name="insertHeaderADOC">
 			<xsl:with-param name="id" select="$aname"/>
 			<xsl:with-param name="level" select="3"/>							
-			<xsl:with-param name="header" select="@name"/>					
+			<xsl:with-param name="header" select="@name"/>
+			<xsl:with-param name="indexed" select="'true'"/>
 		</xsl:call-template>
 		
 
