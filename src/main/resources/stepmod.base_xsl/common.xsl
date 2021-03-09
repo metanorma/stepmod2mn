@@ -119,6 +119,7 @@ $Id: common.xsl,v 1.204 2018/10/07 10:51:54 mike Exp $
 <xsl:template name="annex_header">
 	<xsl:param name="heading"/>
 	<xsl:param name="annex_no"/>
+	<xsl:param name="annex_id"/>
 	<xsl:param name="title"/>
 	<xsl:param name="aname"/>
 	<xsl:param name="informative" select="'informative'"/>
@@ -136,6 +137,7 @@ $Id: common.xsl,v 1.204 2018/10/07 10:51:54 mike Exp $
 		<xsl:with-param name="id" select="$aname"/>
 		<xsl:with-param name="header" select="$heading"/>
 		<xsl:with-param name="annex_no" select="$annex_no"/>
+		<xsl:with-param name="annex_id" select="$annex_id"/>
 		<xsl:with-param name="obligation" select="$informative"/>
 	</xsl:call-template>
 	

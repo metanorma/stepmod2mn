@@ -1637,6 +1637,7 @@ Purpose:
 	<xsl:template match="resource" mode="annexd">
 		<xsl:call-template name="annex_header">
 			<xsl:with-param name="annex_no" select="'D'"/>
+			<xsl:with-param name="annex_id" select="'expg'"/>
 			<xsl:with-param name="heading" 
 					select="'EXPRESS-G diagrams'"/>
 			<xsl:with-param name="aname" select="'annexd'"/>

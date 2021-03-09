@@ -378,12 +378,16 @@
 		<xsl:param name="level" select="1"/>
 		<xsl:param name="header"/>		
 		<xsl:param name="annex_no"/>		
+		<xsl:param name="annex_id"/>		
 		<xsl:param name="obligation"/>
 		<xsl:param name="indexed" select="'false'"/>
 		<xsl:choose>
-			<xsl:when test="$annex_no != ''">
-				<xsl:text>[[Annex</xsl:text>
-				<xsl:value-of select="$annex_no"/>
+			<xsl:when test="$annex_no != '' or $annex_id != ''">
+				<xsl:text>[[</xsl:text>
+				<xsl:choose>
+					<xsl:when test="$annex_id != ''"><xsl:value-of select="$annex_id"/></xsl:when>
+					<xsl:otherwise><xsl:text>Annex</xsl:text><xsl:value-of select="$annex_no"/></xsl:otherwise>
+				</xsl:choose>
 				<xsl:text>]]</xsl:text>
 				<xsl:text>&#xa;</xsl:text>
 			</xsl:when>

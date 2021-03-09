@@ -468,9 +468,10 @@
 				</small>
 			</p> -->
 			
+				<!-- AnnexD -->
 				<xsl:call-template name="insertNote">
 					<xsl:with-param name="text">
-						See &lt;&lt;AnnexD&gt;&gt; for a graphical representation of this schema.
+						See &lt;&lt;expg&gt;&gt; for a graphical representation of this schema.
 					</xsl:with-param>
 				</xsl:call-template>
 
