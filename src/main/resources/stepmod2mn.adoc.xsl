@@ -440,6 +440,7 @@
 	<xsl:template name="insertNote">
 		<xsl:param name="id"/>
 		<xsl:param name="text"/>
+		<xsl:param name="isolated" select="'true'"/>
 		<xsl:text>&#xa;</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
 		<xsl:if test="normalize-space($id) != ''">
@@ -449,7 +450,10 @@
 			<xsl:text>&#xa;</xsl:text>
 		</xsl:if>      
 		<xsl:text>NOTE: </xsl:text><xsl:apply-templates select="xalan:nodeset($text)" mode="linearize"/><!-- <xsl:value-of select="normalize-space($text)"/> -->
-		<xsl:text>&#xa;&#xa;</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:if test="$isolated = 'true'">
+			<xsl:text>&#xa;</xsl:text>
+		</xsl:if>
 	</xsl:template>
 	
 	<xsl:template name="insertExample">
@@ -529,6 +533,16 @@
 		<xsl:text>&#xa;</xsl:text>
 	</xsl:template>
 	
+	<xsl:template name="insertNoteQuoteStart">
+		<xsl:text>--</xsl:text>
+		<xsl:text>&#xa;</xsl:text>		
+	</xsl:template>
+	
+	<xsl:template name="insertNoteQuoteEnd">
+		<xsl:text>--</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+	</xsl:template>
 	
 	<xsl:template name="insertCodeStart">
 		<xsl:text>&#xa;&#xa;</xsl:text>

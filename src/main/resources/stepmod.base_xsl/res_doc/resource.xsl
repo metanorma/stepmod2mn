@@ -1656,7 +1656,7 @@ Purpose:
 
 		<!-- <ul> -->		
 					
-			<xsl:for-each select="./schema/express-g/imgfile" >
+			<xsl:for-each select="./schema/express-g/imgfile | ./schema/express-g/img" >
 				<xsl:variable name="schema">
 					<xsl:value-of select="substring-before(@file,'expg')"/>
 				</xsl:variable>
@@ -1723,6 +1723,10 @@ Purpose:
 					<xsl:variable name="schema_name" select="ancestor::schema/@name"/>
 					<xsl:variable name="map_file" select="concat($path, '../../resources/',$schema_name,'/',@file)"/>
 					
+					
+					<!-- -->
+					<xsl:apply-templates select="." mode="svg_start"/> <!-- imgfile | img -->
+					
 					<!-- for index -->
 					<!-- ((({{object.id}},Object EXPRESS-G))) -->
 					<xsl:variable name="index_items">
@@ -1744,8 +1748,12 @@ Purpose:
 					<!-- for ../../../../ see https://github.com/metanorma/stepmod2mn/issues/14 -->
 					<xsl:value-of select="concat('image::', '../../../../resources/', $schema, '/', $filename_no_ext, '.svg[]')"/>
 					
-				<!-- </li> -->
-				<xsl:text>&#xa;&#xa;</xsl:text>
+					<!-- </li> -->
+					<xsl:text>&#xa;&#xa;</xsl:text>
+				
+					<xsl:apply-templates select="." mode="svg_end"/> <!-- imgfile | img -->
+					
+				
 			</xsl:for-each>
 		<!-- </ul> -->
 		<xsl:text>&#xa;&#xa;</xsl:text>
@@ -1981,7 +1989,8 @@ the types, entity specializations, and functions that are specific to this part 
 			<xsl:text>&#xa;&#xa;</xsl:text>
 		</xsl:if>
 
-		<xsl:apply-templates select="./express-g" mode="svg"/>
+		<!-- Move all EXPRESS-G diagrams (`[.svgmap]`) to Annex D https://github.com/metanorma/stepmod2mn/issues/20 -->
+		<!-- <xsl:apply-templates select="./express-g" mode="svg"/> -->
 	
 		<!-- display the constant EXPRESS. The template is in sect4_express.xsl -->
 		<xsl:apply-templates select="$express_xml/express/schema/constant">
@@ -4316,6 +4325,67 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 		<xsl:text>&#xa;</xsl:text>
 	</xsl:template>
 
+	<xsl:template match="imgfile | img" mode="svg_start">
+		<xsl:text>[.svgmap]</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>====</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		
+		<xsl:variable name="schema_full" select="substring-before(@file, '.xml')"/>
+		<xsl:variable name="expg_n" select="substring-after($schema_full, 'expg')"/>
+		<xsl:variable name="schema" select="substring-before($schema_full, 'expg')"/>
+		<xsl:variable name="id">
+			<xsl:choose>
+				<xsl:when test="$schema != ''">
+					<xsl:value-of select="concat('expg-', $schema, '-', $expg_n)"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="$schema_full"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		
+		<!-- image::basic_attribute_schemaexpg1.svg[] -->
+		<xsl:text>[[</xsl:text><xsl:value-of select="$id"/><xsl:text>]]</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+
+		
+	</xsl:template>
+
+
+	<xsl:template match="imgfile | img" mode="svg_end">
+		
+		<!-- * <<express:basic_attribute_schema>>; 1
+					* <<express:action_schema>>; 2
+					* <<express:support_resource_schema>>; 3
+		-->
+		<xsl:variable name="map_file">
+		<xsl:choose>
+			<xsl:when test="ancestor::schema_diag"><!-- for introduction section file placed in current folder -->
+				<xsl:value-of select="concat($path, @file)"/>				
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:variable name="schema_name" select="ancestor::schema/@name"/>
+				<xsl:value-of select="concat($path, '../../resources/',$schema_name,'/',@file)"/>
+			</xsl:otherwise>
+		</xsl:choose>
+		</xsl:variable>
+		
+		<xsl:choose>
+			<xsl:when test="document($map_file)//img.area[@href]">
+				<xsl:apply-templates select="document($map_file)//img.area[@href]" mode="svg"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="concat('ERROR: Image map file ', @file, '(', $map_file, ') does not exist or empty!')"/>
+			</xsl:otherwise>
+		</xsl:choose>
+		
+		<xsl:text>====</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+	</xsl:template>
+
+	
 	
 	<!-- * <<express:basic_attribute_schema>>; number -->
 	<xsl:template match="img.area" mode="svg">

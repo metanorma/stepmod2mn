@@ -406,14 +406,15 @@
 					<xsl:choose>
 						<xsl:when test="$used-count = 1" >
 										The schemas referenced above are specified in the following 
-										part:
+										part: +
 						</xsl:when>
 						<xsl:otherwise >
 							The schemas referenced above are specified in the following 
-							parts:
+							parts: +
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:with-param>
+				<xsl:with-param name="isolated" select="'false'"/>
 			</xsl:call-template>
 			
 			
@@ -439,7 +440,9 @@
 				</table>
 		</blockquote> -->
 		<blockquote>
-		<xsl:call-template name="insertQuoteStart"/>
+		<xsl:text>+ </xsl:text>
+		<xsl:text>&#xa;</xsl:text>			
+		<xsl:call-template name="insertNoteQuoteStart"/>
 			<xsl:for-each select="$schema_node/interface[not(@schema = node()/preceding::node()/@schema)]">
 				<xsl:variable name="schema_name" select="./@schema"/>      
 				<xsl:value-of select="$schema_name"/>
@@ -450,7 +453,7 @@
 				<xsl:copy-of select="$text"/>
 				<xsl:text>&#xa;</xsl:text>			
 			</xsl:for-each>
-		<xsl:call-template name="insertQuoteEnd"/>
+		<xsl:call-template name="insertNoteQuoteEnd"/>
 		</blockquote>
 		
 			<!-- <p class="note">
@@ -471,7 +474,7 @@
 				<!-- AnnexD -->
 				<xsl:call-template name="insertNote">
 					<xsl:with-param name="text">
-						See &lt;&lt;expg&gt;&gt; for a graphical representation of this schema.
+						See &lt;&lt;Annex D,expg-<xsl:value-of select="$schema_name_param"/>-1&gt;&gt; for a graphical representation of this schema.
 					</xsl:with-param>
 				</xsl:call-template>
 
