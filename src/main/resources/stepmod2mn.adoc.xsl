@@ -297,6 +297,7 @@
 	
 		</xsl:variable>
 		
+		<!-- <xsl:copy-of select="$adoc"/> -->
 	
 		<xsl:apply-templates select="xalan:nodeset($adoc)" mode="text"/>
 		
@@ -441,37 +442,45 @@
 		<xsl:param name="id"/>
 		<xsl:param name="text"/>
 		<xsl:param name="isolated" select="'true'"/>
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>&#xa;</xsl:text>
+		<!-- <xsl:text>&#xa;</xsl:text>
+		<xsl:text>&#xa;</xsl:text> -->
+		<br/><br/>
 		<xsl:if test="normalize-space($id) != ''">
 			<xsl:text>[[</xsl:text>
 			<xsl:value-of select="$id"/>
 			<xsl:text>]]</xsl:text>
-			<xsl:text>&#xa;</xsl:text>
+			<!-- <xsl:text>&#xa;</xsl:text> -->
+			<br/>
 		</xsl:if>      
 		<xsl:text>NOTE: </xsl:text><xsl:apply-templates select="xalan:nodeset($text)" mode="linearize"/><!-- <xsl:value-of select="normalize-space($text)"/> -->
-		<xsl:text>&#xa;</xsl:text>
+		<!-- <xsl:text>&#xa;</xsl:text> -->
+		<br/>
 		<xsl:if test="$isolated = 'true'">
-			<xsl:text>&#xa;</xsl:text>
+			<!-- <xsl:text>&#xa;</xsl:text> -->
+			<br/>
 		</xsl:if>
 	</xsl:template>
 	
 	<xsl:template name="insertExample">
 		<xsl:param name="id"/>
 		<xsl:param name="text"/>
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>&#xa;</xsl:text>
+		<!-- <xsl:text>&#xa;</xsl:text>
+		<xsl:text>&#xa;</xsl:text> -->
+		<br/><br/>
 		<xsl:text>[example]</xsl:text>
-		<xsl:text>&#xa;</xsl:text>
+		<!-- <xsl:text>&#xa;</xsl:text> -->
+		<br/>
 		<xsl:if test="normalize-space($id) != ''">
 			<xsl:text>[[</xsl:text>
 			<xsl:value-of select="$id"/>
 			<xsl:text>]]</xsl:text>
-			<xsl:text>&#xa;</xsl:text>
+			<!-- <xsl:text>&#xa;</xsl:text> -->
+			<br/>
 		</xsl:if>      
 		<!-- <xsl:value-of select="normalize-space($text)"/> -->
 		<xsl:apply-templates select="xalan:nodeset($text)" mode="linearize"/>
-		<xsl:text>&#xa;&#xa;</xsl:text>
+		<!-- <xsl:text>&#xa;&#xa;</xsl:text> -->
+		<br/><br/>
 	</xsl:template>
 	
 	<!-- <xsl:template match="ul/li | li" mode="stepmod2mn">
@@ -733,6 +742,11 @@
 	<xsl:template match="sup" mode="text">
 		<xsl:text>^^</xsl:text><xsl:apply-templates mode="text"/><xsl:text>^^</xsl:text>
 	</xsl:template>
+	
+	<xsl:template match="br" mode="text">
+		<xsl:text>&#xa;</xsl:text>
+	</xsl:template>
+	
 	
 	<xsl:template match="text()[not(ancestor::blockquote or ancestor::code or ancestor::screen or ancestor::li_label)]" mode="text">
 		<xsl:value-of select="java:com.metanorma.RegExEscaping.escapeFormattingCommands(.)"/>
