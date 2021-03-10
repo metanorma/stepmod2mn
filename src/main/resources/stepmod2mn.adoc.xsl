@@ -5,8 +5,9 @@
 		xmlns:xlink="http://www.w3.org/1999/xlink" 
 		xmlns:xalan="http://xml.apache.org/xalan" 
 		xmlns:java="http://xml.apache.org/xalan/java" 
+		xmlns:java_char="http://xml.apache.org/xalan/java/java.lang.Character" 
 		xmlns:metanorma-class="xalan://com.metanorma.RegExEscaping"
-    xmlns:metanorma-class-util="xalan://com.metanorma.Util"
+		xmlns:metanorma-class-util="xalan://com.metanorma.Util"
 		exclude-result-prefixes="mml tbx xlink xalan java metanorma-class metanorma-class-util" 
 		version="1.0">
 
@@ -38,8 +39,7 @@
 	
 	<xsl:import href="stepmod.base_xsl/projmg/resource_issues.xsl"/>
 
-	<!-- <xsl:output method="xml" encoding="UTF-8"/> -->
-	<xsl:output method="text" encoding="UTF-8"/>
+	<xsl:output method="text" encoding="UTF-8"/> <!-- text, xml for debug -->
 
 	<xsl:strip-space elements="*"/>
 			
@@ -709,35 +709,86 @@
 	</xsl:template>
 	
 	<xsl:template match="b" mode="text">
-		<xsl:text>*</xsl:text><xsl:apply-templates mode="text"/><xsl:text>*</xsl:text>
+      <xsl:variable name="element">
+         <xsl:call-template name="processUnconstrainedFormatting"/>
+      </xsl:variable>
+		<!-- element=<xsl:copy-of select="$element"/> -->
+      <xsl:choose>
+         <xsl:when test="xalan:nodeset($element)/*[local-name() = 'b']">
+            <xsl:text>*</xsl:text><xsl:apply-templates mode="text"/><xsl:text>*</xsl:text>
+         </xsl:when>
+         <xsl:otherwise>
+            <xsl:apply-templates select="xalan:nodeset($element)" mode="text"/>
+         </xsl:otherwise>
+      </xsl:choose>
 	</xsl:template>
 	<xsl:template match="b2" mode="text">
 		<xsl:text>**</xsl:text><xsl:apply-templates mode="text"/><xsl:text>**</xsl:text>
 	</xsl:template>
 	
 	<xsl:template match="i" mode="text">
-		<xsl:text>_</xsl:text><xsl:apply-templates mode="text"/><xsl:text>_</xsl:text>
+		<xsl:variable name="element">
+         <xsl:call-template name="processUnconstrainedFormatting"/>
+      </xsl:variable>
+		<xsl:choose>
+         <xsl:when test="xalan:nodeset($element)/*[local-name() = 'i']">
+            <xsl:text>_</xsl:text><xsl:apply-templates mode="text"/><xsl:text>_</xsl:text>
+         </xsl:when>
+         <xsl:otherwise>
+            <xsl:apply-templates select="xalan:nodeset($element)" mode="text"/>
+         </xsl:otherwise>
+      </xsl:choose>
 	</xsl:template>
 	<xsl:template match="i2" mode="text">
 		<xsl:text>__</xsl:text><xsl:apply-templates mode="text"/><xsl:text>__</xsl:text>
 	</xsl:template>
 	
 	<xsl:template match="tt" mode="text">
-		<xsl:text>`</xsl:text><xsl:apply-templates mode="text"/><xsl:text>`</xsl:text>
+		<xsl:variable name="element">
+         <xsl:call-template name="processUnconstrainedFormatting"/>
+      </xsl:variable>
+		<xsl:choose>
+         <xsl:when test="xalan:nodeset($element)/*[local-name() = 'tt']">
+            <xsl:text>`</xsl:text><xsl:apply-templates mode="text"/><xsl:text>`</xsl:text>
+         </xsl:when>
+         <xsl:otherwise>
+            <xsl:apply-templates select="xalan:nodeset($element)" mode="text"/>
+         </xsl:otherwise>
+      </xsl:choose>
 	</xsl:template>
 	<xsl:template match="tt2" mode="text">
 		<xsl:text>``</xsl:text><xsl:apply-templates mode="text"/><xsl:text>``</xsl:text>
 	</xsl:template>
 	
 	<xsl:template match="sub" mode="text">
-		<xsl:text>~</xsl:text><xsl:apply-templates mode="text"/><xsl:text>~</xsl:text>
+		<xsl:variable name="element">
+         <xsl:call-template name="processUnconstrainedFormatting"/>
+      </xsl:variable>
+		<xsl:choose>
+         <xsl:when test="xalan:nodeset($element)/*[local-name() = 'sub']">
+            <xsl:text>~</xsl:text><xsl:apply-templates mode="text"/><xsl:text>~</xsl:text>
+         </xsl:when>
+         <xsl:otherwise>
+            <xsl:apply-templates select="xalan:nodeset($element)" mode="text"/>
+         </xsl:otherwise>
+      </xsl:choose>
 	</xsl:template>
 	<xsl:template match="sub2" mode="text">
 		<xsl:text>~~</xsl:text><xsl:apply-templates mode="text"/><xsl:text>~~</xsl:text>
 	</xsl:template>
 	
 	<xsl:template match="sup" mode="text">
-		<xsl:text>^</xsl:text><xsl:apply-templates mode="text"/><xsl:text>^</xsl:text>
+		<xsl:variable name="element">
+         <xsl:call-template name="processUnconstrainedFormatting"/>
+      </xsl:variable>
+		<xsl:choose>
+         <xsl:when test="xalan:nodeset($element)/*[local-name() = 'sup']">
+            <xsl:text>^</xsl:text><xsl:apply-templates mode="text"/><xsl:text>^</xsl:text>
+         </xsl:when>
+         <xsl:otherwise>
+            <xsl:apply-templates select="xalan:nodeset($element)" mode="text"/>
+         </xsl:otherwise>
+      </xsl:choose>
 	</xsl:template>
 	<xsl:template match="sup" mode="text">
 		<xsl:text>^^</xsl:text><xsl:apply-templates mode="text"/><xsl:text>^^</xsl:text>
@@ -988,5 +1039,51 @@
 		<xsl:value-of select="$text_righttrim"/>
 	</xsl:template>
 
+   <xsl:template name="processUnconstrainedFormatting">
+		<xsl:variable name="unconstrained_formatting"><xsl:call-template name="is_unconstrained_formatting"/></xsl:variable>
+		<!-- unconstrained_formatting=<xsl:value-of select="$unconstrained_formatting"/> -->
+		<xsl:choose>
+			<xsl:when test="$unconstrained_formatting = 'true'">
+				<!-- create element b2, i2, sup2, etc. -->
+				<xsl:element name="{local-name()}2">
+					<xsl:apply-templates select="@*"/>
+					<xsl:apply-templates mode="text"/>
+				</xsl:element>
+			</xsl:when>
+			<xsl:otherwise>
+				<!-- copy 'as is' -->
+				<xsl:copy-of select="."/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+   <!-- https://docs.asciidoctor.org/asciidoc/latest/text/ -->
+	<!-- Unconstrained formatting pair -->
+	<xsl:template name="is_unconstrained_formatting">
+	
+		<xsl:variable name="prev_text" select="preceding-sibling::node()[1]"/>
+		<xsl:variable name="prev_char" select="substring($prev_text, string-length($prev_text))"/>
+		
+		<xsl:variable name="next_text" select="following-sibling::node()[1]"/>
+		<xsl:variable name="next_char" select="substring($next_text, 1, 1)"/>
+		
+		<xsl:variable name="text" select="."/>
+		<xsl:variable name="first_char" select="substring($text, 1, 1)"/>
+		<xsl:variable name="last_char" select="substring($text, string-length($text))"/>
+		
+		<xsl:choose>
+			<!--  a blank space does not precede the text to format -->
+			<xsl:when test="$prev_char != '' and $prev_char != ' '">true</xsl:when>
+			
+			<!-- a blank space or punctuation mark (, ; " . ? or !) does not directly follow the text -->
+			<xsl:when test="$next_char != '' and $next_char != ' ' and 
+													$next_char != ',' and $next_char != ';' and $next_char != '&quot;' and $next_char != '.' and $next_char != '?' and $next_char != '!'">true</xsl:when>
+													
+			<!-- text does not start or end with a word character -->
+			<xsl:when test="java_char:isLetter($first_char) != 'true' or java_char:isLetter($last_char) != 'true'">true</xsl:when>
+			
+			<xsl:otherwise>false</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
 	
 </xsl:stylesheet>

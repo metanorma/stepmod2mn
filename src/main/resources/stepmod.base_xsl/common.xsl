@@ -876,14 +876,14 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 	</b> -->
 	<!-- <xsl:text>*</xsl:text><xsl:apply-templates/><xsl:text>*</xsl:text> -->
 	<b><xsl:apply-templates/></b>
-	<xsl:if test="following-sibling::*[1][local-name() = 'p'] or following-sibling::*[1][local-name = 'P']">
+	<xsl:if test="(following-sibling::*[1][local-name() = 'p'] or following-sibling::*[1][local-name() = 'P']) and not(following-sibling::node()[1][self::text()][normalize-space()!=''])">
 		<xsl:text>&#xa;&#xa;</xsl:text>
 	</xsl:if>
 </xsl:template>
 <xsl:template match="b2|B2">
 	<!-- <xsl:text>**</xsl:text><xsl:apply-templates/><xsl:text>**</xsl:text> -->
 	<b2><xsl:apply-templates/></b2>
-	<xsl:if test="following-sibling::*[1][local-name() = 'p'] or following-sibling::*[1][local-name = 'P']">
+	<xsl:if test="(following-sibling::*[1][local-name() = 'p'] or following-sibling::*[1][local-name() = 'P']) and not(following-sibling::node()[1][self::text()][normalize-space()!=''])">
 		<xsl:text>&#xa;&#xa;</xsl:text>
 	</xsl:if>
 </xsl:template>
@@ -907,14 +907,14 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 	</i> -->
 	<!-- <xsl:text>_</xsl:text><xsl:apply-templates/><xsl:text>_</xsl:text> -->
 	<i><xsl:apply-templates/></i>
-	<xsl:if test="following-sibling::*[1][local-name() = 'p'] or following-sibling::*[1][local-name = 'P']">
+	<xsl:if test="(following-sibling::*[1][local-name() = 'p'] or following-sibling::*[1][local-name() = 'P']) and not(following-sibling::node()[1][self::text()][normalize-space()!=''])">
 		<xsl:text>&#xa;&#xa;</xsl:text>
 	</xsl:if>
 </xsl:template>
 <xsl:template match="i2|I2">
 	<!-- <xsl:text>__</xsl:text><xsl:apply-templates/><xsl:text>__</xsl:text> -->
 	<i2><xsl:apply-templates/></i2>
-	<xsl:if test="following-sibling::*[1][local-name() = 'p'] or following-sibling::*[1][local-name = 'P']">
+	<xsl:if test="(following-sibling::*[1][local-name() = 'p'] or following-sibling::*[1][local-name() = 'P']) and not(following-sibling::node()[1][self::text()][normalize-space()!=''])">
 		<xsl:text>&#xa;&#xa;</xsl:text>
 	</xsl:if>
 </xsl:template>
@@ -935,7 +935,7 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 	<xsl:text>stem:[</xsl:text>
 	<xsl:apply-templates/>
 	<xsl:text>]</xsl:text>
-	<xsl:if test="following-sibling::*[1][local-name() = 'p'] or following-sibling::*[1][local-name = 'P']">
+	<xsl:if test="(following-sibling::*[1][local-name() = 'p'] or following-sibling::*[1][local-name() = 'P']) and not(following-sibling::node()[1][self::text()][normalize-space()!=''])">
 		<xsl:text>&#xa;&#xa;</xsl:text>
 	</xsl:if>
 	
