@@ -169,9 +169,9 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 					<xsl:when test="@id">
 						<xsl:value-of select="concat('example_',@id)"/>
 					</xsl:when>
-					<xsl:when test="@number">
+					<!-- <xsl:when test="@number">
 						<xsl:value-of select="concat('example_',@number)"/>
-					</xsl:when>          
+					</xsl:when> -->          
 				</xsl:choose>
 			</xsl:variable>
 			<!-- <p class="example">
@@ -229,9 +229,9 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 			<xsl:when test="$id != ''">
 				<xsl:value-of select="concat('example_',$id)"/>
 			</xsl:when>
-			<xsl:when test="$number != ''">
+			<!-- <xsl:when test="$number != ''">
 				<xsl:value-of select="concat('example_',$number)"/>
-			</xsl:when>      
+			</xsl:when>  -->     
 		</xsl:choose>
 	</xsl:variable>
 	<xsl:apply-templates select="." mode="check_html"/>
@@ -286,9 +286,9 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 					<xsl:when test="@id">
 						<xsl:value-of select="concat('note_',@id)"/>
 					</xsl:when>
-					<xsl:when test="@number">
+					<!-- <xsl:when test="@number">
 						<xsl:value-of select="concat('note_',@number)"/>
-					</xsl:when>          
+					</xsl:when>           -->
 				</xsl:choose>
 			</xsl:variable>
 			
@@ -338,9 +338,9 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 			<xsl:when test="$id != ''">
 				<xsl:value-of select="concat('note_',$id)"/>
 			</xsl:when>
-			<xsl:when test="$number != ''">
+			<!-- <xsl:when test="$number != ''">
 				<xsl:value-of select="concat('note_',$number)"/>
-			</xsl:when>      
+			</xsl:when> -->      
 		</xsl:choose>
 	</xsl:variable>
 	<xsl:apply-templates select="." mode="check_html"/>

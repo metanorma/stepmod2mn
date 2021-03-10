@@ -1872,7 +1872,7 @@ Purpose:
 		<xsl:call-template name="clause_header">
 			<!-- <xsl:with-param name="heading" select="concat(($schema_no+3),'.1 General')"/> -->
 			<xsl:with-param name="heading" select="'General'"/>
-			<xsl:with-param name="aname" select="'gen'"/>
+			<xsl:with-param name="aname" select="concat('gen',$schema_no+3)"/>
 		</xsl:call-template>
 
 		<!-- output any issues -->
@@ -1955,7 +1955,7 @@ the types, entity specializations, and functions that are specific to this part 
 	 The template is in sect4_express.xsl -->
 		<xsl:if test="$express_xml/express/schema/interface">
 			<!-- <a name="interfaces"/> -->
-			<xsl:text>[[interfaces]]</xsl:text>
+			<xsl:text>[[interfaces_</xsl:text><xsl:value-of select="$schema_name"/><xsl:text>]]</xsl:text>
 			<xsl:text>&#xa;</xsl:text>
 		</xsl:if>
 		<!-- start
@@ -1972,7 +1972,7 @@ the types, entity specializations, and functions that are specific to this part 
 			<!-- <xsl:with-param name="heading" select="concat(($schema_no+3),'.2 Fundamental concepts and assumptions')"/> -->
 			<xsl:with-param name="heading" select="'Fundamental concepts and assumptions'"/>
 			<!--    <xsl:with-param name="aname" select="concat('schema','position()')"/> -->
-			<xsl:with-param name="aname" select="'funcon'"/>
+			<xsl:with-param name="aname" select="concat('funcon', $schema_no+3)"/>
 		</xsl:call-template>
 
 		<!-- output any issues -->

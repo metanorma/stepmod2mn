@@ -583,7 +583,7 @@
 				</A>
 			</h2> -->
 			<xsl:call-template name="insertHeaderADOC">
-				<xsl:with-param name="id" select="'constants'"/>
+				<xsl:with-param name="id" select="concat('constants_', $schema_name)"/>
 				<xsl:with-param name="header" select="$clause_header"/>					
 			</xsl:call-template>
 			
@@ -781,7 +781,7 @@
 				</A>
 			</h2> -->		
 			<xsl:call-template name="insertHeaderADOC">
-				<xsl:with-param name="id" select="'types'"/>
+				<xsl:with-param name="id" select="concat('types_', $schema_name)"/>
 				<xsl:with-param name="header" select="$clause_header"/>					
 			</xsl:call-template>
 			
@@ -1161,7 +1161,7 @@
 			</h2> -->		
 			<xsl:text>&#xa;&#xa;</xsl:text>
 			<xsl:call-template name="insertHeaderADOC">
-				<xsl:with-param name="id" select="'entities'"/>
+				<xsl:with-param name="id" select="concat('entities_', $schema_name)"/>
 				<xsl:with-param name="header" select="$clause_header"/>					
 			</xsl:call-template>
 			
@@ -1888,7 +1888,7 @@
 				</a>
 			</h2> -->
 			<xsl:call-template name="insertHeaderADOC">
-				<xsl:with-param name="id" select="'subtype_constraints'"/>
+				<xsl:with-param name="id" select="concat('subtype_constraints', $schema_name)"/>
 				<xsl:with-param name="header" select="$clause_header"/>
 			</xsl:call-template>
 			
@@ -2285,7 +2285,7 @@
 				</a>
 			</h2> -->
 			<xsl:call-template name="insertHeaderADOC">
-				<xsl:with-param name="id" select="'functions'"/>
+				<xsl:with-param name="id" select="concat('functions', $schema_name)"/>
 				<xsl:with-param name="header" select="$clause_header"/>
 			</xsl:call-template>
 			
@@ -2408,7 +2408,7 @@
 				</a>
 			</h2>  -->
 			<xsl:call-template name="insertHeaderADOC">
-				<xsl:with-param name="id" select="'procedures'"/>
+				<xsl:with-param name="id" select="concat('procedures', $schema_name)"/>
 				<xsl:with-param name="header" select="$clause_header"/>
 			</xsl:call-template>
 				
@@ -2639,7 +2639,7 @@
 				</a>
 			</h2> -->
 			<xsl:call-template name="insertHeaderADOC">
-				<xsl:with-param name="id" select="'rules'"/>
+				<xsl:with-param name="id" select="concat('rules', $schema_name)"/>
 				<xsl:with-param name="header" select="$clause_header"/>
 			</xsl:call-template>
 			
