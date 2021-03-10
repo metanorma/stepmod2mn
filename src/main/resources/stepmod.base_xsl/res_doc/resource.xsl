@@ -9,7 +9,8 @@ Purpose:
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"		
 	xmlns:xalan="http://xml.apache.org/xalan" 
 	xmlns:java="http://xml.apache.org/xalan/java" 
-		version="1.0">
+	xmlns:str="http://exslt.org/strings"
+		version="1.0" extension-element-prefixes="str">
 		
 		<!-- xmlns:msxsl="urn:schemas-microsoft-com:xslt"
 	xmlns:exslt="http://exslt.org/common"
@@ -4105,6 +4106,51 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 		<xsl:apply-templates/>
 	</xsl:template>
 	
+	<xsl:template match="*[local-name() = 'tech_discussion' or local-name() = 'examples']/*[local-name() = 'b' or local-name() = 'b2'][*[local-name() = 'i' or local-name() = 'i2']]" priority="2">
+		<xsl:apply-templates />
+	</xsl:template>
+
+	<xsl:template match="*[local-name() = 'examples']/*[local-name() = 'b' or local-name() = 'b2']" priority="2">
+		<xsl:apply-templates />
+	</xsl:template>
+
+	<xsl:template match="*[local-name() = 'tech_discussion' or local-name() = 'examples']/p[count(*) = 1 and normalize-space(text()) = '']/*[local-name() = 'b' or local-name() = 'b2']" priority="2">
+		<xsl:apply-templates />
+	</xsl:template>
+
+	<xsl:template match="*[local-name() = 'tech_discussion' or local-name() = 'examples']/*[local-name() = 'b' or local-name() = 'b2']/*[local-name() = 'i' or local-name() = 'i2']" priority="2">
+		<xsl:apply-templates />
+	</xsl:template>
+
+	<xsl:template match="*[local-name() = 'tech_discussion' or local-name() = 'examples']/p[count(*) = 1 and normalize-space(text()) = '']/*[local-name() = 'b' or local-name() = 'b2']/*[local-name() = 'i' or local-name() = 'i2']" priority="2">
+		<xsl:apply-templates />
+	</xsl:template>
+
+	<xsl:template match="*[local-name() = 'tech_discussion' or local-name() = 'examples']/*[local-name() = 'b' or local-name() = 'b2']/*[local-name() = 'i' or local-name() = 'i2']/text() |
+												*[local-name() = 'tech_discussion' or local-name() = 'examples']/p[count(*) = 1 and  normalize-space(text()) = '']/*[local-name() = 'b' or local-name() = 'b2']/text() |
+												*[local-name() = 'examples']/*[local-name() = 'b' or local-name() = 'b2']/text()" priority="2">
+		<xsl:variable name="section_number" select="substring-before(., ' ')"/>
+		<xsl:variable name="section_number_parts" select="str:split($section_number, '.')"/>
+		<xsl:choose>
+			<xsl:when test="string-length($section_number_parts[1]) = 1 and string-length($section_number_parts[2]) &gt;= 1">
+				<xsl:variable name="header" select="substring-after(., ' ')"/>
+				<xsl:call-template name="insertHeaderADOC">
+					<xsl:with-param name="level"><xsl:value-of select="count($section_number_parts)"/></xsl:with-param>
+					<xsl:with-param name="header" select="$header"/>
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:element name="{local-name(..)}">
+					<xsl:value-of select="."/>
+				</xsl:element>
+				<xsl:if test="ancestor::examples and not(ancestor::p)">
+					<xsl:text>&#xa;&#xa;</xsl:text>
+				</xsl:if>
+			</xsl:otherwise>
+		</xsl:choose>
+		
+	</xsl:template>
+
 
 	
 	<!-- MWD -->
