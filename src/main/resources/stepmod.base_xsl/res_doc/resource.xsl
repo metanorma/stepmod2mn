@@ -3431,13 +3431,16 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 
 
 	<xsl:template match="term">
+		<xsl:param name="show_id" select="'true'"/>
 		<xsl:variable name="nterm" select="normalize-space(.)"/>
 		<!-- <a name="term-{$nterm}">
 			<xsl:value-of select="$nterm"/>
 		</a> -->
+		<xsl:if test="$show_id = 'true'">
 		<xsl:text>[[</xsl:text>
-		<xsl:value-of select="concat('term-', $nterm)"/>
+		<xsl:value-of select="concat('term-', translate($nterm, ' ', '_'))"/>
 		<xsl:text>]]</xsl:text>
+		</xsl:if>
 		<xsl:value-of select="$nterm"/>
 		<xsl:apply-templates select="../synonym"/>
 	</xsl:template>
@@ -3569,6 +3572,7 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 							</h2> -->				
 							<xsl:call-template name="insertHeaderADOC">
 								<xsl:with-param name="id" select="concat('sec_3.1.',$section_no)"/>		
+								<xsl:with-param name="attributes" select="'.nonterm'"/>
 								<xsl:with-param name="level" select="3"/>
 								<xsl:with-param name="header" select="concat('Terms defined in ',$stdnumber)"/>					
 							</xsl:call-template>
@@ -4000,70 +4004,74 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 
 	<xsl:template match="term.ref"  mode="normref">
 		<xsl:param name="current_resource"/>
-	<xsl:param name="moreNormRefs"/>    
-		<xsl:variable 
-	name="ref"
-	select="@linkend"/>
-		<xsl:variable 
-	name="term"
-	select="document(concat($path, '../../../data/basic/normrefs.xml'))/normref.list/normref/term[@id=$ref]"/>
-		<xsl:choose>
-			<xsl:when test="$term">
-	<xsl:choose>
-		<xsl:when test="position()=last()">		
-			<!-- <xsl:choose>
-				<xsl:when test="$moreNormRefs > 0">
-					<li><xsl:apply-templates select="$term"/>;</li>					
+		<xsl:param name="moreNormRefs"/>    
+		<xsl:variable  name="ref" select="@linkend"/>
+		<xsl:variable name="term" select="document(concat($path, '../../../data/basic/normrefs.xml'))/normref.list/normref/term[@id=$ref]"/>
+		<xsl:variable name="term_ref_text">
+			<xsl:choose>
+				<xsl:when test="$term">
+					<xsl:choose>
+						<xsl:when test="position()=last()">		
+							<!-- <xsl:choose>
+								<xsl:when test="$moreNormRefs > 0">
+									<li><xsl:apply-templates select="$term"/>;</li>					
+								</xsl:when>
+								<xsl:otherwise>
+									<li><xsl:apply-templates select="$term"/>.</li>
+								</xsl:otherwise>
+							</xsl:choose> -->			
+							<!-- <xsl:call-template name="insertParagraph">
+								<xsl:with-param name="text"> -->
+									<xsl:text>* </xsl:text>
+									<xsl:apply-templates select="$term">
+										<xsl:with-param name="show_id">false</xsl:with-param>
+									</xsl:apply-templates>
+									<xsl:choose>
+										<xsl:when test="$moreNormRefs > 0">;</xsl:when>
+										<xsl:otherwise>.</xsl:otherwise>
+									</xsl:choose>
+								<!-- </xsl:with-param>
+							</xsl:call-template> -->
+						</xsl:when>
+						<xsl:otherwise>
+							<!-- <li><xsl:apply-templates select="$term"/>;</li> -->
+							<!-- <xsl:call-template name="insertParagraph">
+								<xsl:with-param name="text"> -->
+									<xsl:text>* </xsl:text>
+									<xsl:apply-templates select="$term">
+										<xsl:with-param name="show_id">false</xsl:with-param>
+									</xsl:apply-templates>
+									<xsl:text>;</xsl:text>
+								<!-- </xsl:with-param>
+						</xsl:call-template> -->
+						</xsl:otherwise>
+					</xsl:choose>
 				</xsl:when>
 				<xsl:otherwise>
-					<li><xsl:apply-templates select="$term"/>.</li>
+					<!-- <li><xsl:call-template name="error_message">
+						<xsl:with-param 
+								name="message"
+								select="concat('Error 12: Can not find term referenced by: ',$ref)"/>
+					</xsl:call-template>
+					</li> -->
+					<!-- <xsl:call-template name="insertParagraph">
+						<xsl:with-param name="text"> -->
+							<xsl:text>* </xsl:text>
+							<xsl:variable name="text">
+								<xsl:call-template name="error_message">
+									<xsl:with-param 
+											name="message"
+											select="concat('Error 12: Can not find term referenced by: ',$ref)"/>
+								</xsl:call-template>
+							</xsl:variable>
+							<xsl:value-of select="$text"/>
+						<!-- </xsl:with-param>
+					</xsl:call-template> -->
 				</xsl:otherwise>
-			</xsl:choose> -->			
-			<xsl:call-template name="insertParagraph">
-				<xsl:with-param name="text">
-					<xsl:text>* </xsl:text>
-					<xsl:apply-templates select="$term"/>
-					<xsl:choose>
-						<xsl:when test="$moreNormRefs > 0">;</xsl:when>
-						<xsl:otherwise>.</xsl:otherwise>
-					</xsl:choose>
-				</xsl:with-param>
-			</xsl:call-template>
-		</xsl:when>
-		<xsl:otherwise>
-			<!-- <li><xsl:apply-templates select="$term"/>;</li> -->
-			<xsl:call-template name="insertParagraph">
-				<xsl:with-param name="text">
-					<xsl:text>* </xsl:text>
-					<xsl:apply-templates select="$term"/>
-					<xsl:text>;</xsl:text>
-				</xsl:with-param>
-		</xsl:call-template>
-		</xsl:otherwise>
-	</xsl:choose>
-			</xsl:when>
-			<xsl:otherwise>
-				<!-- <li><xsl:call-template name="error_message">
-					<xsl:with-param 
-							name="message"
-							select="concat('Error 12: Can not find term referenced by: ',$ref)"/>
-				</xsl:call-template>
-				</li> -->
-				<xsl:call-template name="insertParagraph">
-					<xsl:with-param name="text">
-						<xsl:text>* </xsl:text>
-						<xsl:variable name="text">
-							<xsl:call-template name="error_message">
-								<xsl:with-param 
-										name="message"
-										select="concat('Error 12: Can not find term referenced by: ',$ref)"/>
-							</xsl:call-template>
-						</xsl:variable>
-						<xsl:value-of select="$text"/>
-					</xsl:with-param>
-				</xsl:call-template>
-			</xsl:otherwise>
-		</xsl:choose>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:copy-of select="$term_ref_text"/>
+		<xsl:text>&#xa;</xsl:text>
 	</xsl:template>
 
 

@@ -376,6 +376,7 @@
 
 	<xsl:template name="insertHeaderADOC">
 		<xsl:param name="id"/>
+		<xsl:param name="attributes"/>
 		<xsl:param name="level" select="1"/>
 		<xsl:param name="header"/>		
 		<xsl:param name="annex_no"/>		
@@ -398,7 +399,13 @@
 			<xsl:text>]]</xsl:text>
 			<xsl:text>&#xa;</xsl:text>
 			</xsl:when>
-		</xsl:choose>		
+		</xsl:choose>
+		<xsl:if test="$attributes != ''">
+			<xsl:text>[</xsl:text>
+				<xsl:value-of select="$attributes"/>
+			<xsl:text>]</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+		</xsl:if>
 		<xsl:if test="$annex_no != ''">
 			<xsl:text>[appendix</xsl:text>
 			<xsl:if test="$obligation != ''">
