@@ -1726,6 +1726,11 @@ Purpose:
 					
 					
 					<!-- -->
+					<xsl:call-template name="insertEXPRESSAnnotationStart">
+						<xsl:with-param name="name" select="concat($schema_name, '.__expressg')"/>
+						<xsl:with-param name="break" select="'false'"/>
+					</xsl:call-template>
+					
 					<xsl:apply-templates select="." mode="svg_start"/> <!-- imgfile | img -->
 					
 					<!-- for index -->
@@ -1754,6 +1759,7 @@ Purpose:
 				
 					<xsl:apply-templates select="." mode="svg_end"/> <!-- imgfile | img -->
 					
+					<xsl:call-template name="insertEXPRESSAnnotationEnd"/>
 				
 			</xsl:for-each>
 		<!-- </ul> -->
@@ -1885,11 +1891,17 @@ Purpose:
 		<xsl:variable name="introduction">
 			<xsl:apply-templates select="./introduction"/>
 		</xsl:variable>
-		<xsl:copy-of select="$introduction"/>
+		<xsl:if test="normalize-space($introduction) != ''">
+			<xsl:call-template name="insertEXPRESSAnnotationStart">
+				<xsl:with-param name="name" select="$schema_name"/>
+			</xsl:call-template>
+			<xsl:copy-of select="$introduction"/>
+			<xsl:call-template name="insertEXPRESSAnnotationEnd"/>
+		</xsl:if>
 		
-		<xsl:if test="normalize-space($introduction) != '' and 
+		<!-- <xsl:if test="normalize-space($introduction) != '' and 
 		substring($introduction, string-length($introduction)) != '&#xd;' and
-		substring($introduction, string-length($introduction)) != '&#xa;'"><xsl:text> </xsl:text></xsl:if>
+		substring($introduction, string-length($introduction)) != '&#xa;'"><xsl:text> </xsl:text></xsl:if> -->
 		
 		<xsl:variable name="clause_intro_1">This clause defines the information requirements to which implementations shall conform using the EXPRESS language as defined in ISO 10303-11. The following EXPRESS declaration begins the </xsl:variable>
 		<xsl:variable name="clause_intro_2"> 
@@ -1985,10 +1997,15 @@ the types, entity specializations, and functions that are specific to this part 
 		<xsl:variable name="fund_cons">
 			<xsl:apply-templates select="./fund_cons"/>
 		</xsl:variable>
+		
+		<xsl:call-template name="insertEXPRESSAnnotationStart">
+			<xsl:with-param name="name" select="concat($schema_name, '.__fund_cons')"/>
+		</xsl:call-template>
 		<xsl:copy-of select="$fund_cons"/>
 		<xsl:if test="not(java:endsWith(java:java.lang.String.new($fund_cons),'&#xa;') or java:endsWith(java:java.lang.String.new($fund_cons),'&#xd;'))">
-			<xsl:text>&#xa;&#xa;</xsl:text>
+			<xsl:text>&#xa;</xsl:text> <!-- &#xa; -->
 		</xsl:if>
+		<xsl:call-template name="insertEXPRESSAnnotationEnd"/>
 
 		<!-- Move all EXPRESS-G diagrams (`[.svgmap]`) to Annex D https://github.com/metanorma/stepmod2mn/issues/20 -->
 		<!-- <xsl:apply-templates select="./express-g" mode="svg"/> -->
@@ -4435,8 +4452,7 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 		</xsl:choose>
 		
 		<xsl:text>====</xsl:text>
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>&#xa;</xsl:text>
+		<!-- <xsl:text>&#xa;&#xa;</xsl:text> -->
 	</xsl:template>
 
 	

@@ -582,6 +582,22 @@
 		<xsl:text>&#xa;&#xa;</xsl:text>	
 	</xsl:template>
 
+	<xsl:template name="insertEXPRESSAnnotationStart">
+		<xsl:param name="name"/>
+		<xsl:param name="break" select="'true'"/>
+		<xsl:text>(*"</xsl:text><xsl:value-of select="$name"/><xsl:text>"</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:if test="$break = 'true'">
+			<xsl:text>&#xa;</xsl:text>
+		</xsl:if>
+	</xsl:template>
+
+	<xsl:template name="insertEXPRESSAnnotationEnd">
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>*)</xsl:text>
+		<xsl:text>&#xa;&#xa;</xsl:text>
+	</xsl:template>
+
 	<xsl:template match="pre">
 		<code>
 		<xsl:call-template name="insertCodeStart"/>
