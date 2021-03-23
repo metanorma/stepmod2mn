@@ -1735,15 +1735,15 @@ Purpose:
 					
 					<!-- for index -->
 					<!-- ((({{object.id}},Object EXPRESS-G))) -->
-					<xsl:variable name="index_items">
+					<!-- <xsl:variable name="index_items">
 						<xsl:apply-templates select="document($map_file)//img.area[@href]" mode="svg_index"/>
 					</xsl:variable>
 					<xsl:for-each select="xalan:nodeset($index_items)//item">
-						<xsl:if test="not(preceding-sibling::item[text() = current()/text()])"><!-- exclude duplicates -->
+						<xsl:if test="not(preceding-sibling::item[text() = current()/text()])"> exclude duplicates
 							<xsl:value-of select="."/>
 							<xsl:text>&#xa;</xsl:text>
 						</xsl:if>
-					</xsl:for-each>
+					</xsl:for-each> -->
 					
 					<xsl:variable name="filename_no_ext">
 						<xsl:value-of select="substring-before(@file,'.xml')"/>
