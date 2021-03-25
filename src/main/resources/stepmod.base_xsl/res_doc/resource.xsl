@@ -4349,6 +4349,8 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 
 	<xsl:template match="express-g" mode="svg">
 		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>.The schemas of this part of ISO 10303</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
 		<xsl:apply-templates select="imgfile | img" mode="svg"/>
 		<xsl:text>&#xa;</xsl:text>
 	</xsl:template>
@@ -4361,7 +4363,7 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 		
 		<xsl:variable name="svg_filename" select="concat(substring-before(@file, '.xml'), '.svg')"/>
 		<!-- image::basic_attribute_schemaexpg1.svg[] -->
-		<xsl:text>image::</xsl:text><xsl:value-of select="$svg_filename"/><xsl:text>[]</xsl:text>
+		<xsl:text>image::../</xsl:text><xsl:value-of select="$svg_filename"/><xsl:text>[]</xsl:text>
 		<xsl:text>&#xa;&#xa;</xsl:text>
 
 		
