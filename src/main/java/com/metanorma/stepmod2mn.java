@@ -374,6 +374,7 @@ public class stepmod2mn {
             transformer.setParameter("docfile", bibdataFileName);
             transformer.setParameter("pathSeparator", File.separator);
             transformer.setParameter("path", resourcePath);
+            transformer.setParameter("outpath", fileOut.getParent());
             transformer.setParameter("boilerplate_path", boilerplatePath);
 
             transformer.setParameter("debug", DEBUG);

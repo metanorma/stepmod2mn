@@ -8,7 +8,9 @@
 		xmlns:java_char="http://xml.apache.org/xalan/java/java.lang.Character" 
 		xmlns:metanorma-class="xalan://com.metanorma.RegExEscaping"
 		xmlns:metanorma-class-util="xalan://com.metanorma.Util"
+		xmlns:redirect="http://xml.apache.org/xalan/redirect"
 		exclude-result-prefixes="mml tbx xlink xalan java metanorma-class metanorma-class-util" 
+		extension-element-prefixes="redirect"
 		version="1.0">
 
 	
@@ -44,6 +46,7 @@
 	<xsl:strip-space elements="*"/>
 			
 	<xsl:param name="path"/>
+	<xsl:param name="outpath"/>
   
 	<xsl:param name="boilerplate_path"/>
 	
@@ -149,27 +152,47 @@
 	
 	<!-- resource.xml -->
 	<xsl:template match="/">
-
-		<xsl:text>:docnumber: </xsl:text><xsl:apply-templates select="resource" mode="docnumber"/> <!-- res_doc/sect_1_scope.xsl -->
+		<xsl:variable name="title-intro-en">Industrial automation systems and integration</xsl:variable>
+		<xsl:variable name="title-intro-fr">Systèmes d'automatisation industrielle et intégration</xsl:variable>
+		<xsl:variable name="title-main-en">Product data representation and exchange</xsl:variable>
+		<xsl:variable name="title-main-fr">Représentation et échange de données de produits</xsl:variable>
+		<xsl:variable name="title-part-en"><xsl:apply-templates select="resource" mode="display_name"/></xsl:variable>
+		<xsl:variable name="title-part-fr"><xsl:apply-templates select="resource" mode="display_name_french"/></xsl:variable>
+		
+		<xsl:text>= </xsl:text><xsl:value-of select="$title-main-en"/>: <xsl:value-of select="$title-intro-en"/>: <xsl:value-of select="$title-part-en"/>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>:docnumber: 10303</xsl:text><!-- <xsl:apply-templates select="resource" mode="docnumber"/> --><!-- res_doc/sect_1_scope.xsl -->
+		<xsl:text>&#xa;</xsl:text>
+		
+		<xsl:text>:tc-docnumber: </xsl:text><xsl:value-of select="resource/@wg.number"/>
 		<xsl:text>&#xa;</xsl:text>
 		
 		<xsl:text>:partnumber: </xsl:text><xsl:value-of select="resource/@part"/>
 		<xsl:text>&#xa;</xsl:text>
 		
+		<xsl:text>:copyright-year: </xsl:text><xsl:value-of select="substring(resource/@publication.year,1,4)"/>
+		<xsl:text>&#xa;</xsl:text>
+		
+		<xsl:text>:language: </xsl:text><xsl:call-template name="getLanguage"/>
+		<xsl:text>&#xa;</xsl:text>
+		
+		<xsl:text>:publish-date: </xsl:text><xsl:value-of select="resource/@publication.date"/>
+		<xsl:text>&#xa;</xsl:text>
+		
 		<xsl:text>:edition: </xsl:text><xsl:value-of select="resource/@version"/>
 		<xsl:text>&#xa;</xsl:text>
 		
-		<xsl:text>:title-intro-en: Industrial automation systems and integration</xsl:text>
+		<xsl:text>:title-intro-en: </xsl:text><xsl:value-of select="$title-intro-en"/>
 		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>:title-main-en: Product data representation and exchange</xsl:text>
+		<xsl:text>:title-intro-fr: </xsl:text><xsl:value-of select="$title-intro-fr"/>
 		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>:title-part-en: </xsl:text><xsl:apply-templates select="resource" mode="display_name"/>
+		<xsl:text>:title-main-en: </xsl:text><xsl:value-of select="$title-main-en"/>
 		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>:title-intro-fr: Systèmes d'automatisation industrielle et intégration</xsl:text>
+		<xsl:text>:title-main-fr: </xsl:text><xsl:value-of select="$title-main-fr"/>
 		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>:title-main-fr: Représentation et échange de données de produits </xsl:text>
+		<xsl:text>:title-part-en: </xsl:text><xsl:value-of select="$title-part-en"/>
 		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>:title-part-fr: </xsl:text><xsl:apply-templates select="resource" mode="display_name_french"/>
+		<xsl:text>:title-part-fr: </xsl:text><xsl:value-of select="$title-part-fr"/>
 		<xsl:text>&#xa;</xsl:text>
 		
 		<xsl:text>:doctype: international-standard</xsl:text>
@@ -178,7 +201,24 @@
 		<xsl:apply-templates select="resource" mode="docstage"/>
 		<xsl:text>&#xa;</xsl:text>
 		
-		<xsl:text>:copyright-year: </xsl:text><xsl:value-of select="substring(resource/@publication.year,1,4)"/>
+		<!-- fixed text from resource.xml   <xsl:template match="resource" mode="coverpage"> -->
+		
+		<xsl:text>:technical-committee-number: 184</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>:technical-committee: Industrial automation systems and integration</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>:subcommittee-type: SC</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>:subcommittee-number: 4</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>:subcommittee: Industrial data</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>:workgroup-type: WG</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>:workgroup-number: 12</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		
+		<xsl:text>:secretariat: ANSI</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
 		
 		<xsl:variable name="keywords">			
@@ -188,18 +228,22 @@
 			<xsl:text>:keywords: </xsl:text><xsl:value-of select="normalize-space($keywords)"/>
 			<xsl:text>&#xa;</xsl:text>
 		</xsl:if>
-
-		<!-- fixed text from resource.xml   <xsl:template match="resource" mode="coverpage"> -->
-		
-		<xsl:text>:technical-committee-number: 184</xsl:text>
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>:subcommittee-number: 4</xsl:text>
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>:workgroup-number: 12</xsl:text>
-		<xsl:text>&#xa;</xsl:text>
 		
 		<xsl:text>:library-ics: 25.040.40</xsl:text>
 		<xsl:text>&#xa;&#xa;</xsl:text>
+		
+		<xsl:text>:imagesdir: images</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>:mn-document-class: iso</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>:mn-output-extensions: xml,html,doc,pdf,html_alt,rxl</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>:local-cache-only:</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>:data-uri-image:</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>:lutaml-express-index: schemas; schemas.yaml;</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
 		
 		
 		<xsl:variable name="adoc">
@@ -207,22 +251,29 @@
 			<!-- Abstract -->
 			<xsl:message>[INFO] Processing Abstract ...</xsl:message>
 			<xsl:apply-templates select="resource" mode="abstract"/> <!-- res_doc/resource.xsl  -->
-
+			
 			
 			<!-- Foreword-->
 			<!-- draughting_elements/sys/foreword.xml -->
 			<xsl:message>[INFO] Processing Foreword ...</xsl:message>
-			<xsl:apply-templates select="resource" mode="foreword"/> <!-- res_doc/resource.xsl  -->
+			<file path="sections/00-foreword.adoc">
+				<xsl:apply-templates select="resource" mode="foreword"/> <!-- res_doc/resource.xsl  -->
+			</file>
+      
 			
 			<!-- Introduction -->
 			<!-- draughting_elements/sys/introduction.xml -->
 			<xsl:message>[INFO] Processing Introduction ...</xsl:message>
-			<xsl:apply-templates select="resource" mode="introduction"/> <!-- res_doc/sect_introduction.xsl  -->
+			<file path="sections/00-introduction.adoc">
+				<xsl:apply-templates select="resource" mode="introduction"/> <!-- res_doc/sect_introduction.xsl  -->
+			</file>
 					
 			<!-- 1 Scope -->
 			<!-- draughting_elements/sys/1_scope.xml -->
 			<xsl:message>[INFO] Processing Scope ...</xsl:message>
-			<xsl:apply-templates select="resource" mode="scope_resource"/>	<!-- res_doc/sect_1_scope.xsl  -->	
+			<file path="sections/01-scope.adoc">
+				<xsl:apply-templates select="resource" mode="scope_resource"/>	<!-- res_doc/sect_1_scope.xsl  -->	
+			</file>
 			
 			
 			
@@ -230,7 +281,9 @@
 			<!-- 2 Normative references -->
 			<!-- sys/2_refs.xml -->
 			<xsl:message>[INFO] Processing Normative references ...</xsl:message>		
-			<xsl:apply-templates select="resource" mode="norm_refs_resource"/> <!-- res_doc/sect_2_refs.xsl  -->
+			<file path="sections/02-norm-refs.adoc">
+				<xsl:apply-templates select="resource" mode="norm_refs_resource"/> <!-- res_doc/sect_2_refs.xsl  -->
+			</file>
 			
 			
 			<!-- 3 Terms, definitions and abbreviated terms -->
@@ -238,61 +291,83 @@
 			<!-- 3.1 Terms and definitions -->
 			<!-- 3.2 Abbreviated terms -->
 			<xsl:message>[INFO] Processing Terms, definitions and abbreviated terms ...</xsl:message>		
-			<xsl:apply-templates select="resource" mode="terms_definitions_resource"/> <!-- res_doc/sect_3_defs.xsl -->
+			<file path="sections/03-terms.adoc">
+				<xsl:apply-templates select="resource" mode="terms_definitions_resource"/> <!-- res_doc/sect_3_defs.xsl -->
+			</file>
 			
 			<!-- optional section -->
 			<!--- 4 EXPRESS short listing -->
 			<!-- 4.1 General -->
 			<!-- 4.2 Fundamental concepts and assumptions -->
 			<!-- 4.3 Draughting elements entity definitions -->		
-			<xsl:for-each select="resource/schema">
-				<xsl:variable name="schema_pos" select="position()"/>
-				<xsl:message>[INFO] Processing Section <xsl:value-of select="$schema_pos + 3"/> ...</xsl:message>
-				<xsl:apply-templates select="../../resource" mode="schema_resource"> <!-- res_doc/sect_schema.xsl -->
-					 <xsl:with-param name="pos" select="$schema_pos"/>
-				 </xsl:apply-templates>		
-			</xsl:for-each>
+			<xsl:if test="resource/schema">
+				<file path="sections/04-schemas.adoc">
+					<xsl:for-each select="resource/schema">
+						<xsl:variable name="schema_pos" select="position()"/>
+						<xsl:message>[INFO] Processing Section <xsl:value-of select="$schema_pos + 3"/> ...</xsl:message>
+						<xsl:apply-templates select="../../resource" mode="schema_resource"> <!-- res_doc/sect_schema.xsl -->
+							 <xsl:with-param name="pos" select="$schema_pos"/>
+						 </xsl:apply-templates>		
+					</xsl:for-each>
+				</file>
+			</xsl:if>
 			
 			<!-- Annex A Short names of entities -->
 			<xsl:message>[INFO] Processing Annex A Short names of entities ...</xsl:message>		
-			<xsl:apply-templates select="resource" mode="annex_a"/> <!-- res_doc/sect_a_short_names.xsl  -->
+			<file path="sections/91-short-names.adoc">
+				<xsl:apply-templates select="resource" mode="annex_a"/> <!-- res_doc/sect_a_short_names.xsl  -->
+			</file>
 			
 			<!-- Annex B Information object registration -->
 			<xsl:message>[INFO] Processing Annex B Information object registration ...</xsl:message>		
-			<xsl:apply-templates select="resource" mode="annex_b"/> <!-- res_doc/sect_b_obj_reg.xsl  -->
+			<file path="sections/92-identifier.adoc">
+				<xsl:apply-templates select="resource" mode="annex_b"/> <!-- res_doc/sect_b_obj_reg.xsl  -->
+			</file>
 
 			<!-- Annex C Computer interpretable listings -->
 			<xsl:message>[INFO] Processing Annex C Computer interpretable listings ...</xsl:message>		
-			<xsl:apply-templates select="resource" mode="annexc"/> <!-- res_doc/sect_c_exp.xsl  -->
+			<file path="sections/93-listings.adoc">
+				<xsl:apply-templates select="resource" mode="annexc"/> <!-- res_doc/sect_c_exp.xsl  -->
+			</file>
 			
-			<!-- Annex D EXPRESS-G diagrams -->
 			<xsl:message>[INFO] Processing Annex D EXPRESS-G diagrams ...</xsl:message>		
-			<xsl:apply-templates select="resource" mode="annexd"/> <!-- res_doc/sect_d_expg.xsl  -->
+			<!-- Annex D EXPRESS-G diagrams -->
+			<file path="sections/94-expressg-diagrams.adoc">
+				<xsl:apply-templates select="resource" mode="annexd"/> <!-- res_doc/sect_d_expg.xsl  -->
+			</file>
 				
 			<!-- Annex E F G H -->		
 			
 			<!-- Annex Technical discussion -->		
 			<xsl:if test="string-length(normalize-space(resource/tech_discussion//text())) &gt; 0">			
 				<xsl:message>[INFO] Processing Annex Technical discussion ...</xsl:message>		
-				<xsl:apply-templates select="resource" mode="tech_discussion"/> <!-- res_doc/sect_tech_discussion.xsl -->
+				<file path="sections/95-tech-discussion.adoc">
+					<xsl:apply-templates select="resource" mode="tech_discussion"/> <!-- res_doc/sect_tech_discussion.xsl -->
+				</file>
 			</xsl:if>
 			
 			<!-- Annex Examples -->
-			<xsl:if test="string-length(normalize-space(resource/examples//text())) &gt; 0">			
-				<xsl:message>[INFO] Processing Annex Examples ...</xsl:message>		
-				<xsl:apply-templates select="resource" mode="examples"/> <!-- res_doc/sect_examples.xsl -->
+			<xsl:if test="string-length(normalize-space(resource/examples//text())) &gt; 0">
+				<xsl:message>[INFO] Processing Annex Examples ...</xsl:message>
+        <file path="sections/96-examples.adoc">
+					<xsl:apply-templates select="resource" mode="examples"/> <!-- res_doc/sect_examples.xsl -->
+				</file>
 			</xsl:if>
 				
 			<!-- Annex Additional scope -->
 			<xsl:if test="string-length(normalize-space(resource/add_scope//text())) &gt; 0">
 				<xsl:message>[INFO] Annex Additional scope ...</xsl:message>		
-				<xsl:apply-templates select="resource" mode="additional_scope"/> <!-- res_doc/sect_add_scope.xsl -->
+				<file path="sections/97-add-scope.adoc">
+					<xsl:apply-templates select="resource" mode="additional_scope"/> <!-- res_doc/sect_add_scope.xsl -->
+				</file>
 			</xsl:if>
 			
 			<!-- Annex x Change history -->
 			<xsl:if test="resource/changes">
 				<xsl:message>[INFO] Processing Annex Change history ...</xsl:message>		
-				<xsl:apply-templates select="resource" mode="change_history"/> <!-- res_doc/sect_g_change.xsl -->
+				<file path="sections/97-change-history.adoc">
+					<xsl:apply-templates select="resource" mode="change_history"/> <!-- res_doc/sect_g_change.xsl -->
+				</file>
 			</xsl:if>
 	
 		</xsl:variable>
@@ -301,13 +376,23 @@
 	
 		<xsl:apply-templates select="xalan:nodeset($adoc)" mode="text"/>
 		
+		<xsl:for-each select="xalan:nodeset($adoc)//file">
+			<xsl:text>include::</xsl:text><xsl:value-of select="@path"/><xsl:text>[]</xsl:text>
+			<xsl:text>&#xa;&#xa;</xsl:text>
+		</xsl:for-each>
 		
 			
 		<!-- Bibliography -->
 		<xsl:if test="resource/bibliography/*">
-			<xsl:message>[INFO] Processing Bibliography ...</xsl:message>		
+			<xsl:message>[INFO] Processing Bibliography ...</xsl:message>
+			<redirect:write file="{$outpath}/sections/99-bibliography.adoc">
 				<xsl:apply-templates select="resource" mode="bibliography"/> <!-- res_doc/sect_biblio.xsl  -->	
+			</redirect:write>
+			<xsl:text>include::sections/99-bibliography.adoc[]</xsl:text>
+			<xsl:text>&#xa;&#xa;</xsl:text>
 		</xsl:if>
+		
+		
 		
 		<!-- insert header, if there isn't bibliography in the document, but there are external docs refs -->
 		<!-- 
@@ -372,7 +457,15 @@
 		
 	</xsl:template>
 
-
+	<xsl:template name="getLanguage">
+		<xsl:variable name="lang" select="java:toLowerCase(java:java.lang.String.new(resource/@language))"/>
+		<xsl:choose>
+			<xsl:when test="$lang = 'e'">en</xsl:when> 
+			<xsl:when test="$lang = 'd'">de</xsl:when> 
+			<xsl:when test="$lang = 'z'">zh</xsl:when> 
+			<xsl:otherwise><xsl:value-of select="resource/@language"/></xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
 
 	<xsl:template name="insertHeaderADOC">
 		<xsl:param name="id"/>
@@ -641,6 +734,13 @@
 		</xsl:copy>
 	</xsl:template>
 	
+	<xsl:template match="file" mode="text">
+		<xsl:variable name="outfile" select="concat($outpath, '/', @path)"/>
+		<redirect:write file="{$outfile}">
+			<xsl:apply-templates mode="text" />
+		</redirect:write>
+	</xsl:template>
+  
 	<xsl:template match="ExternalDocumentReference" mode="text">
 		<!-- <xsl:text>&lt;&lt;</xsl:text>
 		
