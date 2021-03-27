@@ -835,7 +835,7 @@ Purpose:
 		</p> -->
 		<xsl:call-template name="insertParagraph">
 			<xsl:with-param name="text">
-			This document was prepared by Technical Committee ISO/TC 184, _Automation systems and integration_, Subcommittee SC 4, _Industrial data._
+			This document was prepared by Technical Committee ISO/TC 184, _Automation systems and integration_, Subcommittee SC 4, _Industrial data_.
 			</xsl:with-param>
 		</xsl:call-template>
 		

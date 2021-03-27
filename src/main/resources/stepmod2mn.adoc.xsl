@@ -230,7 +230,7 @@
 		</xsl:if>
 		
 		<xsl:text>:library-ics: 25.040.40</xsl:text>
-		<xsl:text>&#xa;&#xa;</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
 		
 		<xsl:text>:imagesdir: images</xsl:text>
 		<xsl:text>&#xa;</xsl:text>

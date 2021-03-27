@@ -5,6 +5,7 @@ This file is a copy of the file data/xsl/sect_g_changes.xsl for application modu
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"                	
 	xmlns:xalan="http://xml.apache.org/xalan" 
+	xmlns:java="http://xml.apache.org/xalan/java" 
 	version="1.0">
 	
 	<!-- xmlns:msxsl="urn:schemas-microsoft-com:xslt"
@@ -196,9 +197,15 @@ This file is a copy of the file data/xsl/sect_g_changes.xsl for application modu
 			<xsl:apply-templates select="./description"/>
 			
 			<xsl:for-each select="./schema.changes">
-				<xsl:apply-templates select=".">
-					<xsl:with-param name="annex" select="concat($annex_letter,'.',../@version,'.',position()+1)"/>
-				</xsl:apply-templates>      
+				<xsl:variable name="schema_changes">
+					<xsl:apply-templates select=".">
+						<xsl:with-param name="annex" select="concat($annex_letter,'.',../@version,'.',position()+1)"/>
+					</xsl:apply-templates>
+				</xsl:variable>
+				<xsl:copy-of select="$schema_changes"/>
+				<xsl:if test="not(java:endsWith(java:java.lang.String.new($schema_changes),'&#xa;') or java:endsWith(java:java.lang.String.new($schema_changes),'&#xd;'))">
+					<xsl:text>&#xa;&#xa;</xsl:text>
+				</xsl:if>
 			</xsl:for-each>
 		</xsl:for-each>
 	</xsl:template>
@@ -209,7 +216,14 @@ This file is a copy of the file data/xsl/sect_g_changes.xsl for application modu
 	
 	<xsl:template match="schema.changes">
 		<xsl:param name="annex"/>
-		<xsl:variable name="aname" select="concat(name(),../@version)"/>
+		<xsl:variable name="_pos"><xsl:number/></xsl:variable>
+		<xsl:variable name="pos">
+			<xsl:choose>
+				<xsl:when test="$_pos = '1'"></xsl:when>
+				<xsl:otherwise>_<xsl:value-of select="$_pos"/></xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:variable name="aname" select="concat(name(),../@version, $pos)"/>
 		<!-- <h2>
 			<a name="{$aname}">
 				<xsl:value-of select="concat($annex, ' Changes made to schema ', @schema_name)"/>
