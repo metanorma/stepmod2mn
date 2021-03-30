@@ -62,11 +62,11 @@ $Id: sect_3_defs.xsl,v 1.5 2009/12/24 17:42:04 lothartklein Exp $
       </a>        
     </h2>   -->
 	
-	<xsl:call-template name="insertHeaderADOC">
+	<!-- <xsl:call-template name="insertHeaderADOC">
 		<xsl:with-param name="id" select="'termsdefns'"/>		
 		<xsl:with-param name="level" select="2"/>
 		<xsl:with-param name="header" select="'Terms and definitions'"/>					
-	</xsl:call-template>	
+	</xsl:call-template> -->	
 		
   <xsl:call-template name="output_terms">
     <xsl:with-param name="current_resource" select="."/>

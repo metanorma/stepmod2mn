@@ -3590,7 +3590,7 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 							<xsl:call-template name="insertHeaderADOC">
 								<xsl:with-param name="id" select="concat('sec_3.1.',$section_no)"/>		
 								<xsl:with-param name="attributes" select="'.nonterm'"/>
-								<xsl:with-param name="level" select="3"/>
+								<xsl:with-param name="level" select="2"/> <!-- 3 -->
 								<xsl:with-param name="header" select="concat('Terms defined in ',$stdnumber)"/>					
 							</xsl:call-template>
 							
@@ -3607,7 +3607,7 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 							<!-- <ul> -->							
 							
 					<!-- now output the terms -->
-						<xsl:variable name="moreNormRefs" select="string-length(/resource/normrefs/normref.inc[@normref=$ref]/term.ref)+string-length(/resource/normrefs/normref.inc)"/>
+						<xsl:variable name="moreNormRefs" select="string-length(/resource/normrefs/normref.inc[@normref=$ref]/term.ref)+string-length(/resource/normrefs/normref.inc)+1"/>
 								<xsl:choose>
 									<xsl:when test="not($doctype='aic')">
 										<xsl:apply-templates select="document(concat($path, '../../../data/basic/normrefs_resdoc_default.xml'))/normrefs/normref.inc[@normref=$ref]/term.ref" mode="normref">
@@ -3900,7 +3900,7 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 		</h2> -->
 		<xsl:call-template name="insertHeaderADOC">
 			<xsl:with-param name="id" select="concat('sec_',$section)"/>
-			<xsl:with-param name="level" select="3"/>
+			<xsl:with-param name="level" select="2"/> <!-- 3 -->
 			<xsl:with-param name="header" select="'Other terms and definitions'"/>					
 		</xsl:call-template>
 	</xsl:template>
@@ -4106,7 +4106,7 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 		</xsl:variable>
 		<xsl:call-template name="insertHeaderADOC">
 			<xsl:with-param name="id" select="concat('sec_', $section,'.',position())"/>		
-			<xsl:with-param name="level" select="4"/>
+			<xsl:with-param name="level" select="3"/> <!-- 4 -->
 			<xsl:with-param name="header" select="normalize-space($header)"/>					
 		</xsl:call-template>
 		
