@@ -37,11 +37,27 @@ $Id: sect_1_scope.xsl,v 1.6 2008/12/16 15:44:48 darla Exp $
 		<xsl:apply-templates select="./outscope"/>
 	</xsl:template>
 
+	<xsl:template match="scope/ul/li[*[1][local-name() = 'b' or local-name() = 'b2']]" priority="2">
+		<xsl:apply-templates /> <!-- skip list creation * -->
+	</xsl:template>
+	<xsl:template match="scope/ul/li/*[1][local-name() = 'b' or local-name() = 'b2']" priority="2">
+		<xsl:call-template name="insertHeaderADOC">
+			<xsl:with-param name="level" select="2"/>
+			<xsl:with-param name="header"><xsl:apply-templates /></xsl:with-param>
+		</xsl:call-template>
+	</xsl:template>
+
 	<xsl:template match="resource" mode="scope_header">
 		<xsl:call-template name="clause_header">
 			<xsl:with-param name="heading" select="'Scope'"/> <!-- 1 Scope -->
 			<xsl:with-param name="aname" select="'scope'"/>
 		</xsl:call-template>
+		
+		<xsl:call-template name="insertHeaderADOC">
+			<xsl:with-param name="level" select="2"/>
+			<xsl:with-param name="header" select="'General'"/>
+		</xsl:call-template>
+		
 		<xsl:variable name="resdoc_name">
 			<xsl:call-template name="res_display_name">
 			<xsl:with-param name="res" select="@name"/>

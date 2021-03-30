@@ -524,9 +524,12 @@
 
 	<xsl:template name="insertParagraph">
 		<xsl:param name="text"/>
+		<xsl:param name="keep-with-next" select="'false'"/>
 		<!-- <xsl:value-of select="normalize-space($text)"/> -->
 		<xsl:apply-templates select="xalan:nodeset($text)" mode="linearize"/>
-		<xsl:text>&#xa;&#xa;</xsl:text>
+		<xsl:if test="$keep-with-next = 'false'">
+			<xsl:text>&#xa;&#xa;</xsl:text>
+		</xsl:if>
 	</xsl:template>
 
 
@@ -564,9 +567,13 @@
 	<xsl:template name="insertExample">
 		<xsl:param name="id"/>
 		<xsl:param name="text"/>
+		<xsl:param name="keep-with-previous" select="'false'"/>
 		<!-- <xsl:text>&#xa;</xsl:text>
 		<xsl:text>&#xa;</xsl:text> -->
-		<br/><br/>
+		<xsl:choose>
+			<xsl:when test="$keep-with-previous = 'true'">+<br/>+<br/></xsl:when>
+			<xsl:otherwise><br/><br/></xsl:otherwise>
+		</xsl:choose>
 		<xsl:text>[example]</xsl:text>
 		<!-- <xsl:text>&#xa;</xsl:text> -->
 		<br/>
@@ -608,6 +615,7 @@
 		<xsl:variable name="level">
 			<xsl:choose>
 				<xsl:when test="$level_ = 0">1</xsl:when>
+				<xsl:when test="$level_ &gt; 1 and ancestor::scope/ul/li/*[1][local-name() = 'b' or local-name() = 'b2']"><xsl:value-of select="$level_ - 1"/></xsl:when>
 				<xsl:otherwise><xsl:value-of select="$level_"/></xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>

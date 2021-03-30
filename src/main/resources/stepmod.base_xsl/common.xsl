@@ -183,10 +183,21 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 			</p> -->
 			
 			<xsl:variable name="example"><xsl:apply-templates/></xsl:variable>
-			<xsl:call-template name="insertExample">
-				<xsl:with-param name="id" select="$aname"/>
-				<xsl:with-param name="text" select="$example"/>
-			</xsl:call-template>
+			<xsl:choose>
+				<xsl:when test="parent::li">
+					<xsl:call-template name="insertExample">
+						<xsl:with-param name="id" select="$aname"/>
+						<xsl:with-param name="text" select="$example"/>
+						<xsl:with-param name="keep-with-previous" select="'true'"/>
+					</xsl:call-template>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:call-template name="insertExample">
+						<xsl:with-param name="id" select="$aname"/>
+						<xsl:with-param name="text" select="$example"/>
+					</xsl:call-template>
+				</xsl:otherwise>
+			</xsl:choose>
 			<!-- <xsl:text>&#xa;&#xa;</xsl:text>
 			<xsl:text>[example]</xsl:text>
 			<xsl:text>&#xa;</xsl:text>
@@ -807,12 +818,25 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 				<xsl:apply-templates/>
 			</p>
 		</xsl:otherwise>
-	</xsl:choose> -->	
-	<xsl:call-template name="insertParagraph">
-		<xsl:with-param name="text">
-			<xsl:apply-templates/>
-		</xsl:with-param>
-	</xsl:call-template>
+	</xsl:choose> -->
+  <xsl:choose>
+		<xsl:when test="following-sibling::*[1][local-name() = 'example' or local-name() = 'note']">
+			<xsl:call-template name="insertParagraph">
+				<xsl:with-param name="text">
+					<xsl:apply-templates/>
+				</xsl:with-param>
+				<xsl:with-param name="keep-with-next">true</xsl:with-param>
+			</xsl:call-template>
+		</xsl:when>
+		<xsl:otherwise>
+			<xsl:call-template name="insertParagraph">
+				<xsl:with-param name="text">
+					<xsl:apply-templates/>
+				</xsl:with-param>
+			</xsl:call-template>
+		</xsl:otherwise>
+	</xsl:choose>
+	
 	
 </xsl:template>
 
