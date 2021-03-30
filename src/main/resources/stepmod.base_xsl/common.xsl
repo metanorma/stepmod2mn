@@ -93,6 +93,7 @@ $Id: common.xsl,v 1.204 2018/10/07 10:51:54 mike Exp $
 <!-- output the clause heading -->
 <xsl:template name="clause_header">
 	<xsl:param name="heading"/>
+	<xsl:param name="level" select="1"/>
 	<xsl:param name="aname"/>
 	<!-- <H2>
 		<xsl:attribute name="level">
@@ -103,9 +104,9 @@ $Id: common.xsl,v 1.204 2018/10/07 10:51:54 mike Exp $
 		</A>
 	</H2> -->	
 	
-	<xsl:variable name="level">
+	<!-- <xsl:variable name="level">
 		<xsl:value-of select="string-length($heading) - string-length(translate($heading, '.', '')) + 1"/>
-	</xsl:variable>
+	</xsl:variable> -->
 	<xsl:call-template name="insertHeaderADOC">
 		<xsl:with-param name="id" select="$aname"/>
 		<xsl:with-param name="level" select="$level"/>

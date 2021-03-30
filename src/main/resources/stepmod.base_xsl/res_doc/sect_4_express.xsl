@@ -783,6 +783,7 @@
 			<xsl:call-template name="insertHeaderADOC">
 				<xsl:with-param name="id" select="concat('types_', $schema_name)"/>
 				<xsl:with-param name="header" select="$clause_header"/>					
+				<xsl:with-param name="level" select="2"/>					
 			</xsl:call-template>
 			
 			<xsl:value-of select="$clause_intro"/>
@@ -1162,7 +1163,8 @@
 			<xsl:text>&#xa;&#xa;</xsl:text>
 			<xsl:call-template name="insertHeaderADOC">
 				<xsl:with-param name="id" select="concat('entities_', $schema_name)"/>
-				<xsl:with-param name="header" select="$clause_header"/>					
+				<xsl:with-param name="header" select="$clause_header"/>
+				<xsl:with-param name="level" select="2"/>
 			</xsl:call-template>
 			
 			<xsl:value-of select="$clause_intro"/>
@@ -1890,6 +1892,7 @@
 			<xsl:call-template name="insertHeaderADOC">
 				<xsl:with-param name="id" select="concat('subtype_constraints', $schema_name)"/>
 				<xsl:with-param name="header" select="$clause_header"/>
+				<xsl:with-param name="level" select="2"/>					
 			</xsl:call-template>
 			
 			<xsl:call-template name="insertParagraph">
@@ -2287,6 +2290,7 @@
 			<xsl:call-template name="insertHeaderADOC">
 				<xsl:with-param name="id" select="concat('functions', $schema_name)"/>
 				<xsl:with-param name="header" select="$clause_header"/>
+				<xsl:with-param name="level" select="2"/>
 			</xsl:call-template>
 			
 			<xsl:value-of select="$clause_intro"/>
@@ -2410,6 +2414,7 @@
 			<xsl:call-template name="insertHeaderADOC">
 				<xsl:with-param name="id" select="concat('procedures', $schema_name)"/>
 				<xsl:with-param name="header" select="$clause_header"/>
+				<xsl:with-param name="level" select="2"/>
 			</xsl:call-template>
 				
 				<xsl:value-of select="$clause_intro"/>
@@ -2431,6 +2436,7 @@
 		<xsl:call-template name="insertHeaderADOC">
 			<xsl:with-param name="id" select="$aname"/>
 			<xsl:with-param name="header" select="@name"/>
+			<xsl:with-param name="level" select="3"/>
 			<xsl:with-param name="indexed" select="'true'"/>
 		</xsl:call-template>
 		
@@ -2641,6 +2647,7 @@
 			<xsl:call-template name="insertHeaderADOC">
 				<xsl:with-param name="id" select="concat('rules', $schema_name)"/>
 				<xsl:with-param name="header" select="$clause_header"/>
+				<xsl:with-param name="level" select="2"/>
 			</xsl:call-template>
 			
 			<xsl:value-of select="$clause_intro"/>
