@@ -213,7 +213,7 @@
 								<xsl:apply-templates select="./interfaced.item"/><xsl:text>;</xsl:text>
 								
 								<xsl:choose>
-									<xsl:when test="position()=last()"><xsl:text>&#xa;</xsl:text><!-- <br/> -->(*</xsl:when>
+									<xsl:when test="position()=last()"><!-- <xsl:text>&#xa;</xsl:text>(* --></xsl:when><!-- <br/> -->
 									<xsl:otherwise><xsl:text>&#xa;&#xa;</xsl:text><!-- <br/><br/> --></xsl:otherwise>
 								</xsl:choose>
 								
@@ -223,7 +223,7 @@
 								<xsl:apply-templates select="." mode="source"/>
 								
 								<xsl:choose>
-									<xsl:when test="position()=last()"><xsl:text>&#xa;</xsl:text><!-- <br/> -->(*</xsl:when>
+									<xsl:when test="position()=last()"><!-- <xsl:text>&#xa;</xsl:text>(* --></xsl:when><!-- <br/> -->
 									<xsl:otherwise><xsl:text>&#xa;&#xa;</xsl:text><!-- <br/><br/> --></xsl:otherwise>
 								</xsl:choose>
 								
@@ -599,9 +599,9 @@
 			<!-- start blockquote -->
 			<code>
 			<xsl:call-template name="insertLutaMLCodeStart"/>
-				<xsl:text>*)&#xa;</xsl:text><!-- <br/> -->
+				<!-- <xsl:text>*)&#xa;</xsl:text> --><!-- <br/> -->
 				<xsl:text>CONSTANT</xsl:text>
-				<xsl:text>&#xa;</xsl:text><!-- <br/> --><xsl:text>(*</xsl:text>
+				<!-- <xsl:text>&#xa;</xsl:text><xsl:text>(*</xsl:text> --><!-- <br/> -->
 			<xsl:call-template name="insertCodeEnd"/>
 			</code>
 			<!-- end blockquote  -->
@@ -677,7 +677,7 @@
 			<!--  start blockquote -->
 			<code>
 				<xsl:call-template name="insertLutaMLCodeStart"/>
-					<xsl:text>*)&#xa;</xsl:text><!-- <br/> -->
+					<!-- <xsl:text>*)&#xa;</xsl:text> --><!-- <br/> -->
 					<xsl:text>&#160;&#160;</xsl:text><xsl:value-of select="@name"/> 
 					<xsl:text>: </xsl:text>
 					<xsl:apply-templates select="./*" mode="underlyingconstant"/><xsl:apply-templates select="./*" mode="underlying"/><xsl:text> := </xsl:text>
@@ -693,7 +693,7 @@
 							<xsl:value-of select="@expression"/><xsl:text>;</xsl:text>
 						</xsl:otherwise>
 					</xsl:choose>
-					<xsl:text>&#xa;</xsl:text><!-- <br/> --><xsl:text>(*</xsl:text>
+					<!-- <xsl:text>&#xa;</xsl:text><xsl:text>(*</xsl:text> --><!-- <br/> -->
 				<xsl:call-template name="insertCodeEnd"/>
 			</code>
 			<!-- end blockquote  -->
@@ -705,9 +705,9 @@
 				<!--  start blockquote -->
 				<code>
 				<xsl:call-template name="insertLutaMLCodeStart"/>
-					<xsl:text>*)&#xa;</xsl:text><!-- <br/> -->
+					<!-- <xsl:text>*)&#xa;</xsl:text> --><!-- <br/> -->
 					<xsl:text>END_CONSTANT;</xsl:text>
-					<xsl:text>&#xa;</xsl:text><!-- <br/> --><xsl:text>(*</xsl:text>
+					<!-- <xsl:text>&#xa;</xsl:text><xsl:text>(*</xsl:text> --><!-- <br/> -->
 				<xsl:call-template name="insertCodeEnd"/>
 				</code>
 				<!--  end blockquote  -->
@@ -902,7 +902,7 @@
 		<!-- start blockquote -->
 			<code>
 			<xsl:call-template name="insertLutaMLCodeStart"/>
-				<xsl:text>*)&#xa;</xsl:text><!-- <br/> -->
+				<!-- <xsl:text>*)&#xa;</xsl:text> --><!-- <br/> -->
 				<xsl:text>TYPE </xsl:text>
 				<xsl:value-of select="@name" />
 					<xsl:text>=</xsl:text>
@@ -916,8 +916,8 @@
 							<xsl:apply-templates select="./*" mode="underlying"/>;<xsl:text>&#xa;</xsl:text><!-- <br/> -->
 						</xsl:otherwise>
 					</xsl:choose>
-					<xsl:text>END_TYPE;&#xa;</xsl:text><!-- <br/> -->
-					<xsl:text>(*</xsl:text>
+					<xsl:text>END_TYPE;</xsl:text><!-- <br/> -->
+					<!-- <xsl:text>&#xa;(*</xsl:text> -->
 				<xsl:call-template name="insertCodeEnd"/>
 			</code>
 		<!--  end blockquote  -->
@@ -1265,7 +1265,7 @@
 			<xsl:call-template name="insertLutaMLCodeStart"/>
 				<!-- ex.: express_ref:[linear_dimension] -->
 				<!-- <xsl:text>express_ref:[</xsl:text><xsl:value-of select="@name"/><xsl:text>]</xsl:text> -->
-				<xsl:text>*)&#xa;</xsl:text>
+				<!-- <xsl:text>*)&#xa;</xsl:text> -->
 				<xsl:text>ENTITY </xsl:text><xsl:value-of select="@name"/>
 				<xsl:call-template name="abstract.entity"/>
 				<xsl:call-template name="super.expression-code"/>
@@ -1276,7 +1276,7 @@
 				<xsl:apply-templates select="./inverse" mode="code"/>
 				<xsl:apply-templates select="./unique" mode="code"/>
 				<xsl:apply-templates select="./where[@expression]" mode="code"/>
-				<xsl:text>END_ENTITY;&#xa;</xsl:text><xsl:text>(*</xsl:text>
+				<xsl:text>END_ENTITY;</xsl:text><!-- <xsl:text>&#xa;(*</xsl:text> -->
 			<xsl:call-template name="insertCodeEnd"/>
 
 			</code>
@@ -1934,7 +1934,7 @@
 	 <!--  <p>            -->
 			<code>
 			<xsl:call-template name="insertLutaMLCodeStart"/>
-				<xsl:text>*)&#xa;</xsl:text><!-- <br/> -->
+				<!-- <xsl:text>*)&#xa;</xsl:text> --><!-- <br/> -->
 			<!-- <A NAME="{$aname}">SUBTYPE_CONSTRAINT <b>
 			<xsl:value-of select="@name"/></b></A> -->				
 				<xsl:text>SUBTYPE_CONSTRAINT *</xsl:text><xsl:value-of select="@name"/><xsl:text>*[</xsl:text><xsl:value-of select="$aname"/><xsl:text>]</xsl:text>
@@ -1973,7 +1973,7 @@
 							<xsl:with-param name="indent" select="3"/>
 						</xsl:call-template>;<xsl:text>&#xa;</xsl:text><!-- <br/> -->
 				</xsl:if>
-				<xsl:text>END_SUBTYPE_CONSTRAINT;&#xa;</xsl:text><!-- <br/> --><xsl:text>(*</xsl:text>
+				<xsl:text>END_SUBTYPE_CONSTRAINT;</xsl:text><!-- <br/> --><!-- <xsl:text>&#xa;(*</xsl:text> -->
 			<xsl:call-template name="insertCodeEnd"/>
 		</code><!--</p> -->
 	</xsl:template>
@@ -2360,7 +2360,7 @@
 		<!--  start blockquote  -->
 		<code>
 		<xsl:call-template name="insertLutaMLCodeStart"/>
-			<xsl:text>*)&#xa;</xsl:text><!-- <br/> -->
+			<!-- <xsl:text>*)&#xa;</xsl:text> --><!-- <br/> -->
 			<xsl:text>FUNCTION </xsl:text><xsl:value-of select="@name"/>
 			<xsl:apply-templates select="./parameter" mode="code"/><xsl:text> : </xsl:text>
 			<xsl:apply-templates select="./aggregate" mode="code"/>
@@ -2372,7 +2372,7 @@
 		<!-- <code> -->
 			<!-- <xsl:call-template name="insertCodeStart"/> -->
 				<xsl:text>END_FUNCTION;</xsl:text>
-				<xsl:text>&#xa;</xsl:text><!-- <br/> --><xsl:text>(*</xsl:text>
+				<!-- <xsl:text>&#xa;</xsl:text><xsl:text>(*</xsl:text> --><!-- <br/> -->
 			<xsl:call-template name="insertCodeEnd"/>
 		</code>
 		<!-- end blockquote -->
@@ -2481,7 +2481,7 @@
 		<!--  start blockquote  -->
 		<code>
 			<xsl:call-template name="insertLutaMLCodeStart"/>
-				<xsl:text>*)&#xa;</xsl:text><!-- <br/> -->     
+				<!-- <xsl:text>*)&#xa;</xsl:text> --><!-- <br/> -->     
 				<xsl:text>PROCEDURE </xsl:text><xsl:value-of select="@name"/>
 				<xsl:apply-templates select="./parameter" mode="code"/><xsl:text> : </xsl:text>
 				<xsl:apply-templates select="./aggregate" mode="code"/>
@@ -2493,7 +2493,7 @@
 			<!-- <code> -->
 			<!-- <xsl:call-template name="insertCodeStart"/> -->
 				<xsl:text>END_PROCEDURE;</xsl:text>
-				<xsl:text>&#xa;</xsl:text><!-- <br/> --><xsl:text>(*</xsl:text>
+				<!-- <xsl:text>&#xa;</xsl:text><xsl:text>(*</xsl:text> --><!-- <br/> -->
 			<xsl:call-template name="insertCodeEnd"/>
 		</code>
 		<!-- end blockquote -->
@@ -2719,7 +2719,7 @@
 		<!-- start blockquote -->
 		<code>
 		<xsl:call-template name="insertLutaMLCodeStart"/>
-			<xsl:text>*)&#xa;</xsl:text><!-- <br/> -->
+			<!-- <xsl:text>*)&#xa;</xsl:text> --><!-- <br/> -->
 			<xsl:text>RULE </xsl:text><xsl:value-of select="@name"/><xsl:text> FOR</xsl:text>
 		<!-- <br/> --><xsl:text>&#xa;</xsl:text>
 			<xsl:text>(</xsl:text><xsl:value-of select="translate(@appliesto,' ',', ')"/><xsl:text>);&#xa;</xsl:text><!-- <br/> -->
@@ -2731,7 +2731,7 @@
 			<!-- <xsl:call-template name="insertCodeStart"/> -->
 				<xsl:apply-templates select="./where" mode="code"/>
 				<xsl:text>END_RULE;</xsl:text>
-				<xsl:text>&#xa;</xsl:text><!-- <br/> --><xsl:text>(*</xsl:text>
+				<!-- <xsl:text>&#xa;</xsl:text><xsl:text>(*</xsl:text> --><!-- <br/> -->
 			<xsl:call-template name="insertCodeEnd"/>
 		</code>
 		<!-- end blockquote -->

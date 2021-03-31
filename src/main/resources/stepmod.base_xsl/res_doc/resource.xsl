@@ -1956,12 +1956,12 @@ the types, entity specializations, and functions that are specific to this part 
 	SCHEMA <xsl:value-of select="concat($schema_name,';')"/>
 			</a>
 		</code> -->
+		<xsl:if test="$xref != ''">
+			<xsl:text>[[</xsl:text><xsl:value-of select="$xref"/><xsl:text>]]&#xa;</xsl:text>
+		</xsl:if>
 		<code>
 		<xsl:call-template name="insertLutaMLCodeStart"/>
-			<xsl:text>*)&#xa;</xsl:text>		
-			<xsl:if test="$xref != ''">
-			<xsl:text>[[</xsl:text><xsl:value-of select="$xref"/><xsl:text>]]&#xa;</xsl:text>
-			</xsl:if>
+			<!-- <xsl:text>*)&#xa;</xsl:text>		 -->
 			<xsl:text>SCHEMA </xsl:text><xsl:value-of select="concat($schema_name,';')"/>
 		<xsl:call-template name="insertCodeEnd"/>
 		</code>
@@ -2063,10 +2063,10 @@ the types, entity specializations, and functions that are specific to this part 
 		</code> -->
 		<code>
 		<xsl:call-template name="insertLutaMLCodeStart"/>
-			<xsl:text>*)&#xa;</xsl:text>					
+			<!-- <xsl:text>*)&#xa;</xsl:text>					 -->
 			<xsl:text>END_SCHEMA;  -- </xsl:text><xsl:value-of select="$express_xml/express/schema/@name"/>
-			<xsl:text>&#xa;</xsl:text>
-			<xsl:text>(*</xsl:text>
+			<!-- <xsl:text>&#xa;</xsl:text>
+			<xsl:text>(*</xsl:text> -->
 		<xsl:call-template name="insertCodeEnd"/>
 		</code>
 

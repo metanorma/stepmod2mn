@@ -36,14 +36,12 @@
     </xsl:call-template>
   </xsl:variable>    
 
+	<xsl:text>[[</xsl:text><xsl:value-of select="$aname"/><xsl:text>]]</xsl:text>
 	<code>
 	<xsl:call-template name="insertLutaMLCodeStart"/>
     <!-- <br/><br/> -->
-		
     <!-- <a name="{$aname}">
       SCHEMA <b><xsl:value-of select="@name"/></b>;</a> -->
-		<xsl:text>[[</xsl:text><xsl:value-of select="$aname"/>
-		<xsl:text>]]</xsl:text>
 		<xsl:text>SCHEMA *</xsl:text><xsl:value-of select="@name"/><xsl:text>*;</xsl:text>
 		
 		<xsl:call-template name="insertCodeEnd"/>

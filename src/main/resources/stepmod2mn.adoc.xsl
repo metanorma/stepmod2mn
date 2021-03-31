@@ -670,8 +670,9 @@
 	</xsl:template>
 	
 	<xsl:template name="insertLutaMLCodeStart">
-		<xsl:text>&#xa;&#xa;</xsl:text>
-		<xsl:text>[lutaml_source,express]</xsl:text>
+		<xsl:text>&#xa;</xsl:text><!-- &#xa; -->
+		<!-- <xsl:text>[lutaml_source,express]</xsl:text> -->
+		<xsl:text>[source%unnumbered]</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
 		<xsl:text>--</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
