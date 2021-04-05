@@ -2,7 +2,6 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
 		xmlns:mml="http://www.w3.org/1998/Math/MathML" 
 		xmlns:tbx="urn:iso:std:iso:30042:ed-1" 
-		xmlns:xlink="http://www.w3.org/1999/xlink" 
 		xmlns:xalan="http://xml.apache.org/xalan" 
 		xmlns:java="http://xml.apache.org/xalan/java" 
 		xmlns:metanorma-class="xalan://com.metanorma.RegExEscaping"
@@ -10,7 +9,7 @@
 		xmlns:str="http://exslt.org/strings"
 		exclude-result-prefixes="mml tbx  xalan java metanorma-class str svg" 
 		version="1.0">
-
+	<!-- xmlns:xlink="http://www.w3.org/1999/xlink"  -->
 	<xsl:output method="xml" encoding="UTF-8"/>
 			
 	<xsl:param name="path" />
@@ -79,7 +78,8 @@
 			<xsl:message>Error: empty base64 string.</xsl:message>
 		</xsl:if>
 		
-		<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+		<!-- xmlns:xlink="http://www.w3.org/1999/xlink" -->
+		<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" 
 		x="0px" y="0px" viewBox="0 0 {$width} {$height}" width="{$width}" height="{$height}" style="enable-background:new 0 0 595.28 841.89;" xml:space="preserve">
 			<!-- <style type="text/css">.st0{fill:#FFFFFF;stroke:#000000;stroke-miterlimit:10;opacity:0}</style> -->
 			<!-- 'xlink:href' changed to 'href' for https://github.com/metanorma/stepmod2mn/issues/17, https://github.com/metanorma/annotated-express/issues/21  -->
