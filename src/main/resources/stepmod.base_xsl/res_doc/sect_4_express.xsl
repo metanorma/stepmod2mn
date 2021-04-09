@@ -400,22 +400,12 @@
 				</small>
 			</p> -->
 			
-			<xsl:call-template name="insertNote">
+			<!-- <xsl:call-template name="insertNoteComplex">
 				<xsl:with-param name="text">
-					<xsl:variable name="used-count" select="count(used-schema[not(.=preceding-sibling::used-schema)])" />
-					<xsl:choose>
-						<xsl:when test="$used-count = 1" >
-										The schemas referenced above are specified in the following 
-										part: +
-						</xsl:when>
-						<xsl:otherwise >
-							The schemas referenced above are specified in the following 
-							parts: +
-						</xsl:otherwise>
-					</xsl:choose>
+					
 				</xsl:with-param>
 				<xsl:with-param name="isolated" select="'false'"/>
-			</xsl:call-template>
+			</xsl:call-template> -->
 			
 			
 			<!-- <blockquote>
@@ -440,10 +430,12 @@
 				</table>
 		</blockquote> -->
 		<blockquote>
-		<xsl:text>+ </xsl:text>
-		<xsl:text>&#xa;</xsl:text>			
+		<!-- <xsl:text>+ </xsl:text> -->
+		
+		<xsl:text>[NOTE]</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
 		<xsl:call-template name="insertNoteQuoteStart"/>
-			<xsl:for-each select="$schema_node/interface[not(@schema = node()/preceding::node()/@schema)]">
+			<!-- <xsl:for-each select="$schema_node/interface[not(@schema = node()/preceding::node()/@schema)]">
 				<xsl:variable name="schema_name" select="./@schema"/>      
 				<xsl:value-of select="$schema_name"/>
 				<xsl:text>:: </xsl:text>
@@ -452,7 +444,24 @@
 				</xsl:variable>
 				<xsl:copy-of select="$text"/>
 				<xsl:text>&#xa;</xsl:text>			
-			</xsl:for-each>
+			</xsl:for-each> -->
+			<xsl:variable name="used-count" select="count(used-schema[not(.=preceding-sibling::used-schema)])" />
+			<xsl:text>The schemas referenced above are specified in the following </xsl:text>
+			<xsl:choose>
+				<xsl:when test="$used-count = 1" >part:</xsl:when>
+				<xsl:otherwise>parts:</xsl:otherwise>
+			</xsl:choose>
+			<xsl:text>&#xa;&#xa;</xsl:text>
+			
+			<xsl:text>{% assign reference_froms = schema.interfaces | where: "kind", :REFERENCE %}</xsl:text><xsl:text>&#xa;</xsl:text>
+			<xsl:text>{% for from in reference_froms %}</xsl:text><xsl:text>&#xa;</xsl:text>
+			<xsl:text>{% assign from_schema = context.schemas | where: "id", from.schema.id | first %}</xsl:text><xsl:text>&#xa;</xsl:text>
+			<xsl:text>{% assign version = from_schema.version %}</xsl:text><xsl:text>&#xa;</xsl:text>
+			<xsl:text>{% assign version_number = version.items[2].value %}</xsl:text><xsl:text>&#xa;</xsl:text>
+			<xsl:text>{% assign version_part = version.items[3].value %}</xsl:text><xsl:text>&#xa;</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>{{ from_schema.id }}:: ISO {{ version_number }}-{{ version_part }}</xsl:text><xsl:text>&#xa;</xsl:text>
+			<xsl:text>{% endfor %}</xsl:text><xsl:text>&#xa;</xsl:text>
 		<xsl:call-template name="insertNoteQuoteEnd"/>
 		</blockquote>
 		

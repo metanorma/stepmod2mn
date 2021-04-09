@@ -564,6 +564,22 @@
 		</xsl:if>
 	</xsl:template>
 	
+	<xsl:template name="insertNoteComplex">
+		<xsl:param name="id"/>
+		<xsl:param name="text"/>
+		<br/><br/>
+		<xsl:if test="normalize-space($id) != ''">
+			<xsl:text>[[</xsl:text>
+			<xsl:value-of select="$id"/>
+			<xsl:text>]]</xsl:text>
+			<br/>
+		</xsl:if>      
+		<xsl:text>[NOTE]</xsl:text>
+		<br/>
+		<xsl:apply-templates select="xalan:nodeset($text)" mode="linearize"/>
+		<br/>
+	</xsl:template>
+	
 	<xsl:template name="insertExample">
 		<xsl:param name="id"/>
 		<xsl:param name="text"/>
@@ -651,12 +667,12 @@
 	</xsl:template>
 	
 	<xsl:template name="insertNoteQuoteStart">
-		<xsl:text>--</xsl:text>
+		<xsl:text>====</xsl:text>
 		<xsl:text>&#xa;</xsl:text>		
 	</xsl:template>
 	
 	<xsl:template name="insertNoteQuoteEnd">
-		<xsl:text>--</xsl:text>
+		<xsl:text>====</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
 	</xsl:template>
