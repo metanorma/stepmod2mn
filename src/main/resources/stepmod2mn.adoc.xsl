@@ -6,8 +6,8 @@
 		xmlns:xalan="http://xml.apache.org/xalan" 
 		xmlns:java="http://xml.apache.org/xalan/java" 
 		xmlns:java_char="http://xml.apache.org/xalan/java/java.lang.Character" 
-		xmlns:metanorma-class="xalan://com.metanorma.RegExEscaping"
-		xmlns:metanorma-class-util="xalan://com.metanorma.Util"
+		xmlns:metanorma-class="xalan://org.metanorma.RegExEscaping"
+		xmlns:metanorma-class-util="xalan://org.metanorma.Util"
 		xmlns:redirect="http://xml.apache.org/xalan/redirect"
 		exclude-result-prefixes="mml tbx xlink xalan java metanorma-class metanorma-class-util" 
 		extension-element-prefixes="redirect"
@@ -843,7 +843,7 @@
         <xsl:text>&#xa;</xsl:text>
         <xsl:copy-of select="$text"/>
         <xsl:if test="normalize-space($file) != ''">
-          <xsl:copy-of select="java:com.metanorma.Util.getFileContent(concat($boilerplate_path, $file))"/>
+          <xsl:copy-of select="java:org.metanorma.Util.getFileContent(concat($boilerplate_path, $file))"/>
         </xsl:if>
         <xsl:text>&#xa;</xsl:text>
         <xsl:text>[end_</xsl:text><xsl:value-of select="$folder"/><xsl:text>]</xsl:text>
@@ -948,7 +948,7 @@
 	
 	
 	<xsl:template match="text()[not(ancestor::blockquote or ancestor::code or ancestor::screen or ancestor::li_label)]" mode="text">
-		<xsl:value-of select="java:com.metanorma.RegExEscaping.escapeFormattingCommands(.)"/>
+		<xsl:value-of select="java:org.metanorma.RegExEscaping.escapeFormattingCommands(.)"/>
 	</xsl:template>
 	
 	<xsl:template name="repeat">

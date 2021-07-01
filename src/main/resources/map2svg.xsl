@@ -4,7 +4,7 @@
 		xmlns:tbx="urn:iso:std:iso:30042:ed-1" 
 		xmlns:xalan="http://xml.apache.org/xalan" 
 		xmlns:java="http://xml.apache.org/xalan/java" 
-		xmlns:metanorma-class="xalan://com.metanorma.RegExEscaping"
+		xmlns:metanorma-class="xalan://org.metanorma.RegExEscaping"
 		xmlns:svg="http://www.w3.org/2000/svg"
 		xmlns:str="http://exslt.org/strings"
 		exclude-result-prefixes="mml tbx  xalan java metanorma-class str svg" 

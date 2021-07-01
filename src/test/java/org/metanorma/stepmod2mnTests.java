@@ -1,5 +1,6 @@
-package com.metanorma;
+package org.metanorma;
 
+import org.metanorma.stepmod2mn;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
