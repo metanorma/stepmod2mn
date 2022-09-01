@@ -332,11 +332,25 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 		</xsl:when>
 
 		<xsl:otherwise>
+		
+			<xsl:variable name="schema_entity_">
+				<xsl:choose>
+					<xsl:when test="../@linkend"><xsl:value-of select="../@linkend"/></xsl:when>
+					<xsl:when test="ancestor::schema/@name"><xsl:value-of select="ancestor::schema/@name"/></xsl:when>
+				</xsl:choose>
+			</xsl:variable>
+			<xsl:variable name="schema_entity" select="normalize-space($schema_entity_)"/>
+			
 			<xsl:apply-templates select="./p[1]" mode="first_paragraph_note">
 				<xsl:with-param name="id" select="@id"/>
+				<xsl:with-param name="schema_entity" select="$schema_entity"/>
 				<xsl:with-param name="number" select="@number"/>
 			</xsl:apply-templates>
 			<xsl:apply-templates select="./child::*[position() &gt; 1]"/>
+			
+			<xsl:call-template name="insertNoteEnd">
+				<xsl:with-param name="schema_entity" select="$schema_entity"/>
+			</xsl:call-template>
 		</xsl:otherwise>
 	</xsl:choose>
 </xsl:template>
@@ -344,6 +358,7 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 <!-- called from <note> to deal with first paragraph -->
 <xsl:template match="p" mode="first_paragraph_note">
 	<xsl:param name="id"/>
+	<xsl:param name="schema_entity"/>
 	<xsl:param name="number"/>
 	<xsl:variable name="aname">
 		<xsl:choose>
@@ -356,41 +371,36 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 		</xsl:choose>
 	</xsl:variable>
 	<xsl:apply-templates select="." mode="check_html"/>
-	<xsl:choose>
+	
+	<!-- <xsl:choose>
 		<xsl:when test="name(../..)='example'">
-			<!-- already small -->
-			<!-- <p class="note">
+			< ! - - already small - - >
+			<p class="note">
 				<a name="{$aname}">
 					<xsl:value-of select="concat('NOTE&#160;',$number)"/></a>&#160;&#160;
 					<xsl:apply-templates/>
-			</p> -->
-			
-			<xsl:call-template name="insertNote">
-				<xsl:with-param name="id" select="$aname"/>
-				<xsl:with-param name="text">
-					<xsl:apply-templates/>
-				</xsl:with-param>
-			</xsl:call-template>
-				
+			</p>
 		</xsl:when>
 		<xsl:otherwise>
-			<!-- <p class="note">
+			<p class="note">
 				<small>
 					<a name="{$aname}">
 						<xsl:value-of select="concat('NOTE&#160;',$number)"/></a>&#160;&#160;
 						<xsl:apply-templates/>
 					</small>
-				</p>  --> 
-				
-				<xsl:call-template name="insertNote">
-					<xsl:with-param name="id" select="$aname"/>
-					<xsl:with-param name="text">
-						<xsl:apply-templates/>
-					</xsl:with-param>
-				</xsl:call-template>
-				
+				</p>
 		</xsl:otherwise>
-	</xsl:choose>
+	</xsl:choose> -->
+	
+	<xsl:call-template name="insertNote">
+		<xsl:with-param name="id" select="$aname"/>
+		<xsl:with-param name="schema_entity_param" select="$schema_entity"/>
+		<xsl:with-param name="text">
+			<xsl:apply-templates/>
+		</xsl:with-param>
+		<xsl:with-param name="start_only">true</xsl:with-param>
+	</xsl:call-template>
+	
 </xsl:template>
 
 <xsl:template match="figure">

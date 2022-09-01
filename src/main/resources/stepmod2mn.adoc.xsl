@@ -543,28 +543,78 @@
 
 	<xsl:template name="insertNote">
 		<xsl:param name="id"/>
+		<xsl:param name="schema_entity_param"/>
 		<xsl:param name="text"/>
-		<xsl:param name="isolated" select="'true'"/>
-		<!-- <xsl:text>&#xa;</xsl:text>
-		<xsl:text>&#xa;</xsl:text> -->
+		<!-- <xsl:param name="isolated" select="'true'"/> -->
+		<xsl:param name="start_only">false</xsl:param>
+		
 		<br/><br/>
+		
+		<xsl:variable name="schema_entity_">
+			<xsl:choose>
+				<xsl:when test="$schema_entity_param != ''"><xsl:value-of select="$schema_entity_param"/></xsl:when>
+				<xsl:when test="../@linkend"><xsl:value-of select="../@linkend"/></xsl:when>
+				<xsl:when test="ancestor::schema/@name"><xsl:value-of select="ancestor::schema/@name"/></xsl:when>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:variable name="schema_entity" select="normalize-space($schema_entity_)"/>
+		
 		<xsl:if test="normalize-space($id) != ''">
 			<xsl:text>[[</xsl:text>
 			<xsl:value-of select="$id"/>
 			<xsl:text>]]</xsl:text>
 			<!-- <xsl:text>&#xa;</xsl:text> -->
 			<br/>
-		</xsl:if>      
-		<xsl:text>NOTE: </xsl:text><xsl:apply-templates select="xalan:nodeset($text)" mode="linearize"/><!-- <xsl:value-of select="normalize-space($text)"/> -->
-		<!-- <xsl:text>&#xa;</xsl:text> -->
-		<br/>
-		<xsl:if test="$isolated = 'true'">
-			<!-- <xsl:text>&#xa;</xsl:text> -->
-			<br/>
+		</xsl:if>
+		
+		<xsl:choose>
+			<xsl:when test="$schema_entity = ''">
+				<!-- <xsl:text>NOTE: </xsl:text> -->
+				<xsl:text>[NOTE]</xsl:text>
+				<br/>
+				<xsl:text>--</xsl:text>
+				<br/>
+				<xsl:apply-templates select="xalan:nodeset($text)" mode="linearize"/>
+				<br/>
+			</xsl:when>
+			<xsl:otherwise>
+				<!-- Sample:
+				(*"Activity_arm.Activity.__note"
+					Status information identifying the level of ...
+					*)
+				-->
+				<xsl:text>(*"</xsl:text><xsl:value-of select="$schema_entity"/><xsl:text>.__note"</xsl:text>
+				<br/>
+				<xsl:apply-templates select="xalan:nodeset($text)" mode="linearize"/>
+				<br/>
+			</xsl:otherwise>
+		</xsl:choose>
+		
+		<xsl:if test="$start_only = 'false'">
+			<xsl:call-template name="insertNoteEnd">
+				<xsl:with-param name="schema_entity" select="$schema_entity"/>
+			</xsl:call-template>
 		</xsl:if>
 	</xsl:template>
 	
-	<xsl:template name="insertNoteComplex">
+	<xsl:template name="insertNoteEnd">
+		<xsl:param name="schema_entity"/>
+		<xsl:choose>
+			<xsl:when test="$schema_entity = ''">
+				<xsl:text>--</xsl:text>
+				<br/>
+				<br/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:text>*)</xsl:text>
+				<br/>
+				<br/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	
+	
+	<!-- <xsl:template name="insertNoteComplex">
 		<xsl:param name="id"/>
 		<xsl:param name="text"/>
 		<br/><br/>
@@ -578,31 +628,63 @@
 		<br/>
 		<xsl:apply-templates select="xalan:nodeset($text)" mode="linearize"/>
 		<br/>
-	</xsl:template>
+	</xsl:template> -->
 	
 	<xsl:template name="insertExample">
 		<xsl:param name="id"/>
 		<xsl:param name="text"/>
 		<xsl:param name="keep-with-previous" select="'false'"/>
-		<!-- <xsl:text>&#xa;</xsl:text>
-		<xsl:text>&#xa;</xsl:text> -->
+		
 		<xsl:choose>
 			<xsl:when test="$keep-with-previous = 'true'">+<br/>+<br/></xsl:when>
 			<xsl:otherwise><br/><br/></xsl:otherwise>
 		</xsl:choose>
-		<xsl:text>[example]</xsl:text>
-		<!-- <xsl:text>&#xa;</xsl:text> -->
-		<br/>
+		
+		<xsl:variable name="schema_entity_">
+			<xsl:choose>
+				<xsl:when test="../@linkend"><xsl:value-of select="../@linkend"/></xsl:when>
+				<xsl:when test="ancestor::schema/@name"><xsl:value-of select="ancestor::schema/@name"/></xsl:when>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:variable name="schema_entity" select="normalize-space($schema_entity_)"/>
+		
 		<xsl:if test="normalize-space($id) != ''">
+			<br/>
 			<xsl:text>[[</xsl:text>
 			<xsl:value-of select="$id"/>
 			<xsl:text>]]</xsl:text>
-			<!-- <xsl:text>&#xa;</xsl:text> -->
 			<br/>
-		</xsl:if>      
-		<!-- <xsl:value-of select="normalize-space($text)"/> -->
+		</xsl:if>
+		
+		<xsl:choose>
+			<xsl:when test="$schema_entity = ''">
+				<xsl:text>[example]</xsl:text>
+				<br/>
+				<xsl:text>====</xsl:text>
+			</xsl:when>
+			<xsl:otherwise>
+				<!-- Sample:
+				(*"Activity_arm.Activity.__example"
+				Change, distilling, design, ....
+				*)
+				-->
+				<xsl:text>(*"</xsl:text><xsl:value-of select="$schema_entity"/><xsl:text>.__example"</xsl:text>
+			</xsl:otherwise>
+		</xsl:choose>
+		
+		<br/>
 		<xsl:apply-templates select="xalan:nodeset($text)" mode="linearize"/>
-		<!-- <xsl:text>&#xa;&#xa;</xsl:text> -->
+		<br/>
+		
+		<xsl:choose>
+			<xsl:when test="$schema_entity = ''">
+				<xsl:text>====</xsl:text>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:text>*)</xsl:text>
+			</xsl:otherwise>
+		</xsl:choose>
+		
 		<br/><br/>
 	</xsl:template>
 	

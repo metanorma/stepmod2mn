@@ -432,9 +432,18 @@
 		<blockquote>
 		<!-- <xsl:text>+ </xsl:text> -->
 		
-		<xsl:text>[NOTE]</xsl:text>
+		<!-- <xsl:text>[NOTE]</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
-		<xsl:call-template name="insertNoteQuoteStart"/>
+		<xsl:call-template name="insertNoteQuoteStart"/> -->
+		
+		<!-- 
+		Sample: 
+		(*"Activity_arm.Activity.__note"
+		Status information identifying the level of ...
+		*) -->
+		<xsl:text>(*"</xsl:text><xsl:value-of select="$schema_name_param"/><xsl:text>.__note"</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		
 			<!-- <xsl:for-each select="$schema_node/interface[not(@schema = node()/preceding::node()/@schema)]">
 				<xsl:variable name="schema_name" select="./@schema"/>      
 				<xsl:value-of select="$schema_name"/>
@@ -462,7 +471,10 @@
 			<xsl:text>&#xa;</xsl:text>
 			<xsl:text>{{ from_schema.id }}:: ISO {{ version_number }}-{{ version_part }}</xsl:text><xsl:text>&#xa;</xsl:text>
 			<xsl:text>{% endfor %}</xsl:text><xsl:text>&#xa;</xsl:text>
-		<xsl:call-template name="insertNoteQuoteEnd"/>
+		<!-- <xsl:call-template name="insertNoteQuoteEnd"/> -->
+		<xsl:text>*)</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
 		</blockquote>
 		
 			<!-- <p class="note">
