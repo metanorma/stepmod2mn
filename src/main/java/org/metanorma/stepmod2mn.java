@@ -177,9 +177,7 @@ public class stepmod2mn {
                 String imageIn = cmd.getOptionValue("image");
                 //get filename from path
                 imageIn = Paths.get(imageIn).getFileName().toString();
-                
-                //C:\Upwork\Metanorma\Stepmod\iso-10303-stepmod-master\data\resources\action_schema\action_schemaexpg1.xml 
-                
+
                 try {
                     stepmod2mn app = new stepmod2mn();
                     app.generateSVG(xmlIn, imageIn, cmd.getOptionValue("svg"));
@@ -284,16 +282,18 @@ public class stepmod2mn {
                     System.out.println("Done!");*/
                 } else { // in case of local file
                     File fXMLin = new File(argXMLin);
+                    fXMLin = fXMLin.getAbsoluteFile();
                     if (!fXMLin.exists()) {
                         System.out.println(String.format(INPUT_NOT_FOUND, XML_INPUT, fXMLin));
                         System.exit(ERROR_EXIT_CODE);
                     }
 
                     //parent path for input resource.xml
-                    resourcePath = new File(argXMLin).getParent() + File.separator;
+                    //resourcePath = new File(argXMLin).getParent() + File.separator;
+                    resourcePath = fXMLin.getParent() + File.separator;
 
                     if (!cmd.hasOption("output")) { // if local file, then save result in input folder
-                      outFileName = new File(argXMLin).getAbsolutePath();
+                      outFileName = fXMLin.getAbsolutePath();
                     }                    
                 }
 
