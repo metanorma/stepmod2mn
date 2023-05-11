@@ -2499,13 +2499,31 @@ the types, entity specializations, and functions that are specific to this part 
 				<xsl:variable 
 			name="id" 
 			select="substring-after($first,'normref:')"/>
-
-				<xsl:variable name="normref">
-		<xsl:apply-templates 
-				select="document(concat($path, '../../../data/basic/normrefs.xml'))/normref.list/normref[@id=$id]" mode="prune_normrefs_list"/>
-				</xsl:variable>
-				<!-- return the normref to be added to the list -->
-				<xsl:value-of select="$normref"/>
+			
+				<xsl:variable name="normref_xml" select="document(concat($path, '../../../data/basic/normrefs.xml'))"/>
+			
+				<xsl:variable name="normref_node" select="$normref_xml/normref.list/normref[@id=$id]"/>
+				
+				<xsl:choose>
+					<xsl:when test="$normref_node">
+					
+						<xsl:variable name="normref">
+							<xsl:apply-templates select="$normref_xml/normref.list/normref[@id=$id]" mode="prune_normrefs_list"/>
+						</xsl:variable>
+						<!-- return the normref to be added to the list -->
+						<xsl:value-of select="$normref"/>
+						
+					</xsl:when>
+					
+					<xsl:otherwise>
+						<xsl:call-template name="error_message">
+							<xsl:with-param name="message">
+								<xsl:value-of select="concat('Error 7: reference with id ', $id, ' not found')"/>
+							</xsl:with-param>
+						</xsl:call-template>
+					</xsl:otherwise>
+					
+				</xsl:choose>
 			</xsl:when>
 
 			<xsl:when test="contains($first,'resource:')">
@@ -2778,9 +2796,11 @@ the types, entity specializations, and functions that are specific to this part 
 		name="normref" 
 		select="substring-after($first,'normref:')"/>
 
+			<xsl:variable name="normref_xml" select="document(concat($path, '../../../data/basic/normrefs.xml'))"/>
+
 			<xsl:variable 
 		name="normref_node"
-		select="document(concat($path, '../../../data/basic/normrefs.xml'))/normref.list/normref[@id=$normref]"/>
+		select="$normref_xml/normref.list/normref[@id=$normref]"/>
 			
 			<xsl:choose>
 				<xsl:when test="$normref_node">   
@@ -2794,14 +2814,14 @@ the types, entity specializations, and functions that are specific to this part 
 							 <xsl:element name="string">
 								<xsl:if test="$resource_number!=$part_no">
 									<!-- OOUTPUT from normative references -->
-										<xsl:apply-templates select="document(concat($path, '../../../data/basic/normrefs.xml'))/normref.list/normref[@id=$normref]"/>
+										<xsl:apply-templates select="$normref_xml/normref.list/normref[@id=$normref]"/>
 								</xsl:if>
 							</xsl:element>
 							<xsl:variable name="part">
-								<xsl:value-of select="document(concat($path, '../../../data/basic/normrefs.xml'))/normref.list/normref[@id=$normref]/stdref/stdnumber"/>
+								<xsl:value-of select="$normref_xml/normref.list/normref[@id=$normref]/stdref/stdnumber"/>
 							</xsl:variable>
 							<xsl:variable name="orgname">
-								<xsl:value-of select="document(concat($path, '../../../data/basic/normrefs.xml'))/normref.list/normref[@id=$normref]/stdref/orgname"/>
+								<xsl:value-of select="$normref_xml/normref.list/normref[@id=$normref]/stdref/orgname"/>
 							</xsl:variable>
 							<!-- eliminate status info like TS, CD-TS, etc -->
 							<xsl:variable name="orgname_cleaned">
@@ -3370,7 +3390,8 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 		<!-- <table width="80%" type="abbreviations"> -->
 			<!-- get the default abbreviations out of the abbreviations_resdoc_defaultxml
 		 database -->
-			<xsl:apply-templates select="document(concat($path, '../../../data/basic/abbreviations_resdoc_default.xml'))/abbreviations/abbreviation.inc"/>
+			<xsl:variable name="abbreviations_resdoc_default_xml" select="document(concat($path, '../../../data/basic/abbreviations_resdoc_default.xml'))"/>
+			<xsl:apply-templates select="$abbreviations_resdoc_default_xml/abbreviations/abbreviation.inc"/>
 			
 			<xsl:apply-templates select="/resource/abbreviations" mode="output"/>    
 			<xsl:text>&#xa;</xsl:text>
@@ -3615,16 +3636,55 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 						<xsl:variable name="moreNormRefs" select="string-length(/resource/normrefs/normref.inc[@normref=$ref]/term.ref)+string-length(/resource/normrefs/normref.inc)+1"/>
 								<xsl:choose>
 									<xsl:when test="not($doctype='aic')">
-										<xsl:apply-templates select="document(concat($path, '../../../data/basic/normrefs_resdoc_default.xml'))/normrefs/normref.inc[@normref=$ref]/term.ref" mode="normref">
-											<xsl:with-param name="current_resource" select="$current_resource"/>
-											<xsl:with-param name="moreNormRefs" select="$moreNormRefs"/>
-										</xsl:apply-templates>
+									
+										<xsl:variable name="normrefs_resdoc_default_xml" select="document(concat($path, '../../../data/basic/normrefs_resdoc_default.xml'))"/>
+										
+										<xsl:variable name="normrefs_resdoc_default_node" select="$normrefs_resdoc_default_xml/normrefs/normref.inc[@normref=$ref]"/>
+										
+										<xsl:choose>
+											<xsl:when test="$normrefs_resdoc_default_node">
+												<xsl:apply-templates select="$normrefs_resdoc_default_xml/normrefs/normref.inc[@normref=$ref]/term.ref" mode="normref">
+													<xsl:with-param name="current_resource" select="$current_resource"/>
+													<xsl:with-param name="moreNormRefs" select="$moreNormRefs"/>
+												</xsl:apply-templates>
+											</xsl:when>
+											
+											<xsl:otherwise>
+												<xsl:call-template name="error_message">
+													<xsl:with-param name="message">
+														<xsl:value-of select="concat('Error 7: reference with id ', $ref, ' not found')"/>
+													</xsl:with-param>
+												</xsl:call-template>
+											</xsl:otherwise>
+											
+										</xsl:choose>
+										
 									</xsl:when>
 									<xsl:when test="$doctype='aic'">
-										<xsl:apply-templates select="document(concat($path, '../../../data/basic/normrefs_aic_default.xml'))/normrefs/normref.inc[@normref=$ref]/term.ref" mode="normref">
-											<xsl:with-param name="current_resource" select="$current_resource"/>
-											<xsl:with-param name="moreNormRefs" select="$moreNormRefs"/>
-										</xsl:apply-templates>
+									
+									
+										<xsl:variable name="normrefs_aic_default_xml" select="document(concat($path, '../../../data/basic/normrefs_aic_default.xml'))"/>
+										
+										<xsl:variable name="normrefs_aic_default_node" select="$normrefs_aic_default_xml/normrefs/normref.inc[@normref=$ref]"/>
+										
+										<xsl:choose>
+											<xsl:when test="$normrefs_aic_default_node">
+												<xsl:apply-templates select="$normrefs_aic_default_xml/normrefs/normref.inc[@normref=$ref]/term.ref" mode="normref">
+													<xsl:with-param name="current_resource" select="$current_resource"/>
+													<xsl:with-param name="moreNormRefs" select="$moreNormRefs"/>
+												</xsl:apply-templates>
+											</xsl:when>
+											
+											<xsl:otherwise>
+												<xsl:call-template name="error_message">
+													<xsl:with-param name="message">
+														<xsl:value-of select="concat('Error 7: reference with id ', $ref, ' not found')"/>
+													</xsl:with-param>
+												</xsl:call-template>
+											</xsl:otherwise>
+											
+										</xsl:choose>
+										
 									</xsl:when>
 								</xsl:choose>
 								<!-- check to see if any terms from the same normref are 
