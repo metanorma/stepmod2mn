@@ -7,7 +7,7 @@ $Id: express_description.xsl,v 1.8 2015/08/03 09:40:44 mikeward Exp $
 		 Used to display the commented XML encoded Express
 		 in clause 4 and 5 of a module.
 -->
-
+<!-- Updated: Alexander Dyuzhev, for stepmod2mn tool-->
 
 <xsl:stylesheet 
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:java="http://xml.apache.org/xalan/java"

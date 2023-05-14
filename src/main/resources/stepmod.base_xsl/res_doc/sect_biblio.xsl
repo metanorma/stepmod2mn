@@ -8,6 +8,7 @@ $Id: sect_biblio.xsl,v 1.2 2002/12/19 21:02:58 nigelshaw Exp $
   	Adapted to work with resource documents by Tom Hendrix and Nigel Shaw
      
 -->
+<!-- Updated: Alexander Dyuzhev, for stepmod2mn tool-->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version="1.0">
 

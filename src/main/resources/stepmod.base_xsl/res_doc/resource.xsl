@@ -6,6 +6,7 @@ Owner:   Developed by Eurostep and supplied to NIST under contract.
 Purpose:
 
 -->
+<!-- Updated: Alexander Dyuzhev, for stepmod2mn tool-->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"		
 	xmlns:xalan="http://xml.apache.org/xalan" 
 	xmlns:java="http://xml.apache.org/xalan/java" 

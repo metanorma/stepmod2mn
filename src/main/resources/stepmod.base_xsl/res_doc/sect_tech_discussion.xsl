@@ -7,6 +7,7 @@ $Id: sect_e_examples.xsl,v 1.1 2002/10/16 00:43:38 thendrix Exp $
 	Purpose: To display technical discussions annex of resource documents
 		 
 -->
+<!-- Updated: Alexander Dyuzhev, for stepmod2mn tool-->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 								version="1.0">
 

@@ -9,6 +9,7 @@
 		 Used to display the commented XML encoded Express
 		 in the schema clauses 4, etc of a resource.
 -->
+<!-- Updated: Alexander Dyuzhev, for stepmod2mn tool-->
 
 <xsl:stylesheet 
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"

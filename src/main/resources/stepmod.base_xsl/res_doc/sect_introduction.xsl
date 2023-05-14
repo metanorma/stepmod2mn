@@ -7,6 +7,7 @@ $Id: sect_introduction.xsl,v 1.13 2010/10/20 07:44:26 robbod Exp $
 	Purpose: Output introduction as a web page
 		 
 -->
+<!-- Updated: Alexander Dyuzhev, for stepmod2mn tool-->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"  
 	xmlns:xalan="http://xml.apache.org/xalan" 
 	version="1.0">

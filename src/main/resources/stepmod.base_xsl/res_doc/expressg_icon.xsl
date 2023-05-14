@@ -7,6 +7,7 @@ $Id: expressg_icon.xsl,v 1.1 2003/08/26 05:32:50 thendrix Exp $
   Purpose: Read the are maps in an image and create a node list. This is
      then used to determine the EXPRESSG page on which an entity is drawn.
 -->
+<!-- Updated: Alexander Dyuzhev, for stepmod2mn tool-->
 <xsl:stylesheet 
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"  
 	xmlns:xalan="http://xml.apache.org/xalan" 

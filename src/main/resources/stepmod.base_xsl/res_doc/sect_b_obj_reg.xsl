@@ -7,6 +7,7 @@ $Id: sect_b_obj_reg.xsl,v 1.9 2012/11/14 23:16:12 lothartklein Exp $
 	Purpose:
 		 
 -->
+<!-- Updated: Alexander Dyuzhev, for stepmod2mn tool-->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 								version="1.0">
 

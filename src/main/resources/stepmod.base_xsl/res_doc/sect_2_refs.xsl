@@ -7,6 +7,7 @@ $Id: sect_2_refs.xsl,v 1.6 2002/08/05 16:20:48 robbod Exp $
   Purpose: Output the refs section as a web page
      
 -->
+<!-- Updated: Alexander Dyuzhev, for stepmod2mn tool-->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version="1.0">
 
