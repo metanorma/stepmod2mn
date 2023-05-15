@@ -2360,7 +2360,7 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
 
   <xsl:choose>
     <xsl:when test="document($arm)/express/schema[entity/@name=$ae or type/@name=$ae]">
-      <li> 
+      <!-- <li>  -->
         <xsl:variable name="aname">
           <xsl:call-template name="express_a_name">
             <xsl:with-param name="section1" select="$schema_name"/>
@@ -2380,7 +2380,8 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
             </xsl:otherwise>
           </xsl:choose>
         </xsl:variable>
-        <xsl:choose>
+        
+        <!-- <xsl:choose>
           <xsl:when test="position()!=last()">
             <a href="{$xref}">
               <xsl:value-of select="$ae"/>
@@ -2391,8 +2392,24 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
               <xsl:value-of select="$ae"/>
             </a>.
           </xsl:otherwise>
+        </xsl:choose> -->
+        
+        <xsl:call-template name="insertParagraph">
+          <xsl:with-param name="text">
+              <xsl:text>* &lt;&lt;</xsl:text>
+              <xsl:value-of select="$ae"/>
+              <xsl:text>, </xsl:text>
+              <xsl:value-of select="$xref"/>
+              <xsl:text>&gt;&gt;</xsl:text>
+            </xsl:with-param>
+        </xsl:call-template>
+        
+        <xsl:choose>
+          <xsl:when test="position()!=last()">;</xsl:when>
+          <xsl:otherwise>.</xsl:otherwise>
         </xsl:choose>
-      </li>
+      <!-- </li> -->
+      
     </xsl:when>
     <xsl:otherwise>
       <xsl:call-template name="error_message">
@@ -2429,42 +2446,77 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
   </xsl:choose>
   -->
 
-  <h2>
+  <!-- <h2>
     <a name="mim_express">5.2 MIM EXPRESS short listing</a>
-  </h2>
-  <p>
+  </h2> -->
+  
+  <xsl:call-template name="insertHeaderADOC">
+    <xsl:with-param name="id">mim_express</xsl:with-param>
+    <xsl:with-param name="level" select="2"/>
+    <xsl:with-param name="header">MIM EXPRESS short listing</xsl:with-param>
+  </xsl:call-template>
+  
+  <!-- <p> -->
+  <xsl:call-template name="insertParagraph">
+    <xsl:with-param name="text">
     This clause specifies the EXPRESS schema derived from the mapping
     table. 
     It uses elements from the common resources or from other application
     modules and defines the EXPRESS constructs that are specific to this
     part of ISO 10303.
-  </p> 
-  <p>
+    </xsl:with-param>
+  </xsl:call-template>
+  <!-- </p>  -->
+  <!-- <p> -->
+  <xsl:call-template name="insertParagraph">
+    <xsl:with-param name="text">
     This clause constitutes the Module Interpreted Module (MIM) of the
     application module.
-  </p>
+    </xsl:with-param>
+  </xsl:call-template>
+  <!-- </p> -->
 
-  <p>This clause also
+  <!-- <p> -->
+  <xsl:call-template name="insertParagraph">
+    <xsl:with-param name="text">This clause also
     specifies the modifications that apply to the constructs 
-    imported from the common resources.</p>
-  <p>The following restrictions apply to the use, in this schema, of constructs defined in common resources or in application
-    modules:</p>
-  <ul>
-    <li>
-      use of a supertype entity does not make applicable any of its
+    imported from the common resources.
+    </xsl:with-param>
+  </xsl:call-template>
+  <!-- </p> -->
+  
+  <!-- <p> -->
+  <xsl:call-template name="insertParagraph">
+    <xsl:with-param name="text">
+      The following restrictions apply to the use, in this schema, of constructs defined in common resources or in application
+    modules:
+    </xsl:with-param>
+  </xsl:call-template>
+  <!-- </p> -->
+  
+  <!-- <ul>
+    <li> -->
+    <xsl:call-template name="insertParagraph">
+			<xsl:with-param name="text">* use of a supertype entity does not make applicable any of its
       specializations, unless the specialization is also imported in the
-      MIM schema;
-    </li> 
-    <li>
-      use of a SELECT type does not make applicable any of its listed types
-      unless the listed type is also imported in the MIM schema.
-    </li>
-  </ul>
+      MIM schema;</xsl:with-param>
+    </xsl:call-template>
+    <!-- </li> 
+    <li> -->
+    <xsl:call-template name="insertParagraph">
+			<xsl:with-param name="text">* use of a SELECT type does not make applicable any of its listed types
+      unless the listed type is also imported in the MIM schema.</xsl:with-param>
+    </xsl:call-template>
+    <!-- </li>
+  </ul> -->
   
-  <p>
+  <!-- <p> -->
+  <xsl:call-template name="insertParagraph">
+    <xsl:with-param name="text">
     Short names of entities defined in this schema are described in Annex A. Unambiguous identification of this schema is defined in Annex B. 
-  </p>
-  
+    </xsl:with-param>
+  </xsl:call-template>
+  <!-- </p> -->
 
   <!-- output all the EXPRESS specifications -->
   <xsl:variable name="module_dir">
@@ -2509,16 +2561,31 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
 
 
   <xsl:apply-templates select="$mim_nodes/express/schema" mode="check_mim_usefroms"/>
-  <u>EXPRESS specification: </u>
-  <code>
+  <!-- <u>EXPRESS specification: </u> -->
+  <xsl:call-template name="insertParagraph">
+    <xsl:with-param name="text">
+      [.underline]#EXPRESS specification:#
+    </xsl:with-param>
+  </xsl:call-template>
+  
+  <!-- <code>
     <br/>    <br/>
     *)<br/>
     <a name="{$xref}">
       SCHEMA <xsl:value-of select="concat($schema_name,';')"/>
   </a>
-</code>
+</code> -->
 
- 
+  <xsl:if test="$xref != ''">
+    <xsl:text>[[</xsl:text><xsl:value-of select="$xref"/><xsl:text>]]&#xa;</xsl:text>
+  </xsl:if>
+  <code>
+  <xsl:call-template name="insertLutaMLCodeStart"/>
+    <!-- <xsl:text>*)&#xa;</xsl:text>		 -->
+    <xsl:text>SCHEMA </xsl:text><xsl:value-of select="concat($schema_name,';')"/>
+  <xsl:call-template name="insertCodeEnd"/>
+  </code>
+
   <!-- display the EXPRESS for the interfaces in the MIM.
        The template is in sect4_express.xsl -->
   <!-- there is only one schema in a module -->
@@ -2608,11 +2675,20 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
       select="$mim_nodes/express/schema/interface/described.item[@kind='PROCEDURE']"/>
   </xsl:call-template>
 
-  <code>
+ <!--  <code>
     <br/>    <br/>
     *)<br/>
-    END_SCHEMA;&#160;&#160;--&#160;<xsl:value-of select="$mim_nodes/express/schema/@name"/>
+    END_SCHEMA;&#160;&#160;- -&#160;<xsl:value-of select="$mim_nodes/express/schema/@name"/>
     <br/>(*
+  </code> -->
+  
+  <code>
+		<xsl:call-template name="insertLutaMLCodeStart"/>
+			<!-- <xsl:text>*)&#xa;</xsl:text>					 -->
+			<xsl:text>END_SCHEMA;  -- </xsl:text><xsl:value-of select="$mim_nodes/express/schema/@name"/>
+			<!-- <xsl:text>&#xa;</xsl:text>
+			<xsl:text>(*</xsl:text> -->
+		<xsl:call-template name="insertCodeEnd"/>
   </code>
 
 </xsl:template>
@@ -2629,10 +2705,24 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
   <xsl:variable name="sect_no">
     <xsl:number/>
   </xsl:variable>
-  <h2>
+  <!-- <h2>
     <xsl:value-of select="concat('5.1.',$sect_no,' ')"/>
     <a href="{$xref}"><xsl:value-of select="@entity"/></a>
-  </h2>
+  </h2> -->
+  <xsl:variable name="header">
+    <a href="{$xref}"><xsl:value-of select="@entity"/></a>
+    <xsl:call-template name="insertHyperlink">
+      <xsl:with-param name="a">
+        <xsl:value-of select="concat('5.1.',$sect_no,' ')"/>
+      </xsl:with-param>
+    </xsl:call-template>
+  </xsl:variable>
+  <xsl:call-template name="insertHeaderADOC">
+    <xsl:with-param name="id" select="''"/>		
+    <xsl:with-param name="level" select="3"/>
+    <xsl:with-param name="header" select="normalize-space($header)"/>					
+  </xsl:call-template>
+
 </xsl:template>
 
 
