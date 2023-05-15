@@ -244,13 +244,15 @@
 		<xsl:text>&#xa;</xsl:text>
 		<xsl:text>:lutaml-express-index: schemas; schemas.yaml;</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
-		
+		<xsl:text>&#xa;</xsl:text>
 		
 		<xsl:variable name="adoc">
 	
 			<!-- Abstract -->
 			<xsl:message>[INFO] Processing Abstract ...</xsl:message>
-			<xsl:apply-templates select="resource" mode="abstract"/> <!-- res_doc/resource.xsl  -->
+			<file path="sections/00-abstract.adoc">
+				<xsl:apply-templates select="resource" mode="abstract"/> <!-- res_doc/resource.xsl  -->
+			</file>
 			
 			
 			<!-- Foreword-->
