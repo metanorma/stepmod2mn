@@ -1214,7 +1214,8 @@ TT remove since locke is no longer available.
 
 <xsl:template match="inscope">
   <xsl:call-template name="clause_header">
-    <xsl:with-param name="heading" select="'1 Scope'"/>
+    <!-- <xsl:with-param name="heading" select="'1 Scope'"/> -->
+    <xsl:with-param name="heading" select="'Scope'"/>
     <xsl:with-param name="aname" select="'scope'"/>
   </xsl:call-template>
   <xsl:variable name="module_name">
@@ -1222,37 +1223,54 @@ TT remove since locke is no longer available.
       <xsl:with-param name="module" select="../@name"/>
     </xsl:call-template>           
   </xsl:variable>
-  <p>
+  <!-- <p> -->
+  <xsl:text>&#xa;</xsl:text>
+  <xsl:text>[[inscope]]</xsl:text>
+  <xsl:text>&#xa;</xsl:text>
+  <xsl:call-template name="insertParagraph">
+    <xsl:with-param name="text">
     This part of ISO 10303 specifies the application module
     <xsl:value-of select="$module_name"/>.
-    <a name="inscope"/>
+    <!-- <a name="inscope"/> -->
     The following are within the scope of this part of ISO 10303: 
-  </p>
+    </xsl:with-param>
+  </xsl:call-template>
+  <!-- </p> -->
 
   <!-- output any issues -->
   <xsl:apply-templates select=".." mode="output_clause_issue">
     <xsl:with-param name="clause" select="'inscope'"/>
   </xsl:apply-templates>
 
-  <ul>
+  <!-- <ul> -->
+  <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="li"/>
-  </ul>
+  <!-- </ul> -->
+  <xsl:text>&#xa;&#xa;</xsl:text>
 </xsl:template>
 
 
 <xsl:template match="outscope">
-  <p>
-    <a name="outscope"/>
+  <!-- <p>
+    <a name="outscope"/> -->
+  <xsl:text>[[outscope]]</xsl:text>
+  <xsl:text>&#xa;</xsl:text>
+  <xsl:call-template name="insertParagraph">
+    <xsl:with-param name="text">
     The following are outside the scope of this part of ISO 10303: 
-  </p>
+    </xsl:with-param>
+  </xsl:call-template>
+  <!-- </p> -->
   <!-- output any issues -->
   <xsl:apply-templates select=".." mode="output_clause_issue">
     <xsl:with-param name="clause" select="'outscope'"/>
   </xsl:apply-templates>
 
-  <ul>
+  <!-- <ul> -->
+  <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates/>
-  </ul>
+  <!-- </ul> -->
+  <xsl:text>&#xa;&#xa;</xsl:text>
 </xsl:template>
 
 
@@ -1260,15 +1278,25 @@ TT remove since locke is no longer available.
   <xsl:apply-templates/>
 </xsl:template>
 <xsl:template match="comment_to_reader">
-  <p>
-    <xsl:apply-templates/>
-  </p>
+  <!-- <p> -->
+  <xsl:call-template name="insertParagraph">
+    <xsl:with-param name="text">
+      <xsl:apply-templates/>
+    </xsl:with-param>
+  </xsl:call-template>
+  <!-- </p> -->
 </xsl:template>
 
 
 
 <xsl:template match="module" mode="annexe">
   <xsl:param name="annex_no" select="'E'"/>
+
+  <xsl:call-template name="annex_header">
+    <xsl:with-param name="annex_no" select="'E'"/>
+    <xsl:with-param name="heading" select="'Computer interpretable listings'"/>
+    <xsl:with-param name="aname" select="'annexe'"/>
+  </xsl:call-template>
 
   <xsl:variable name="arm">
     <xsl:choose>
@@ -1321,15 +1349,19 @@ provided  that links throught SC4ONLINE to a new repository -->
   select="'http://www.tc184-sc4.org/implementation_information/'"/> -->
   <xsl:variable name="information_url"
        select="concat('http://www.tc184-sc4.org/implementation_information/10303/',format-number(@part, '00000'))"/>
-  <p>
+  <!-- <p> -->
+  <xsl:call-template name="insertParagraph">
+    <xsl:with-param name="text">
     This annex references a listing of the EXPRESS entity names and
     corresponding short names as specified or referenced in this part of ISO
     10303. It also provides a listing of each EXPRESS schema specified in this
     part of ISO 10303 without comments nor other explanatory text. These
     listings are available in computer-interpretable form in Table E.1 and can
     be found at the following URLs:
-  </p>
-  <table>
+    </xsl:with-param>
+  </xsl:call-template>
+  <!-- </p> -->
+  <!-- <table>
     <tr>
       <td>&#160;&#160;</td>
       <td>Short names:</td>
@@ -1340,23 +1372,61 @@ provided  that links throught SC4ONLINE to a new repository -->
     <td>EXPRESS:</td>
      <td><a href="{$parts_url}" target="_blank" ><xsl:value-of select="$parts_url"/></a></td>
    </tr>
-  </table>
+  </table> -->
+
+  <xsl:text>Short names::: </xsl:text>
+    <xsl:call-template name="insertHyperlink">
+      <xsl:with-param name="a">
+        <a href="{$names_url}"   target="_blank"><xsl:value-of select="$names_url"/></a>
+      </xsl:with-param>
+      <xsl:with-param name="asText">true</xsl:with-param>
+    </xsl:call-template>
+  <xsl:text>&#xa;</xsl:text>
+  <xsl:text>EXPRESS::: </xsl:text>
+    <xsl:call-template name="insertHyperlink">
+      <xsl:with-param name="a">
+        <a href="{$parts_url}"   target="_blank"><xsl:value-of select="$parts_url"/></a>
+      </xsl:with-param>
+      <xsl:with-param name="asText">true</xsl:with-param>
+    </xsl:call-template>		
+  <xsl:text>&#xa;&#xa;</xsl:text>
+  
 
   <xsl:if test="@sc4.working_group='3' and string-length(@wg.number.mim_lf) > 0" >
-    <p>Additional information, such as 
+    <!-- <p>Additional information, such as 
 computer-interpretable rules derived from normative text or mappings in 
-this part of ISO 10303,  may be provided to support implementations.  If the information is  provided it can be found at the following URL:</p>
-  <table>
+this part of ISO 10303,  may be provided to support implementations.  If the information is  provided it can be found at the following URL:</p> -->
+    <xsl:call-template name="insertParagraph">
+      <xsl:with-param name="text">Additional information, such as 
+      computer-interpretable rules derived from normative text or mappings in 
+      this part of ISO 10303,  may be provided to support implementations.  If the information is  provided it can be found at the following URL:
+      </xsl:with-param>
+    </xsl:call-template>
+  
+  <!-- <table>
     <tr>
       <td>&#160;&#160;</td>
       <td>Additional information:</td>      
       <td><a href="{$information_url}"  target="_blank"><xsl:value-of select="$information_url"/></a></td>
   </tr>
   </table>
+  
+  <p/>  -->
+  
+    <xsl:text>Additional information::: </xsl:text>
+      <xsl:call-template name="insertHyperlink">
+        <xsl:with-param name="a">
+          <a href="{$information_url}"  target="_blank"><xsl:value-of select="$information_url"/></a>
+        </xsl:with-param>
+        <xsl:with-param name="asText">true</xsl:with-param>
+      </xsl:call-template>		
+    <xsl:text>&#xa;&#xa;</xsl:text>
+  
   </xsl:if>
 
-  <p/>
-  <div align="center">
+
+  
+  <!-- <div align="center">
     <a name="table_e1">
       <b>
         <xsl:choose>
@@ -1369,11 +1439,30 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
         </xsl:choose>
       </b>
     </a>
-  </div>
+  </div> -->
 
-  <br/>
+  <xsl:text>[#table_e1]</xsl:text>
+  <xsl:text>&#xa;</xsl:text>
+  <xsl:text>[cols="^,^",options="header"]</xsl:text>
+  <xsl:text>&#xa;</xsl:text>
+  <xsl:choose>
+    <xsl:when test="./mim_lf or ./arm_lf">
+      <xsl:text>.ARM and MIM EXPRESS short and long form listings</xsl:text>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:text>.ARM and MIM EXPRESS listings</xsl:text>
+    </xsl:otherwise>
+  </xsl:choose>
+  <xsl:text>&#xa;</xsl:text>
+  
+  <xsl:text>|===</xsl:text>
+  <xsl:text>&#xa;</xsl:text>
 
-  <div align="center">
+  <!-- <br/> -->
+
+  <xsl:variable name="FILE_EXT" select="'.htm'"/>
+
+ <!--  <div align="center">
     <table border="1" cellspacing="1">
       <tr>
         <td><b>Description</b></td>
@@ -1388,10 +1477,24 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
 
         <td><b>ASCII file</b></td>
         <td><b>Identifier</b></td>
-      </tr>
-      
+      </tr> -->
+
+      <xsl:text>| Description </xsl:text>
+      <xsl:text>| </xsl:text>
+      <xsl:choose>
+        <xsl:when test="$FILE_EXT='.xml'">
+          <xsl:text>XML file</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:text>HTML file</xsl:text>
+        </xsl:otherwise>
+      </xsl:choose>
+      <xsl:text> | ASCII file | Identifier</xsl:text>
+      <xsl:text>&#xa;&#xa;</xsl:text>
+
+
       <!-- ARM HTML row -->
-      <tr>
+      <!-- <tr>
         <xsl:choose>
           <xsl:when test="$FILE_EXT='.xml'">
             <td>ARM short form EXPRESS</td>
@@ -1401,9 +1504,9 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
           </xsl:otherwise>
         </xsl:choose>
         <td>
-          <a href="{$arm}">
+          <a href="{$arm}"> -->
             <!-- <xsl:value-of select="concat('arm',$FILE_EXT)"/> -->
-            <xsl:choose>
+            <!-- <xsl:choose>
               <xsl:when test="$FILE_EXT='.xml'">
                 XML
               </xsl:when>
@@ -1412,18 +1515,43 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
               </xsl:otherwise>
             </xsl:choose>
           </a>
-        </td>
+        </td> -->
 
+        <xsl:text>| </xsl:text>
+        <xsl:choose>
+          <xsl:when test="$FILE_EXT='.xml'">
+            <td>ARM short form EXPRESS</td>
+          </xsl:when>
+          <xsl:otherwise>
+            <td>ARM short form EXPRESS</td>
+          </xsl:otherwise>
+        </xsl:choose>
+        <xsl:text>| </xsl:text>
+        <xsl:call-template name="insertHyperlink">
+          <xsl:with-param name="a">
+            <a href="{$arm}">
+              <xsl:choose>
+                <xsl:when test="$FILE_EXT='.xml'">
+                  XML
+                </xsl:when>
+                <xsl:otherwise>
+                  HTML
+                </xsl:otherwise>
+              </xsl:choose>
+            </a>
+          </xsl:with-param>
+        </xsl:call-template>					
+        
         <xsl:call-template name="output_express_links">
           <xsl:with-param name="module" select="/module/@name"/>
           <xsl:with-param name="wgnumber" select="./@wg.number.arm"/>
           <xsl:with-param name="file" select="'arm.exp'"/>
         </xsl:call-template>        
-      </tr>
+      <!-- </tr> -->
       <xsl:apply-templates select="arm_lf" mode="annexe"/>
 
       <!-- MIM HTML row -->
-      <tr>
+      <!-- <tr>
         <xsl:choose>
           <xsl:when test="$FILE_EXT='.xml'">
             <td>MIM short form EXPRESS</td>
@@ -1431,11 +1559,18 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
           <xsl:otherwise>
             <td>MIM short form EXPRESS</td>
           </xsl:otherwise>
+        </xsl:choose> -->
+        
+        <xsl:text>| </xsl:text>
+        <xsl:choose>
+          <xsl:when test="$FILE_EXT='.xml'">MIM short form EXPRESS</xsl:when>
+          <xsl:otherwise>MIM short form EXPRESS</xsl:otherwise>
         </xsl:choose>
-        <td>
-          <a href="{$mim}">
+        
+        <!-- <td>
+          <a href="{$mim}"> -->
             <!-- <xsl:value-of select="concat('mim',$FILE_EXT)"/> -->
-            <xsl:choose>
+            <!-- <xsl:choose>
               <xsl:when test="$FILE_EXT='.xml'">
                 XML
               </xsl:when>
@@ -1444,30 +1579,57 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
               </xsl:otherwise>
             </xsl:choose>
           </a>
-        </td>
+        </td> -->
+        
+        <xsl:text>| </xsl:text>
+        <xsl:call-template name="insertHyperlink">
+          <xsl:with-param name="a">
+            <a href="{$mim}">
+              <xsl:choose>
+                <xsl:when test="$FILE_EXT='.xml'">
+                  XML
+                </xsl:when>
+                <xsl:otherwise>
+                  HTML
+                </xsl:otherwise>
+              </xsl:choose>
+            </a>
+          </xsl:with-param>
+        </xsl:call-template>	
+        
         <xsl:call-template name="output_express_links">
           <xsl:with-param name="module" select="/module/@name"/>
           <xsl:with-param name="wgnumber" 
             select="./@wg.number.mim"/>
           <xsl:with-param name="file" select="'mim.exp'"/>
         </xsl:call-template>        
-      </tr>
+      <!-- </tr> -->
       <xsl:apply-templates select="mim_lf" mode="annexe"/>
 
-    </table>
-  </div>
+    <!-- </table> -->
+  <!-- </div> -->
   <!--<p>
     If there is difficulty accessing these sites, contact ISO Central
     Secretariat.
   </p> removed by MWD 2018-08-23 -->
-  <p class="note">
+  <!-- <p class="note">
     <small>
       NOTE&#160;&#160;The information provided in computer-interpretable
       form at the 
       above URLs is informative. The information that is contained in the
       body of this part of ISO 10303 is normative. 
     </small>
-  </p>
+  </p> -->
+  
+  <xsl:call-template name="insertNote">		
+    <xsl:with-param name="text">
+      The information provided in computer-interpretable
+      form at the 
+      above URLs is informative. The information that is contained in the
+      body of this part of ISO 10303 is normative. 
+    </xsl:with-param>
+  </xsl:call-template>
+  
 </xsl:template>
 
 
@@ -1476,13 +1638,25 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
   <xsl:param name="module"/>
   <xsl:param name="file"/>
 
-  <td>
+  <!-- <td>
     <a href="../../../modules/{$module}/{$file}">
-      EXPRESS
+      EXPRESS -->
       <!--  <xsl:value-of select="$file"/> -->
-    </a>
-  </td>
-  <td align="left">
+  <!--  </a>
+  </td> -->
+  
+  <xsl:text>| </xsl:text>
+  <xsl:call-template name="insertHyperlink">
+    <xsl:with-param name="a">
+      <a href="../../../modules/{$module}/{$file}">
+        EXPRESS
+      </a>
+    </xsl:with-param>
+  </xsl:call-template>					
+  
+  <xsl:text>| </xsl:text>
+  
+  <!-- <td align="left"> -->
     <xsl:variable name="test_wg_number">
       <xsl:call-template name="test_wg_number">
         <xsl:with-param name="wgnumber" select="$wgnumber"/>
@@ -1515,7 +1689,7 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
         <xsl:value-of select="concat('ISO/TC 184/SC 4/WG ',$wg_group,' N',$wgnumber)"/>
       </xsl:otherwise>
     </xsl:choose>    
-  </td>
+  <!-- </td> -->
 </xsl:template>
 
 <xsl:template match="arm_lf" mode="annexe">
