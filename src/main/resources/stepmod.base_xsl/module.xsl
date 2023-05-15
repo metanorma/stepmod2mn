@@ -1606,6 +1606,10 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
       <!-- </tr> -->
       <xsl:apply-templates select="mim_lf" mode="annexe"/>
 
+    <xsl:text>|===</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+
     <!-- </table> -->
   <!-- </div> -->
   <!--<p>
@@ -1704,12 +1708,14 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
     </xsl:choose>
   </xsl:variable>
 
-  <tr>
-    <td>ARM long form EXPRESS</td>
-    <td>
-      <a href="{$arm_lf}">
+  <!-- <tr>
+    <td>ARM long form EXPRESS</td> -->
+    <xsl:text>| ARM long form EXPRESS</xsl:text>
+    
+    <!-- <td>
+      <a href="{$arm_lf}"> -->
         <!-- <xsl:value-of select="concat('arm_lf',$FILE_EXT)"/> -->
-        <xsl:choose>
+        <!-- <xsl:choose>
           <xsl:when test="$FILE_EXT='.xml'">
             XML
           </xsl:when>
@@ -1718,14 +1724,31 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
           </xsl:otherwise>
         </xsl:choose>
       </a>
-    </td>
+    </td> -->
+    
+    <xsl:text>| </xsl:text>
+    <xsl:call-template name="insertHyperlink">
+      <xsl:with-param name="a">
+        <a href="{$arm_lf}">
+          <xsl:choose>
+            <xsl:when test="$FILE_EXT='.xml'">
+              XML
+            </xsl:when>
+            <xsl:otherwise>
+              HTML
+            </xsl:otherwise>
+          </xsl:choose>
+        </a>
+      </xsl:with-param>
+    </xsl:call-template>
+    
     <xsl:call-template name="output_express_links">
       <xsl:with-param name="module" select="/module/@name"/>
       <xsl:with-param name="wgnumber" 
         select="../@wg.number.arm_lf"/>
       <xsl:with-param name="file" select="'arm_lf.exp'"/>
     </xsl:call-template>        
-  </tr>
+  <!-- </tr> -->
 </xsl:template>
 
 <xsl:template match="mim_lf" mode="annexe">
@@ -1739,12 +1762,16 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
       </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
-  <tr>
-    <td>MIM long form EXPRESS</td>
-    <td>
-      <a href="{$mim_lf}">
+  
+  <!-- <tr>
+    <td>MIM long form EXPRESS</td> -->
+    
+    <xsl:text>| MIM long form EXPRESS</xsl:text>
+    
+    <!-- <td>
+      <a href="{$mim_lf}"> -->
         <!-- <xsl:value-of select="concat('mim_lf',$FILE_EXT)"/> -->
-        <xsl:choose>
+        <!-- <xsl:choose>
           <xsl:when test="$FILE_EXT='.xml'">
             XML
           </xsl:when>
@@ -1753,19 +1780,37 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
           </xsl:otherwise>
         </xsl:choose>
       </a>
-    </td>
+    </td> -->
+    
+    <xsl:text>| </xsl:text>
+    <xsl:call-template name="insertHyperlink">
+      <xsl:with-param name="a">
+        <a href="{$arm_lf}">
+          <xsl:choose>
+            <xsl:when test="$FILE_EXT='.xml'">
+              XML
+            </xsl:when>
+            <xsl:otherwise>
+              HTML
+            </xsl:otherwise>
+          </xsl:choose>
+        </a>
+      </xsl:with-param>
+    </xsl:call-template>
+    
     <xsl:call-template name="output_express_links">
       <xsl:with-param name="module" select="/module/@name"/>
       <xsl:with-param name="wgnumber" 
         select="../@wg.number.mim_lf"/>
       <xsl:with-param name="file" select="'mim_lf.exp'"/>
     </xsl:call-template>        
-  </tr>
+  <!-- </tr> -->
 </xsl:template>
 
 <xsl:template match="arm">
   <xsl:call-template name="clause_header">
-    <xsl:with-param name="heading" select="'4 Information requirements'"/>
+    <!-- <xsl:with-param name="heading" select="'4 Information requirements'"/> -->
+    <xsl:with-param name="heading" select="'Information requirements'"/>
     <xsl:with-param name="aname" select="'arm'"/>
   </xsl:call-template>
   <xsl:variable name="c_expg"
@@ -1790,20 +1835,34 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
   <xsl:variable name="arm_node" select="document($arm_xml)"/>
 
 
-  <p>
+  <!-- <p> -->
+  <xsl:call-template name="insertParagraph">
+    <xsl:with-param name="text">
     This clause specifies the information requirements for the 
-    <b><xsl:value-of select="$current_module"/></b>
+    <!-- <b><xsl:value-of select="$current_module"/></b> -->
+    *<xsl:value-of select="$current_module"/>*
     application module. The information requirements are specified as the
     Application Reference Model (ARM) of this application module.
-  </p>
-  <p class="note">
+    </xsl:with-param>
+  </xsl:call-template>
+  <!-- </p> -->
+  
+  <!-- <p class="note">
     <small>
       NOTE&#160;1&#160;&#160;A graphical representation of the information
       requirements is given in 
       Annex <a href="{$c_expg}">C</a>.
     </small>
-  </p>
-  <p class="note">
+  </p> -->
+  <xsl:call-template name="insertNote">
+    <xsl:with-param name="text">
+      A graphical representation of the information
+      requirements is given in &lt;&lt;AnnexC&gt;&gt;.
+    </xsl:with-param>
+  </xsl:call-template>
+
+  
+  <!-- <p class="note">
     <small>
       NOTE&#160;2&#160;&#160;The mapping specification is specified in 
       <a href="{$sect51}">5.1</a>. It shows how
@@ -1811,9 +1870,21 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
       constructs defined or imported in the MIM schema of this application
       module. 
     </small>
-  </p>
-    
-  <p>
+  </p> -->
+  
+  <xsl:call-template name="insertNote">
+    <xsl:with-param name="text">
+      The mapping specification is specified in 
+      &lt;&lt;<xsl:value-of select="$sect51"/>&gt;&gt;. It shows how
+      the information requirements are met by using common resources and
+      constructs defined or imported in the MIM schema of this application
+      module. 
+    </xsl:with-param>
+  </xsl:call-template>
+  
+  <!-- <p> -->
+  <xsl:call-template name="insertParagraph">
+    <xsl:with-param name="text">
     This clause defines the information requirements to which implementations shall
     conform using the EXPRESS language as defined in ISO 10303-11.   
     <xsl:choose>
@@ -1827,7 +1898,9 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
         <b><xsl:value-of select="$current_module"/></b> schema.
       </xsl:otherwise>
     </xsl:choose>
-  </p>
+    </xsl:with-param>
+  </xsl:call-template>
+  <!-- </p> -->
   
   <!-- Just display the description of the schema. -->
   <xsl:apply-templates 
@@ -1854,15 +1927,33 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
   <xsl:call-template name="output_express_issue">
     <xsl:with-param name="schema" select="$schema_name"/>
   </xsl:call-template> 
-    <u>EXPRESS specification: </u>
-  <code>
+  <!-- <u>EXPRESS specification: </u> -->
+    
+  <xsl:call-template name="insertParagraph">
+    <xsl:with-param name="text">
+      [.underline]#EXPRESS specification:#
+    </xsl:with-param>
+  </xsl:call-template>
+    
+  <!-- <code>
     <br/>    <br/>
     *)<br/>
     <a name="{$xref}">
       SCHEMA <xsl:value-of select="concat($schema_name,';')"/>
   </a>
   <br/>(*<br/>
+  </code> -->
+
+  <xsl:if test="$xref != ''">
+    <xsl:text>[[</xsl:text><xsl:value-of select="$xref"/><xsl:text>]]&#xa;</xsl:text>
+  </xsl:if>
+  <code>
+  <xsl:call-template name="insertLutaMLCodeStart"/>
+    <!-- <xsl:text>*)&#xa;</xsl:text>		 -->
+    <xsl:text>SCHEMA </xsl:text><xsl:value-of select="concat($schema_name,';')"/>
+  <xsl:call-template name="insertCodeEnd"/>
   </code>
+
 
   <!-- Note a UoF section is no longer required so this is commented out 
   <h2>
@@ -1914,17 +2005,29 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
     select="$arm_node/express/schema/procedure"/>
 
   
-  <code>
+  <!-- <code>
     <br/>    <br/>
     *)<br/>
-    END_SCHEMA;&#160;&#160;--&#160;<xsl:value-of select="$arm_node/express/schema/@name"/>
+    END_SCHEMA;&#160;&#160; - -&#160;<xsl:value-of select="$arm_node/express/schema/@name"/>
     <br/>(*
+  </code> -->
+
+  <code>
+  <xsl:call-template name="insertLutaMLCodeStart"/>
+    <!-- <xsl:text>*)&#xa;</xsl:text>					 -->
+    <xsl:text>END_SCHEMA;  -- </xsl:text><xsl:value-of select="$arm_node/express/schema/@name"/>
+    <!-- <xsl:text>&#xa;</xsl:text>
+    <xsl:text>(*</xsl:text> -->
+  <xsl:call-template name="insertCodeEnd"/>
   </code>
 
 </xsl:template>
 
 <!-- Note a UoF section is no longer required -->
 <xsl:template match="arm" mode="uof">
+
+  <xsl:call-template name="insertParagraph">
+    <xsl:with-param name="text">
       This subclause specifies the units of functionality (UoF) for this
       part of ISO 10303 as well as any support elements needed for the
       application module definition.       
@@ -1938,34 +2041,55 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
           functionality:
         </xsl:otherwise>
       </xsl:choose>
-      <ul>
+    </xsl:with-param>
+  </xsl:call-template>
+      
+      <!-- <ul> -->
+      <xsl:text>&#xa;</xsl:text>
         <xsl:apply-templates select="uof" mode="toc"/>
-      </ul>
+      <xsl:text>&#xa;&#xa;</xsl:text>
+      <!-- </ul> -->
+      
       <!-- output any UoFs in other modules -->
       <xsl:choose>
         <xsl:when test="(./uoflink)">
-          <p>
+          <!-- <p> -->
+          <xsl:call-template name="insertParagraph">
+            <xsl:with-param name="text">
             This part of ISO 10303 also includes the following units of
             functionality: 
-          </p>
-          <ul>
+            </xsl:with-param>
+          </xsl:call-template>
+          <!-- </p> -->
+          <!-- <ul> -->
+          <xsl:text>&#xa;</xsl:text>
             <xsl:apply-templates select="./uoflink" mode="toc"/>
-          </ul>
+          <xsl:text>&#xa;&#xa;</xsl:text>
+          <!-- </ul> -->
         </xsl:when>
         <xsl:otherwise>
-          <p>
+          <!-- <p> -->
             <!--
                  This part of ISO 10303 uses no other units of functionality. 
                  -->
+          <xsl:call-template name="insertParagraph">
+            <xsl:with-param name="text">
             This part of ISO 10303 also includes the units of functionality
             defined in the application modules that are imported with the USE
             FROM statements specified in Clause 4.2  
-          </p>        
+            </xsl:with-param>
+          </xsl:call-template>
+          <!-- </p> -->
         </xsl:otherwise>
       </xsl:choose>
-      <p>
+      
+      <!-- <p> -->
+      <xsl:call-template name="insertParagraph">
+        <xsl:with-param name="text">
         The content of the units of functionality is listed below.  
-      </p>
+        </xsl:with-param>
+      </xsl:call-template>
+      <!-- </p> -->
       
       <xsl:apply-templates select="uof" mode="uof_toc"/>
       
@@ -1974,7 +2098,7 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
 
 <xsl:template match="uof" mode="toc">
   <xsl:variable name="href" select="concat('#uof',@name)"/>
-  <li>
+  <!-- <li>
     <a href="{$href}">
       <xsl:choose>
         <xsl:when test="position()!=last()">
@@ -1985,7 +2109,26 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
         </xsl:otherwise>
       </xsl:choose>
     </a>
-  </li>
+  </li> -->
+  
+  <xsl:call-template name="insertParagraph">
+    <xsl:with-param name="text">
+      * &lt;&lt;
+      <xsl:choose>
+        <xsl:when test="position()!=last()">
+          <xsl:value-of select="concat(@name,';')"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="concat(@name,'.')"/>        
+        </xsl:otherwise>
+      </xsl:choose>
+      <xsl:text>, </xsl:text>
+      <xsl:value-of select="$href"/>
+    
+      <xsl:text>&gt;&gt;</xsl:text>
+    </xsl:with-param>
+  </xsl:call-template>
+  
 </xsl:template>
 
 <xsl:template match="uoflink" mode="toc">
@@ -1993,7 +2136,7 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
   <xsl:variable name="uof" select="@uof"/>
   <xsl:variable name="xref" 
     select="concat('#uof',$uof)"/>
-  <li>
+  <!-- <li>
     <xsl:choose>
       <xsl:when test="position()!=last()">
         <a href="{$xref}">
@@ -2006,14 +2149,30 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
         </a>
       </xsl:otherwise>
     </xsl:choose>
-  </li>
+  </li> -->
+  <xsl:call-template name="insertParagraph">
+    <xsl:with-param name="text">
+        * &lt;&lt;
+      <xsl:choose>
+        <xsl:when test="position()!=last()">					
+          <xsl:value-of select="concat($uof,';')"/>					
+        </xsl:when>
+        <xsl:otherwise>					
+          <xsl:value-of select="concat($uof,'.')"/>
+        </xsl:otherwise>
+      </xsl:choose>		
+      <xsl:text>, </xsl:text>
+      <xsl:value-of select="$xref"/>
+      <xsl:text>&gt;&gt;</xsl:text>
+    </xsl:with-param>
+  </xsl:call-template>
 </xsl:template>
 
 <xsl:template match="uof" mode="uof_toc">
-  <h2>
-    <xsl:variable name="name" select="concat('uof',@name)"/>
+  <!-- <h2>
+    <xsl:variable name="name" select="concat('uof',@name)"/> -->
     <!-- only number section if more than one UOF -->
-    <xsl:choose>
+    <!-- <xsl:choose>
       <xsl:when test="count(../uof) > 1 ">
         <a name="{$name}">
           <xsl:value-of select="concat('4.1.',position(),' ',@name)"/>
@@ -2025,7 +2184,14 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
         </a>        
       </xsl:otherwise>
     </xsl:choose>
-  </h2>
+  </h2> -->
+
+  <xsl:variable name="name" select="concat('uof',@name)"/>
+  <xsl:call-template name="insertHeaderADOC">
+    <xsl:with-param name="id" select="$name"/>		
+    <xsl:with-param name="level" select="3"/>
+    <xsl:with-param name="header" select="normalize-space(@name)"/>					
+  </xsl:call-template>
 
   <!-- The <xsl:value-of select="@name"/> UoF specifies -->
   <xsl:choose>
@@ -2042,14 +2208,20 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
   </xsl:choose>
 
   <xsl:if test="uof.ae">
-    <p>
+    <!-- <p> -->
+    <xsl:call-template name="insertParagraph">
+			<xsl:with-param name="text">
       The following application objects are defined in the
       <xsl:value-of select="@name"/> UoF: 
-    </p>
+      </xsl:with-param>
+    </xsl:call-template>
+    <!-- </p> -->
   </xsl:if>
-  <ul>
+  <!-- <ul> -->
+  <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="uof.ae"/>
-  </ul>
+  <xsl:text>&#xa;&#xa;</xsl:text>
+  <!-- </ul> -->
 </xsl:template>
 
 <xsl:template match="uoflink" mode="uof_toc">
@@ -2062,65 +2234,95 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
       <xsl:with-param name="module" select="/module/@name"/>
     </xsl:call-template>           
   </xsl:variable>
-  <h2>
+  <!-- <h2>
     <xsl:variable name="name" select="concat('uof',$uof)"/>
     <a name="{$name}">
       <xsl:value-of select="concat('4.1.',position()+count(../uof),' ',$uof)"/>
     </a>
-  </h2>
-  This UoF is defined in the
-  <a href="{$xref}">
-    <xsl:call-template name="module_display_name">
-      <xsl:with-param name="module" select="$module"/>
-    </xsl:call-template>   
-  </a>
-  module. The following application entities from this UoF are referenced
-  in the 
-  <xsl:value-of select="$current_module"/> module:  
-  <xsl:variable name="module_dir">
-    <xsl:call-template name="module_directory">
-      <xsl:with-param name="module" select="$module"/>
+  </h2> -->
+  <xsl:call-template name="insertHeaderADOC">
+    <xsl:with-param name="id" select="$name"/>		
+    <xsl:with-param name="level" select="3"/>
+    <xsl:with-param name="header" select="normalize-space($uof)"/>					
+  </xsl:call-template>
+  
+  
+  <xsl:variable name="text">
+    This UoF is defined in the
+    
+    <!-- <a href="{$xref}">
+      <xsl:call-template name="module_display_name">
+        <xsl:with-param name="module" select="$module"/>
+      </xsl:call-template>   
+    </a> -->
+    
+    <xsl:call-template name="insertHyperlink">
+      <xsl:with-param name="a">
+        <a href="{$xref}">
+          <xsl:call-template name="module_display_name">
+            <xsl:with-param name="module" select="$module"/>
+          </xsl:call-template>   
+        </a>
+      </xsl:with-param>
     </xsl:call-template>
-  </xsl:variable>
-
-  <xsl:variable name="module_ok">
-    <xsl:call-template name="check_module_exists">
-      <xsl:with-param name="module" select="$module"/>
-    </xsl:call-template>
-  </xsl:variable>
-
-  <xsl:choose>
-    <xsl:when test="$module_ok='true'">
-        <!-- check that the UoF is named correctly -->
-        <xsl:choose>
-          <xsl:when test="document(concat($module_dir,'/module.xml'))/module/arm/uof[@name=$uof]">
-            <ul>
-              <xsl:apply-templates
-                select="document(concat($module_dir,'/module.xml'))/module/arm/uof[@name=$uof]/uof.ae">
-                <xsl:with-param name="module" select="$module"/>
-              </xsl:apply-templates>
-            </ul>            
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:call-template name="error_message">
-              <xsl:with-param name="message">
-                <xsl:value-of select="concat('Error 18: The UoF ',$uof,
-                                      ' cannot be found in module ',$module )"/>
-              </xsl:with-param>
-            </xsl:call-template>
-          </xsl:otherwise>
-        </xsl:choose>
-
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:call-template name="error_message">
-        <xsl:with-param name="message">
-          <xsl:value-of select="concat('Error 5: ', $module_ok)"/>
-        </xsl:with-param>
+    
+    module. The following application entities from this UoF are referenced
+    in the 
+    <xsl:value-of select="$current_module"/> module:  
+    <xsl:variable name="module_dir">
+      <xsl:call-template name="module_directory">
+        <xsl:with-param name="module" select="$module"/>
       </xsl:call-template>
+    </xsl:variable>
 
-    </xsl:otherwise>
-  </xsl:choose>
+    <xsl:variable name="module_ok">
+      <xsl:call-template name="check_module_exists">
+        <xsl:with-param name="module" select="$module"/>
+      </xsl:call-template>
+    </xsl:variable>
+
+    <xsl:choose>
+      <xsl:when test="$module_ok='true'">
+          <!-- check that the UoF is named correctly -->
+          <xsl:choose>
+            <xsl:when test="document(concat($module_dir,'/module.xml'))/module/arm/uof[@name=$uof]">
+              <!-- <ul> -->
+              <xsl:text>&#xa;</xsl:text>
+                <xsl:apply-templates
+                  select="document(concat($module_dir,'/module.xml'))/module/arm/uof[@name=$uof]/uof.ae">
+                  <xsl:with-param name="module" select="$module"/>
+                </xsl:apply-templates>
+              <xsl:text>&#xa;&#xa;</xsl:text>
+              <!-- </ul> -->
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:call-template name="error_message">
+                <xsl:with-param name="message">
+                  <xsl:value-of select="concat('Error 18: The UoF ',$uof,
+                                        ' cannot be found in module ',$module )"/>
+                </xsl:with-param>
+              </xsl:call-template>
+            </xsl:otherwise>
+          </xsl:choose>
+
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="error_message">
+          <xsl:with-param name="message">
+            <xsl:value-of select="concat('Error 5: ', $module_ok)"/>
+          </xsl:with-param>
+        </xsl:call-template>
+
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  
+  <xsl:call-template name="insertParagraph">
+    <xsl:with-param name="text">
+      <xsl:value-of select="$text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+  
 </xsl:template>
 
 
