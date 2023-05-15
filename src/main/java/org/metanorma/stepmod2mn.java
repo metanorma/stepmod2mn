@@ -249,6 +249,13 @@ public class stepmod2mn {
                 String outFileName = "";
                 if (cmd.hasOption("output")) {
                     outFileName = cmd.getOptionValue("output");
+                    String outPath_normalized = outFileName;
+                    if (outPath_normalized.startsWith("./") || outPath_normalized.startsWith(".\\")) {
+                        outPath_normalized = outPath_normalized.substring(2);
+                    }
+                    File fXMLout = new File(outPath_normalized);
+                    outFileName = fXMLout.getAbsoluteFile().toString();
+                    new File(fXMLout.getParent()).mkdirs();
                 }
 
                 String boilerplatePath = "";
