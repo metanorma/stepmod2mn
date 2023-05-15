@@ -8,16 +8,22 @@ $Id: module.xsl,v 1.252 2018/08/23 11:13:36 mike Exp $
      
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"                
-		xmlns:msxsl="urn:schemas-microsoft-com:xslt"
-		xmlns:exslt="http://exslt.org/common"
-                exclude-result-prefixes="msxsl exslt"
+    xmlns:java="http://xml.apache.org/xalan/java"
+    xmlns:str="http://exslt.org/strings"
+    xmlns:xalan="http://xml.apache.org/xalan"
                 version="1.0">
 
-  <xsl:import href="module_toc.xsl"/>
+  <!--
+    exclude-result-prefixes="msxsl exslt"
+    xmlns:msxsl="urn:schemas-microsoft-com:xslt"
+		xmlns:exslt="http://exslt.org/common"
+  -->
+
+  <!-- <xsl:import href="module_toc.xsl"/>
 
   <xsl:import href="sect_4_express.xsl"/>
 
-  <xsl:import href="projmg/issues.xsl"/> 
+  <xsl:import href="projmg/issues.xsl"/>  -->
 
   <xsl:output 
     method="html"
@@ -25,37 +31,7 @@ $Id: module.xsl,v 1.252 2018/08/23 11:13:36 mike Exp $
     doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN"
     indent="yes"
     />
-<xsl:template match="/">
-  <HTML>
-    <HEAD>
-      <!-- apply a cascading stylesheet.
-           the stylesheet will only be applied if the parameter output_css
-           is set in parameter.xsl 
-           -->
-      <xsl:call-template name="output_css">
-        <xsl:with-param name="path" select="'../../../css/'"/>
-      </xsl:call-template>
-      <TITLE>
-        <!-- output the module page title -->
-        <xsl:apply-templates select="./module" mode="title"/>
-      </TITLE>
-    </HEAD>
-    <xsl:element name="body">
-      <xsl:if test="$output_background='YES'">
-        <xsl:attribute name="background">
-          <xsl:value-of select="concat('../../../../images/',$background_image)"/>
-        </xsl:attribute>
-        <!-- can only use this for Internet explorer, so not valid HTML
-        <xsl:attribute name="bgproperties" >
-          <xsl:value-of select="'fixed'" />
-          </xsl:attribute> -->
-        </xsl:if>
-        
-        <xsl:apply-templates select="./module" mode="TOCsinglePage"/>
-        <xsl:apply-templates select="./module" />
-        </xsl:element>
-      </HTML>
-    </xsl:template>
+
 
 <xsl:template match="module">
   <xsl:apply-templates select="." mode="coverpage"/>
@@ -138,7 +114,8 @@ $Id: module.xsl,v 1.252 2018/08/23 11:13:36 mike Exp $
     <tr>
       <td><h2><xsl:value-of select="$n_number"/></h2></td>
       <td>&#x20;</td>
-      <td valign="top" width="200"><b>Date:&#x20;</b><xsl:value-of select="$date"/></td>
+      <!-- <td valign="top" width="200"><b>Date:&#x20;</b><xsl:value-of select="$date"/></td> -->
+      <td valign="top" width="200"><xsl:text>*</xsl:text>Date: <xsl:text>*</xsl:text><xsl:value-of select="$date"/></td>
     </tr>    
 
     <xsl:variable name="test_wg_number">
@@ -222,12 +199,24 @@ $Id: module.xsl,v 1.252 2018/08/23 11:13:36 mike Exp $
       <xsl:with-param name="module" select="."/>
     </xsl:call-template>
   </xsl:variable>
-  <h4>
+  <!-- <h4>
     <xsl:value-of select="$stdnumber"/><br/>
     Product data representation and exchange: Application module: 
     <xsl:value-of select="$module_name"/>
-  </h4>
-  
+  </h4> -->
+  <xsl:variable name="header">
+    <xsl:value-of select="$stdnumber"/><br/>
+    Product data representation and exchange: Application module: 
+    <xsl:value-of select="$module_name"/>
+  </xsl:variable>
+  <xsl:call-template name="insertHeaderADOC">
+      <xsl:with-param name="id"
+                      select="$stdnumber" />
+      <xsl:with-param name="level"
+                      select="4" />
+      <xsl:with-param name="header"
+                      select="normalize-space($header)" />
+  </xsl:call-template>
   
   <xsl:variable name="status" select="string(@status)"/>
   <xsl:variable name="status_words">
@@ -504,6 +493,9 @@ TT remove since locke is no longer available.
     </xsl:call-template>           
   </xsl:variable>
 
+  <xsl:text>[abstract]</xsl:text>
+  <xsl:text>&#xa;</xsl:text>
+
   <!-- replaced by below  
   <P>
     This document is the
@@ -512,12 +504,16 @@ TT remove since locke is no longer available.
     <xsl:value-of select="$module_name"/>.
   </P>
   -->
-  <P>
-    <xsl:call-template name="get_module_stdnumber">
-      <xsl:with-param name="module" select="."/>
-    </xsl:call-template> specifies the application module for
-    <xsl:value-of select="$module_name"/>.       
-  </P>
+  <!-- <P> -->
+  <xsl:call-template name="insertParagraph">
+    <xsl:with-param name="text">
+      <xsl:call-template name="get_module_stdnumber">
+        <xsl:with-param name="module" select="."/>
+      </xsl:call-template> specifies the application module for
+      <xsl:value-of select="$module_name"/>.       
+    </xsl:with-param>
+  </xsl:call-template>
+  <!-- </P> -->
 
   <xsl:choose>
     <xsl:when test="./abstract">
@@ -525,25 +521,35 @@ TT remove since locke is no longer available.
         <xsl:when  test="./abstract/li">
           <xsl:choose>
             <xsl:when  test="count(./abstract/li)=1">
-              <P>
-                The following is within the scope of 
-                <xsl:call-template name="get_module_stdnumber">
-                  <xsl:with-param name="module" select="."/>
-                </xsl:call-template>:
-              </P>
+              <!-- <P> -->
+              <xsl:call-template name="insertParagraph">
+                <xsl:with-param name="text">
+                  The following is within the scope of 
+                  <xsl:call-template name="get_module_stdnumber">
+                    <xsl:with-param name="module" select="."/>
+                  </xsl:call-template>:
+                </xsl:with-param>
+              </xsl:call-template>
+              <!-- </P> -->
             </xsl:when>
             <xsl:otherwise>
-              <P>
-                The following are within the scope of 
-                <xsl:call-template name="get_module_stdnumber">
-                  <xsl:with-param name="module" select="."/>
-                </xsl:call-template>:
-              </P>
+              <!-- <P> -->
+              <xsl:call-template name="insertParagraph">
+                <xsl:with-param name="text">
+                  The following are within the scope of 
+                  <xsl:call-template name="get_module_stdnumber">
+                    <xsl:with-param name="module" select="."/>
+                  </xsl:call-template>:
+                </xsl:with-param>
+              </xsl:call-template>
+              <!-- </P> -->
             </xsl:otherwise>
           </xsl:choose>
-          <ul>
+          <!-- <ul> -->
+            <xsl:text>&#xa;</xsl:text>
             <xsl:apply-templates select="./abstract/*"/>
-          </ul>          
+            <xsl:text>&#xa;&#xa;</xsl:text>
+          <!-- </ul> -->
         </xsl:when>
         <xsl:otherwise>
           <xsl:apply-templates select="./abstract/*"/>
@@ -551,15 +557,21 @@ TT remove since locke is no longer available.
       </xsl:choose>
     </xsl:when>
     <xsl:otherwise>
-      <P>
-        The following are within the scope of 
-        <xsl:call-template name="get_module_stdnumber">
-          <xsl:with-param name="module" select="."/>
-        </xsl:call-template>:
-      </P>
-      <UL>
+      <!-- <P> -->
+      <xsl:call-template name="insertParagraph">
+        <xsl:with-param name="text">
+          The following are within the scope of 
+          <xsl:call-template name="get_module_stdnumber">
+            <xsl:with-param name="module" select="."/>
+          </xsl:call-template>:
+        </xsl:with-param>
+      </xsl:call-template>
+      <!-- </P> -->
+      <!-- <UL> -->
+        <xsl:text>&#xa;</xsl:text>
         <xsl:apply-templates select="./inscope/li"/>
-      </UL>
+        <xsl:text>&#xa;&#xa;</xsl:text>
+      <!-- </UL> -->
     </xsl:otherwise>
   </xsl:choose>
       
@@ -633,7 +645,7 @@ TT remove since locke is no longer available.
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-    <p>
+    <!-- <p> -->
       <xsl:variable name="this_edition">
         <xsl:choose>
           <xsl:when test="@version='2'">
@@ -777,12 +789,18 @@ TT remove since locke is no longer available.
             <xsl:when test="./changes and ./usage_guide">G</xsl:when>
             <xsl:when test="./changes">F</xsl:when>
           </xsl:choose>
-        </xsl:variable><br/><br/>A detailed description of the changes is provided in Annex <a
+        </xsl:variable>
+        <!-- <br/><br/>A detailed description of the changes is provided in Annex <a
           href="g_change{$FILE_EXT}">
           <xsl:value-of select="$annex_letter"/>
-        </a>. 
+        </a>.  -->
+        
+        <xsl:call-template name="insertParagraph">
+          <xsl:with-param name="text">A detailed description of the changes is provided in &lt;&lt;Annex<xsl:value-of select="$annex_letter"/>&gt;&gt;</xsl:with-param>
+        </xsl:call-template>
+        
       </xsl:if>
-    </p>    
+    <!-- </p>     -->
   </xsl:template> 
 
 <!-- Outputs the foreword -->
@@ -798,12 +816,18 @@ TT remove since locke is no longer available.
       </xsl:choose>
     </xsl:variable>
     
-    <h2>
+    <!-- <h2>
       <a name="foreword">
         Foreword
       </a>
-    </h2>
-    <p>
+    </h2> -->
+    
+    <xsl:text>.Foreword</xsl:text>
+		<xsl:text>&#xa;&#xa;</xsl:text>
+
+    <!-- <p> -->
+    <xsl:call-template name="insertParagraph">
+			<xsl:with-param name="text">
       ISO (the International Organization for Standardization) is a worldwide federation of national standards 
       bodies (ISO member bodies). The work of preparing International Standards is normally carried out 
       through ISO technical committees. Each member body interested in a subject for which a technical 
@@ -811,47 +835,81 @@ TT remove since locke is no longer available.
       organizations, governmental and non-governmental, in liaison with ISO, also take part in the work. 
       ISO collaborates closely with the International Electrotechnical Commission (IEC) on all matters of 
       electrotechnical standardization.
-    </p>
-    <p>
+      </xsl:with-param>
+    </xsl:call-template>
+    <!-- </p> -->
+    <!-- <p> -->
+    <xsl:call-template name="insertParagraph">
+			<xsl:with-param name="text">
       The procedures used to develop this document and those intended for its further maintenance are
       described in the ISO/IEC Directives, Part 1. In particular, the different approval criteria needed for the
       different types of ISO documents should be noted. This document was drafted in accordance with the
       editorial rules of the ISO/IEC Directives, Part 2 (see <a href="http://www.iso.org/directives" target="_blank">www.iso.org/directives</a>).
-    </p>
-    <p>
+      </xsl:with-param>
+    </xsl:call-template>
+    <!-- </p> -->
+    <!-- <p> -->
+    <xsl:call-template name="insertParagraph">
+			<xsl:with-param name="text">
       Attention is drawn to the possibility that some of the elements of this document may be the subject of 
       patent rights. ISO shall not be held responsible for identifying any or all such patent rights. Details of 
       any patent rights identified during the development of the document will be in the Introduction and/or 
       on the ISO list of patent declarations received (see <a href="http://www.iso.org/patents" target="_blank">www.iso.org/patents</a>). 
-    </p>
-    <p>
+      </xsl:with-param>
+    </xsl:call-template>
+    <!-- </p> -->
+    <!-- <p> -->
+    <xsl:call-template name="insertParagraph">
+			<xsl:with-param name="text">
       Any trade name used in this document is information given for the convenience of users and does not
       constitute an endorsement. 
-    </p>
+      </xsl:with-param>
+    </xsl:call-template>
+    <!-- </p> -->
     
-    <p>
+    <!-- <p> -->
+    <xsl:call-template name="insertParagraph">
+			<xsl:with-param name="text">
       For an explanation on the voluntary nature of standards, the meaning of ISO specific terms and 
       expressions related to conformity assessment, as well as information about ISO's adherence to the 
       World Trade Organization (WTO) principles in the Technical Barriers to Trade (TBT) see <a href="http://www.iso.org/iso/foreword.html" target="_blank">www.iso.org/iso/foreword.html</a>.
-    </p>
+      </xsl:with-param>
+    </xsl:call-template>
+    <!-- </p> -->
     
-    <p>
+    <!-- <p> -->
+    <xsl:call-template name="insertParagraph">
+			<xsl:with-param name="text">
       This document was prepared by Technical Committee ISO/TC 184, <i>Automation systems and integration</i>, Subcommittee SC 4,
       <i>Industrial data.</i>
-    </p>
+      </xsl:with-param>
+    </xsl:call-template>
+    <!-- </p> -->
     
     <xsl:if test="@version!='1'">
-      <xsl:apply-templates select="." mode="edition_sentence"/>  
+      <xsl:call-template name="insertParagraph">
+        <xsl:with-param name="text">
+          <xsl:apply-templates select="." mode="edition_sentence"/>  
+        </xsl:with-param>
+      </xsl:call-template>
     </xsl:if>
     
-  <p>
+  <!-- <p> -->
+  <xsl:call-template name="insertParagraph">
+    <xsl:with-param name="text">
     A list of all parts in the ISO 10303 series can be found on the <a href="http://standards.iso.org/iso/10303/tech/step_titles.htm" target="_blank">ISO website</a>. 
-  </p>
+    </xsl:with-param>
+  </xsl:call-template>
+  <!-- </p> -->
   
-  <p>
+  <!-- <p> -->
+  <xsl:call-template name="insertParagraph">
+    <xsl:with-param name="text">
     Any feedback or questions on this document should be directed to the user’s national standards body. 
     A complete listing of these bodies can be found at <a href="https://www.iso.org/members.html">www.iso.org/members.html</a>.
-  </p>
+    </xsl:with-param>
+  </xsl:call-template>
+  <!-- </p> -->
     
 </xsl:template> 
   
@@ -986,11 +1044,17 @@ TT remove since locke is no longer available.
 
 
 <xsl:template match="purpose">
-  <h2>
+  <!-- <h2>
     <a name="introduction">
       Introduction
     </a>
-  </h2>
+  </h2> -->
+  
+  <xsl:call-template name="insertHeaderADOC">
+    <xsl:with-param name="id" select="'introduction'"/>		
+    <xsl:with-param name="level" select="1"/>
+    <xsl:with-param name="header" select="'Introduction'"/>					
+  </xsl:call-template>
 
   <xsl:if test="not( string-length(normalize-space(.)) > 85)" >
         <xsl:call-template name="error_message">
@@ -1022,7 +1086,9 @@ TT remove since locke is no longer available.
   
   
 
-  <p>
+  <!-- <p> -->
+  <xsl:call-template name="insertParagraph">
+    <xsl:with-param name="text">
     ISO 10303 is an International Standard for the computer-interpretable 
     representation of product information and for the exchange of product data.
     The objective is to provide a neutral mechanism capable of describing
@@ -1030,7 +1096,9 @@ TT remove since locke is no longer available.
     for neutral file exchange, but also as a basis for implementing and
     sharing product databases, and as a basis 
     for retention and archiving.
-  </p>
+    </xsl:with-param>
+  </xsl:call-template>
+  <!-- </p> -->
 
   <!-- output any issues -->
   <xsl:apply-templates select=".." mode="output_clause_issue">
@@ -1067,55 +1135,81 @@ TT remove since locke is no longer available.
     </p>
      -->
   </xsl:if>
-  <p>
-    Clause <a href="1_scope{$FILE_EXT}">1</a> defines the scope of the
+  <!-- <p> -->
+  <xsl:call-template name="insertParagraph">
+    <xsl:with-param name="text">
+    <!-- Clause <a href="1_scope{$FILE_EXT}">1</a> defines the scope of the -->
+    &lt;&lt;sec_1_scope&gt;&gt; defines the scope of the
     application module and summarizes the functionality and data covered. 
 
-    Clause <a href="3_defs{$FILE_EXT}">3</a> lists the words defined in
+    <!-- Clause <a href="3_defs{$FILE_EXT}">3</a> lists the words defined in -->
+    &lt;&lt;sec_3_defs&gt;&gt; lists the words defined in
     this part of ISO 10303 and gives pointers to words defined elsewhere. 
 
     The information requirements of the application are specified in Clause 
-    <a href="4_info_reqs{$FILE_EXT}">4</a> using terminology appropriate to
+    <!-- <a href="4_info_reqs{$FILE_EXT}">4</a> using terminology appropriate to -->
+    &lt;lt;sec_4_info_reqs&gt;&gt; using terminology appropriate to
     the application. 
 
     A graphical representation of the information requirements, referred to
-    as the application reference model, is given in Annex 
-    <a href="c_arm_expg{$FILE_EXT}">C</a>. 
+    as the application reference model, is given in &lt;&lt;AnnexC&gt;&gt; . <!-- c_arm_expg -->
+    <!-- <a href="c_arm_expg{$FILE_EXT}">C</a>.  -->
 
     Resource constructs are interpreted to meet the information
     requirements. 
     This interpretation produces the module interpreted model (MIM). 
-    This interpretation, given in <a href="5_mapping{$FILE_EXT}#mapping">5.1</a>,
+    <!-- This interpretation, given in <a href="5_mapping{$FILE_EXT}#mapping">5.1</a>, -->
+    This interpretation, given in &lt;&lt;sec_5_mapping_mapping&gt;&gt;,
     shows the correspondence between the information requirements and the
     MIM. The short listing of the MIM specifies the interface to the
-    resources and is given in <a href="5_mim{$FILE_EXT}#mim_express">5.2</a>.  
+    <!-- resources and is given in <a href="5_mim{$FILE_EXT}#mim_express">5.2</a>.   -->
+    resources and is given in &lt;&lt;sec_5_mim_mim_express&gt;&gt;.  
 
     A graphical representation of the short listing of the MIM is given
-    in Annex <a href="d_mim_expg{$FILE_EXT}">D</a>.
-  </p>
-  <p>
+    <!-- in Annex <a href="d_mim_expg{$FILE_EXT}">D</a>. -->
+    in &lt;&lt;AnnexD&gt;&gt;.
+    </xsl:with-param>
+  </xsl:call-template>
+  <!-- </p> -->
+  <!-- <p> -->
+  <xsl:call-template name="insertParagraph">
+    <xsl:with-param name="text">
     In ISO 10303, the same English language words can be
     used to refer to an object in the real world or concept, and as the
     name of an EXPRESS data type that represents this object or concept. 
-  </p>
-  <p>
+    </xsl:with-param>
+  </xsl:call-template>
+  <!-- </p> -->
+  <!-- <p> -->
+  <xsl:call-template name="insertParagraph">
+    <xsl:with-param name="text">
     The following typographical convention is used to distinguish between
     these. If a word or phrase occurs in the same typeface as narrative
     text, the referent is the object or concept. If the word or phrase
     occurs in a bold typeface or as a hyperlink, the referent is the
     EXPRESS data type. 
-  </p>
-  <p>
+    </xsl:with-param>
+  </xsl:call-template>
+  <!-- </p> -->
+  <!-- <p> -->
+  <xsl:call-template name="insertParagraph">
+    <xsl:with-param name="text">
     The name of an EXPRESS data type can be used to refer to the data type
     itself, or to an instance of the data type. The distinction between
     these uses is normally clear from the context. If there is a likelihood
     of ambiguity, either the phrase "entity data type" or "instance(s) of" is
     included in the text. 
-  </p>
-  <p>
+    </xsl:with-param>
+  </xsl:call-template>
+  <!-- </p> -->
+  <!-- <p> -->
+  <xsl:call-template name="insertParagraph">
+    <xsl:with-param name="text">
     Double quotation marks " " denote quoted text. Single quotation marks ' '
     denote particular text string values.
-  </p>
+    </xsl:with-param>
+  </xsl:call-template>
+  <!-- </p> -->
 </xsl:template>
 
 <xsl:template match="inscope">
