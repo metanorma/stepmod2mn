@@ -12,6 +12,9 @@ $Id: express_description.xsl,v 1.53 2016/08/26 10:19:51 mikeward Exp $
 
 <xsl:stylesheet 
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:java="http://xml.apache.org/xalan/java"
+  xmlns:str="http://exslt.org/strings"
+  extension-element-prefixes="str"
 	version="1.0"
 >
 
@@ -462,7 +465,22 @@ $Id: express_description.xsl,v 1.53 2016/08/26 10:19:51 mikeward Exp $
       <!-- if -->
       <!--      <xsl:if test="not(contains('is',substring-before(normalize-space($description/text()[position()=2]),' ')))"> -->
       <!-- MWD  added "and string-length($constant)=0" to prevent spurious error messages for constants -->
-  <xsl:if test="string-length($rule)=0 and not(contains('is',substring-before(substring-after(substring-after(normalize-space($description),' '),' '),' '))) and string-length($constant)=0">
+  
+      <xsl:variable name="description_parts_by_space"
+                    select="str:split(normalize-space($description),' ')" />
+      <xsl:variable name="contains_is">
+          <xsl:choose>
+              <xsl:when test="$description_parts_by_space[3] = 'is'">yes</xsl:when>
+              <xsl:when test="substring($description_parts_by_space[2], string-length($description_parts_by_space[2])) = ','">
+                  <!-- Example An *application_context*, as defined in ISO 10303-1, is a  -->
+                  <xsl:variable name="description_parts_by_comma"
+                                select="str:split($description,',')" />
+                  <xsl:if test="starts-with(normalize-space($description_parts_by_comma[3]), 'is ')">yes</xsl:if>
+              </xsl:when>
+          </xsl:choose>
+      </xsl:variable>
+      <!-- <xsl:if test="string-length($rule)=0 and not(contains('is',substring-before(substring-after(substring-after(normalize-space($description),' '),' '),' '))) and string-length($constant)=0"> -->
+      <xsl:if test="string-length($rule)=0 and not(contains($contains_is, 'yes'))">
       
       <xsl:call-template name="error_message">
           <xsl:with-param  name="message"  >
@@ -564,26 +582,38 @@ $Id: express_description.xsl,v 1.53 2016/08/26 10:19:51 mikeward Exp $
           name="message" 
           select="concat('Error ATTR1: attribute descriptions (',$inline_aname,') containing block elements such as ', name(./child::*[name()='p' or name()='screen' or name()='ul' or name()='note' or name()='example']), ' should start with p not text#Currently starts with:#',$text_str)"/>
       </xsl:call-template>
-      <p class="expressdescription">
+      <!-- <p class="expressdescription">
         <b>
           <a name="{$inline_aname}">
             <xsl:value-of select="$inline_name"/>:
           </a>
         </b>
         <xsl:apply-templates/>
-      </p>
+      </p> -->
+      <xsl:call-template name="insertParagraph">
+        <xsl:with-param name="text">
+          <xsl:text>[[</xsl:text><xsl:value-of select="$inline_aname"/><xsl:text>]]*</xsl:text><xsl:value-of select="$inline_name"/><xsl:text>:* </xsl:text>
+          <xsl:apply-templates/>
+        </xsl:with-param>
+      </xsl:call-template>
     </xsl:when>
 
     <!-- plain text -->
     <xsl:when test="string-length($text_str) != 0">
-      <p class="expressdescription">
+      <!-- <p class="expressdescription">
         <b>
           <a name="{$inline_aname}">
             <xsl:value-of select="$inline_name"/>:
           </a>
         </b>
         <xsl:apply-templates/>
-      </p>
+      </p> -->
+      <xsl:call-template name="insertParagraph">
+        <xsl:with-param name="text">
+          <xsl:text>[[</xsl:text><xsl:value-of select="$inline_aname"/><xsl:text>]]*</xsl:text><xsl:value-of select="$inline_name"/><xsl:text>:* </xsl:text>					
+          <xsl:apply-templates/>
+        </xsl:with-param>
+      </xsl:call-template>
     </xsl:when>
 
     <!-- check that the first element is p -->
@@ -593,14 +623,20 @@ $Id: express_description.xsl,v 1.53 2016/08/26 10:19:51 mikeward Exp $
           name="message" 
           select="concat('Error ATTR2: attribute descriptions (',$inline_aname,') must start with a p element, not ', name(./child::*[1]))"/>
       </xsl:call-template>
-      <p class="expressdescription">
+      <!-- <p class="expressdescription">
         <b>
           <a name="{$inline_aname}">
             <xsl:value-of select="$inline_name"/>:
           </a>
         </b>
         <xsl:apply-templates/>
-      </p>
+      </p> -->
+      <xsl:call-template name="insertParagraph">
+        <xsl:with-param name="text">
+          <xsl:text>[[</xsl:text><xsl:value-of select="$inline_aname"/><xsl:text>]]*</xsl:text><xsl:value-of select="$inline_name"/><xsl:text>:* </xsl:text>					
+          <xsl:apply-templates/>
+        </xsl:with-param>
+      </xsl:call-template>
     </xsl:when>
 
     <xsl:otherwise>
@@ -613,23 +649,29 @@ $Id: express_description.xsl,v 1.53 2016/08/26 10:19:51 mikeward Exp $
   </xsl:choose>
 </xsl:template>
   
-  <xsl:template match="bold">
+  <!-- <xsl:template match="bold">
     <b><xsl:apply-templates/></b>
-  </xsl:template>
+  </xsl:template> -->
 
 
 <xsl:template match="p" mode="first_paragraph_attribute">
   <xsl:param name="inline_aname"/>
   <xsl:param name="inline_name"/>
   <xsl:apply-templates select="." mode="check_html"/>
-  <p class="expressdescription">
+  <!-- <p class="expressdescription">
     <b>
       <a name="{$inline_aname}">
         <xsl:value-of select="$inline_name"/>:
       </a>
     </b>
     <xsl:apply-templates/>
-  </p>  
+  </p> -->
+  <xsl:call-template name="insertParagraph">
+    <xsl:with-param name="text">
+      <xsl:text>[[</xsl:text><xsl:value-of select="$inline_aname"/><xsl:text>]]*</xsl:text><xsl:value-of select="$inline_name"/><xsl:text>:* </xsl:text>			
+      <xsl:apply-templates/>
+    </xsl:with-param>
+  </xsl:call-template>
 </xsl:template>
 
 <xsl:template match="text()" mode="chktxt" >
@@ -742,6 +784,15 @@ $Id: express_description.xsl,v 1.53 2016/08/26 10:19:51 mikeward Exp $
 
 <xsl:template match="ext_description">
   <xsl:apply-templates/>
+</xsl:template>
+
+
+<xsl:template match="ext_description/text()">
+  <!-- <xsl:value-of select="translate(., '&#x9;', '')"/> -->
+  <xsl:variable name="text" select="java:replaceAll(java:java.lang.String.new(.),'\s+',' ')"/>
+  <xsl:call-template name="trimSpaces">
+    <xsl:with-param name="text" select="$text"/>
+  </xsl:call-template>
 </xsl:template>
 
 
