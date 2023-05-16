@@ -12,20 +12,20 @@ $Id: sect_1_scope.xsl,v 1.6 2003/07/15 14:02:51 robbod Exp $
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:java="http://xml.apache.org/xalan/java" 
                 version="1.0">
 
-  <xsl:import href="module.xsl"/>
+<!--   <xsl:import href="module.xsl"/> -->
 
   <!-- 
        the stylesheet that allows different stylesheets to be applied 
        -->
-  <xsl:import href="module_clause.xsl"/>
+  <!-- <xsl:import href="module_clause.xsl"/> -->
 
 
-  <xsl:output method="html"/>
+  <!-- <xsl:output method="html"/> -->
 
 
 <!-- overwrites the template declared in module.xsl -->
-<xsl:template match="module">
-  <xsl:apply-templates select="." mode="special_header"/>
+<xsl:template match="module" mode="scope_module">
+  <!-- <xsl:apply-templates select="." mode="special_header"/>
   <h1>
     Industrial automation systems and integration &#8212; <br/>
     Product data representation and exchange &#8212;  <br/>
@@ -34,13 +34,14 @@ $Id: sect_1_scope.xsl,v 1.6 2003/07/15 14:02:51 robbod Exp $
     <xsl:call-template name="module_display_name">
       <xsl:with-param name="module" select="@name"/>
     </xsl:call-template>
-  </h1>
+  </h1> -->
+  
   <xsl:apply-templates select="./inscope"/>
   <xsl:apply-templates select="./outscope"/>
 </xsl:template>
   
 
-<xsl:template match="module" mode="special_header">
+<!-- <xsl:template match="module" mode="special_header">
   <xsl:variable name="right">
     <xsl:choose>
       <xsl:when test="@status='WD' or @status='CD' or @status='DIS'">
@@ -94,5 +95,59 @@ $Id: sect_1_scope.xsl,v 1.6 2003/07/15 14:02:51 robbod Exp $
   </table>
   <hr/>
 </xsl:template>
+-->
+
+	<xsl:template match="module" mode="docnumber">
+		<xsl:choose>
+			<xsl:when test="@status='WD' or @status='CD' or @status='DIS'">
+				<xsl:value-of select="concat('ISO/',@status,' 10303-',@part)"/>
+			</xsl:when>
+			<xsl:when test="@status='CD-TS'">
+				<xsl:value-of select="concat('ISO/CD TS 10303-',@part)"/>
+			</xsl:when>
+			<xsl:when test="@status='IS'">
+				<xsl:value-of select="concat('ISO',' 10303-',@part,':',@publication.year,'(',@language,')')"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="concat('ISO/',@status,' 10303-',@part,':',@publication.year,'(',@language,')')"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template match="module" mode="docstage">
+		<xsl:choose>
+			<xsl:when test="@status='WD'"> <!-- WORKING DRAFT -->
+				<xsl:text>:docstage: 20</xsl:text>
+				<xsl:text>&#xa;</xsl:text>
+				<xsl:text>:docsubstage: 00</xsl:text>
+			</xsl:when>
+			<xsl:when test="@status='CD' or @status='CD-TS'"> <!-- COMMITTEE DRAFT -->
+				<xsl:text>:docstage: 30</xsl:text>
+				<xsl:text>&#xa;</xsl:text>
+				<xsl:text>:docsubstage: 00</xsl:text>
+			</xsl:when>
+			<xsl:when test="@status='DIS'"> <!-- DRAFT INTERNATIONAL STANDARD -->
+				<xsl:text>:docstage: 40</xsl:text>
+				<xsl:text>&#xa;</xsl:text>
+				<xsl:text>:docsubstage: 00</xsl:text>
+			</xsl:when>
+			<xsl:when test="@status='FDIS'"> <!-- FINAL DRAFT INTERNATIONAL STANDARD -->
+				<xsl:text>:docstage: 50</xsl:text>
+				<xsl:text>&#xa;</xsl:text>
+				<xsl:text>:docsubstage: 00</xsl:text>
+			</xsl:when>
+			<xsl:when test="@status='IS'"> <!-- INTERNATIONAL STANDARD -->
+				<xsl:text>:docstage: 60</xsl:text>
+				<xsl:text>&#xa;</xsl:text>
+				<xsl:text>:docsubstage: 60</xsl:text>        
+			</xsl:when>
+			<xsl:when test="@status='TS'"> <!-- TECHNICAL SPECIFICATION -->
+				<xsl:text>:docstage: 30</xsl:text>
+				<xsl:text>&#xa;</xsl:text>
+				<xsl:text>:docsubstage: 00</xsl:text>        
+			</xsl:when>
+		</xsl:choose>
+	</xsl:template>
+
 
 </xsl:stylesheet>
