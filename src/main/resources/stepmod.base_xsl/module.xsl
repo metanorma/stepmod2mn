@@ -3897,7 +3897,7 @@ test="document('../data/basic/normrefs.xml')/normref.list/normref[@id=$normref]/
   <!-- </p> -->
   <!-- get the default abbreviations out of the abbreviations_default.xml
        database -->
-  <xsl:variable name="abbr_inc" select="document(concat($path, '../../../data/basic/abbreviations_default.xml')/abbreviations"/>
+  <xsl:variable name="abbr_inc" select="document(concat($path, '../../../data/basic/abbreviations_default.xml'))/abbreviations"/>
   
   <xsl:variable name="abbrevs">
     <abbrevs>
@@ -3942,7 +3942,7 @@ test="document('../data/basic/normrefs.xml')/normref.list/normref[@id=$normref]/
   <xsl:variable name="ref" select="@linkend"/>
   <xsl:variable 
     name="abbrev" 
-    select="document(concat($path, '../../../data/basic/abbreviations.xml')/abbreviation.list/abbreviation[@id=$ref]"/>
+    select="document(concat($path, '../../../data/basic/abbreviations.xml'))/abbreviation.list/abbreviation[@id=$ref]"/>
   <xsl:if test="$abbrev">
     <abbreviation.inc>
       <xsl:attribute name="acronym">
@@ -3982,7 +3982,7 @@ test="document('../data/basic/normrefs.xml')/normref.list/normref[@id=$normref]/
   <xsl:variable name="ref" select="@linkend"/>
   <xsl:variable 
     name="abbrev" 
-    select="document(concat($path, '../../../data/basic/abbreviations.xml')/abbreviation.list/abbreviation[@id=$ref]"/>
+    select="document(concat($path, '../../../data/basic/abbreviations.xml'))/abbreviation.list/abbreviation[@id=$ref]"/>
   <xsl:choose>
     <xsl:when test="$abbrev">
       <xsl:apply-templates select="$abbrev"/>
@@ -4024,7 +4024,7 @@ test="document('../data/basic/normrefs.xml')/normref.list/normref[@id=$normref]/
   <xsl:variable name="normref" select="./@normref"/>
   <xsl:variable 
     name="term"
-    select="document(concat($path, '../../../data/basic/normrefs.xml')/normref.list/normref/term[@id=$termref]"/>
+    select="document(concat($path, '../../../data/basic/normrefs.xml'))/normref.list/normref/term[@id=$termref]"/>
   <xsl:choose>
     <xsl:when test="$term">
       <xsl:value-of select="normalize-space($term)"/>
@@ -4162,7 +4162,7 @@ test="document('../data/basic/normrefs.xml')/normref.list/normref[@id=$normref]/
             select="substring-after($first,'normref:')"/>
           <xsl:variable 
             name="normref"
-            select="document(concat($path, '../../../data/basic/normrefs.xml')/normref.list/normref[@id=$ref]"/>
+            select="document(concat($path, '../../../data/basic/normrefs.xml'))/normref.list/normref[@id=$ref]"/>
 
           <!-- get the number of the standard -->      
           <xsl:variable name="stdnumber" 
@@ -4201,7 +4201,7 @@ test="document('../data/basic/normrefs.xml')/normref.list/normref[@id=$normref]/
             <!-- </p> -->
             <!-- <ul> -->
               <!-- now output the terms -->
-              <xsl:variable name="normrefs_default_xml" select="document(concat($path, '../../../data/basic/normrefs_default.xml')"/>
+              <xsl:variable name="normrefs_default_xml" select="document(concat($path, '../../../data/basic/normrefs_default.xml'))"/>
               <xsl:apply-templates 
                 select="$normrefs_default_xml/normrefs/normref.inc[@normref=$ref]/term.ref" mode="normref">
                 <xsl:with-param name="current_module" select="$current_module"/>
@@ -4338,7 +4338,7 @@ $module_ok,' Check the normatives references')"/>
     <xsl:call-template name="get_normref_term">
       <xsl:with-param 
         name="normref_nodes" 
-        select="document(concat($path, '../../../data/basic/normrefs_default.xml')/normrefs/normref.inc"/>
+        select="document(concat($path, '../../../data/basic/normrefs_default.xml'))/normrefs/normref.inc"/>
       <xsl:with-param 
         name="normref_list" 
         select="''"/>
@@ -4654,7 +4654,7 @@ $module_ok,' Check the normatives references')"/>
       select="@linkend"/>
     <xsl:variable 
       name="term"
-      select="document(concat($path, '../../../data/basic/normrefs.xml')/normref.list/normref/term[@id=$ref]"/>
+      select="document(concat($path, '../../../data/basic/normrefs.xml'))/normref.list/normref/term[@id=$ref]"/>
     <xsl:choose>
       <xsl:when test="$term">
         <!-- <xsl:choose>
