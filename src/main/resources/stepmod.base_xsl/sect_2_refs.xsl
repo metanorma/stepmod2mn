@@ -19,29 +19,31 @@ $Id: sect_2_refs.xsl,v 1.21 2018/08/22 23:06:22 mike Exp $
 -->
 <!-- Updated: Alexander Dyuzhev, for stepmod2mn tool -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"                
-  xmlns:msxsl="urn:schemas-microsoft-com:xslt"
-  xmlns:exslt="http://exslt.org/common"
-  xmlns:saxon="http://icl.com/saxon"
-  extension-element-prefixes="saxon" 
-  exclude-result-prefixes="msxsl exslt saxon"
+  xmlns:xalan="http://xml.apache.org/xalan"  
   version="1.0">
   
 
-  <xsl:import href="module.xsl"/>
+  <!-- <xsl:import href="module.xsl"/> -->
 
   <!-- 
        the stylesheet that allows different stylesheets to be applied 
        -->
-  <xsl:import href="module_clause.xsl"/>
+  <!-- <xsl:import href="module_clause.xsl"/> -->
 
 
-  <xsl:output method="html"/>
+  <!-- <xsl:output method="html"/> -->
 
 
   <!-- added by MWD 2016-05-03 -->
-  <xsl:template match="resource">
+  <xsl:template match="resource" mode="norm_refs_module">
     
-    <h2>2 Normative references</h2>
+    <!-- <h2>2 Normative references</h2> -->
+    
+    <xsl:text>[bibliography]</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>== </xsl:text>
+		<xsl:text>Normative references</xsl:text>
+		<xsl:text>&#xa;&#xa;</xsl:text>
     
     <!--<p>
       The following referenced documents are indispensable for the application of
@@ -51,10 +53,14 @@ $Id: sect_2_refs.xsl,v 1.21 2018/08/22 23:06:22 mike Exp $
     </p>--> 
     
     <!-- MWD 2018-07-04 6538 the above paragraph replaced with this one -->
-    <p>
+    <!-- <p> -->
+    <xsl:call-template name="insertParagraph">
+			<xsl:with-param name="text">
     The following documents are referred to in the text in such a way that some or all of their content constitutes requirements of this document. 
     For dated references, only the edition cited applies. For undated references, the latest edition of the referenced document (including any amendments) applies.
-    </p> 
+      </xsl:with-param>
+    </xsl:call-template>
+    <!-- </p>  -->
     
     
     
@@ -80,7 +86,8 @@ $Id: sect_2_refs.xsl,v 1.21 2018/08/22 23:06:22 mike Exp $
         </xsl:attribute>
         
         <!-- collect default normative reference -->
-        <xsl:apply-templates select="document('../data/basic/normrefs_default.xml')/normrefs"
+        <xsl:variable name="normrefs_default_xml" select="document(concat($path,'../../../data/basic/normrefs_default.xml'))"/>
+        <xsl:apply-templates select="$normrefs_default_xml/normrefs"
           mode="generate_node"> </xsl:apply-templates>
         
         <!-- collect normative references explicitly referenced in the module -->
@@ -89,8 +96,9 @@ $Id: sect_2_refs.xsl,v 1.21 2018/08/22 23:06:22 mike Exp $
         
         <!-- collect normative references that define terms for which abbreviations are provided
           and listed in ../data/basic/abbreviations_default.xml -->
+        <xsl:variable name="abbreviations_default_xml" select="document(concat($path,'../../../data/basic/abbreviations_default.xml'))"/>
         <xsl:apply-templates
-          select="document('../data/basic/abbreviations_default.xml')/abbreviations/abbreviation.inc"
+          select="$abbreviations_default_xml/abbreviations/abbreviation.inc"
           mode="generate_node"/>
         <xsl:apply-templates select="abbreviations/abbreviation.inc" mode="generate_node"/>
         
@@ -113,7 +121,7 @@ $Id: sect_2_refs.xsl,v 1.21 2018/08/22 23:06:22 mike Exp $
     </saxon:output>
 -->
 
-    <xsl:choose>
+    <!-- <xsl:choose>
       <xsl:when test="function-available('msxsl:node-set')">
         <xsl:variable name="normref_nodes" select="msxsl:node-set($normref_list)"/>
         <xsl:apply-templates select="$normref_nodes" mode="output_normrefs"/>
@@ -125,12 +133,19 @@ $Id: sect_2_refs.xsl,v 1.21 2018/08/22 23:06:22 mike Exp $
       <xsl:otherwise>
         <xsl:message> Only support SAXON and MXSL XSL parsers. </xsl:message>
       </xsl:otherwise>
-    </xsl:choose>
+    </xsl:choose> -->
+    <xsl:variable name="normref_nodes" select="xalan:nodeset($normref_list)"/>
+    <xsl:apply-templates select="$normref_nodes" mode="output_normrefs"/>
   </xsl:template>
   
   <xsl:template match="module">
     
-    <h2>2 Normative references</h2>
+    <!-- <h2>2 Normative references</h2> -->
+    <xsl:text>[bibliography]</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>== </xsl:text>
+		<xsl:text>Normative references</xsl:text>
+		<xsl:text>&#xa;&#xa;</xsl:text>
     
     <!--<p>
       The following referenced documents are indispensable for the application of
@@ -140,10 +155,14 @@ $Id: sect_2_refs.xsl,v 1.21 2018/08/22 23:06:22 mike Exp $
     </p>--> 
     
     <!-- MWD 2018-07-04 6538 the above paragraph replaced with this one -->
-    <p>
+    <!-- <p> -->
+    <xsl:call-template name="insertParagraph">
+			<xsl:with-param name="text">
       The following documents are referred to in the text in such a way that some or all of their content constitutes requirements of this document. 
       For dated references, only the edition cited applies. For undated references, the latest edition of the referenced document (including any amendments) applies.
-    </p> 
+      </xsl:with-param>
+    </xsl:call-template>
+    <!-- </p>  -->
     
     
     <!-- collect up all the normrefs for the module into a normref_nodes node
@@ -168,7 +187,8 @@ $Id: sect_2_refs.xsl,v 1.21 2018/08/22 23:06:22 mike Exp $
         </xsl:attribute>
         
         <!-- collect default normative reference -->
-        <xsl:apply-templates select="document('../data/basic/normrefs_default.xml')/normrefs"
+        <xsl:variable name="normrefs_default_xml" select="document(concat($path,'../../../data/basic/normrefs_default.xml'))"/>
+        <xsl:apply-templates select="$normrefs_default_xml/normrefs"
           mode="generate_node"> </xsl:apply-templates>
         
         <!-- collect normative references explicitly referenced in the module -->
@@ -177,8 +197,9 @@ $Id: sect_2_refs.xsl,v 1.21 2018/08/22 23:06:22 mike Exp $
         
         <!-- collect normative references that define terms for which abbreviations are provided
           and listed in ../data/basic/abbreviations_default.xml -->
+        <xsl:variable name="abbreviations_default_xml" select="document(concat($path,'../../../data/basic/abbreviations_default.xml'))"/>
         <xsl:apply-templates
-          select="document('../data/basic/abbreviations_default.xml')/abbreviations/abbreviation.inc"
+          select="$abbreviations_default_xml/abbreviations/abbreviation.inc"
           mode="generate_node"/>
         <xsl:apply-templates select="abbreviations/abbreviation.inc" mode="generate_node"/>
         
@@ -188,13 +209,13 @@ $Id: sect_2_refs.xsl,v 1.21 2018/08/22 23:06:22 mike Exp $
             <xsl:with-param name="module" select="/module/@name"/>
           </xsl:call-template>
         </xsl:variable>
-        <xsl:variable name="arm_xml" select="concat($module_dir,'/arm.xml')"/>
-        <xsl:apply-templates select="document($arm_xml)/express/schema/interface"
+        <xsl:variable name="arm_xml" select="document(concat($module_dir,'/arm.xml'))"/>
+        <xsl:apply-templates select="$arm_xml/express/schema/interface"
           mode="generate_node"/>
         
         <!-- collect normative reference implicit in the module through a USE FROM in the MIM -->
-        <xsl:variable name="mim_xml" select="concat($module_dir,'/mim.xml')"/>
-        <xsl:apply-templates select="document($mim_xml)/express/schema/interface"
+        <xsl:variable name="mim_xml" select="document(concat($module_dir,'/mim.xml'))"/>
+        <xsl:apply-templates select="$mim_xml/express/schema/interface"
           mode="generate_node"/>
       </xsl:element>
       <!--  </normref_nodes> -->
@@ -212,7 +233,7 @@ $Id: sect_2_refs.xsl,v 1.21 2018/08/22 23:06:22 mike Exp $
     </saxon:output>
 -->
     
-    <xsl:choose>
+    <!-- <xsl:choose>
       <xsl:when test="function-available('msxsl:node-set')">
         <xsl:variable name="normref_nodes" select="msxsl:node-set($normref_list)"/>
         <xsl:apply-templates select="$normref_nodes" mode="output_normrefs"/>
@@ -224,16 +245,21 @@ $Id: sect_2_refs.xsl,v 1.21 2018/08/22 23:06:22 mike Exp $
       <xsl:otherwise>
         <xsl:message> Only support SAXON and MXSL XSL parsers. </xsl:message>
       </xsl:otherwise>
-    </xsl:choose>
+    </xsl:choose> -->
+    <xsl:variable name="normref_nodes" select="xalan:nodeset($normref_list)"/>
+    <xsl:apply-templates select="$normref_nodes" mode="output_normrefs"/>
   </xsl:template>
 
 <!-- generate the normref node for included/referenced normrefs in a module -->
 <xsl:template match="normref.inc" mode="generate_node">
   <xsl:variable name="ref" select="@normref"/>
-  <xsl:apply-templates 
-    select="document('../data/basic/normrefs.xml')/normref.list/normref[@id=$ref]"
-    mode="generate_node">
-  </xsl:apply-templates>
+  <xsl:variable name="normrefs_xml" select="document(concat($path,'../../../data/basic/normrefs.xml'))"/>
+  <xsl:variable name="normrefs_node" select="$normrefs_xml/normref.list/normref[@id=$ref]"/>
+  <xsl:if test="$normrefs_node">
+    <xsl:apply-templates 
+      select="$normrefs_xml/normref.list/normref[@id=$ref]"
+      mode="generate_node"/>
+  </xsl:if>
 </xsl:template>
 
 <!-- deep copy of any node -->
@@ -370,7 +396,7 @@ $Id: sect_2_refs.xsl,v 1.21 2018/08/22 23:06:22 mike Exp $
   <xsl:template match="abbreviation.inc" mode="generate_node">
   <xsl:variable name="abbr.inc" select="@linkend"/>
   <xsl:variable name="abbr" 
-    select="document('../data/basic/abbreviations.xml')/abbreviation.list/abbreviation[@id=$abbr.inc]"/>
+    select="document(concat($path,'../../../data/basic/abbreviations.xml'))/abbreviation.list/abbreviation[@id=$abbr.inc]"/>
   <xsl:choose>
     <xsl:when test="$abbr/term.ref/@normref">
       <xsl:variable name="ref" select="$abbr/term.ref/@normref"/>
@@ -443,7 +469,7 @@ $Id: sect_2_refs.xsl,v 1.21 2018/08/22 23:06:22 mike Exp $
         </xsl:variable>
         <xsl:if test="$ir_ok='true'">
           <xsl:variable name="ir_ref"
-            select="document(concat('../data/resources/',
+            select="document(concat($path,'../../../data/resources/',
             $schema_lcase,'/',$schema_lcase,'.xml'))/express/@reference"
           />
           <xsl:variable name="ir_refn1" select="normalize-space($ir_ref)"/>   
@@ -640,11 +666,21 @@ $Id: sect_2_refs.xsl,v 1.21 2018/08/22 23:06:22 mike Exp $
       <xsl:variable name="stdnumber" select="concat(stdref/orgname,'&#160;',stdref/stdnumber)"/>
       <xsl:variable name="current_module_status" select="../@current_module_status"/>
       
-      <p>
-        <xsl:value-of select="$stdnumber"/>
+      <!-- <p>
+        <xsl:value-of select="$stdnumber"/> -->
+      
+      <xsl:text>* [[[</xsl:text>
+			<xsl:value-of select="@id"/>
+			<xsl:text>,</xsl:text>
+			<xsl:value-of select="$stdnumber"/>
+      <xsl:text>]]]</xsl:text>
+        
         <xsl:if test="stdref[@published='n']">
-          <sup><a href="#tobepub">1</a>)</sup>
-        </xsl:if>,&#160; <i>
+          <xsl:text> footnote:[To be published.]</xsl:text><!-- <sup><a href="#tobepub">1</a>)</sup> -->
+        </xsl:if>,
+        
+        <!-- &#160; <i> -->
+        <xsl:text>_</xsl:text>
           <xsl:value-of select="stdref/stdtitle"/>
           <xsl:variable name="subtitle" select="normalize-space(stdref/subtitle)"/>
           <xsl:choose>
@@ -664,9 +700,10 @@ $Id: sect_2_refs.xsl,v 1.21 2018/08/22 23:06:22 mike Exp $
               <xsl:value-of select="$subtitle"/>
             </xsl:otherwise>
           </xsl:choose>-->
-        </i>
+        <!-- </i> -->
+        <xsl:text>_</xsl:text>
         <!--<xsl:value-of select="$id"/>-->
-      </p>
+      <!-- </p> -->
     </xsl:if>
   </xsl:template>
 
