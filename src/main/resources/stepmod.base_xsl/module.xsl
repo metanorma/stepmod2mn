@@ -26,12 +26,12 @@ $Id: module.xsl,v 1.252 2018/08/23 11:13:36 mike Exp $
 
   <xsl:import href="projmg/issues.xsl"/>  -->
 
-  <xsl:output 
+<!--  <xsl:output 
     method="html"
     doctype-system="http://www.w3.org/TR/html4/loose.dtd"
     doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN"
     indent="yes"
-    />
+    /> -->
 
 
 <xsl:template match="module">
@@ -3290,7 +3290,7 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
     </xsl:when>
   </xsl:choose> -->
   
-  <xsl:variable name="normrefs_to_be_sorted_set" select="ext:node-set($normrefs_to_be_sorted)"/>
+  <xsl:variable name="normrefs_to_be_sorted_set" select="xalan:nodeset($normrefs_to_be_sorted)"/>
   <xsl:for-each select="$normrefs_to_be_sorted_set/normref">
     <!-- sorting basis is special normalized string, consisting of organization, series and part number all of equal lengths per each element -->
     <xsl:sort select='part'/>
@@ -3930,7 +3930,7 @@ test="document('../data/basic/normrefs.xml')/normref.list/normref[@id=$normref]/
     </xsl:choose>
   </table> -->
   
-  <xsl:variable name="abbrevs_nodes" select="ext:node-set($abbrevs)"/>
+  <xsl:variable name="abbrevs_nodes" select="xalan:nodeset($abbrevs)"/>
   <xsl:apply-templates select="$abbrevs_nodes/abbrevs/*">
     <xsl:sort select="@acronym"/>
   </xsl:apply-templates> 
