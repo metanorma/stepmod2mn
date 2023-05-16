@@ -8,10 +8,11 @@ $Id: sect_g_change.xsl,v 1.17 2017/09/29 06:01:47 mikeward Exp $
   Purpose:
      
 -->
+<!-- Updated: Alexander Dyuzhev, for stepmod2mn tool -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"                
-  xmlns:msxsl="urn:schemas-microsoft-com:xslt"
-  xmlns:exslt="http://exslt.org/common"
-  exclude-result-prefixes="msxsl exslt"
+	xmlns:xalan="http://xml.apache.org/xalan" 
+	xmlns:java="http://xml.apache.org/xalan/java" 
+  exclude-result-prefixes="xalan"
   version="1.0">
   
   <xsl:import href="module.xsl"/>

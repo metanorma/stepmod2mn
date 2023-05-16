@@ -8,11 +8,11 @@ $Id: expressg_icon.xsl,v 1.13 2014/06/13 12:58:59 nigelshaw Exp $
   Purpose: Read the are maps in an image and create a node list. This is
      then used to determine the EXPRESSG page on which an entity is drawn.
 -->
+<!-- Updated: Alexander Dyuzhev, for stepmod2mn tool -->
 <xsl:stylesheet 
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xmlns:msxsl="urn:schemas-microsoft-com:xslt"
-  xmlns:exslt="http://exslt.org/common"
-  exclude-result-prefixes="msxsl exslt"
+  xmlns:xalan="http://xml.apache.org/xalan"
+  exclude-result-prefixes="xalan"
   version="1.0">
 
   <xsl:import href="common.xsl"/>

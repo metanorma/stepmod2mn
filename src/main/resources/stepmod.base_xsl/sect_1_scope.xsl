@@ -8,7 +8,8 @@ $Id: sect_1_scope.xsl,v 1.6 2003/07/15 14:02:51 robbod Exp $
   Purpose: Output the Scope section as a web page
      
 -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+<!-- Updated: Alexander Dyuzhev, for stepmod2mn tool -->
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:java="http://xml.apache.org/xalan/java" 
                 version="1.0">
 
   <xsl:import href="module.xsl"/>

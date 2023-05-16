@@ -8,6 +8,7 @@ $Id: sect_e_exp_arm.xsl,v 1.8 2003/10/01 07:49:01 robbod Exp $
   Purpose: Display the ARM short form express 
      
 -->
+<!-- Updated: Alexander Dyuzhev, for stepmod2mn tool -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version="1.0">
 

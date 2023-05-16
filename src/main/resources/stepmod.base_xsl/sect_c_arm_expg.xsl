@@ -8,6 +8,7 @@ $Id: sect_c_arm_expg.xsl,v 1.13 2006/10/13 21:18:00 darla Exp $
   Purpose:
      
 -->
+<!-- Updated: Alexander Dyuzhev, for stepmod2mn tool -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version="1.0">
 

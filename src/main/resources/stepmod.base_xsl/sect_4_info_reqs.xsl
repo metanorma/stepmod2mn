@@ -8,6 +8,7 @@ $Id: sect_4_info_reqs.xsl,v 1.6 2012/11/06 09:43:39 mikeward Exp $
   Purpose: Output section 4 Information model as a web page
      
 -->
+<!-- Updated: Alexander Dyuzhev, for stepmod2mn tool -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version="1.0">
 
