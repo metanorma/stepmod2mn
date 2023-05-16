@@ -32,8 +32,9 @@ $Id: expressg_icon.xsl,v 1.13 2014/06/13 12:58:59 nigelshaw Exp $
               <xsl:with-param name="module" select="/module_clause/@directory"/>
             </xsl:call-template>
           </xsl:variable>      
+          <xsl:variable name="module_xml" select="document(concat($module_dir,'/module.xml'))"/>
           <xsl:apply-templates 
-            select="document(concat($module_dir,'/module.xml'))/module/arm/express-g/imgfile" mode="mk_node"/>
+            select="$module_xml/module/arm/express-g/imgfile" mode="mk_node"/>
         </xsl:when>
         <xsl:when test="/module">
           <xsl:apply-templates 
@@ -55,7 +56,7 @@ $Id: expressg_icon.xsl,v 1.13 2014/06/13 12:58:59 nigelshaw Exp $
 				<xsl:value-of select="//business_object_model_clause/@directory"/>
 			</xsl:when>
 			<xsl:when test="/application_protocol">
-				<xsl:value-of select="document(concat('../data/application_protocols/',
+				<xsl:value-of select="document(concat($path, '../../../data/application_protocols/',
 					/application_protocol/@directory,'/application_protocol.xml'))/application_protocol/@business_object_model"/>
 			</xsl:when>
 		</xsl:choose>
@@ -66,8 +67,9 @@ $Id: expressg_icon.xsl,v 1.13 2014/06/13 12:58:59 nigelshaw Exp $
       
       <xsl:choose>
         <xsl:when test="string-length($model_dir) > 1">
+          <xsl:variable name="business_object_model_xml" select="document(concat($path, '../../../data/business_object_models/', $model_dir,'/business_object_model.xml'))"/>
           <xsl:apply-templates 
-            select="document(concat('../data/business_object_models/', $model_dir,'/business_object_model.xml'))/business_object_model/inforeqt/bom/express-g/imgfile" mode="mk_bom_node"/>
+            select="$business_object_model_xml/business_object_model/inforeqt/bom/express-g/imgfile" mode="mk_bom_node"/>
         </xsl:when>
         <xsl:otherwise/>
       </xsl:choose>
@@ -106,7 +108,7 @@ $Id: expressg_icon.xsl,v 1.13 2014/06/13 12:58:59 nigelshaw Exp $
 
   <xsl:template name="get_arm_expressg_file">
     <xsl:param name="object"/>
-    <xsl:choose>
+    <!-- <xsl:choose>
       <xsl:when test="function-available('msxsl:node-set')">
         <xsl:variable name="arm_expressg_node_set" select="msxsl:node-set($arm_expressg)"/>
         <xsl:apply-templates
@@ -117,12 +119,15 @@ $Id: expressg_icon.xsl,v 1.13 2014/06/13 12:58:59 nigelshaw Exp $
         <xsl:apply-templates
           select="$arm_expressg_node_set/expg_nodes/object[@object=$object]" mode="get_file"/>
       </xsl:when>
-    </xsl:choose>
+    </xsl:choose> -->
+    <xsl:variable name="arm_expressg_node_set" select="xalan:nodeset($arm_expressg)"/>
+    <xsl:apply-templates
+      select="$arm_expressg_node_set/expg_nodes/object[@object=$object]" mode="get_file"/>
   </xsl:template>
   
   <xsl:template name="get_bom_expressg_file">
     <xsl:param name="object"/>
-    <xsl:choose>
+    <!-- <xsl:choose>
       <xsl:when test="function-available('msxsl:node-set')">
         <xsl:variable name="bom_expressg_node_set" select="msxsl:node-set($bom_expressg)"/>
         <xsl:apply-templates
@@ -133,12 +138,15 @@ $Id: expressg_icon.xsl,v 1.13 2014/06/13 12:58:59 nigelshaw Exp $
         <xsl:apply-templates
           select="$bom_expressg_node_set/expg_nodes/object[@object=$object]" mode="get_file"/>
       </xsl:when>
-    </xsl:choose>
+    </xsl:choose> -->
+    <xsl:variable name="bom_expressg_node_set" select="xalan:nodeset($bom_expressg)"/>
+    <xsl:apply-templates
+      select="$bom_expressg_node_set/expg_nodes/object[@object=$object]" mode="get_file"/>
   </xsl:template>
 
   <xsl:template name="get_mim_expressg_file">
     <xsl:param name="object"/>
-    <xsl:choose>
+    <!-- <xsl:choose>
       <xsl:when test="function-available('msxsl:node-set')">
         <xsl:variable name="mim_expressg_node_set" select="msxsl:node-set($mim_expressg)"/>
         <xsl:apply-templates
@@ -149,12 +157,15 @@ $Id: expressg_icon.xsl,v 1.13 2014/06/13 12:58:59 nigelshaw Exp $
         <xsl:apply-templates
           select="$mim_expressg_node_set/expg_nodes/object[@object=$object]" mode="get_file"/>
       </xsl:when>
-    </xsl:choose>
+    </xsl:choose> -->
+    <xsl:variable name="mim_expressg_node_set" select="xalan:nodeset($mim_expressg)"/>
+    <xsl:apply-templates
+      select="$mim_expressg_node_set/expg_nodes/object[@object=$object]" mode="get_file"/>
   </xsl:template>
 
   <xsl:template name="get_arm_expressg_href">
     <xsl:param name="object"/>
-    <xsl:choose>
+    <!-- <xsl:choose>
       <xsl:when test="function-available('msxsl:node-set')">
         <xsl:variable name="arm_expressg_node_set" select="msxsl:node-set($arm_expressg)"/>
         <xsl:apply-templates
@@ -165,13 +176,16 @@ $Id: expressg_icon.xsl,v 1.13 2014/06/13 12:58:59 nigelshaw Exp $
         <xsl:apply-templates
           select="$arm_expressg_node_set/expg_nodes/object[@object=$object]" mode="get_href"/>
       </xsl:when>
-    </xsl:choose>
+    </xsl:choose> -->
+    <xsl:variable name="arm_expressg_node_set" select="xalan:nodeset($arm_expressg)"/>
+    <xsl:apply-templates
+      select="$arm_expressg_node_set/expg_nodes/object[@object=$object]" mode="get_href"/>
   </xsl:template>
   
   <xsl:template name="get_bom_expressg_href">
     <xsl:param name="object"/>
     
-    <xsl:choose>
+    <!-- <xsl:choose>
       <xsl:when test="function-available('msxsl:node-set')">
         <xsl:variable name="bom_expressg_node_set" select="msxsl:node-set($bom_expressg)"/>
         
@@ -185,12 +199,15 @@ $Id: expressg_icon.xsl,v 1.13 2014/06/13 12:58:59 nigelshaw Exp $
         <xsl:apply-templates
           select="$bom_expressg_node_set/expg_nodes/object[@object=$object]" mode="get_href"/>
       </xsl:when>
-    </xsl:choose>
+    </xsl:choose> -->
+    <xsl:variable name="bom_expressg_node_set" select="xalan:nodeset($bom_expressg)"/>
+    <xsl:apply-templates
+      select="$bom_expressg_node_set/expg_nodes/object[@object=$object]" mode="get_href"/>
   </xsl:template>
   
   <xsl:template name="get_mim_expressg_href">
     <xsl:param name="object"/>
-    <xsl:choose>
+    <!-- <xsl:choose>
       <xsl:when test="function-available('msxsl:node-set')">
         <xsl:variable name="mim_expressg_node_set" select="msxsl:node-set($mim_expressg)"/>
         <xsl:apply-templates
@@ -201,7 +218,10 @@ $Id: expressg_icon.xsl,v 1.13 2014/06/13 12:58:59 nigelshaw Exp $
         <xsl:apply-templates
           select="$mim_expressg_node_set/expg_nodes/object[@object=$object]" mode="get_href"/>
       </xsl:when>
-    </xsl:choose>
+    </xsl:choose> -->
+    <xsl:variable name="mim_expressg_node_set" select="xalan:nodeset($mim_expressg)"/>
+    <xsl:apply-templates
+      select="$mim_expressg_node_set/expg_nodes/object[@object=$object]" mode="get_href"/>
   </xsl:template>
 
 
@@ -217,7 +237,7 @@ $Id: expressg_icon.xsl,v 1.13 2014/06/13 12:58:59 nigelshaw Exp $
   <!-- build the node set of expressg objects for a BOM -->
   <xsl:template match="imgfile" mode="mk_bom_node">
     <xsl:variable name="img_file"
-      select="concat('../data/business_object_models/',/business_object_model/@name,'/',./@file)"/>
+      select="concat($path,'../../../data/business_object_models/',/business_object_model/@name,'/',./@file)"/>
    
     <xsl:variable name="img_file_xml" select="document(string($img_file))"/>
     <xsl:variable name="schema" select="concat(//business_object_model/@name,'_bom')"/>
@@ -232,7 +252,7 @@ $Id: expressg_icon.xsl,v 1.13 2014/06/13 12:58:59 nigelshaw Exp $
   <!-- build the node set of expressg objects -->
   <xsl:template match="imgfile" mode="mk_node">
     <xsl:variable name="img_file"
-      select="concat('../data/modules/',/module/@name,'/',./@file)"/>
+      select="concat($path,'../../../data/modules/',/module/@name,'/',./@file)"/>
     <xsl:variable name="img_file_xml" select="document($img_file)"/>
     <xsl:variable name="schema" select="concat(/module/@name,'_',name(../..))"/>
     <xsl:apply-templates
@@ -382,10 +402,10 @@ $Id: expressg_icon.xsl,v 1.13 2014/06/13 12:58:59 nigelshaw Exp $
                 </xsl:call-template>    
               </xsl:when>
               <xsl:otherwise>
-                &#160;&#160;<a href="{$href_expg}"  target="{$target}">
+                <!-- &#160;&#160;<a href="{$href_expg}"  target="{$target}">
                 <img align="middle" border="0" 
                   alt="EXPRESS-G" src="{$module_root}/../../../images/expg.gif"/>
-              </a>
+              </a> -->
             </xsl:otherwise>
           </xsl:choose>
           </xsl:when>
@@ -412,10 +432,10 @@ $Id: expressg_icon.xsl,v 1.13 2014/06/13 12:58:59 nigelshaw Exp $
               </xsl:when>
               <xsl:otherwise>
             
-                &#160;&#160;<a href="{$href_expg}"  target="{$target}">
+                <!-- &#160;&#160;<a href="{$href_expg}"  target="{$target}">
                   <img align="middle" border="0" 
                     alt="EXPRESS-G" src="{$module_root}/../../../images/expg.gif"/>
-                </a>
+                </a> -->
               </xsl:otherwise>
               </xsl:choose>
             
@@ -439,9 +459,9 @@ $Id: expressg_icon.xsl,v 1.13 2014/06/13 12:58:59 nigelshaw Exp $
               </xsl:call-template>    
             </xsl:when>
             <xsl:otherwise>
-              &#160;&#160;<a href="{$href_expg}">
+              <!-- &#160;&#160;<a href="{$href_expg}">
               <img align="middle" border="0" 
-                alt="EXPRESS-G" src="{$module_root}/../../../images/expg.gif"/></a>
+                alt="EXPRESS-G" src="{$module_root}/../../../images/expg.gif"/></a> -->
             </xsl:otherwise>
           </xsl:choose>
         </xsl:when>
@@ -458,10 +478,10 @@ $Id: expressg_icon.xsl,v 1.13 2014/06/13 12:58:59 nigelshaw Exp $
           </xsl:when>
         </xsl:choose>        
       </xsl:variable>
-      &#160;&#160;<a href="{$href_expg}"  target="{$target}">
+      <!-- &#160;&#160;<a href="{$href_expg}"  target="{$target}">
       <img align="middle" border="0" 
         alt="EXPRESS-G" src="{$module_root}/../../../images/expg.gif"/>
-       </a>
+       </a> -->
      </xsl:otherwise>
    </xsl:choose>
  </xsl:template>
