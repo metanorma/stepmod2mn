@@ -16,13 +16,13 @@
 	version="1.0"
 >
 
-  <xsl:import href="common.xsl"/>
+  <!-- <xsl:import href="common.xsl"/>
 
   <xsl:import href="express_application.xsl"/>
   <xsl:import href="express_link.xsl"/>
 
 
-  <xsl:output method="html"/>
+  <xsl:output method="html"/> -->
 
 
   <!-- +++++++++++++++++++
@@ -37,10 +37,15 @@
     </xsl:call-template>
   </xsl:variable>    
 
+  <xsl:text>[[</xsl:text><xsl:value-of select="$aname"/><xsl:text>]]</xsl:text>
   <code>
-    <br/><br/>
-    <a name="{$aname}">SCHEMA <b><xsl:value-of select="@name"/></b>;</a>
-    <br/><br/>
+  <xsl:call-template name="insertLutaMLCodeStart"/>
+    <!-- <br/><br/>
+    <a name="{$aname}">SCHEMA <b><xsl:value-of select="@name"/></b>;</a> -->
+    <xsl:text>SCHEMA *</xsl:text><xsl:value-of select="@name"/><xsl:text>*;</xsl:text>
+    <xsl:call-template name="insertCodeEnd"/>
+		<xsl:text>&#xa;</xsl:text>
+    <!-- <br/><br/> -->
   </code>
   <xsl:apply-templates select="./interface" mode="code">
     <xsl:sort select="@name"/>
@@ -67,9 +72,12 @@
     <xsl:sort select="@name"/>
   </xsl:apply-templates>
   <code>
-    <br/>
-    END_SCHEMA;&#160;&#160;--&#160;<xsl:value-of select="@name"/>
-    <br/>
+    <!-- <br/> -->
+    <xsl:call-template name="insertLutaMLCodeStart"/>
+    <xsl:text>END_SCHEMA;&#160;&#160;--&#160;</xsl:text><xsl:value-of select="@name"/>
+    <!-- <br/> -->
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:call-template name="insertCodeEnd"/>
   </code>
 </xsl:template>
 
@@ -79,9 +87,10 @@
     name="schema_name" 
     select="../@name"/>      
   <code>
+    <xsl:call-template name="insertLutaMLCodeStart"/>
   <xsl:choose>
     <xsl:when test="@kind='reference'">
-      REFERENCE FROM 
+      <xsl:text>REFERENCE FROM </xsl:text>
       <xsl:call-template name="link_schema">
         <xsl:with-param name="schema_name" select="@schema"/>
         <xsl:with-param name="clause" select="'annexe'"/>
@@ -89,20 +98,23 @@
 
       <xsl:choose>
         <xsl:when test="./interfaced.item">
+          <xsl:text>&#160;&#160;&#160;--&#160;</xsl:text>
           <!-- if interface items then out put source tail comment now -->
           <xsl:apply-templates select="." mode="source"/>
-          <xsl:apply-templates select="./interfaced.item" mode="code"/>;
-          <br/><br/>          
+          <xsl:apply-templates select="./interfaced.item" mode="code"/><xsl:text>;</xsl:text>
+          <!-- <br/><br/>           -->
+          <xsl:text>&#xa;&#xa;</xsl:text>
         </xsl:when>
         <xsl:otherwise>;
           <xsl:apply-templates select="." mode="source"/>
-          <br/><br/>
+          <!-- <br/><br/> -->
+          <xsl:text>&#xa;&#xa;</xsl:text>
         </xsl:otherwise>
       </xsl:choose>      
 
     </xsl:when>
     <xsl:when test="@kind='use'">
-      USE FROM
+      <xsl:text>USE FROM</xsl:text>
       <xsl:call-template name="link_schema">
         <!-- defined in sect_4_express_link.xsl -->
         <xsl:with-param name="schema_name" select="@schema"/>
@@ -111,14 +123,18 @@
 
       <xsl:choose>
         <xsl:when test="./interfaced.item">
+          <xsl:text>&#160;&#160;&#160;--&#160;</xsl:text>
           <!-- if interface items then out put source tail comment now -->
           <xsl:apply-templates select="." mode="source"/>
-          <xsl:apply-templates select="./interfaced.item" mode="code"/>;
-          <br/><br/>          
+          <xsl:apply-templates select="./interfaced.item" mode="code"/><xsl:text>;</xsl:text>
+          <!-- <br/><br/>           -->
+          <xsl:text>&#xa;&#xa;</xsl:text>
         </xsl:when>
-        <xsl:otherwise>;
+        <xsl:otherwise><xsl:text>;</xsl:text>
+          <xsl:text>&#160;&#160;&#160;--&#160;</xsl:text>
           <xsl:apply-templates select="." mode="source"/>
-          <br/><br/>
+          <!-- <br/><br/> -->
+          <xsl:text>&#xa;&#xa;</xsl:text>
         </xsl:otherwise>
       </xsl:choose>      
 
@@ -133,11 +149,12 @@
       </xsl:call-template>
     </xsl:otherwise>
   </xsl:choose>
+  <xsl:call-template name="insertCodeEnd"/>
 </code>
 </xsl:template>
 
 <!-- output the trailing comment that shows where the express came from -->
-<xsl:template match="interface" mode="source">
+<xsl:template match="interface" mode="source2"> <!-- there is in sect_4_express.xsl already -->
   <xsl:variable name="module" select="string(@schema)"/> 
   <xsl:choose>
     <xsl:when 
@@ -245,10 +262,10 @@ data/resources/',$lmodule,'/',$lmodule,'.xml.')"/>
 <xsl:template match="interfaced.item" mode="code">
   <xsl:choose>
     <xsl:when test="position()=1">
-      <br/><xsl:text>&#160;&#160;(</xsl:text>
+      <!-- <br/> --><xsl:text>&#xa;&#160;&#160;(</xsl:text>
     </xsl:when>
     <xsl:otherwise>
-        &#160;&#160;
+        <xsl:text>&#160;&#160;</xsl:text>
     </xsl:otherwise>
   </xsl:choose>
 
@@ -260,16 +277,17 @@ data/resources/',$lmodule,'/',$lmodule,'.xml.')"/>
   </xsl:call-template>
 
   <xsl:if test="@alias">
-    AS&#160;<xsl:value-of select="@alias"/>
+    <xsl:text>AS&#160;</xsl:text><xsl:value-of select="@alias"/>
   </xsl:if>
 
-  <xsl:if test="position()!=last()">,<br/></xsl:if>
+  <xsl:if test="position()!=last()">,<xsl:text>&#xa;</xsl:text><!-- <br/> --></xsl:if>
   <xsl:if test="position()=last()">)</xsl:if>
 </xsl:template>
 
 
 <xsl:template match="constant" mode="code">
   <code>
+  <xsl:call-template name="insertLutaMLCodeStart"/>
     <xsl:variable 
       name="schema_name" 
       select="../@name"/>      
@@ -281,12 +299,13 @@ data/resources/',$lmodule,'/',$lmodule,'.xml.')"/>
       </xsl:call-template>
     </xsl:variable>    
     <br/>
-    <xsl:if test="position()=1">CONSTANT<br/></xsl:if>
-    <A NAME="{$aname}"></A>
-    &#160;&#160;<xsl:value-of select="@name"/> : <xsl:apply-templates select="./*" mode="underlyingconstant"/><xsl:apply-templates select="./*" mode="underlying"/> := <xsl:choose>
+    <xsl:if test="position()=1">CONSTANT<xsl:text>&#xa;</xsl:text><!-- <br/> --></xsl:if>
+    <!-- <A NAME="{$aname}"></A> -->
+    <xsl:text>[[</xsl:text><xsl:value-of select="$aname"/><xsl:text>]]</xsl:text>
+    <xsl:text>&#160;&#160;</xsl:text><xsl:value-of select="@name"/> : <xsl:apply-templates select="./*" mode="underlyingconstant"/><xsl:apply-templates select="./*" mode="underlying"/> := <xsl:choose>
     
-    <xsl:when test="./aggregate and contains(@expression,',')"><br/>
-      &#160;&#160;&#160;<xsl:value-of select="concat(substring-before(@expression,','),',')"/>
+    <xsl:when test="./aggregate and contains(@expression,',')"><xsl:text>&#xa;</xsl:text><!-- <br/> -->
+      <xsl:text>&#160;&#160;&#160;</xsl:text><xsl:value-of select="concat(substring-before(@expression,','),',')"/>
       <xsl:call-template name="output_constant_expression">
         <xsl:with-param name="expression" select="substring-after(@expression,',')"/>
       </xsl:call-template>
@@ -296,17 +315,19 @@ data/resources/',$lmodule,'/',$lmodule,'.xml.')"/>
       </xsl:otherwise>
   </xsl:choose>
     <xsl:if test="position()=last()">
-      <br/>
+      <xsl:text>&#xa;</xsl:text><!-- <br/> -->
       END_CONSTANT;
-      <br/>
+      <!-- <br/> -->
+      <xsl:text>&#xa;</xsl:text>
     </xsl:if>
   </code>
+  <xsl:call-template name="insertCodeEnd"/>
 </xsl:template>
 
 <!-- THX added to support constants that are aggregates -->
 
 
-<xsl:template name="output_constant_expression">
+<xsl:template name="output_constant_expression_2"> <!-- there is in sect_4_express.xsl yet -->
   <xsl:param name="expression"/>
   <!--  <xsl:value-of select="','" /> -->
     <br/>
@@ -322,7 +343,6 @@ data/resources/',$lmodule,'/',$lmodule,'.xml.')"/>
         <xsl:value-of select="$expression"/>;
       </xsl:otherwise>
     </xsl:choose>
-
 
 </xsl:template>
 
@@ -341,6 +361,7 @@ data/resources/',$lmodule,'/',$lmodule,'.xml.')"/>
 
 <xsl:template match="type" mode="code">
   <code>
+  <xsl:call-template name="insertLutaMLCodeStart"/>
     <xsl:variable 
       name="schema_name" 
       select="../@name"/>      
@@ -352,29 +373,35 @@ data/resources/',$lmodule,'/',$lmodule,'.xml.')"/>
       </xsl:call-template>
     </xsl:variable>    
     
-    <br/>
-    <A NAME="{$aname}">TYPE </A><b><xsl:value-of select="@name"/></b> =
+    <!-- <br/>
+    <A NAME="{$aname}">TYPE </A><b><xsl:value-of select="@name"/></b> = -->
+    
+    <xsl:text>[[</xsl:text><xsl:value-of select="$aname"/><xsl:text>]]</xsl:text>
+    <xsl:text>TYPE </xsl:text>
+    <xsl:text>*</xsl:text><xsl:value-of select="@name"/><xsl:text>* =</xsl:text>
+    
     <xsl:apply-templates select="./aggregate" mode="code"/>        
     <xsl:choose>
       <xsl:when test="./where">
-        <xsl:apply-templates select="./*" mode="underlying"/>;<br/>
+        <xsl:apply-templates select="./*" mode="underlying"/><xsl:text>;&#xa;</xsl:text><!-- <br/> -->
         <xsl:apply-templates select="./where" mode="code"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:apply-templates select="./*" mode="underlying"/>;<br/>
+        <xsl:apply-templates select="./*" mode="underlying"/><xsl:text>;&#xa;</xsl:text><!-- <br/> -->
       </xsl:otherwise>
     </xsl:choose>
-    END_TYPE; 
+    <xsl:text>END_TYPE;&#xa;</xsl:text>
     <br/>
+    <xsl:call-template name="insertCodeEnd"/>
   </code>
 </xsl:template>
 
 <!-- empty template to prevent the description element being output along
      with the code -->
-<xsl:template match="description" mode="underlying"/> 
+<xsl:template match="description" mode="underlying2"/> <!-- there is in sect_4_express.xsl already -->
 
 
-<xsl:template match="explicit/typename" mode="underlying">
+<xsl:template match="explicit/typename" mode="underlying2">
   <xsl:call-template name="link_object">
     <xsl:with-param name="object_name" select="@name"/>
     <xsl:with-param name="object_used_in_schema_name" 
@@ -383,7 +410,7 @@ data/resources/',$lmodule,'/',$lmodule,'.xml.')"/>
   </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="typename" mode="underlying">
+<xsl:template match="typename" mode="underlying2">  <!-- there is in sect_4_express.xsl already -->
   <xsl:call-template name="link_object">
     <xsl:with-param name="object_name" select="@name"/>
     <xsl:with-param name="object_used_in_schema_name" 
@@ -392,7 +419,7 @@ data/resources/',$lmodule,'/',$lmodule,'.xml.')"/>
   </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="builtintype" mode="underlying">
+<xsl:template match="builtintype" mode="underlying2">
   <xsl:choose>
     <xsl:when test="@type='GENERICENTITY'">GENERIC_ENTITY</xsl:when>
     <xsl:otherwise>  
@@ -406,7 +433,7 @@ data/resources/',$lmodule,'/',$lmodule,'.xml.')"/>
 </xsl:template>
 
 
-<xsl:template match="select" mode="underlying">
+<xsl:template match="select" mode="underlying2">
   <xsl:if test="@extensible='YES' or @extensible='yes'">
     EXTENSIBLE
   </xsl:if>
@@ -444,7 +471,7 @@ data/resources/',$lmodule,'/',$lmodule,'.xml.')"/>
 
 
 
-<xsl:template match="enumeration" mode="underlying">
+<xsl:template match="enumeration" mode="underlying2">
   <xsl:if test="@extensible='YES' or @extensible='yes'">
     EXTENSIBLE
   </xsl:if>
@@ -483,6 +510,7 @@ data/resources/',$lmodule,'/',$lmodule,'.xml.')"/>
 
 <xsl:template match="entity" mode="code">
   <code>
+  <xsl:call-template name="insertLutaMLCodeStart"/>
     <xsl:variable 
       name="schema_name" 
       select="../@name"/>      
@@ -494,30 +522,36 @@ data/resources/',$lmodule,'/',$lmodule,'.xml.')"/>
       </xsl:call-template>
     </xsl:variable>
     
-    <br/>
-    <A NAME="{$aname}">ENTITY <b><xsl:value-of select="@name"/></b></A>
+    <!-- <br/>
+    <A NAME="{$aname}">ENTITY <b><xsl:value-of select="@name"/></b></A> -->
+    <xsl:text>[[</xsl:text><xsl:value-of select="$aname"/><xsl:text>]]</xsl:text>
+		<xsl:text>ENTITY </xsl:text>
+		<xsl:text>*</xsl:text><xsl:value-of select="@name"/><xsl:text>*</xsl:text>
+    
     <xsl:call-template name="abstract.entity"/>
     <xsl:call-template name="super.expression-code"/>
     <xsl:call-template name="supertypes-code"/><xsl:text>;</xsl:text>  
-    <br/>
+    <!-- <br/> --><xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="./explicit" mode="code"/>
     <xsl:apply-templates select="./derived" mode="code"/>
     <xsl:apply-templates select="./inverse" mode="code"/>
     <xsl:apply-templates select="./unique" mode="code"/>
     <xsl:apply-templates select="./where[@expression]" mode="code"/>
     <!-- <xsl:call-template name="output_where_formal"/> -->
-    END_ENTITY;<br/>
+    <!-- END_ENTITY;<br/> -->
+    <xsl:text>END_ENTITY;&#xa;</xsl:text><!-- <br/> -->
+    <xsl:call-template name="insertCodeEnd"/>
   </code>
 </xsl:template>
 
 
-<xsl:template name="abstract.entity">
+<xsl:template name="abstract.entity2">
   <xsl:if test="@abstract.entity='YES' or @abstract.entity='yes'">
     ABSTRACT</xsl:if>
 </xsl:template>
 
 
-<xsl:template name="super.expression-code">
+<xsl:template name="super.expression-code2">
   <!-- Always enclose the expression in parentheses -->
   <xsl:variable name="sup_expr"
     select="concat('(',@super.expression,')')"/>
@@ -549,7 +583,7 @@ data/resources/',$lmodule,'/',$lmodule,'.xml.')"/>
   </xsl:choose>
 </xsl:template>
 
-<xsl:template name="supertypes-code">
+<xsl:template name="supertypes-code2">
   <xsl:if test="@supertypes">
     <br/>
 &#160;&#160;SUBTYPE OF (<xsl:call-template name="link_list">
@@ -561,7 +595,7 @@ data/resources/',$lmodule,'/',$lmodule,'.xml.')"/>
   </xsl:if>
 </xsl:template>
 
-<xsl:template match="explicit" mode="code">
+<xsl:template match="explicit" mode="code2">
   <xsl:variable name="aname">
     <xsl:call-template name="express_a_name">
       <xsl:with-param name="section1" select="../../@name"/>
@@ -578,7 +612,7 @@ data/resources/',$lmodule,'/',$lmodule,'.xml.')"/>
   <xsl:apply-templates select="./*" mode="underlying"/>;<br/>
 </xsl:template>
 
-<xsl:template match="redeclaration" mode="code">SELF\<xsl:call-template name="link_object">
+<xsl:template match="redeclaration" mode="code2">SELF\<xsl:call-template name="link_object">
       <xsl:with-param name="object_name" select="@entity-ref"/>
       <xsl:with-param name="object_used_in_schema_name" 
         select="../../@name"/>
@@ -594,7 +628,7 @@ data/resources/',$lmodule,'/',$lmodule,'.xml.')"/>
     </xsl:choose>
 </xsl:template>
 
-<xsl:template match="derived" mode="code">
+<xsl:template match="derived" mode="code2">
   <xsl:variable name="aname">
     <xsl:call-template name="express_a_name">
       <xsl:with-param name="section1" select="../../@name"/>
@@ -613,7 +647,7 @@ data/resources/',$lmodule,'/',$lmodule,'.xml.')"/>
   <xsl:value-of select="concat(' := ',@expression,';')"/><br/>
 </xsl:template>
 
-<xsl:template match="inverse" mode="code">
+<xsl:template match="inverse" mode="code2">
   <xsl:variable name="aname">
     <xsl:call-template name="express_a_name">
       <xsl:with-param name="section1" select="../../@name"/>
@@ -636,7 +670,7 @@ data/resources/',$lmodule,'/',$lmodule,'.xml.')"/>
   <xsl:value-of select="concat(' FOR ', @attribute)"/>;<br/>
 </xsl:template>
 
-<xsl:template match="inverse.aggregate" mode="code">
+<xsl:template match="inverse.aggregate" mode="code2">
   <xsl:choose>
     <xsl:when test="@lower">
       <xsl:value-of select="concat(@type, '[', @lower, ':', @upper, '] OF ')"/>
@@ -647,7 +681,7 @@ data/resources/',$lmodule,'/',$lmodule,'.xml.')"/>
   </xsl:choose>
 </xsl:template>
 
-<xsl:template match="unique" mode="code">
+<xsl:template match="unique" mode="code2">
   <xsl:variable name="aname">
     <xsl:call-template name="express_a_name">
       <xsl:with-param name="section1" select="../../@name"/>
@@ -664,7 +698,7 @@ data/resources/',$lmodule,'/',$lmodule,'.xml.')"/>
 </xsl:template>
 
 
-<xsl:template match="unique.attribute" mode="code">
+<xsl:template match="unique.attribute" mode="code2">
   <xsl:variable name="suffix">
     <xsl:choose>
       <xsl:when test="position()!=last()">
@@ -692,7 +726,7 @@ data/resources/',$lmodule,'/',$lmodule,'.xml.')"/>
 </xsl:template>
 
 
-<xsl:template match="aggregate" mode="code">
+<xsl:template match="aggregate" mode="code2">
   <xsl:choose>
     <xsl:when test="@lower">
       <xsl:value-of select="concat(@type, '[', @lower, ':', @upper, '] OF ')"/>
@@ -709,13 +743,13 @@ data/resources/',$lmodule,'/',$lmodule,'.xml.')"/>
   </xsl:if>
 </xsl:template>
 
-<xsl:template name="output_where_formal">
+<xsl:template name="output_where_formal2">
   <xsl:if test="./where[@expression] and not(./unique)">
     <xsl:apply-templates select="./where[@expression]" mode="code"/>
   </xsl:if>
 </xsl:template>
 
-<xsl:template match="where" mode="code">
+<xsl:template match="where" mode="code2">
   <xsl:variable name="aname">
     <xsl:call-template name="express_a_name">
       <xsl:with-param name="section1" select="../../@name"/>
@@ -731,7 +765,7 @@ data/resources/',$lmodule,'/',$lmodule,'.xml.')"/>
 </xsl:template>
 
 
-<xsl:template match="function" mode="code">
+<xsl:template match="function" mode="code2">
   <xsl:variable 
     name="schema_name" 
     select="../@name"/>      
@@ -761,9 +795,9 @@ data/resources/',$lmodule,'/',$lmodule,'.xml.')"/>
 
 <!-- empty template to prevent the algorithm element being out put along
      with the code -->
-<xsl:template match="parameter" mode="underlying"/>
+<xsl:template match="parameter" mode="underlying2"/>
 
-<xsl:template match="parameter" mode="code">
+<xsl:template match="parameter" mode="code2">
   <xsl:if test="position()=1">&#160;(</xsl:if>
   <xsl:value-of select="@name"/><xsl:text> : </xsl:text>
   <xsl:apply-templates select="./aggregate" mode="code"/>
@@ -779,7 +813,7 @@ data/resources/',$lmodule,'/',$lmodule,'.xml.')"/>
 </xsl:template>
 
 
-<xsl:template match="algorithm" mode="code">
+<xsl:template match="algorithm" mode="code2">
   <!-- empty algorithms are sometimes output so ignore -->
   <xsl:if test="string-length(normalize-space(.))>0">
     <pre>
@@ -790,7 +824,7 @@ data/resources/',$lmodule,'/',$lmodule,'.xml.')"/>
 
 <!-- empty template to prevent the algorithm element being out put along
      with the code -->
-<xsl:template match="algorithm" mode="underlying"/>
+<xsl:template match="algorithm" mode="underlying2"/>
 
 
 
@@ -823,6 +857,7 @@ data/resources/',$lmodule,'/',$lmodule,'.xml.')"/>
 
 <xsl:template match="rule" mode="code">
   <code>
+  <xsl:call-template name="insertLutaMLCodeStart"/>
     <xsl:variable 
       name="schema_name" 
       select="../@name"/>      
@@ -841,20 +876,29 @@ data/resources/',$lmodule,'/',$lmodule,'.xml.')"/>
       <xsl:value-of select="@name"/>
     </b></A><xsl:text> FOR </xsl:text>
     -->
-    <A NAME="{$aname}">RULE&#160;<b><xsl:value-of select="@name"/></b></A>&#160;FOR<xsl:text> </xsl:text>
-    <br/>
-      (<xsl:call-template name="process_FOR_arguments">
+    <!-- <A NAME="{$aname}">RULE&#160;<b><xsl:value-of select="@name"/></b></A>&#160;FOR<xsl:text> </xsl:text> -->
+    
+    <xsl:text>[[</xsl:text><xsl:value-of select="$aname"/><xsl:text>]]</xsl:text>
+		<xsl:text>RULE&#160;</xsl:text>
+		<xsl:text>*</xsl:text><xsl:value-of select="@name"/><xsl:text>*</xsl:text>
+    <xsl:text>&#160;FOR</xsl:text><xsl:text> </xsl:text>
+    
+    <!-- <br/> -->
+    <xsl:text>&#xa;</xsl:text>
+      <xsl:text>(</xsl:text><xsl:call-template name="process_FOR_arguments">
           <xsl:with-param name="args" select="@appliesto"/>
-      </xsl:call-template>);<br/>
+      </xsl:call-template><xsl:text>);</xsl:text><xsl:text>&#xa;</xsl:text><!-- <br/> -->
+    
   </code>
   <xsl:apply-templates select="./algorithm" mode="code"/>
   <code>
     <xsl:apply-templates select="./where" mode="code"/>
   </code>
   <code>
-    END_RULE;
+    <xsl:text>END_RULE;&#xa;</xsl:text>
+    <xsl:call-template name="insertCodeEnd"/>
   </code>
-  <br/>
+  <!-- <br/> -->
 </xsl:template>
     
     
@@ -893,7 +937,7 @@ data/resources/',$lmodule,'/',$lmodule,'.xml.')"/>
         </xsl:call-template>
     </xsl:template>
 
-<xsl:template match="subtype.constraint" mode="code">
+<xsl:template match="subtype.constraint" mode="code2">
   <code>
     <xsl:variable 
       name="schema_name" 
