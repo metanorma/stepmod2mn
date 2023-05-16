@@ -7,6 +7,7 @@ $Id: module.xsl,v 1.252 2018/08/23 11:13:36 mike Exp $
   Purpose:
      
 -->
+<!-- Updated: Alexander Dyuzhev, for stepmod2mn tool-->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"                
     xmlns:java="http://xml.apache.org/xalan/java"
     xmlns:str="http://exslt.org/strings"
@@ -3184,7 +3185,14 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
 <xsl:template name="output_normrefs">
   <xsl:param name="module_number"/>
   <xsl:param name="current_module"/>
-  <h2>2 Normative references</h2>
+  <!-- <h2>2 Normative references</h2> -->
+  
+  <xsl:text>[bibliography]</xsl:text>
+  <xsl:text>&#xa;</xsl:text>
+  <xsl:text>== </xsl:text>
+  <xsl:text>Normative references</xsl:text>
+  <xsl:text>&#xa;&#xa;</xsl:text>
+  
   <!-- replace with ISO Directives, Part 2: as requested by WG3 conver 24/2/2004
   <p>
     The following normative documents contain provisions which, through
@@ -3206,10 +3214,14 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
     </p>--> 
   
   <!-- MWD 2018-07-04 6538 the above paragraph replaced with this one -->
-  <p>
+  <!-- <p> -->
+  <xsl:call-template name="insertParagraph">
+    <xsl:with-param name="text">
     The following documents are referred to in the text in such a way that some or all of their content constitutes requirements of this document. 
     For dated references, only the edition cited applies. For undated references, the latest edition of the referenced document (including any amendments) applies.
-  </p>
+    </xsl:with-param>
+  </xsl:call-template>
+  <!-- </p> -->
   
   <!-- output any issues -->
   <xsl:apply-templates select="." mode="output_clause_issue">
@@ -3253,12 +3265,12 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
     </xsl:call-template>  
   </xsl:variable>
 
-  <xsl:choose>
+  <!-- <xsl:choose>
     <xsl:when test="function-available('msxsl:node-set')">
       <xsl:variable name="normrefs_to_be_sorted_set" select="msxsl:node-set($normrefs_to_be_sorted)"/>
-      <xsl:for-each select="$normrefs_to_be_sorted_set/normref">
+      <xsl:for-each select="$normrefs_to_be_sorted_set/normref"> -->
         <!-- sorting basis is special normalized string, consisting of organization, series and part number all of equal lengths per each element -->
-        <xsl:sort select='part'/>
+       <!--  <xsl:sort select='part'/>
         <xsl:for-each select="string/*">
          <xsl:copy-of select="."/>
         </xsl:for-each>
@@ -3266,15 +3278,24 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
     </xsl:when>
     <xsl:when test="function-available('exslt:node-set')">    
       <xsl:variable name="normrefs_to_be_sorted_set" select="exslt:node-set($normrefs_to_be_sorted)"/>
-      <xsl:for-each select="$normrefs_to_be_sorted_set/normref">
+      <xsl:for-each select="$normrefs_to_be_sorted_set/normref"> -->
         <!-- sorting basis is special normalized string, consisting of organization, series and part number all of equal lengths per each element -->
-        <xsl:sort select='part'/>
+       <!--  <xsl:sort select='part'/>
         <xsl:for-each select="string/*">
          <xsl:copy-of select="."/>
         </xsl:for-each>
       </xsl:for-each>
     </xsl:when>
-  </xsl:choose>
+  </xsl:choose> -->
+  
+  <xsl:variable name="normrefs_to_be_sorted_set" select="ext:node-set($normrefs_to_be_sorted)"/>
+  <xsl:for-each select="$normrefs_to_be_sorted_set/normref">
+    <!-- sorting basis is special normalized string, consisting of organization, series and part number all of equal lengths per each element -->
+    <xsl:sort select='part'/>
+    <xsl:for-each select="string/*">
+     <xsl:copy-of select="."/>
+    </xsl:for-each>
+  </xsl:for-each>
 
   <!-- output a footnote to say that the normative reference has not been
        published -->
@@ -3461,13 +3482,13 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
     </xsl:choose>
   </xsl:variable>
 
-  <xsl:if test="$footnote='y'">
+  <!-- <xsl:if test="$footnote='y'">
     <p>
       <a name="tobepub">
         <sup>1)</sup> To be published.
       </a>      
     </p>
-  </xsl:if>
+  </xsl:if> -->
 </xsl:template>
 
 <xsl:template name="output_unpublished_normrefs_rec">
@@ -3583,11 +3604,11 @@ test="document('../data/basic/normrefs.xml')/normref.list/normref[@id=$normref]/
   </xsl:variable>
 
   <xsl:if test="$footnote='y'">
-    <p>
+    <!-- <p>
       <a name="derogation">
         <sup>2)</sup> Reference applicable during ballot or review period.
       </a>      
-    </p>
+    </p> -->
   </xsl:if>
 </xsl:template>
 
@@ -3706,7 +3727,7 @@ test="document('../data/basic/normrefs.xml')/normref.list/normref[@id=$normref]/
     </xsl:if>
   </xsl:variable>
 
-  <p>
+  <!-- <p> -->
     <xsl:call-template name="error_message">
       <xsl:with-param name="message">
         <xsl:value-of 
@@ -3719,7 +3740,7 @@ test="document('../data/basic/normrefs.xml')/normref.list/normref[@id=$normref]/
       </xsl:with-param>
       <xsl:with-param name="inline" select="'no'"/>
     </xsl:call-template>
-  </p>
+  <!-- </p> -->
 </xsl:template>
 
 <xsl:template match="module" mode="normref">
@@ -3812,10 +3833,19 @@ test="document('../data/basic/normrefs.xml')/normref.list/normref[@id=$normref]/
   </xsl:variable>
   <p>
     <xsl:value-of select="$stdnumber"/>
+    
+    <xsl:text>* [[[</xsl:text>
+			<xsl:value-of select="@id"/>
+			<xsl:text>,</xsl:text>
+			<xsl:value-of select="$stdnumber"/>
+		<xsl:text>]]]</xsl:text>
+    
     <xsl:if test="stdref[@published='n']">
-      <sup><a href="#tobepub">1</a>)</sup>
+      <xsl:text> footnote:[To be published.]</xsl:text><!-- <sup><a href="#tobepub">1</a>)</sup> -->
     </xsl:if>,&#160;
-    <i>
+    
+    <!-- <i> -->
+    <xsl:text>_</xsl:text>
       <xsl:value-of select="stdref/stdtitle"/>
       <xsl:variable name="subtitle" select="normalize-space(stdref/subtitle)"/>
       <xsl:choose>
@@ -3826,7 +3856,9 @@ test="document('../data/basic/normrefs.xml')/normref.list/normref[@id=$normref]/
           <xsl:value-of select="$subtitle"/>
         </xsl:otherwise>
       </xsl:choose>
-    </i>
+    <!-- </i> -->
+    <xsl:text>_</xsl:text>
+		<xsl:text>&#xa;&#xa;</xsl:text>
   </p>
 </xsl:template>
 
@@ -3836,9 +3868,15 @@ test="document('../data/basic/normrefs.xml')/normref.list/normref[@id=$normref]/
      -->
 <xsl:template name="output_abbreviations">
   <xsl:param name="section"/>
-  <h2>
+  <!-- <h2>
     <a name="abbrv">3.2 Abbreviated terms</a>
-  </h2>
+  </h2> -->
+  
+  <xsl:call-template name="insertHeaderADOC">
+		<xsl:with-param name="id" select="'abbrv'"/>		
+		<xsl:with-param name="level" select="2"/>
+		<xsl:with-param name="header" select="'Abbreviated terms'"/>		
+	</xsl:call-template>
 
   <!-- output any issues -->
   <xsl:apply-templates select="." mode="output_clause_issue">
@@ -3846,10 +3884,14 @@ test="document('../data/basic/normrefs.xml')/normref.list/normref[@id=$normref]/
   </xsl:apply-templates>
 
 
-  <p>
+  <!-- <p> -->
+  <xsl:call-template name="insertParagraph">
+    <xsl:with-param name="text">
     For the purposes of this document, the following abbreviated terms
     apply:
-  </p>
+    </xsl:with-param>
+  </xsl:call-template>
+  <!-- </p> -->
   <!-- get the default abbreviations out of the abbreviations_default.xml
        database -->
   <xsl:variable name="abbr_inc" select="document('../data/basic/abbreviations_default.xml')/abbreviations"/>
@@ -3867,7 +3909,7 @@ test="document('../data/basic/normrefs.xml')/normref.list/normref[@id=$normref]/
     <xsl:apply-templates select="/module/abbreviations" mode="output"/>    
   </table> -->
 
-  <table width="80%">
+  <!-- <table width="80%">
     <xsl:choose>
       <xsl:when test="function-available('msxsl:node-set')">
         <xsl:variable name="abbrevs_nodes" select="msxsl:node-set($abbrevs)"/>
@@ -3883,7 +3925,14 @@ test="document('../data/basic/normrefs.xml')/normref.list/normref[@id=$normref]/
         </xsl:apply-templates>
       </xsl:when>
     </xsl:choose>
-  </table>
+  </table> -->
+  
+  <xsl:variable name="abbrevs_nodes" select="ext:node-set($abbrevs)"/>
+  <xsl:apply-templates select="$abbrevs_nodes/abbrevs/*">
+    <xsl:sort select="@acronym"/>
+  </xsl:apply-templates> 
+  <xsl:text>&#xa;</xsl:text>
+  
 </xsl:template>
 
 <xsl:template match="abbreviation.inc"  mode="abbr_node">
@@ -3950,7 +3999,7 @@ test="document('../data/basic/normrefs.xml')/normref.list/normref[@id=$normref]/
 <!-- output the abbreviation. The term is defined in the normative
      references -->
 <xsl:template match="abbreviation">
-  <tr>
+  <!-- <tr>
     <td>
       <xsl:value-of select="acronym"/>
     </td>
@@ -3958,7 +4007,13 @@ test="document('../data/basic/normrefs.xml')/normref.list/normref[@id=$normref]/
       <xsl:apply-templates select="./term" mode="abbreviation"/>
       <xsl:apply-templates select="term.ref" mode="abbreviation"/>
     </td>
-  </tr>
+  </tr> -->
+    
+  <xsl:value-of select="acronym"/>
+  <xsl:text>:: </xsl:text>
+  <xsl:apply-templates select="./term" mode="abbreviation"/>
+  <xsl:apply-templates select="term.ref" mode="abbreviation"/>
+  <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="term.ref" mode="abbreviation">
@@ -3987,10 +4042,17 @@ test="document('../data/basic/normrefs.xml')/normref.list/normref[@id=$normref]/
 
 
 <xsl:template match="term">
+  <xsl:param name="show_id" select="'true'"/>
   <xsl:variable name="nterm" select="normalize-space(.)"/>
-  <a name="term-{$nterm}">
+  <!-- <a name="term-{$nterm}">
     <xsl:value-of select="$nterm"/>
-  </a>
+  </a> -->
+  <xsl:if test="$show_id = 'true'">
+  <xsl:text>[[</xsl:text>
+  <xsl:value-of select="concat('term-', translate($nterm, ' ', '_'))"/>
+  <xsl:text>]]</xsl:text>
+  </xsl:if>
+  <xsl:value-of select="$nterm"/>
   <xsl:apply-templates select="../synonym"/>
 </xsl:template>
 
@@ -4036,8 +4098,13 @@ test="document('../data/basic/normrefs.xml')/normref.list/normref[@id=$normref]/
       <xsl:with-param name="module" select="/module"/>
       <xsl:with-param name="section" select="concat('3.1.',$def_section+1)"/>
     </xsl:call-template>
+    
+    <xsl:call-template name="insertParagraph">
+      <xsl:with-param name="text">
     For the purposes of this document, 
     the following terms and definitions apply:
+      </xsl:with-param>
+    </xsl:call-template>
   </xsl:if>
 
   <!-- increment the section number depending on whether a definition
@@ -4107,19 +4174,29 @@ test="document('../data/basic/normrefs.xml')/normref.list/normref[@id=$normref]/
           <xsl:variable name="part_no" 
             select="substring-after($normref/stdref/stdnumber,'-')"/>
           <xsl:if test="$module_number!=$part_no">
-            <h2>
+            <!-- <h2>
             <xsl:value-of select="concat('3.1.',$section_no,
                                   ' Terms defined in ',$stdnumber)"/>
-            </h2>
-            <p>
+            </h2> -->
+            <xsl:call-template name="insertHeaderADOC">
+              <xsl:with-param name="id" select="concat('sec_3.1.',$section_no)"/>		
+              <xsl:with-param name="attributes" select="'.nonterm'"/>
+              <xsl:with-param name="level" select="2"/> <!-- 3 -->
+              <xsl:with-param name="header" select="concat('Terms defined in ',$stdnumber)"/>					
+            </xsl:call-template>
+            <!-- <p> -->
               <!-- RBN Changed due to request from ISO
                    For the purposes of this part of ISO 10303, -->
+            <xsl:call-template name="insertParagraph">
+              <xsl:with-param name="text">
               For the purposes of this document,
               the following terms defined in 
               <xsl:value-of select="$stdnumber"/>
               apply:
-            </p>
-            <ul>
+              </xsl:with-param>
+            </xsl:call-template>
+            <!-- </p> -->
+            <!-- <ul> -->
               <!-- now output the terms -->
               <xsl:apply-templates 
                 select="document('../data/basic/normrefs_default.xml')/normrefs/normref.inc[@normref=$ref]/term.ref" mode="normref">
@@ -4137,7 +4214,8 @@ test="document('../data/basic/normrefs.xml')/normref.list/normref[@id=$normref]/
                 <xsl:with-param name="current_module" select="$current_module"/>
               </xsl:apply-templates>
 
-            </ul>
+            <!-- </ul> -->
+            <xsl:text>&#xa;&#xa;</xsl:text>
           </xsl:if>
         </xsl:when>
           
@@ -4177,24 +4255,35 @@ test="document('../data/basic/normrefs.xml')/normref.list/normref[@id=$normref]/
                 
                 <!-- output the section header for the normative reference
                      that is defining terms -->              
-                <h2>
+                <!-- <h2>
                   <xsl:value-of select="concat('3.',$section_no,
                                         ' Terms defined in ', $stdnumber)"/>
-                </h2>
-                <p>
+                </h2> -->
+                <xsl:call-template name="insertHeaderADOC">
+                  <xsl:with-param name="id" select="concat('sec_3.',$section_no)"/>		
+                  <xsl:with-param name="level" select="2"/>
+                  <xsl:with-param name="header" select="concat('Terms defined in ', $stdnumber)"/>					
+                </xsl:call-template>
+                <!-- <p> -->
               <!-- RBN Changed due to request from ISO
                   For the purposes of this part of ISO 10303, -->              
+                <xsl:call-template name="insertParagraph">
+                  <xsl:with-param name="text">
                   For the purposes of this document,
                   the following terms defined in 
                   <xsl:value-of select="$stdnumber"/>
                   apply:
-                </p>
-                <ul>
+                  </xsl:with-param>
+                </xsl:call-template>
+                <!-- </p> -->
+                
+                <!-- <ul> -->
                   <!-- now output the terms -->
                   <xsl:apply-templates 
                     select="/module/normrefs/normref.inc[@module.name=$module]/term.ref" 
                     mode="module"/>
-                </ul>
+                  <xsl:text>&#xa;&#xa;</xsl:text>
+                <!-- </ul> -->
               </xsl:if>
             </xsl:when>
             <xsl:otherwise>
@@ -4419,12 +4508,17 @@ $module_ok,' Check the normatives references')"/>
     select="concat('ISO/',$module/@status,'&#160;10303-',$module/@part)"/>
 
 
-  <h2>
-    <xsl:value-of select="concat($section,' Other terms and definitions')"/>
+  <!-- <h2>
+    <xsl:value-of select="concat($section,' Other terms and definitions')"/> -->
     <!--
     <xsl:value-of select="concat($section,' Terms defined in',$stdnumber)"/>
     -->
-</h2>
+<!-- </h2> -->
+    <xsl:call-template name="insertHeaderADOC">
+			<xsl:with-param name="id" select="concat('sec_',$section)"/>
+			<xsl:with-param name="level" select="2"/> <!-- 3 -->
+			<xsl:with-param name="header" select="'Other terms and definitions'"/>					
+		</xsl:call-template>
   </xsl:template>
 
 
@@ -4458,23 +4552,44 @@ $module_ok,' Check the normatives references')"/>
         <xsl:choose>
           <xsl:when test="$term">
             <xsl:variable name="nterm" select="normalize-space($term)"/>
-            <xsl:choose>
+            <!-- <xsl:choose>
               <xsl:when test="position()=last()">
                 <li><xsl:value-of select="$nterm"/>.</li>
               </xsl:when>
               <xsl:otherwise>
                 <li><xsl:value-of select="$nterm"/>;</li>
               </xsl:otherwise>
-            </xsl:choose>
+            </xsl:choose> -->
+            <xsl:call-template name="insertParagraph">
+							<xsl:with-param name="text">
+								<xsl:text>* </xsl:text>
+								<xsl:apply-templates select="$nterm"/>
+								<xsl:choose>
+									<xsl:when test="position()=last()">.</xsl:when>
+									<xsl:otherwise>;</xsl:otherwise>
+								</xsl:choose>
+							</xsl:with-param>
+						</xsl:call-template>
           </xsl:when>
           <xsl:otherwise>
-            <li>
+            <!-- <li>
               <xsl:call-template name="error_message">
                 <xsl:with-param 
                   name="message"
                   select="concat('Error 11: Can not find term referenced by: ',$ref)"/>
               </xsl:call-template>
-            </li>
+            </li> -->
+            <xsl:call-template name="insertParagraph">
+              <xsl:with-param name="text">
+                <xsl:variable name="text">
+                  <xsl:call-template name="error_message">
+                    <xsl:with-param name="message" select="concat('Error 11: Can not find term referenced by: ',$ref)"/>
+                  </xsl:call-template>
+                </xsl:variable>
+                <xsl:text>* </xsl:text>
+                <xsl:value-of select="$text"/>
+              </xsl:with-param>
+            </xsl:call-template>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:when>
@@ -4538,14 +4653,22 @@ $module_ok,' Check the normatives references')"/>
       select="document('../data/basic/normrefs.xml')/normref.list/normref/term[@id=$ref]"/>
     <xsl:choose>
       <xsl:when test="$term">
-        <xsl:choose>
+        <!-- <xsl:choose>
           <xsl:when test="position()=last()">
             <li><xsl:apply-templates select="$term"/>.</li>
           </xsl:when>
           <xsl:otherwise>
             <li><xsl:apply-templates select="$term"/>;</li>
           </xsl:otherwise>
+        </xsl:choose> -->
+        
+        <xsl:text>* </xsl:text>
+        <xsl:apply-templates select="$term"/>
+        <xsl:choose>
+          <xsl:when test="position()=last()">.</xsl:when>
+          <xsl:otherwise>;</xsl:otherwise>
         </xsl:choose>
+
       </xsl:when>
       <xsl:otherwise>
         <li><xsl:call-template name="error_message">
@@ -4554,19 +4677,44 @@ $module_ok,' Check the normatives references')"/>
               select="concat('Error 12: Can not find term referenced by: ',$ref)"/>
           </xsl:call-template>
         </li>
+        <xsl:text>* </xsl:text>
+        <xsl:variable name="text">
+          <xsl:call-template name="error_message">
+            <xsl:with-param 
+              name="message"
+              select="concat('Error 12: Can not find term referenced by: ',$ref)"/>
+          </xsl:call-template>
+        </xsl:variable>
+        <xsl:value-of select="$text"/>
       </xsl:otherwise>
     </xsl:choose>
+    <xsl:text>&#xa;</xsl:text>
   </xsl:template>
 
 
   <xsl:template match="definition">
     <xsl:param name="section"/>
-    <h4>
+    <!-- <h4> -->
       <!-- <xsl:value-of select="$section"/>.<xsl:number/><br/> -->
-      <xsl:value-of select="concat($section,'.',position())"/><br/> 
+    <!--  <xsl:value-of select="concat($section,'.',position())"/><br/> 
       <xsl:apply-templates select="term"/>
-    </h4>
-    <xsl:apply-templates select="def"/>
+    </h4> -->
+    
+    <xsl:variable name="header">
+			<xsl:apply-templates select="term"/>
+		</xsl:variable>
+		<xsl:call-template name="insertHeaderADOC">
+			<xsl:with-param name="id" select="concat('sec_', $section,'.',position())"/>		
+			<xsl:with-param name="level" select="3"/>
+			<xsl:with-param name="header" select="normalize-space($header)"/>					
+		</xsl:call-template>
+    
+    <!-- <xsl:apply-templates select="def"/> -->
+    <xsl:call-template name="insertParagraph">
+			<xsl:with-param name="text">
+				<xsl:apply-templates select="def"/>
+			</xsl:with-param>
+		</xsl:call-template>
   </xsl:template>
   
   <xsl:template match="def">
@@ -4709,7 +4857,9 @@ $module_ok,' Check the normatives references')"/>
 
 	
 <xsl:template match="express-g">
+    <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="imgfile|img" mode="expressg"/>
+    <xsl:text>&#xa;&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="imgfile" mode="expressg">
@@ -4719,11 +4869,21 @@ $module_ok,' Check the normatives references')"/>
     </xsl:call-template>
   </xsl:variable>
   <xsl:variable name="href" select="concat('../',$file)"/>
-  <p>
+  <!-- <p>
     <a href="{$href}">
       <xsl:apply-templates select="." mode="title"/>
     </a>
-  </p>
+  </p> -->
+  <xsl:call-template name="insertParagraph">
+    <xsl:with-param name="text">
+      <xsl:text>* </xsl:text>
+      <xsl:text>&lt;&lt;</xsl:text>
+      <xsl:apply-templates select="." mode="title"/>
+      <xsl:text>, </xsl:text>
+      <xsl:value-of select="$href"/>
+      <xsl:text>&gt;&gt;</xsl:text>
+    </xsl:with-param>
+  </xsl:call-template>
 </xsl:template>
 
 <xsl:template match="imgfile" mode="title">
@@ -4794,6 +4954,7 @@ $module_ok,' Check the normatives references')"/>
 
 <xsl:template match="orgname">
 <xsl:value-of select="."/>
+<xsl:text>, </xsl:text>
 </xsl:template>
 
 <xsl:template match="stdnumber">
@@ -4836,12 +4997,16 @@ $module_ok,' Check the normatives references')"/>
 </xsl:template>
 
 <xsl:template match="stdtitle">
-<i>
+<!-- <i>
 <xsl:value-of select="normalize-space(.)"/>
-</i>
+</i> -->
+  <xsl:text> _</xsl:text>		
+  <xsl:value-of select="normalize-space(java:replaceAll(java:java.lang.String.new(.),'&#x2014;','--'))"/>
+  <xsl:text>_ </xsl:text>
 </xsl:template>
 
 <xsl:template match="subtitle">
+<xsl:text>, </xsl:text>
 <xsl:value-of select="normalize-space(.)"/>
 </xsl:template>
 
@@ -4850,7 +5015,9 @@ $module_ok,' Check the normatives references')"/>
        stdnumber, so do not output it -->
   <xsl:variable name="stdnumber" select="normalize-space(../stdnumber)"/>
   <xsl:if test="not(starts-with($stdnumber,'ISO'))">
+    <xsl:text>, </xsl:text>
     <xsl:value-of select="normalize-space(.)"/>
+    <xsl:text>.</xsl:text>
   </xsl:if>
 </xsl:template>
 
