@@ -20,7 +20,7 @@
   <xsl:import href="common.xsl"/>
 
 
-  <xsl:output method="html"/>
+<!--   <xsl:output method="html"/> -->
 
 
   <!-- +++++++++++++++++++
@@ -50,7 +50,7 @@
        This variable is overwritten when express_link.xsl is imported
        into another stylesheet.
        -->
-    <xsl:variable name="global_resource_xref_list"/>
+    <xsl:variable name="global_resource_xref_list2"/> <!-- there is sect_4_express.xsl yet -->
 
   
   
@@ -136,7 +136,7 @@
         
         <!-- get schema node contained in express file -->
         <xsl:variable name="if_schema_node"
-            select="document(string($express_file_to_read))//express/schema"/>
+            select="document(concat($path, '../', string($express_file_to_read)))//express/schema" />
         
         <!-- add separator before name of schema -->
         <xsl:variable name="if_schema_name_list_item" select="concat('|', $if_schema_name)"/>
@@ -450,9 +450,10 @@
       <xsl:value-of select="$schema_name"/>
     </xsl:when>
     <xsl:otherwise>
-      <A HREF="{$express_file_to_ref}#{$xref}">
+      <!-- <A HREF="{$express_file_to_ref}#{$xref}">
         <xsl:value-of select="$schema_name"/>
-      </A>
+      </A> -->
+      <xsl:text>&lt;&lt;</xsl:text><xsl:value-of select="$xref"/>,<xsl:value-of select="$schema_name"/>
     </xsl:otherwise>
   </xsl:choose>
 
@@ -494,9 +495,11 @@
           <xsl:with-param name="object_used_in_schema_name" select="$lobject_used_in_schema_name"/>
         </xsl:call-template>
       </xsl:variable>
-      <A HREF="{$xref}">
+      <!-- <A HREF="{$xref}">
         <xsl:value-of select="$lobject_name"/>
-      </A>
+      </A> -->
+      <xsl:text>&lt;&lt;</xsl:text><xsl:value-of select="$xref"/>,<xsl:value-of select="$lobject_name"/>
+      
         
        
       
@@ -534,10 +537,10 @@
             <xsl:with-param name="object_used_in_schema_name" select="$lobject_used_in_schema_name"/>
           </xsl:call-template>
         </xsl:variable>
-        <A HREF="{$xref}">
+        <!-- <A HREF="{$xref}">
           <xsl:value-of select="$lobject_name"/>
-        </A>
-        
+        </A> -->
+        <xsl:text>&lt;&lt;</xsl:text><xsl:value-of select="$xref"/>,<xsl:value-of select="$lobject_name"/>
         
         
         <!-- xsl:message>     
@@ -693,7 +696,7 @@
           <xsl:with-param name="fix" select="$suffix"/>
         </xsl:call-template>
         <xsl:if test="$linebreak='yes'">
-          <br/>
+          <xsl:text>&#xa;</xsl:text><!-- <br/> -->
         </xsl:if>        
       </xsl:if>
 
@@ -711,7 +714,7 @@
             <xsl:with-param name="fix" select="$suffix"/>
           </xsl:call-template>
           <xsl:if test="$linebreak='yes'">
-            <br/>
+            <xsl:text>&#xa;</xsl:text><!-- <br/> -->
           </xsl:if>
           
           <xsl:choose>
@@ -856,10 +859,11 @@
   <xsl:param name="fix"/>
   <xsl:choose>
     <xsl:when test="$fix='br'">
-      <br/>      
+      <xsl:text>&#xa;</xsl:text><!-- <br/> -->
     </xsl:when>
     <xsl:when test="$fix='br'">
-      <p/>      
+      <!-- <p/>       -->
+      <xsl:text>&#xa;&#xa;</xsl:text>
     </xsl:when>
     <xsl:otherwise>
       <xsl:value-of select="$fix"/>
@@ -983,7 +987,8 @@ Needs to deal with expressions starting with not ( i.e. ANDOR above
       </xsl:variable>
 
       <xsl:if test="$linebreak='YES'">
-        <br/>
+        <!-- <br/> -->
+        <xsl:text>&#xa;</xsl:text>
         <!-- indent -->
         <xsl:call-template name="string_n_chars">
           <xsl:with-param name="char" select="'&#160;'"/>
@@ -1139,8 +1144,7 @@ Needs to deal with expressions starting with not ( i.e. ANDOR above
         <xsl:choose>
           <!-- would have been better to use xsl:if != but this does not
                work, hence use of when and otherwise -->
-          <xsl:when
-            test="document('../repository_index.xml')/repository_index/modules/module[@name=$module_name]"/>
+          <xsl:when test="document(concat($path, '../../../repository_index.xml'))/repository_index/modules/module[@name=$module_name]" />
           <xsl:otherwise>
             <xsl:value-of 
               select="concat('ERROR el1: ', $module_name, 
@@ -1153,7 +1157,7 @@ Needs to deal with expressions starting with not ( i.e. ANDOR above
         <xsl:choose>
           <!-- would have been better to use xsl:if != but this does not
                work, hence use of when and otherwise -->
-          <xsl:when test="document('../repository_index.xml')/repository_index/modules/module[@name=$module_name]"/>
+          <xsl:when test="document(concat($path, '../../../repository_index.xml'))/repository_index/modules/module[@name=$module_name]" />
           <xsl:otherwise>
             <xsl:value-of 
               select="concat('ERROR el2: ', $module_name, 
@@ -1166,8 +1170,7 @@ Needs to deal with expressions starting with not ( i.e. ANDOR above
         <xsl:choose>
           <!-- would have been better to use xsl:if != but this does not
                work, hence use of when and otherwise -->
-          <xsl:when
-            test="document('../repository_index.xml')/repository_index/resources/resource[@name=$schema_name_tmp]"/>
+          <xsl:when test="document(concat($path, '../../../repository_index.xml'))/repository_index/resources/resource[@name=$schema_name_tmp]" />
           <xsl:otherwise>
             <xsl:value-of 
               select="concat('ERROR el3: ', $module_name, 
@@ -1363,9 +1366,10 @@ Needs to deal with expressions starting with not ( i.e. ANDOR above
           <xsl:with-param name="object_name" select="$lobject_name"/>
         </xsl:call-template>
       </xsl:variable>
-      <A HREF="{$xref}">
+      <!-- <A HREF="{$xref}">
         <xsl:value-of select="$lobject_name"/>
-      </A>
+      </A> -->
+      <xsl:text>&lt;&lt;</xsl:text><xsl:value-of select="$xref"/>,<xsl:value-of select="$lobject_name"/>
     </xsl:when>
 
     <xsl:otherwise>
@@ -1382,7 +1386,7 @@ Needs to deal with expressions starting with not ( i.e. ANDOR above
 <xsl:template name="build_resource_xref_list">
   <xsl:call-template name="build_resource_xref_list_rec">
     <xsl:with-param name="resources"
-      select="document('../repository_index.xml')/repository_index/resources/resource"/>
+      select="document(concat($path, '../../../repository_index.xml'))/repository_index/resources/resource" />
   </xsl:call-template>
 </xsl:template>
 <xsl:template name="build_resource_xref_list_rec">
@@ -1393,7 +1397,7 @@ Needs to deal with expressions starting with not ( i.e. ANDOR above
   <xsl:variable name="remaining_resources" select="$resources[position()!=1]"/>
 
   <xsl:variable name="express_file" 
-    select="concat('../data/resources/',
+    select="concat($path,'../../../data/resources/',
             $first_resource/@name,'/',$first_resource/@name,'.xml')"/>
   <xsl:variable name="object_nodes"
     select="document($express_file)/express/schema/entity|/express/schema/type|/express/schema/subtype.constraint|/express/schema/function|/express/schema/procedure|/express/schema/rule|/express/schema/constant"/>
