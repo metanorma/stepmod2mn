@@ -18,10 +18,10 @@
 	version="1.0"
 >
 
-  <xsl:import href="express_link.xsl"/> 
+<!--   <xsl:import href="express_link.xsl"/> 
   <xsl:import href="express_description.xsl"/> 
 
-  <xsl:import href="projmg/issues.xsl"/> 
+  <xsl:import href="projmg/issues.xsl"/>  -->
 
   <xsl:output method="html" indent="no"/>
 
@@ -102,11 +102,15 @@
     <xsl:with-param name="schema" select="./@name"/>
   </xsl:call-template> 
   <!-- output description from express -->
-  <p>
+  <!-- <p> -->
+  <xsl:call-template name="insertParagraph">
+    <xsl:with-param name="text">
     <xsl:if test="string-length(./description)>0">
       <xsl:apply-templates select="./description" mode="exp_description"/>
     </xsl:if>
-  </p>
+    </xsl:with-param>
+  </xsl:call-template>
+  <!-- </p> -->
 </xsl:template>
 
 <xsl:template match="interface">
@@ -155,24 +159,37 @@
       </xsl:choose>      
     </xsl:variable>
   
-    <h2>
+    <!-- <h2>
       <A NAME="interfaces">
         <xsl:value-of select="$clause_header"/>
       </A>
-    </h2>
-    <p><xsl:value-of select="$clause_intro"/></p>
+    </h2> -->
+    <xsl:call-template name="insertHeaderADOC">
+      <xsl:with-param name="id">interfaces</xsl:with-param>
+      <xsl:with-param name="header" select="$clause_header"/>					
+    </xsl:call-template>
+    
+    <!-- <p> -->
+    <xsl:call-template name="insertParagraph">
+      <xsl:with-param name="text"><xsl:value-of select="$clause_intro"/></xsl:with-param>
+    </xsl:call-template>
+    <!-- </p> -->
+		
     <xsl:if test="contains($schema_name,'_arm')">
-      <p><u>EXPRESS specification:</u></p>
+      <!-- <p><u>EXPRESS specification:</u></p> -->
+      <xsl:text>[.underline]#EXPRESS specification:#</xsl:text>
+      <xsl:text>&#xa;&#xa;</xsl:text>
     </xsl:if>
 
   </xsl:if>
-  <p>
+  <!-- <p> -->
   <!-- <blockquote> -->
     <code>
-      <xsl:if test="contains($schema_name,'_arm') and position()=1">*)<br/></xsl:if>
+			<xsl:call-template name="insertLutaMLCodeStart"/>
+      <!-- <xsl:if test="contains($schema_name,'_arm') and position()=1">*)<br/></xsl:if> -->
       <xsl:choose>
         <xsl:when test="@kind='reference'">
-          REFERENCE FROM 
+          <xsl:text>REFERENCE FROM </xsl:text>
           <xsl:call-template name="link_schema">
             <xsl:with-param 
               name="schema_name" 
@@ -180,26 +197,27 @@
             <xsl:with-param name="clause" select="'section'"/>
           </xsl:call-template>
 
+          <xsl:text>&#160;&#160;&#160;--&#160;</xsl:text>
           <xsl:choose>
             <xsl:when test="./interfaced.item">
               <!-- if interface items then output source tail comment now -->
-              &#160;&#160;&#160;--&#160;
               <xsl:apply-templates select="." mode="source"/>
               <xsl:apply-templates select="./interfaced.item"/>;
-              <xsl:if test="position()=last()"><br/>(*</xsl:if>
-              <br/><br/>          
+              <!-- <xsl:if test="position()=last()"><br/>(*</xsl:if>
+              <br/><br/> -->
             </xsl:when>
-            <xsl:otherwise>;
-              &#160;&#160;&#160;--&#160;              
+            <xsl:otherwise><xsl:text>;</xsl:text>
               <xsl:apply-templates select="." mode="source"/>
-              <xsl:if test="position()=last()"><br/>(*</xsl:if>
-              <br/><br/>
+              <!-- <xsl:if test="position()=last()"><br/>(*</xsl:if>
+              <br/><br/> -->
             </xsl:otherwise>
           </xsl:choose> 
+          <xsl:if test="position()=last()"><xsl:text>&#xa;(*</xsl:text><!-- <br/>(*--></xsl:if>
+          <xsl:text>&#xa;&#xa;</xsl:text>
 
         </xsl:when>
         <xsl:when test="@kind='use'">
-          USE FROM
+          <xsl:text>USE FROM</xsl:text>
           <xsl:call-template name="link_schema">
             <!-- defined in sect_4_express_link.xsl -->
             <xsl:with-param 
@@ -208,22 +226,23 @@
             <xsl:with-param name="clause" select="'section'"/>
           </xsl:call-template>
 
+          <xsl:text>&#160;&#160;&#160;--&#160;</xsl:text>
           <xsl:choose>
             <xsl:when test="./interfaced.item">
               <!-- if interface items then out put source tail comment now -->
-              &#160;&#160;&#160;--&#160;
               <xsl:apply-templates select="." mode="source"/>
               <xsl:apply-templates select="./interfaced.item"/>;
-              <xsl:if test="position()=last()"><br/>(*</xsl:if>
-              <br/><br/>          
+              <!-- <xsl:if test="position()=last()"><br/>(*</xsl:if>
+              <br/><br/>           -->
             </xsl:when>
-            <xsl:otherwise>;
-              &#160;&#160;&#160;--&#160;
+            <xsl:otherwise><xsl:text>;</xsl:text>
               <xsl:apply-templates select="." mode="source"/>
-              <xsl:if test="position()=last()"><br/>(*</xsl:if>
-              <br/><br/>
+              <!-- <xsl:if test="position()=last()"><br/>(*</xsl:if>
+              <br/><br/> -->
             </xsl:otherwise>
           </xsl:choose> 
+          <xsl:if test="position()=last()"><xsl:text>&#xa;(*</xsl:text></xsl:if>
+          <xsl:text>&#xa;&#xa;</xsl:text>
 
       </xsl:when>
         <xsl:otherwise>
@@ -238,7 +257,8 @@
       </xsl:choose>
     </code>
   <!-- </blockquote> -->
-  </p>
+  <!-- </p> -->
+	
   <xsl:if test="position()=last()">
     <xsl:call-template name="interface_notes">
       <xsl:with-param name="schema_node" select=".."/>
@@ -353,18 +373,24 @@
 <!-- output a note detailing the interface -->
 <xsl:template name="interface_notes">
   <xsl:param name="schema_node"/>
-    <p class="note">
+    <!-- <p class="note">
       <small>
         NOTE&#160;1&#160;&#160;
         The schemas referenced above are specified in the following 
         part of ISO 10303:
       </small>
-    </p>
+    </p> -->
+    <xsl:call-template name="insertNote">
+      <xsl:with-param name="text">
+        The schemas referenced above are specified in the following 
+        part of ISO 10303:
+      </xsl:with-param>
+    </xsl:call-template>
     <blockquote>
-        <table>  
+        <!-- <table>   -->
         <xsl:for-each select="$schema_node/interface">
           <xsl:variable name="schema_name" select="./@schema"/>      
-          <tr>
+          <!-- <tr>
             <td width="266">
               <b>
                 <small>
@@ -377,13 +403,18 @@
                 <xsl:apply-templates select="." mode="source"/>
               </small>
             </td>
-          </tr>
+          </tr> -->
+          <xsl:value-of select="$schema_name"/><xsl:text>:: </xsl:text>
+          <xsl:apply-templates select="." mode="source"/>
+          <xsl:text>&#xa;&#xa;</xsl:text>
         </xsl:for-each>
-      </table>
+      <!-- </table> -->
   </blockquote>
-    <p class="note">
+    <!-- <p class="note">
       <small>
-        NOTE&#160;2&#160;&#160;
+        NOTE&#160;2&#160;&#160; -->
+    <xsl:call-template name="insertNote">
+      <xsl:with-param name="text">
         <xsl:variable name="module_dir">
           <xsl:call-template name="module_directory">
             <xsl:with-param name="module" select="$schema_node/@name"/>
@@ -413,9 +444,10 @@
                   <xsl:with-param name="filename" select="concat('../',@file)"/>   
                 </xsl:call-template>
               </xsl:variable>
-              <a href="{$imgfile}">
+              <!-- <a href="{$imgfile}">
                 <xsl:value-of select="concat('C.',position())"/>
-              </a>
+              </a> -->
+              <xsl:text>&lt;&lt;</xsl:text><xsl:value-of select="$imgfile"/><xsl:text>&gt;&gt;</xsl:text>
               <xsl:if test="position()!=last()">
                 <xsl:choose>
                   <xsl:when test="position()!=$penultimate">, </xsl:when>
@@ -446,9 +478,10 @@
                   <xsl:with-param name="filename" select="concat('../',@file)"/>   
                 </xsl:call-template>
               </xsl:variable>
-              <a href="{$imgfile}">
+              <!-- <a href="{$imgfile}">
                 <xsl:value-of select="concat('D.',position())"/>
-              </a>
+              </a> -->
+              <xsl:text>&lt;&lt;</xsl:text><xsl:value-of select="$imgfile"/><xsl:text>&gt;&gt;</xsl:text>
               <xsl:if test="position()!=last()">
                 <xsl:choose>
                   <xsl:when test="position()!=$penultimate">, </xsl:when>
@@ -459,22 +492,29 @@
             for a graphical representation of this schema.            
           </xsl:otherwise>
         </xsl:choose>
-      </small>
-    </p>
+      </xsl:with-param>
+    </xsl:call-template>
+      <!-- </small>
+    </p> -->
 
 </xsl:template>
 
 <!-- output a list of  deprecated types, if any -->
 <xsl:template name="deprecated_types_note">
   <xsl:param name="schema_node"/>
-    <p class="note">
+    <!-- <p class="note">
       <small>
         NOTE&#160;&#160;
         In order to ensure upward compatibility, this schema includes definitions for the following deprecated types:
       </small>
-    </p>
+    </p> -->
+    <xsl:call-template name="insertNote">
+      <xsl:with-param name="text">
+        In order to ensure upward compatibility, this schema includes definitions for the following deprecated types:
+      </xsl:with-param>
+    </xsl:call-template>
     <blockquote>
-        <table>  
+        <!-- <table>   -->
         <xsl:variable name="deprecated_expressions">
           <xsl:for-each select="$schema_node/constant[contains(@name,'deprecated_constructed')]">
             :<xsl:value-of select="@expression"/>:
@@ -489,7 +529,7 @@
         <xsl:for-each select="$schema_node/type">
           <xsl:if test="contains($deprecated,concat(':',./@name,':'))">
             <xsl:variable name="item_name" select="./@name"/>      
-          <tr>
+          <!-- <tr>
             <td width="266">
               <b>
                 <small>
@@ -497,10 +537,12 @@
                 </small>
               </b>
             </td>
-          </tr>
+          </tr> -->
+          <xsl:value-of select="$item_name"/>
+          <xsl:text>&#xa;&#xa;</xsl:text>
         </xsl:if>
         </xsl:for-each>
-      </table>
+      <!-- </table> -->
     </blockquote>
   </xsl:template>
 <!-- output a note for a deprecated type  -->
@@ -519,12 +561,17 @@
   select="translate($deprecated_expressions,$special,$separator)"/>
 <xsl:if test="contains($deprecated,concat(':',$type/@name,':'))">
   <xsl:variable name="item_name" select="$type/@name"/>      
-  <p class="note">
+  <!-- <p class="note">
     <small>
       NOTE&#160;&#160;
       The <b><xsl:value-of select="$item_name" /></b>  select type is kept in this edition in order to ensure upward compatibility.  Its usage is deprecated.
     </small>
-  </p>    
+  </p>  -->   
+  <xsl:call-template name="insertNote">
+    <xsl:with-param name="text">
+      The *<xsl:value-of select="$item_name" />*  select type is kept in this edition in order to ensure upward compatibility.  Its usage is deprecated.
+    </xsl:with-param>
+  </xsl:call-template>
 </xsl:if>
 </xsl:template>
 
@@ -544,12 +591,17 @@
   select="translate($deprecated_expressions,$special,$separator)"/>
 <xsl:if test="contains($deprecated,concat(':',$type/@name,':'))">
   <xsl:variable name="item_name" select="$type/@name"/>      
-  <p class="note">
+  <!-- <p class="note">
     <small>
       NOTE&#160;&#160;
       The <b><xsl:value-of select="$item_name" /></b>  entity data type is kept in this edition in order to ensure upward compatibility.  Its usage is deprecated.
     </small>
-  </p>    
+  </p>    -->
+  <xsl:call-template name="insertNote">
+    <xsl:with-param name="text">
+      The *<xsl:value-of select="$item_name" />*  entity data type is kept in this edition in order to ensure upward compatibility.  Its usage is deprecated.
+    </xsl:with-param>
+  </xsl:call-template>
 </xsl:if>
 </xsl:template>
 
@@ -558,14 +610,20 @@
 <!-- output a list of all  deprecated entities, if any -->
 <xsl:template name="deprecated_entities_note">
   <xsl:param name="schema_node"/>
-    <p class="note">
+    <!-- <p class="note">
       <small>
         NOTE&#160;&#160;
         In order to ensure upward compatibility, this schema includes definitions for the following deprecated entities:
       </small>
-    </p>
+    </p> -->
+    <xsl:call-template name="insertNote">
+      <xsl:with-param name="text">
+        In order to ensure upward compatibility, this schema includes definitions for the following deprecated entities:
+      </xsl:with-param>
+    </xsl:call-template>
+    
     <blockquote>
-        <table>  
+       <!-- <table>   -->
         <xsl:variable name="deprecated_expressions">
           <xsl:for-each select="$schema_node/constant[contains(@name,'deprecated_entity')]">
             :<xsl:value-of select="@expression"/>:
@@ -580,7 +638,7 @@
         <xsl:for-each select="$schema_node/entity">
           <xsl:if test="contains($deprecated,concat(':',./@name,':'))">
             <xsl:variable name="item_name" select="./@name"/>      
-          <tr>
+          <!-- <tr>
             <td width="266">
               <b>
                 <small>
@@ -588,10 +646,13 @@
                 </small>
               </b>
             </td>
-          </tr>
+          </tr> -->
+          
+          <xsl:value-of select="$item_name"/>
+          <xsl:text>&#xa;&#xa;</xsl:text>
         </xsl:if>
         </xsl:for-each>
-      </table>
+      <!-- </table> -->
     </blockquote>
     
 </xsl:template>
@@ -601,14 +662,20 @@
 <!-- output a note for deprecated interfaced constructs, if any -->
 <xsl:template name="deprecated_interface_notes">
   <xsl:param name="schema_node"/>
-    <p class="note">
+    <!-- <p class="note">
       <small>
         NOTE&#160;3&#160;&#160;
         In order to insure upward compatibility, explicit interfaces are made to the following deprecated data types:
       </small>
-    </p>
+    </p> -->
+    <xsl:call-template name="insertNote">
+      <xsl:with-param name="text">
+        In order to insure upward compatibility, explicit interfaces are made to the following deprecated data types:
+      </xsl:with-param>
+    </xsl:call-template>
+    
     <blockquote>
-        <table>  
+        <!-- <table>   -->
         <xsl:variable name="deprecated_expressions">
           <xsl:for-each select="$schema_node/constant[contains(@name,'deprecated')]">
             :<xsl:value-of select="@expression"/>:
@@ -624,7 +691,7 @@
           <xsl:if test="contains($deprecated,concat(':',./@name,':'))">
             
           <xsl:variable name="item_name" select="./@name"/>      
-          <tr>
+          <!-- <tr>
             <td width="266">
               <b>
                 <small>
@@ -637,10 +704,14 @@
                 <xsl:apply-templates select="." mode="source"/>
               </small>
             </td>
-          </tr>
+          </tr> -->
+          <xsl:value-of select="$item_name"/>
+          <xsl:text>:: </xsl:text>
+          <xsl:apply-templates select="." mode="source"/>
+          <xsl:text>&#xa;&#xa;</xsl:text>
         </xsl:if>
         </xsl:for-each>
-      </table>
+      <!-- </table> -->
     </blockquote>
     
 </xsl:template>
@@ -649,10 +720,10 @@
 <xsl:template match="interfaced.item">
   <xsl:choose>
     <xsl:when test="position()=1">
-      <br/><xsl:text>&#160;&#160;(</xsl:text>
+      <xsl:text>&#xa;</xsl:text><!-- <br/> --><xsl:text>&#160;&#160;(</xsl:text>
     </xsl:when>
     <xsl:otherwise>
-        &#160;&#160;
+        <xsl:text>&#160;&#160;</xsl:text>
     </xsl:otherwise>
   </xsl:choose>
 
@@ -663,16 +734,16 @@
     <xsl:with-param name="clause" select="'section'"/>
   </xsl:call-template>
 
-  <xsl:if test="position()!=last()">,
+  <xsl:if test="position()!=last()"><xsl:text>,&#xa;</xsl:text>
 
 
-<br/></xsl:if>
+<!-- <br/> --></xsl:if>
 
 <xsl:if test="position()=last()">)<xsl:text/>
 <!-- THX added to print out deprecated note  --> 
   <xsl:variable name="this" select="@name"/>
   <xsl:if test="../described.item[@item = $this]">
-              &#160;&#160;&#160;--&#160;
+              <xsl:text>&#160;&#160;&#160;--&#160;</xsl:text>
     <xsl:value-of select="../described.item[@item=$this]/description"/>
   </xsl:if>
 
@@ -771,23 +842,39 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
       </xsl:choose>      
     </xsl:variable>
 
-    <h2>
+    <!-- <h2>
       <A NAME="constants">
         <xsl:value-of select="$clause_header"/>
       </A>
-    </h2>
-    <p><xsl:value-of select="$clause_intro"/></p>
+    </h2> -->
+    <xsl:call-template name="insertHeaderADOC">
+      <xsl:with-param name="id" select="concat('constants_', $schema_name)"/>
+      <xsl:with-param name="header" select="$clause_header"/>					
+    </xsl:call-template>
+    
+    <!-- <p> -->
+    <xsl:call-template name="insertParagraph">
+			<xsl:with-param name="text">
+        <xsl:value-of select="$clause_intro"/>
+      </xsl:with-param>
+    </xsl:call-template>
+    <!-- </p> -->
   </xsl:if>
 
   <xsl:if test="position()=1">
-    <p><u>EXPRESS specification:</u></p>
-    <p>
+    <!-- <p><u>EXPRESS specification:</u></p> -->
+    <xsl:text>[.underline]#EXPRESS specification:#</xsl:text>
+    <xsl:text>&#xa;&#xa;</xsl:text>
+    <!-- <p> -->
     <!-- <blockquote> -->
       <code>
-        *)<br/>CONSTANT<br/>(*
+      <xsl:call-template name="insertLutaMLCodeStart"/>
+        <!-- *)<br/>CONSTANT<br/>(* -->
+        <xsl:text>CONSTANT</xsl:text>
+      <xsl:call-template name="insertCodeEnd"/>
       </code>
     <!-- </blockquote> -->
-  </p>
+    <!-- </p> -->
   </xsl:if>
   
   <xsl:variable name="aname">
@@ -796,7 +883,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
       <xsl:with-param name="section2" select="@name"/>
     </xsl:call-template>
   </xsl:variable>    
-  <h2>
+  <!-- <h2> -->
     <!-- only number section if more than one constant
     <xsl:choose>
       <xsl:when test="count(../constant) > 1 ">
@@ -811,11 +898,18 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
       </xsl:otherwise>
     </xsl:choose>
 -->
-     <a name="{$aname}">
+     <!-- <a name="{$aname}">
           <xsl:value-of select="concat($clause_number,'.',position(),' ',@name)"/>
         </a>
    
-  </h2>
+  </h2> -->
+  <xsl:call-template name="insertHeaderADOC">
+    <xsl:with-param name="id" select="$aname"/>
+    <xsl:with-param name="level" select="3"/>
+    <xsl:with-param name="header" select="@name"/>
+    <xsl:with-param name="indexed" select="'true'"/>
+  </xsl:call-template>
+
 
   <!-- output description from express --> 
   <!-- output description from external file -->
@@ -824,7 +918,9 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
     <xsl:with-param name="entity" select="./@name"/>
   </xsl:call-template> 
   <!-- output description from express -->
-  <p>
+  <!-- <p> -->
+  <xsl:call-template name="insertParagraph">
+    <xsl:with-param name="text">
     <xsl:choose>
       <xsl:when test="string-length(./description)>0">
         <xsl:apply-templates select="./description" mode="exp_description"/>
@@ -845,7 +941,9 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
         </xsl:if>
       </xsl:otherwise>
     </xsl:choose>
-  </p>
+    </xsl:with-param>
+  </xsl:call-template>
+  <!-- </p> -->
   <!-- output any issue against constant   -->
   <xsl:call-template name="output_express_issue">
     <xsl:with-param name="schema" select="../@name"/>
@@ -854,23 +952,25 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
 
 
     <!-- output EXPRESS -->
-    <p><u>EXPRESS specification:</u></p>
-    <p>
+    <!-- <p><u>EXPRESS specification:</u></p> -->
+    <xsl:text>[.underline]#EXPRESS specification:#</xsl:text>
+    <!-- <p> -->
     <!-- <blockquote> -->
       <code>
-        *)<br/>
-        &#160;&#160;<xsl:value-of select="@name"/> : 
+        <xsl:call-template name="insertLutaMLCodeStart"/>
+        <!--*)<br/>-->
+        <xsl:text>&#160;&#160;</xsl:text><xsl:value-of select="@name"/><xsl:text> : </xsl:text>
 
       <!-- THX modified to support aggregates  -->
           <xsl:apply-templates select="./*" mode="code"/> 
           <xsl:apply-templates select="./*" mode="underlying"/>
 
 
-          := 
+          <xsl:text>:= </xsl:text>
 <xsl:choose>
     
     <xsl:when test="./aggregate and contains(@expression,',')"><br/>
-      &#160;&#160;&#160;<xsl:value-of select="concat(substring-before(@expression,','),',')"/>
+      <xsl:text>&#160;&#160;&#160;</xsl:text><xsl:value-of select="concat(substring-before(@expression,','),',')"/>
       <xsl:call-template name="output_constant_expression">
         <xsl:with-param name="expression" select="substring-after(@expression,',')"/>
       </xsl:call-template>
@@ -880,22 +980,26 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
       </xsl:otherwise>
   </xsl:choose>
 
-      <br/>(*
+      <!-- <br/>(* -->
+      <xsl:call-template name="insertCodeEnd"/>
       </code>
     <!-- </blockquote> -->
-    </p>
+    <!-- </p> -->
     
     <xsl:if test="position()=last()">
-      <br/>
-      <p>
+      <!-- <br/>
+      <p> -->
+      <xsl:text>&#xa;</xsl:text>
       <!-- <blockquote> -->
         <code>
-          *)<br/>
-          END_CONSTANT;
-          <br/>(*
+        <xsl:call-template name="insertLutaMLCodeStart"/>
+          <!-- *)<br/> -->
+          <xsl:text>END_CONSTANT;</xsl:text>
+          <!-- <br/>(* -->
+        <xsl:call-template name="insertCodeEnd"/>
         </code>
       <!-- </blockquote> -->
-    </p>
+    <!-- </p> -->
     </xsl:if>
 
 </xsl:template>
@@ -905,8 +1009,9 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
 <xsl:template name="output_constant_expression">
   <xsl:param name="expression"/>
   <!--  <xsl:value-of select="','" /> -->
-    <br/>
-    &#160;&#160;&#160;&#160;<xsl:value-of select="substring-before($expression,',')"/>
+    <!-- <br/> -->
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:text>&#160;&#160;&#160;&#160;</xsl:text><xsl:value-of select="substring-before($expression,',')"/>
     
     <xsl:choose>
       <xsl:when test="contains($expression,',')">,
@@ -999,12 +1104,24 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
 
   <xsl:if test="position()=1">
     <!-- first entity so output the intro -->
-    <h2>
+    <!-- <h2>
       <a name="types">
         <xsl:value-of select="$clause_header"/>
       </a>
-    </h2>
-    <p><xsl:value-of select="$clause_intro"/></p>
+    </h2> -->
+    <xsl:call-template name="insertHeaderADOC">
+      <xsl:with-param name="id" select="concat('types_', $schema_name)"/>
+      <xsl:with-param name="header" select="$clause_header"/>					
+      <xsl:with-param name="level" select="2"/>					
+    </xsl:call-template>
+    
+    <!-- <p> -->
+    <xsl:call-template name="insertParagraph">
+			<xsl:with-param name="text">
+        <xsl:value-of select="$clause_intro"/>
+      </xsl:with-param>
+    </xsl:call-template>
+    <!-- </p> -->
       <xsl:if test="..//constant[contains(@name,'deprecated_constructed')]">
         <xsl:call-template name="deprecated_types_note">
           <xsl:with-param name="schema_node" select=".."/>
@@ -1041,12 +1158,19 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
     </xsl:otherwise>
   </xsl:choose>
 -->
-      <h2>
+      <!-- <h2>
         <a name="{$aname}">
           <xsl:value-of select="concat($clause_number, '.', position(), ' ', @name)"/>
         </a>
         <xsl:apply-templates select="." mode="expressg_icon"/>
-      </h2>      
+      </h2> --> 
+
+      <xsl:call-template name="insertHeaderADOC">
+        <xsl:with-param name="id" select="$aname"/>
+        <xsl:with-param name="level" select="3"/>
+        <xsl:with-param name="header" select="@name"/>
+        <xsl:with-param name="indexed" select="'true'"/>
+      </xsl:call-template>
 
   <xsl:call-template name="check_type_name">
     <xsl:with-param name="type_name" select="@name"/>
@@ -1064,6 +1188,8 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
   <!-- output description from express -->
 
 
+  <xsl:call-template name="insertParagraph">
+    <xsl:with-param name="text">
     <xsl:choose>
       <xsl:when test="string-length(./description)>0">
         <!-- only output <p> if description starts with text, otherwise
@@ -1073,14 +1199,14 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
             <xsl:apply-templates select="./description" mode="exp_description"/>
           </xsl:when>
           <xsl:otherwise>
-            <p>
+            <!-- <p> -->
               <xsl:apply-templates select="./description" mode="exp_description"/>
-            </p>
+            <!-- </p> -->
           </xsl:otherwise>
         </xsl:choose>
       </xsl:when>
       <xsl:otherwise>
-        <p>
+        <!-- <p> -->
           <!-- 
                disable error checking for selects as boiler plate
                should output text -->
@@ -1100,9 +1226,32 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
               </xsl:call-template>
             </xsl:if>
           </xsl:if>
-        </p>
+        <!-- </p> -->
       </xsl:otherwise>
     </xsl:choose>
+    </xsl:with-param>
+  </xsl:call-template>
+
+  <!-- https://github.com/metanorma/stepmod2mn/issues/10 -->
+  <!-- If no text is provided in descriptions.xml for SELECT and ENUMERATION types, the XSLT pastes boilerplate descriptions in the document. -->
+  <xsl:if test="./select and normalize-space($type_select_boilerplate) = ''">
+      <xsl:variable name="external_description">
+        <xsl:call-template name="check_external_description">
+          <xsl:with-param name="schema" select="../@name"/>
+          <xsl:with-param name="entity" select="@name"/>
+        </xsl:call-template>        
+      </xsl:variable>
+      <xsl:if test="$external_description='false'">
+        <xsl:call-template name="insertBoilerplate">
+          <xsl:with-param name="folder" select="'General'"/>
+          <xsl:with-param name="identifier" select="'SC4_xxxx'"/>
+          <!-- Example: Put boilerplate for type select, see https://github.com/metanorma/iso-tc184-sc4-directives/blob/master/supplementary-directives.adoc -->
+          <xsl:with-param name="text"></xsl:with-param>
+          <!-- Example /src/main/resources/empty.adoc -->
+          <xsl:with-param name="file"></xsl:with-param>
+        </xsl:call-template>
+      </xsl:if>
+  </xsl:if>
 
   <!-- output any issue against type -->
   <xsl:call-template name="output_express_issue">
@@ -1110,29 +1259,51 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
     <xsl:with-param name="entity" select="./@name"/>
   </xsl:call-template> 
 
-  <p><u>EXPRESS specification:</u></p>
-  <p>
+  <!-- <p><u>EXPRESS specification:</u></p> -->
+  <xsl:text>[.underline]#EXPRESS specification:#</xsl:text>
+  <xsl:text>&#xa;&#xa;</xsl:text>
+  <!-- <p> -->
   <!-- <blockquote> -->
     <code>
       *)<br/>
-      TYPE 
-      <xsl:value-of select="@name" /> =
+      <xsl:call-template name="insertLutaMLCodeStart"/>
+      <xsl:text>TYPE </xsl:text>
+      <xsl:value-of select="@name" /><xsl:text>=</xsl:text>
         <xsl:apply-templates select="./aggregate" mode="code"/>        
         <xsl:choose>
           <xsl:when test="./where">
-            <xsl:apply-templates select="./*" mode="underlying"/>;<br/>
+            <xsl:apply-templates select="./*" mode="underlying"/>;<xsl:text>&#xa;</xsl:text><!-- <br/> -->
             <xsl:apply-templates select="./where" mode="code"/>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:apply-templates select="./*" mode="underlying"/>;<br/>
+            <xsl:apply-templates select="./*" mode="underlying"/>;<xsl:text>&#xa;</xsl:text><!-- <br/> -->
           </xsl:otherwise>
         </xsl:choose>
-        END_TYPE; <br/>
-        (*
+        <xsl:text>END_TYPE;</xsl:text><!-- <br/> -->
+        <!-- (* -->
+      <xsl:call-template name="insertCodeEnd"/>
     </code>
   <!-- </blockquote> -->
-</p>
+<!-- </p> -->
   <xsl:apply-templates select="enumeration" mode="describe_enums"/>
+  
+  <xsl:if test="./enumeration">
+    <xsl:variable name="external_description">
+      <xsl:call-template name="check_external_description">
+        <xsl:with-param name="schema" select="../@name"/>
+        <xsl:with-param name="entity" select="@name"/>
+      </xsl:call-template>        
+    </xsl:variable>
+    <xsl:if test="$external_description='false'">
+      <xsl:call-template name="insertBoilerplate">
+        <xsl:with-param name="folder" select="'General'"/>
+        <xsl:with-param name="identifier" select="'SC4_xxxx'"/>
+        <!-- Example: Put boilerplate for type enumeration, see https://github.com/metanorma/iso-tc184-sc4-directives/blob/master/supplementary-directives.adoc -->
+        <xsl:with-param name="text"></xsl:with-param>
+      </xsl:call-template>
+    </xsl:if>
+</xsl:if>
+  
   <xsl:call-template name="output_where_formal"/>
   <xsl:call-template name="output_where_informal"/>
 </xsl:template>
@@ -1167,15 +1338,15 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
 
 <xsl:template match="select" mode="underlying">
   <xsl:if test="@extensible='YES' or @extensible='yes'">
-    EXTENSIBLE
+    <xsl:text>EXTENSIBLE </xsl:text>
   </xsl:if>
 
   <xsl:if test="@genericentity='YES' or @genericentity='yes'">
-    GENERIC_ENTITY
+    <xsl:text>GENERIC_ENTITY </xsl:text>
   </xsl:if>
 
-  SELECT<xsl:if test="@basedon">
-    BASED_ON 
+  <xsl:text>SELECT </xsl:text><xsl:if test="@basedon">
+    <xsl:text>BASED_ON </xsl:text>
       <xsl:call-template name="link_object">
         <xsl:with-param name="object_name" select="@basedon"/>
         <xsl:with-param name="object_used_in_schema_name" 
@@ -1186,9 +1357,9 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
   <xsl:if test="@selectitems and 
                 (string-length(@selectitems)!=0)">
     <xsl:if test="@basedon">
-      WITH 
-    </xsl:if><br/>
-    &#160;&#160;&#160;(<xsl:call-template name="link_list">
+      <xsl:text>WITH </xsl:text>
+    </xsl:if><xsl:text>&#xa;</xsl:text><!-- <br/> -->
+    <xsl:text>&#160;&#160;&#160;(</xsl:text><xsl:call-template name="link_list">
     <xsl:with-param name="linebreak" select="'yes'"/>
     <xsl:with-param name="suffix" select="', '"/>
     <xsl:with-param name="prefix" select="'&#160;&#160;&#160;&#160;'"/>
@@ -1202,11 +1373,11 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
 
 <xsl:template match="enumeration" mode="underlying">
   <xsl:if test="@extensible='YES' or @extensible='yes'">
-    EXTENSIBLE
+    <xsl:text>EXTENSIBLE </xsl:text>
   </xsl:if>
-  ENUMERATION
+  <xsl:text>ENUMERATION </xsl:text>
   <xsl:if test="@basedon">
-    BASED_ON 
+    <xsl:text>BASED_ON </xsl:text>
     <xsl:call-template name="link_object">
       <xsl:with-param name="object_name" select="@basedon"/>
       <xsl:with-param name="object_used_in_schema_name" 
@@ -1218,14 +1389,15 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
   <xsl:if test="@items and (string-length(@items)!=0)">
     <xsl:choose>
       <xsl:when test="@basedon">
-        WITH 
+        <xsl:text>WITH </xsl:text>
       </xsl:when>
       <xsl:otherwise>
-        OF
+        <xsl:text>OF </xsl:text>
       </xsl:otherwise>
     </xsl:choose>
-    <br/>
-    &#160;&#160; 
+    <!-- <br/> -->
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:text>&#160;&#160; </xsl:text>
     <xsl:variable name="enum"
       select="concat('(',translate(normalize-space(@items),' ',','),')')"/>
     <xsl:call-template name="output_line_breaks">
@@ -1237,7 +1409,9 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
 
 <xsl:template match="enumeration" mode="describe_enums">
   <xsl:if test="string-length(normalize-space(@items))>0">
-    <p><u>Enumerated item definitions:</u></p>
+    <!-- <p><u>Enumerated item definitions:</u></p> -->
+    <xsl:text>[.underline]#Enumerated item definitions:#</xsl:text>
+			<xsl:text>&#xa;&#xa;</xsl:text>
     <xsl:call-template name="output_enums">
       <xsl:with-param name="str" select="normalize-space(@items)"/>
     </xsl:call-template>
@@ -1416,13 +1590,25 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
       </xsl:choose>      
     </xsl:variable>
 
-    <h2>
+    <!-- <h2>
       <a name="entities">
         <xsl:value-of select="$clause_header"/>
       </a>
-    </h2>
+    </h2> -->
+    <xsl:text>&#xa;&#xa;</xsl:text>
+    <xsl:call-template name="insertHeaderADOC">
+      <xsl:with-param name="id" select="concat('entities_', $schema_name)"/>
+      <xsl:with-param name="header" select="$clause_header"/>
+      <xsl:with-param name="level" select="2"/>
+    </xsl:call-template>
 
-    <p><xsl:value-of select="$clause_intro"/></p>
+    <!-- <p> -->
+    <xsl:call-template name="insertParagraph">
+      <xsl:with-param name="text">
+        <xsl:value-of select="$clause_intro"/>
+      </xsl:with-param>
+    </xsl:call-template>
+    <!-- </p> -->
       <xsl:if test="..//constant[contains(@name,'deprecated_entity')]">
         <xsl:call-template name="deprecated_entities_note">
           <xsl:with-param name="schema_node" select=".."/>
@@ -1437,7 +1623,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
     </xsl:call-template>
   </xsl:variable>
 
-  <h2>
+  <!-- <h2> -->
     <!-- only number section if more than one entity
     <xsl:choose>
       <xsl:when test="count(../entity) > 1 ">
@@ -1452,7 +1638,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
       </xsl:otherwise>
     </xsl:choose>
 -->
-     <a name="{$aname}">
+<!--     <a name="{$aname}">
           <xsl:value-of select="concat($clause_number,'.',position(),' ',@name)"/>
         </a>
    
@@ -1471,7 +1657,14 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
           alt="Mapping table" src="../../../../images/mapping.gif"/>
       </a>
     </xsl:if>
-  </h2>
+  </h2> -->
+  
+  <xsl:call-template name="insertHeaderADOC">
+    <xsl:with-param name="id" select="$aname"/>
+    <xsl:with-param name="level" select="3"/>
+    <xsl:with-param name="header" select="@name"/>
+    <xsl:with-param name="indexed" select="'true'"/>
+  </xsl:call-template>
 
   <xsl:choose>
     <xsl:when 
@@ -1494,39 +1687,44 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
     <xsl:with-param name="supertypes" select="@supertypes"/>
   </xsl:call-template> 
   <!-- output description from express -->
-  <xsl:choose>
-      <xsl:when test="string-length(./description)>0">
-        <!-- only output <p> if description starts with text, otherwise
-             assume that the description sarts with <p> -->
-        <xsl:choose>
-          <xsl:when test="string-length(normalize-space(./description/text()))=0">
-            <xsl:apply-templates select="./description" mode="exp_description"/>
+  <xsl:call-template name="insertParagraph">
+    <xsl:with-param name="text">
+      <xsl:choose>
+          <xsl:when test="string-length(./description)>0">
+            <!-- only output <p> if description starts with text, otherwise
+                 assume that the description sarts with <p> -->
+            <xsl:choose>
+              <xsl:when test="string-length(normalize-space(./description/text()))=0">
+                <xsl:apply-templates select="./description" mode="exp_description"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <!-- <p> -->
+                  <xsl:apply-templates select="./description" mode="exp_description"/>
+                <!-- </p> -->
+              </xsl:otherwise>
+            </xsl:choose>
           </xsl:when>
           <xsl:otherwise>
-            <p>
-              <xsl:apply-templates select="./description" mode="exp_description"/>
-            </p>
+            <!-- <p> -->
+              <xsl:variable name="external_description">
+                <xsl:call-template name="check_external_description">
+                  <xsl:with-param name="schema" select="../@name"/>
+                  <xsl:with-param name="entity" select="@name"/>
+                </xsl:call-template>        
+              </xsl:variable>
+              <xsl:if test="$external_description='false'">
+                <xsl:call-template name="error_message">
+                  <xsl:with-param 
+                    name="message" 
+                    select="concat('Error e4: No description provided for ',@name)"/>
+                </xsl:call-template>
+              </xsl:if>
+            <!-- </p> -->
           </xsl:otherwise>
         </xsl:choose>
-      </xsl:when>
-      <xsl:otherwise>
-        <p>
-          <xsl:variable name="external_description">
-            <xsl:call-template name="check_external_description">
-              <xsl:with-param name="schema" select="../@name"/>
-              <xsl:with-param name="entity" select="@name"/>
-            </xsl:call-template>        
-          </xsl:variable>
-          <xsl:if test="$external_description='false'">
-            <xsl:call-template name="error_message">
-              <xsl:with-param 
-                name="message" 
-                select="concat('Error e4: No description provided for ',@name)"/>
-            </xsl:call-template>
-          </xsl:if>
-        </p>
-      </xsl:otherwise>
-    </xsl:choose>
+      </xsl:with-param>
+    </xsl:call-template>
+    
     <xsl:call-template name="deprecated_entity_note">     
     <xsl:with-param name="type" select="."/>
     </xsl:call-template>
@@ -1537,25 +1735,29 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
     <xsl:with-param name="entity" select="./@name"/>
   </xsl:call-template> 
 
-  <p><u>EXPRESS specification:</u></p>
-  <p>
+  <!-- <p><u>EXPRESS specification:</u></p> -->
+  <xsl:text>[.underline]#EXPRESS specification:#</xsl:text>
+  <xsl:text>&#xa;&#xa;</xsl:text>
+  <!-- <p> -->
   <!-- <blockquote> -->
     <code>
-      *)<br/>
-      ENTITY <xsl:value-of select="@name"/>
+      <!-- *)<br/> -->
+    <xsl:call-template name="insertLutaMLCodeStart"/>
+      <xsl:text>ENTITY </xsl:text><xsl:value-of select="@name"/>
       <xsl:call-template name="abstract.entity"/>
       <xsl:call-template name="super.expression-code"/>
       <xsl:call-template name="supertypes-code"/><xsl:text>;</xsl:text>
-      <br/>
+      <xsl:text>&#xa;</xsl:text>
       <xsl:apply-templates select="./explicit" mode="code"/>
       <xsl:apply-templates select="./derived" mode="code"/>
       <xsl:apply-templates select="./inverse" mode="code"/>
       <xsl:apply-templates select="./unique" mode="code"/>
       <xsl:apply-templates select="./where[@expression]" mode="code"/>
-      END_ENTITY;<br/>(*
+      <xsl:text>END_ENTITY;</xsl:text><!-- <xsl:text>&#xa;(*</xsl:text> -->
+    <xsl:call-template name="insertCodeEnd"/>
     </code>
   <!-- </blockquote> -->
-  </p>
+  <!-- </p> -->
   <xsl:apply-templates select="./explicit" mode="description"/>    
   <xsl:apply-templates select="./derived" mode="description"/>    
   <xsl:apply-templates select="./inverse" mode="description"/>  
@@ -1566,8 +1768,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
 
 
 <xsl:template name="abstract.entity">
-  <xsl:if test="@abstract.entity='YES' or @abstract.entity='yes'">
-    ABSTRACT</xsl:if>
+  <xsl:if test="@abstract.entity='YES' or @abstract.entity='yes'">ABSTRACT</xsl:if>
 </xsl:template>
 
 <xsl:template name="super.expression-code">
@@ -1577,10 +1778,10 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
 
   <xsl:choose>
     <xsl:when test="@abstract.supertype='YES' or @abstract.supertype='yes'">
-      <br/>
-      &#160;&#160;ABSTRACT SUPERTYPE
+      <!-- <br/> --><xsl:text>&#xa;</xsl:text>
+      <xsl:text>&#160;&#160;ABSTRACT SUPERTYPE </xsl:text>
       <xsl:if test="@super.expression">
-        OF&#160;<xsl:call-template name="link_super_expression_list">
+        <xsl:text>OF&#160;</xsl:text><xsl:call-template name="link_super_expression_list">
           <xsl:with-param name="list" select="$sup_expr"/>
           <xsl:with-param name="object_used_in_schema_name" select="../@name"/>
           <xsl:with-param name="clause" select="'section'"/>
@@ -1591,8 +1792,8 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
     </xsl:when>
     <xsl:otherwise>
       <xsl:if test="@super.expression">
-      <br/>
-&#160;&#160;SUPERTYPE OF&#160;<xsl:call-template name="link_super_expression_list">
+      <!-- <br/> --><xsl:text>&#xa;</xsl:text>
+<xsl:text>&#160;&#160;SUPERTYPE OF&#160;</xsl:text><xsl:call-template name="link_super_expression_list">
         <xsl:with-param name="list" select="$sup_expr"/>
         <xsl:with-param name="object_used_in_schema_name" select="../@name"/>
         <xsl:with-param name="clause" select="'section'"/>
@@ -1607,8 +1808,8 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
 
 <xsl:template name="supertypes-code">
   <xsl:if test="@supertypes">
-<br/>
-    &#160;&#160;SUBTYPE OF (<xsl:call-template name="link_list">
+<!-- <br/> --><xsl:text>&#xa;</xsl:text>
+    <xsl:text>&#160;&#160;SUBTYPE OF (</xsl:text><xsl:call-template name="link_list">
       <xsl:with-param name="list" select="@supertypes"/>
         <xsl:with-param name="suffix" select="', '"/>
       <xsl:with-param name="object_used_in_schema_name" select="../@name"/>
@@ -1666,13 +1867,11 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
 -->
 
 
-&#160;&#160;<xsl:apply-templates select="./redeclaration" mode="code"/>
+<xsl:text>&#160;&#160;</xsl:text><xsl:apply-templates select="./redeclaration" mode="code"/>
   <xsl:value-of select="concat(@name, ' : ')"/>
-  <xsl:if test="@optional='YES' or @optional='yes'">
-    OPTIONAL 
-  </xsl:if>
+  <xsl:if test="@optional='YES' or @optional='yes'">OPTIONAL </xsl:if>
   <xsl:apply-templates select="./aggregate" mode="code"/>
-  <xsl:apply-templates select="./*" mode="underlying"/>;<br/>
+  <xsl:apply-templates select="./*" mode="underlying"/>;<xsl:text>&#xa;</xsl:text><!-- <br/> -->
 </xsl:template>
 
 <xsl:template match="redeclaration" mode="code">SELF\<xsl:call-template name="link_object">
@@ -1692,20 +1891,20 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
 </xsl:template>
 
 <xsl:template match="derived" mode="code">
-  <xsl:if test="position()=1">DERIVE<br/>
+  <xsl:if test="position()=1">DERIVE<xsl:text>&#xa;</xsl:text><!-- <br/> -->
   </xsl:if>
-  &#160;&#160;<xsl:apply-templates select="./redeclaration" mode="code"/>
+  <xsl:text>&#160;&#160;</xsl:text><xsl:apply-templates select="./redeclaration" mode="code"/>
   <!-- need to clarify the XML for derive --> 
   <xsl:value-of select="concat(@name, ' : ')"/>
   <xsl:apply-templates select="./aggregate" mode="code"/>
   <xsl:apply-templates select="./*" mode="underlying"/>
-  <xsl:value-of select="concat(' := ',@expression,';')"/><br/>
+  <xsl:value-of select="concat(' := ',@expression,';')"/><xsl:text>&#xa;</xsl:text><!-- <br/> -->
 </xsl:template>
 
 <xsl:template match="inverse" mode="code">
-  <xsl:if test="position()=1">INVERSE<br/>
+  <xsl:if test="position()=1">INVERSE<xsl:text>&#xa;</xsl:text><!-- <br/> -->
   </xsl:if>
-  &#160;&#160;<xsl:apply-templates select="./redeclaration" mode="code"/>
+  <xsl:text>&#160;&#160;</xsl:text><xsl:apply-templates select="./redeclaration" mode="code"/>
   <xsl:value-of select="concat(@name, ' : ')"/>
   <xsl:apply-templates select="./inverse.aggregate" mode="code"/>
   <xsl:call-template name="link_object">
@@ -1714,7 +1913,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
       select="../../@name"/>
     <xsl:with-param name="clause" select="'section'"/>
   </xsl:call-template>  
-  <xsl:value-of select="concat(' FOR ', @attribute)"/>;<br/>
+  <xsl:value-of select="concat(' FOR ', @attribute)"/>;<xsl:text>&#xa;</xsl:text><!-- <br/> -->
 </xsl:template>
 
 <xsl:template match="inverse.aggregate" mode="code">
@@ -1729,11 +1928,11 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
 </xsl:template>
 
 <xsl:template match="unique" mode="code">
-  <xsl:if test="position()=1">UNIQUE<br/>
+  <xsl:if test="position()=1">UNIQUE<xsl:text>&#xa;</xsl:text><!-- <br/> -->
   </xsl:if>
-  &#160;&#160;<xsl:value-of select="concat(@label, ': ')"/>
+  <xsl:text>&#160;&#160;</xsl:text><xsl:value-of select="concat(@label, ': ')"/>
   <xsl:apply-templates select="./unique.attribute" mode="code"/>
-  <br/>
+  <xsl:text>&#xa;</xsl:text><!-- <br/> -->
 </xsl:template>
 
 
@@ -1774,18 +1973,14 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
       <xsl:value-of select="concat(@type, ' OF ')"/>
     </xsl:otherwise>
   </xsl:choose>
-  <xsl:if test="@optional='YES'">
-    OPTIONAL
-  </xsl:if>
-  <xsl:if test="@unique='YES'">
-    UNIQUE
-  </xsl:if>
+  <xsl:if test="@optional='YES'">OPTIONAL</xsl:if>
+  <xsl:if test="@unique='YES'">UNIQUE</xsl:if>
 </xsl:template>
 
 <xsl:template match="where" mode="code">
-  <xsl:if test="position()=1">WHERE<br/></xsl:if> 
-  &#160;&#160;<xsl:value-of select="concat(@label, ': ', @expression, ';')"/>
-  <br/>
+  <xsl:if test="position()=1">WHERE<xsl:text>&#xa;</xsl:text><!-- <br/> --></xsl:if> 
+  <xsl:text>&#160;&#160;</xsl:text><xsl:value-of select="concat(@label, ': ', @expression, ';')"/>
+  <xsl:text>&#xa;</xsl:text><!-- <br/> -->
 </xsl:template>
 
 <xsl:template match="graphic.element" mode="code">
@@ -1794,7 +1989,9 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
 
 <xsl:template match="explicit" mode="description">
   <xsl:if test="position()=1">
-    <p><u>Attribute definitions:</u></p>
+    <!-- <p><u>Attribute definitions:</u></p> -->
+    <xsl:text>[.underline]#Attribute definitions:#</xsl:text>
+    <xsl:text>&#xa;&#xa;</xsl:text>
   </xsl:if>
 
   <xsl:variable name="aname">
@@ -1865,7 +2062,9 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
        there are no explicit attribute - if there were then Attribute
        definitions" would have already been output -->
   <xsl:if test="position()=1 and not(../explicit)">
-    <p><u>Attribute definitions:</u></p>
+    <!-- <p><u>Attribute definitions:</u></p> -->
+    <xsl:text>[.underline]#Attribute definitions:#</xsl:text>
+    <xsl:text>&#xa;&#xa;</xsl:text>
   </xsl:if>
 
   <xsl:variable name="aname">
@@ -1931,7 +2130,9 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
 <xsl:template match="inverse" mode="description">
 
   <xsl:if test="position()=1 and not(../explicit | ../derived)">
-    <p><u>Attribute definitions:</u></p>
+    <!-- <p><u>Attribute definitions:</u></p> -->
+    <xsl:text>[.underline]#Attribute definitions:#</xsl:text>
+    <xsl:text>&#xa;&#xa;</xsl:text>
   </xsl:if>
 
   <xsl:variable name="aname">
@@ -1998,7 +2199,9 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
 
 <xsl:template match="unique" mode="description">
   <xsl:if test="position()=1">
-    <p><u>Formal propositions:</u></p>
+    <!-- <p><u>Formal propositions:</u></p> -->
+    <xsl:text>[.underline]#Formal propositions:#</xsl:text>
+    <xsl:text>&#xa;&#xa;</xsl:text>
   </xsl:if>  
 
   <xsl:variable name="aname">
@@ -2064,14 +2267,18 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
 
 <xsl:template name="output_where_formal">
   <xsl:if test="./where[@expression] and not(./unique)">
-    <p><u>Formal propositions:</u></p>
+    <!-- <p><u>Formal propositions:</u></p> -->
+    <xsl:text>[.underline]#Formal propositions:#</xsl:text>
+    <xsl:text>&#xa;&#xa;</xsl:text>
   </xsl:if>
   <xsl:apply-templates select="./where[@expression]" mode="description"/>
 </xsl:template>
 
 <xsl:template name="output_where_informal">
   <xsl:if test="./where[not(@expression)]">
-    <p><u>Informal propositions:</u></p>
+    <!-- <p><u>Informal propositions:</u></p> -->
+    <xsl:text>[.underline]#Informal propositions:#</xsl:text>
+    <xsl:text>&#xa;&#xa;</xsl:text>
   </xsl:if>
   <xsl:apply-templates select="./where[not(@expression)]" mode="description"/>
 </xsl:template>
@@ -2223,12 +2430,25 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
       </xsl:choose>      
     </xsl:variable>
 
-    <h2>
+    <!-- <h2>
       <a name="subtype_constraints">
         <xsl:value-of select="$clause_header"/>
       </a>
     </h2>
-    <p><xsl:value-of select="$clause_intro"/></p>
+    <p><xsl:value-of select="$clause_intro"/></p> -->
+    
+    <xsl:call-template name="insertHeaderADOC">
+      <xsl:with-param name="id" select="concat('subtype_constraints', $schema_name)"/>
+      <xsl:with-param name="header" select="$clause_header"/>
+      <xsl:with-param name="level" select="2"/>					
+    </xsl:call-template>
+    
+    <xsl:call-template name="insertParagraph">
+      <xsl:with-param name="text">
+        <xsl:value-of select="$clause_intro"/>
+      </xsl:with-param>
+    </xsl:call-template>
+    
   </xsl:if>
 
   <xsl:variable name="aname">
@@ -2238,7 +2458,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
     </xsl:call-template>
   </xsl:variable>
 
-  <h2>
+  <!-- <h2> -->
   <!-- only number section if more than one sub type constraint
   <xsl:choose>
     <xsl:when test="count(../subtype.constraint) > 1 ">      
@@ -2253,7 +2473,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
     </xsl:otherwise>
   </xsl:choose>
 -->
-      <A NAME="{$aname}">
+     <!--  <A NAME="{$aname}">
         <xsl:value-of select="concat($clause_number,'.',position(),' ',@name)"/>
       </A>
 
@@ -2270,7 +2490,13 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
       <a href="{$maphref}"><img align="middle" border="0" 
           alt="Mapping table" src="../../../../images/mapping.gif"/></a>
     </xsl:if>
-  </h2>
+  </h2> -->
+
+  <xsl:call-template name="insertHeaderADOC">
+    <xsl:with-param name="id" select="$aname"/>
+    <xsl:with-param name="header" select="@name"/>
+    <xsl:with-param name="indexed" select="'true'"/>
+  </xsl:call-template>
 
   <xsl:apply-templates select="." mode="description"/>
 
@@ -2282,27 +2508,31 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
 
 
   <!-- output the EXPRESS -->
-  <p><u>EXPRESS specification:</u></p>
+  <!-- <p><u>EXPRESS specification:</u></p> -->
+  <xsl:text>[.underline]#EXPRESS specification:#</xsl:text>
+  <xsl:text>&#xa;&#xa;</xsl:text>
   
-  <p>
+  <!-- <p> -->
     <code>
-  *)<br/>
-  <A NAME="{$aname}">SUBTYPE_CONSTRAINT <xsl:value-of select="@name"/></A>
+  <!-- *)<br/> -->
+    <xsl:call-template name="insertLutaMLCodeStart"/>
+  <!-- <A NAME="{$aname}">SUBTYPE_CONSTRAINT <xsl:value-of select="@name"/></A> -->
+  <xsl:text>SUBTYPE_CONSTRAINT *</xsl:text><xsl:value-of select="@name"/><xsl:text>*[</xsl:text><xsl:value-of select="$aname"/><xsl:text>]</xsl:text>
   <xsl:text> FOR </xsl:text>
   <xsl:call-template name="link_object">
     <xsl:with-param name="object_name" select="@entity"/>
     <xsl:with-param name="object_used_in_schema_name" 
       select="../@name"/>
     <xsl:with-param name="clause" select="'section'"/>
-  </xsl:call-template>;<br/>
+  </xsl:call-template>;<xsl:text>&#xa;</xsl:text><!-- <br/> -->
 
   <xsl:if test="@abstract.supertype='YES' or @abstract.supertype='yes'">
-      &#160;&#160;ABSTRACT SUPERTYPE;<br/>
+      <xsl:text>&#160;&#160;ABSTRACT SUPERTYPE;&#xa;</xsl:text><!-- <br/> -->
   </xsl:if>
 
   <xsl:if test="@totalover and 
                 (string-length(@totalover)!=0)">
-    &#160;&#160;TOTAL_OVER&#160;(<xsl:call-template name="link_list">
+    <xsl:text>&#160;&#160;TOTAL_OVER&#160;(</xsl:text><xsl:call-template name="link_list">
     <xsl:with-param name="list" select="@totalover"/>
     <xsl:with-param name="linebreak" select="'yes'"/>
     <xsl:with-param name="prefix" select="'&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;'"/>
@@ -2310,21 +2540,22 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
     <xsl:with-param name="suffix" select="', '"/>
     <xsl:with-param name="object_used_in_schema_name" select="../@name"/>
     <xsl:with-param name="clause" select="'section'"/>
-  </xsl:call-template>);<br/>
+  </xsl:call-template>);<xsl:text>&#xa;</xsl:text><!-- <br/> -->
   </xsl:if>
 
   
   <xsl:variable name="sup_expr" select="@super.expression"/>
   <xsl:if test="@super.expression">
-    &#160;&#160;<xsl:call-template name="link_super_expression_list">
+    <xsl:text>&#160;&#160;</xsl:text><xsl:call-template name="link_super_expression_list">
         <xsl:with-param name="list" select="$sup_expr"/>
         <xsl:with-param name="object_used_in_schema_name" select="../@name"/>
         <xsl:with-param name="clause" select="'section'"/>
         <xsl:with-param name="indent" select="3"/>
-      </xsl:call-template>;<br/>
+      </xsl:call-template>;<xsl:text>&#xa;</xsl:text><!-- <br/> -->
     </xsl:if>      
-  END_SUBTYPE_CONSTRAINT;<br/>(*
-  </code></p>
+  <xsl:text>END_SUBTYPE_CONSTRAINT;</xsl:text><!-- <br/> --><!-- <xsl:text>&#xa;(*</xsl:text> -->
+  <xsl:call-template name="insertCodeEnd"/>
+  </code><!-- </p> -->
 </xsl:template>
 
 <xsl:template match="subtype.constraint" mode="description">
@@ -2351,7 +2582,9 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
     <xsl:choose>
       <!-- an ABSTRACT ONEOF -->
       <xsl:when test="(./@abstract.supertype='YES') and ($one_of = 'ONEOF')">
-        <p>
+        <!-- <p> -->
+        <xsl:call-template name="insertParagraph">
+          <xsl:with-param name="text">
           The
           <b>
             <xsl:value-of select="@name"/>
@@ -2382,11 +2615,15 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
             <xsl:with-param name="clause" select="'section'"/>
             <xsl:with-param name="and_for_last_pair" select="'yes'"/>
           </xsl:call-template>.
-        </p>
+          </xsl:with-param>
+        </xsl:call-template>
+        <!-- </p> -->
       </xsl:when>
       
       <xsl:when test="($one_of = 'ONEOF')">
-        <p>
+        <!-- <p> -->
+        <xsl:call-template name="insertParagraph">
+          <xsl:with-param name="text">
           The
           <b>
             <xsl:value-of select="@name"/>
@@ -2408,12 +2645,16 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
             <xsl:with-param name="clause" select="'section'"/>
             <xsl:with-param name="and_for_last_pair" select="'yes'"/>
           </xsl:call-template>.
-        </p>
+          </xsl:with-param>
+        </xsl:call-template>
+        <!-- </p> -->
       </xsl:when>
 
       <!-- an ABSTRACT EXPRESSION -->
       <xsl:when test="(./@abstract.supertype='YES') and ./@super.expression">
-        <p>
+        <!-- <p> -->
+        <xsl:call-template name="insertParagraph">
+          <xsl:with-param name="text">
           The
           <b>
             <xsl:value-of select="@name"/>
@@ -2437,14 +2678,18 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
               <xsl:with-param name="clause" select="'section'"/>
             </xsl:call-template>
           </b>.
-        </p>
+          </xsl:with-param>
+        </xsl:call-template>
+        <!-- </p> -->
       </xsl:when>
 
       <!-- a subtype expression -->
       <xsl:when test="./@super.expression">
         <xsl:choose>
           <xsl:when test="contains(./@super.expression, 'ONEOF')">
-            <p>
+            <!-- <p> -->
+            <xsl:call-template name="insertParagraph">
+              <xsl:with-param name="text">
               The
               <b>
                 <xsl:value-of select="@name"/>
@@ -2464,10 +2709,15 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
                 <xsl:with-param name="oneof_expression" select="./@super.expression"/>
               </xsl:call-template>
               are exclusive.
-            </p>
+            
+            </xsl:with-param>
+          </xsl:call-template>
+          <!-- </p>-->
           </xsl:when>
           <xsl:otherwise>
-            <p>
+            <!-- <p> -->
+            <xsl:call-template name="insertParagraph">
+              <xsl:with-param name="text">
               The 
               <b>
                 <xsl:value-of select="@name"/>
@@ -2481,13 +2731,17 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
                   <xsl:with-param name="clause" select="'section'"/>
                 </xsl:call-template>
               </b>.
-            </p>
+              </xsl:with-param>
+            </xsl:call-template>
+            <!-- </p> -->
           </xsl:otherwise>
         </xsl:choose>
       </xsl:when>
 
       <!-- an ABSTRACT supertype -->
       <xsl:when test="./@abstract.supertype='YES'">
+        <xsl:call-template name="insertParagraph">
+          <xsl:with-param name="text">
           The
           <b>
             <xsl:value-of select="@name"/>
@@ -2502,6 +2756,8 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
             </xsl:call-template>
           </b>
           is an abstract supertype.
+          </xsl:with-param>
+        </xsl:call-template>
       </xsl:when>
     </xsl:choose>
 
@@ -2613,12 +2869,21 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
       </xsl:choose>      
     </xsl:variable>
 
-    <h2>
+    <!-- <h2>
       <a name="functions">
         <xsl:value-of select="$clause_header"/>
       </a>
     </h2>
-    <p><xsl:value-of select="$clause_intro"/></p>
+    <p><xsl:value-of select="$clause_intro"/></p> -->
+    
+    <xsl:call-template name="insertHeaderADOC">
+      <xsl:with-param name="id" select="concat('functions', $schema_name)"/>
+      <xsl:with-param name="header" select="$clause_header"/>
+      <xsl:with-param name="level" select="2"/>
+    </xsl:call-template>
+    
+    <xsl:value-of select="$clause_intro"/>
+    
   </xsl:if>
 
   <xsl:variable name="aname">
@@ -2628,11 +2893,18 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
     </xsl:call-template>
   </xsl:variable>
              
-  <h2>
+  <!-- <h2>
     <A NAME="{$aname}">
       <xsl:value-of select="concat($clause_number,'.',position(),' ',@name)"/>
     </A>
-  </h2>
+  </h2> -->
+  <xsl:call-template name="insertHeaderADOC">
+    <xsl:with-param name="id" select="$aname"/>
+    <xsl:with-param name="level" select="3"/>
+    <xsl:with-param name="header" select="@name"/>
+    <xsl:with-param name="indexed" select="'true'"/>
+  </xsl:call-template>
+  
   <!-- output description from external file -->
   <xsl:call-template name="output_external_description">
     <xsl:with-param name="schema" select="../@name"/>
@@ -2669,20 +2941,24 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
   </xsl:call-template>
 
   <!-- output the EXPRESS -->
-  <p><u>EXPRESS specification:</u></p>
+  <!-- <p><u>EXPRESS specification:</u></p> -->
+  <xsl:text>[.underline]#EXPRESS specification:#</xsl:text>
+  <xsl:text>&#xa;&#xa;</xsl:text>
 
   <!-- <blockquote> -->
     <code>
-      *)<br/>
-      FUNCTION <xsl:value-of select="@name"/>
+      <!-- *)<br/> -->
+      <xsl:call-template name="insertLutaMLCodeStart"/>
+      <xsl:text>FUNCTION </xsl:text><xsl:value-of select="@name"/>
       <xsl:apply-templates select="./parameter" mode="code"/><xsl:text> : </xsl:text>
       <xsl:apply-templates select="./aggregate" mode="code"/>
-      <xsl:apply-templates select="./*" mode="underlying"/>;
-    </code>
+      <xsl:apply-templates select="./*" mode="underlying"/><xsl:text>;</xsl:text>
+    <!-- </code> -->
       <xsl:apply-templates select="./algorithm" mode="code"/>
-      <code>
-      END_FUNCTION;
-      <br/>(*
+      <!-- <code> -->
+      <xsl:text>END_FUNCTION;</xsl:text>
+      <!-- <br/>(* -->
+      <xsl:call-template name="insertCodeEnd"/>
     </code>
   <!-- </blockquote> -->
 
@@ -2759,13 +3035,21 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
       </xsl:choose>      
     </xsl:variable>
 
-    <h2>
+    <!-- <h2>
       <a name="procedures">
         <xsl:value-of 
           select="$clause_header"/>
       </a>
       </h2> 
-      <p><xsl:value-of select="$clause_intro"/></p>
+      <p><xsl:value-of select="$clause_intro"/></p> -->
+    <xsl:call-template name="insertHeaderADOC">
+      <xsl:with-param name="id" select="concat('procedures', $schema_name)"/>
+      <xsl:with-param name="header" select="$clause_header"/>
+      <xsl:with-param name="level" select="2"/>
+    </xsl:call-template>
+      
+    <xsl:value-of select="$clause_intro"/>
+      
   </xsl:if>
 
   <xsl:variable name="aname">
@@ -2775,11 +3059,18 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
     </xsl:call-template>
   </xsl:variable>
 
-  <h2>
+  <!-- <h2>
     <A NAME="{$aname}">
       <xsl:value-of select="concat($clause_number,'.',position(),' ',@name)"/>
     </A>
-  </h2>
+  </h2> -->
+  <xsl:call-template name="insertHeaderADOC">
+    <xsl:with-param name="id" select="$aname"/>
+    <xsl:with-param name="header" select="@name"/>
+    <xsl:with-param name="level" select="3"/>
+    <xsl:with-param name="indexed" select="'true'"/>
+  </xsl:call-template>
+  
   <!-- output description from external file -->
   <xsl:call-template name="output_external_description">
     <xsl:with-param name="schema" select="../@name"/>
@@ -2814,19 +3105,24 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
   </xsl:call-template> 
   
   <!-- output the EXPRESS -->
-  <p><u>EXPRESS specification:</u></p>
+  <!-- <p><u>EXPRESS specification:</u></p> -->
+  <xsl:text>[.underline]#EXPRESS specification:#</xsl:text>
+  <xsl:text>&#xa;&#xa;</xsl:text>
   <!-- <blockquote> -->
     <code>
-      *)<br/>     
-      PROCEDURE <xsl:value-of select="@name"/>
+      <!-- *)<br/>      -->
+      <xsl:call-template name="insertLutaMLCodeStart"/>
+      <xsl:text>PROCEDURE </xsl:text><xsl:value-of select="@name"/>
     <xsl:apply-templates select="./parameter" mode="code"/><xsl:text> : </xsl:text>
     <xsl:apply-templates select="./aggregate" mode="code"/>
     <xsl:apply-templates select="./*" mode="underlying"/>;
-  </code>
+  <!-- </code> -->
     <xsl:apply-templates select="./algorithm" mode="code"/><br/>
-    <code>
+<!--     <code> -->
     END_PROCEDURE;
-    <br/>(*
+    <xsl:text>END_PROCEDURE;</xsl:text>
+    <!-- <br/>(* -->
+    <xsl:call-template name="insertCodeEnd"/>
     </code>
   <!-- </blockquote> -->
   <xsl:apply-templates select="./explicit" mode="description"/>
@@ -2854,7 +3150,9 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
 
 <xsl:template match="parameter" mode="description">
   <xsl:if test="position()=1">
-    <p><u>Argument definitions:</u></p>
+    <!-- <p><u>Argument definitions:</u></p> -->
+    <xsl:text>[.underline]#Argument definitions:#</xsl:text>
+    <xsl:text>&#xa;&#xa;</xsl:text>
   </xsl:if>
 
   <xsl:variable name="aname">
@@ -2919,9 +3217,14 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
 <xsl:template match="algorithm" mode="code">
   <!-- empty algorithms are sometimes output so ignore -->
   <xsl:if test="string-length(normalize-space(.))>0">
-    <pre>
+    <!-- <pre>
       <xsl:value-of select="."/>
-    </pre>
+    </pre> -->
+    <xsl:text>&#xa;&#xa;</xsl:text>
+    <code>
+    <xsl:value-of select="."/>
+    </code>
+    <xsl:text>&#xa;&#xa;</xsl:text>
   </xsl:if>
 </xsl:template>
 
@@ -2999,12 +3302,19 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
         </xsl:when>
       </xsl:choose>      
     </xsl:variable>
-    <h2>
+    <!-- <h2>
       <a name="rules">
         <xsl:value-of select="$clause_header"/>
       </a>
     </h2>
-    <p><xsl:value-of select="$clause_intro"/></p>
+    <p><xsl:value-of select="$clause_intro"/></p> -->
+    <xsl:call-template name="insertHeaderADOC">
+      <xsl:with-param name="id" select="concat('rules', $schema_name)"/>
+      <xsl:with-param name="header" select="$clause_header"/>
+      <xsl:with-param name="level" select="2"/>
+    </xsl:call-template>
+    
+    <xsl:value-of select="$clause_intro"/>
   </xsl:if>
 
   <xsl:variable name="aname">
@@ -3014,11 +3324,17 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
     </xsl:call-template>
   </xsl:variable>
 
-  <h2>
+  <!-- <h2>
     <A NAME="{$aname}">
       <xsl:value-of select="concat($clause_number,'.',position(),' ',@name)"/>
     </A>
-  </h2>
+  </h2> -->
+  <xsl:call-template name="insertHeaderADOC">
+    <xsl:with-param name="id" select="$aname"/>
+    <xsl:with-param name="level" select="3"/>							
+    <xsl:with-param name="header" select="@name"/>
+    <xsl:with-param name="indexed" select="'true'"/>
+  </xsl:call-template>
 
   <!-- output description from external file -->
   <xsl:call-template name="output_external_description">
@@ -3056,26 +3372,32 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
   </xsl:call-template> 
   
   <!-- output the EXPRESS -->
-  <p><u>EXPRESS specification:</u></p>
+  <!-- <p><u>EXPRESS specification:</u></p> -->
+  <xsl:text>[.underline]#EXPRESS specification:#</xsl:text>
+  <xsl:text>&#xa;&#xa;</xsl:text>
   <!-- <blockquote> -->
     <code>
-      *)<br/>
-      RULE <xsl:value-of select="@name"/> FOR
-    <br/>
+      <!-- *)<br/> -->
+      <xsl:call-template name="insertLutaMLCodeStart"/>
+      <xsl:text>RULE </xsl:text><xsl:value-of select="@name"/><xsl:text> FOR</xsl:text>
+    <!-- <br/> --><xsl:text>&#xa;</xsl:text>
         
-        (<xsl:call-template name="process_FOR_arguments">
+        <xsl:text>(</xsl:text><xsl:call-template name="process_FOR_arguments">
             <xsl:with-param name="args" select="@appliesto"/>
-        </xsl:call-template>);<br/>
-  </code>
+        </xsl:call-template><xsl:text>);&#xa;</xsl:text><!-- <br/> -->
+  <!-- </code> -->
     <xsl:apply-templates select="./algorithm" mode="code"/>
-    <code>
+    <!-- <code> -->
     <xsl:apply-templates select="./where" mode="code"/>
-      END_RULE;
-    <br/>(*
+      <xsl:text>END_RULE;</xsl:text>
+    <!-- <br/>(* -->
+    <xsl:call-template name="insertCodeEnd"/>
     </code>
   <!-- </blockquote> -->
 
-  <p><u>Argument definitions:</u></p>
+  <!-- <p><u>Argument definitions:</u></p> -->
+  <xsl:text>[.underline]#Argument definitions:#</xsl:text>
+  <xsl:text>&#xa;&#xa;</xsl:text>
   <xsl:call-template name="process_rule_arguments">
     <xsl:with-param name="args" select="@appliesto"/>
   </xsl:call-template>
@@ -3145,7 +3467,9 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
 
 <xsl:template name="output_rule_argument">
   <xsl:param name="arg"/>
-  <p class="expressdescription">
+  <!-- <p class="expressdescription"> -->
+  <xsl:call-template name="insertParagraph">
+    <xsl:with-param name="text">
     <b>
       <xsl:value-of select="concat($arg,' : ')"/>
     </b>
@@ -3156,7 +3480,10 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
       <xsl:with-param name="object_used_in_schema_name" 
         select="../../@name"/>
       <xsl:with-param name="clause" select="'section'"/>
-    </xsl:call-template>.</p>
+    </xsl:call-template>.
+    </xsl:with-param>
+  </xsl:call-template>
+    <!-- </p> -->
 </xsl:template>
 
 
@@ -3862,11 +4189,15 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
         </xsl:variable>
 
         <xsl:variable name="aname" select="concat('imported_',$lkind)"/>
-        <h2>
+        <!-- <h2>
           <A NAME="{$aname}">
             <xsl:value-of select="$clause_header"/>
           </A>
-        </h2>
+        </h2> -->
+        <xsl:call-template name="insertHeaderADOC">
+          <xsl:with-param name="id" select="$aname"/>
+          <xsl:with-param name="header" select="$clause_header"/>					
+        </xsl:call-template>
         <xsl:apply-templates select="$desc_item"/>                    
       </xsl:if>
 </xsl:template>
@@ -3885,9 +4216,13 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
     </xsl:call-template>
   </xsl:variable>
   
-  <h4>
+  <!-- <h4>
     <xsl:value-of select="concat($clause_number,'.',position(),' ',@item )"/>
-  </h4>
+  </h4> -->
+  <xsl:call-template name="insertHeaderADOC">					
+    <xsl:with-param name="level" select="2"/>					
+    <xsl:with-param name="header" select="@item"/>					
+  </xsl:call-template>
   <!-- get information about the module from which the construct is being
        imported -->
   <xsl:variable name="module_dir">
@@ -3905,6 +4240,8 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
   <xsl:variable name="module_href"
     select="concat('../../',$module_name,'/sys/1_scope',$FILE_EXT)"/>
   
+  <xsl:call-template name="insertParagraph">
+    <xsl:with-param name="text">
   The base definition of the 
   <xsl:call-template name="link_object">
     <xsl:with-param name="object_name" select="@item"/>
@@ -3914,11 +4251,22 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
   </xsl:call-template>
   <xsl:value-of select="concat(' ',$lkind)"/>
   is specified in 
-  <a href="{$module_href}">
-    <xsl:value-of select="concat('ISO 10303-',$module_no)"/>
-  </a>
+  
+  <xsl:call-template name="insertHyperlink">
+    <xsl:with-param name="a">
+    <a href="{$module_href}">
+      <xsl:value-of select="concat('ISO 10303-',$module_no)"/>
+    </a>
+    </xsl:with-param>
+  </xsl:call-template>
+  
   The following modifications apply to this part of ISO 10303.
-  <p>
+    </xsl:with-param>
+  </xsl:call-template>
+  
+  <xsl:call-template name="insertParagraph">
+			<xsl:with-param name="text">
+  <!-- <p> -->
     The definition of 
     <xsl:call-template name="link_object">
       <xsl:with-param name="object_name" select="@item"/>
@@ -3927,12 +4275,24 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
       <xsl:with-param name="clause" select="'section'"/>
     </xsl:call-template>
     is modified as follows:
-  </p>
-  <ul>
+  <!-- </p> -->
+    </xsl:with-param>
+  </xsl:call-template>
+
+  
+  <!-- <ul>
     <li>
       <xsl:apply-templates/>
     </li>
-  </ul>
+  </ul> -->
+  
+  <xsl:call-template name="insertParagraph">
+    <xsl:with-param name="text">
+      <xsl:text>* </xsl:text>
+      <xsl:apply-templates/>
+    </xsl:with-param>
+  </xsl:call-template>
+  
 </xsl:template>
 
 
@@ -3964,7 +4324,8 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
     <xsl:choose>
       <xsl:when test="@basedon and @extensible='YES'">
         <!-- an extended and extensible SELECT type -->
-        <p>
+        <xsl:call-template name="insertParagraph">
+          <xsl:with-param name="text">
           The <b><xsl:value-of select="$typename"/></b> type is an extension
           of the 
           <b>
@@ -3997,9 +4358,13 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
             </xsl:call-template>
             to the list of alternate data types.
           </xsl:if>
-        </p>
-        <p class="note">
-          <small>
+          </xsl:with-param>
+        </xsl:call-template>
+        <!-- </p> -->
+        <!-- <p class="note">
+          <small> -->
+        <xsl:call-template name="insertNote">
+          <xsl:with-param name="text">
             <xsl:choose>
               <xsl:when test="./note">
                 NOTE&#160;1&#160;&#160;The list of entity data types may be
@@ -4017,13 +4382,17 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
                 this module.
               </xsl:otherwise>
             </xsl:choose>
-          </small>
-        </p>
+          </xsl:with-param>
+        </xsl:call-template>
+          <!-- </small>
+        </p> -->
                 </xsl:when>
 
       <xsl:when test="(@basedon and @extensible='NO') or @basedon">
         <!-- an extended not extensible SELECT type  -->
-        <p>
+        <!-- <p> -->
+        <xsl:call-template name="insertParagraph">
+          <xsl:with-param name="text">
         The <b><xsl:value-of select="$typename"/></b> type is an extension
         of the 
         <b>
@@ -4056,7 +4425,9 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
           </xsl:call-template>
           to the list of alternate data types.
         </xsl:if>
-      </p>
+        </xsl:with-param>
+      </xsl:call-template>
+      <!-- </p> -->
       </xsl:when>
 
       <xsl:when test="@extensible='YES'">
@@ -4065,7 +4436,9 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
 
           <xsl:when test="@selectitems">
             <!-- an extensible non-empty SELECT type -->
-            <p>
+            <!-- <p> -->
+            <xsl:call-template name="insertParagraph">
+              <xsl:with-param name="text">
               The <b><xsl:value-of select="$typename"/></b> type is an
               extensible list of alternate data types
               that allows for the designation of the data 
@@ -4090,9 +4463,13 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
               <b><xsl:value-of select="$typename"/></b> 
               type.
 -->
-            </p>
-            <p class="note">
-              <small>
+              </xsl:with-param>
+            </xsl:call-template>
+            <!-- </p> -->
+            <!-- <p class="note">
+              <small> -->
+            <xsl:call-template name="insertNote">
+              <xsl:with-param name="text">
                 <xsl:choose>
                   <xsl:when test="./note">
                     NOTE&#160;1&#160;&#160;
@@ -4106,22 +4483,30 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
                 </xsl:choose>The list of entity data types may be
                 extended in application modules that use the constructs of
                 this module.                 
-              </small>
-              </p>
+              </xsl:with-param>
+            </xsl:call-template>
+              <!-- </small>
+              </p> -->
           </xsl:when>
 
           <xsl:otherwise>
             <!-- an extensible empty SELECT type -->
-            <p> 
+            <!-- <p>  -->
+            <xsl:call-template name="insertParagraph">
+              <xsl:with-param name="text">
               The <b><xsl:value-of select="$typename"/></b> type is an
               extensible list of alternate data types. 
               Additional alternate data types are specified in select data
               types that extend the 
               <b><xsl:value-of select="$typename"/></b> type. 
-            </p>
+              </xsl:with-param>
+            </xsl:call-template>
+            <!-- </p> -->
 
-            <p class="note">
-              <small>
+            <!-- <p class="note">
+              <small> -->
+            <xsl:call-template name="insertNote">
+              <xsl:with-param name="text">
                 <xsl:choose>
                   <xsl:when test="./note">
                     NOTE&#160;1&#160;&#160;
@@ -4135,8 +4520,10 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
                 </xsl:choose>This empty extensible select requires
                 extension in a further module to ensure that entities that refer to it have
                 at least one valid instantiation.
-              </small>
-            </p>
+              </xsl:with-param>
+            </xsl:call-template>
+              <!-- </small>
+            </p> -->
           </xsl:otherwise>
         </xsl:choose>
       </xsl:when>
@@ -4145,7 +4532,9 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
         <xsl:choose>
           <xsl:when test="string-length(@selectitems)&gt;0">
             <!-- an extensible non-empty SELECT type -->
-            <p>
+            <!-- <p> -->
+            <xsl:call-template name="insertParagraph">
+              <xsl:with-param name="text">
               The <b><xsl:value-of select="$typename"/></b> type allows for the designation of the data 
               <xsl:choose>
                 <!-- if the list has a space there must be more than one item -->
@@ -4165,7 +4554,9 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
                 <xsl:with-param name="clause" select="'section'"/>
                 <xsl:with-param name="and_for_last_pair" select="'yes'"/>
               </xsl:call-template>.
-            </p>
+              </xsl:with-param>
+            </xsl:call-template>
+            <!-- </p> -->
           </xsl:when>
           <xsl:otherwise>
             <xsl:call-template name="error_message">
