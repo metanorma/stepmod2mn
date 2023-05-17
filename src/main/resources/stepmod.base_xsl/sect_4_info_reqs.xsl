@@ -12,13 +12,13 @@ $Id: sect_4_info_reqs.xsl,v 1.6 2012/11/06 09:43:39 mikeward Exp $
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version="1.0">
 
-  <xsl:import href="module.xsl"/>
+  <!-- <xsl:import href="module.xsl"/> -->
 
   <!-- 
        the stylesheet that allows different stylesheets to be applied 
        -->
-  <xsl:import href="module_clause.xsl"/>
-  <xsl:import href="expressg_icon.xsl"/> 
+<!--   <xsl:import href="module_clause.xsl"/>
+  <xsl:import href="expressg_icon.xsl"/>  -->
 
 
   <xsl:output method="html"/>
@@ -39,7 +39,7 @@ $Id: sect_4_info_reqs.xsl,v 1.6 2012/11/06 09:43:39 mikeward Exp $
   
 
   <!-- overwrites the template declared in module.xsl -->
-  <xsl:template match="module">
+  <xsl:template match="module" mode="info_reqs_module">
     <xsl:apply-templates select="arm"/>
   </xsl:template>
   

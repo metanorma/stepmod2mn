@@ -280,17 +280,15 @@
 			<!-- draughting_elements/sys/1_scope.xml -->
 			<xsl:message>[INFO] Processing Scope ...</xsl:message>
 			<file path="sections/01-scope.adoc">
-				<xsl:apply-templates select="resource" mode="scope_module"/>	<!-- sect_1_scope.xsl  -->	
+				<xsl:apply-templates select="module" mode="scope_module"/>	<!-- sect_1_scope.xsl  -->	
 			</file>
-			
-			
 			
 			
 			<!-- 2 Normative references -->
 			<!-- sys/2_refs.xml -->
 			<xsl:message>[INFO] Processing Normative references ...</xsl:message>		
 			<file path="sections/02-norm-refs.adoc">
-				<xsl:apply-templates select="resource" mode="norm_refs_module"/> <!-- sect_2_refs.xsl  -->
+				<xsl:apply-templates select="module" mode="norm_refs_module"/> <!-- sect_2_refs.xsl  -->
 			</file>
 			
 			
@@ -300,9 +298,27 @@
 			<!-- 3.2 Abbreviated terms -->
 			<xsl:message>[INFO] Processing Terms, definitions and abbreviated terms ...</xsl:message>		
 			<file path="sections/03-terms.adoc">
-				<xsl:apply-templates select="resource" mode="terms_definitions_module"/> <!-- sect_3_defs.xsl -->
+				<xsl:apply-templates select="module" mode="terms_definitions_module"/> <!-- sect_3_defs.xsl -->
 			</file>
 			
+      <!-- 4 Information requirements -->
+      <!-- 4.1 ARM entity definition -->
+      <xsl:message>[INFO] Processing Information requirements ...</xsl:message>		
+      <file path="sections/04-info_reqs.adoc">
+        <xsl:apply-templates select="module" mode="info_reqs_module"/> <!-- sect_4_info_reqs.xsl -->
+      </file>
+      
+      
+      
+      <!-- 5 Module interpreted model -->
+      <!-- 5.1 Mapping specification -->
+      <!-- 5.2 MIM EXPRESS short listing -->
+      <xsl:message>[INFO] Module interpreted model ...</xsl:message>		
+      <file path="sections/05-mim.adoc">
+        <xsl:apply-templates select="module" mode="mim_main_module"/> <!-- sect_5_main.xsl  -->
+      </file>
+      
+      
 			<!-- optional section -->
 			<!--- 4 EXPRESS short listing -->
 			<!-- 4.1 General -->

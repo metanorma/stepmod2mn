@@ -12,12 +12,12 @@ $Id: sect_5_mim.xsl,v 1.5 2003/05/28 09:27:00 robbod Exp $
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version="1.0">
 
-  <xsl:import href="module.xsl"/>
+  <!-- <xsl:import href="module.xsl"/> -->
   <!-- 
        the stylesheet that allows different stylesheets to be applied 
        -->
-  <xsl:import href="module_clause.xsl"/>
-  <xsl:import href="expressg_icon.xsl"/> 
+  <!-- <xsl:import href="module_clause.xsl"/>
+  <xsl:import href="expressg_icon.xsl"/>  -->
 
 
 
@@ -86,7 +86,7 @@ $Id: sect_5_mim.xsl,v 1.5 2003/05/28 09:27:00 robbod Exp $
 
 
 <!-- overwrites the template declared in module.xsl -->
-<xsl:template match="module">
+<xsl:template match="module" mode="mim_module">
   <xsl:apply-templates select="mim"/>
 </xsl:template>
   

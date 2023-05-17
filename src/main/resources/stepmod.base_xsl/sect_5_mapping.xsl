@@ -12,13 +12,13 @@ $Id: sect_5_mapping.xsl,v 1.89 2019/03/28 19:39:31 mike Exp $
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version="1.0">
 
-  <xsl:import href="module.xsl"/>
-  <xsl:import href="sect_5_mapping_check.xsl"/>
+  <!-- <xsl:import href="module.xsl"/>
+  <xsl:import href="sect_5_mapping_check.xsl"/> -->
 
   <!-- 
        the stylesheet that allows different stylesheets to be applied 
        -->
-  <xsl:import href="module_clause.xsl"/>
+  <!-- <xsl:import href="module_clause.xsl"/> -->
 
   <xsl:preserve-space elements="aimelt"/>
   <xsl:output method="html"/>
@@ -117,15 +117,23 @@ $Id: sect_5_mapping.xsl,v 1.89 2019/03/28 19:39:31 mike Exp $
     name="modname"
     select="/module_clause/@directory"/>
 
-<xsl:template match="module">
+<xsl:template match="module" mode="mapping_module">
   <!--
        SC4 do not like the index of mapping tables at the top
        <xsl:apply-templates select="./mapping_table" mode="toc"/>
        -->
-  <h2>
+  <!-- <h2>
     <a name="mapping">5.1 Mapping specification</a>
-  </h2>
-  <a name="mappings"/>
+  </h2> -->
+  <xsl:call-template name="insertHeaderADOC">
+    <xsl:with-param name="id">mapping</xsl:with-param>
+    <xsl:with-param name="level" select="2"/>
+    <xsl:with-param name="header">Mapping specification</xsl:with-param>
+  </xsl:call-template>
+  
+  <!-- <a name="mappings"/> -->
+  <xsl:text>[[mappings]]</xsl:text>
+  <xsl:text>&#xa;</xsl:text>
   <xsl:choose>
     <xsl:when test="./mapping_table/ae or ./mapping_table/sc">
       <xsl:call-template name="mapping_syntax"/>
@@ -153,25 +161,38 @@ $Id: sect_5_mapping.xsl,v 1.89 2019/03/28 19:39:31 mike Exp $
   <xsl:variable name="arm_xml" select="document(concat($module_dir,'/arm.xml'))"/>
   <xsl:choose>
     <xsl:when test="count($arm_xml/express/schema/interface)=1">
-      <p>
+      <!-- <p> -->
+      <xsl:call-template name="insertParagraph">
+        <xsl:with-param name="text">
         The mapping specification for this part of ISO 10303 is defined in
         <xsl:apply-templates select="$arm_xml/express/schema/interface" mode="link_use_from">
           <xsl:with-param name="item" select="'.'"/>
         </xsl:apply-templates>
-      </p>
+        </xsl:with-param>
+      </xsl:call-template>
+      <!-- </p> -->
     </xsl:when>
     <xsl:when test="$arm_xml/express/schema/interface">
-      <p>
+      <!-- <p> -->
+      <xsl:call-template name="insertParagraph">
+        <xsl:with-param name="text">
         The mapping specification for this part of ISO 10303 is defined in:    
-      </p>
-      <ul>
+        </xsl:with-param>
+      </xsl:call-template>
+      <!-- </p> -->
+      <!-- <ul> --><xsl:text>&#xa;</xsl:text>
         <xsl:apply-templates select="$arm_xml/express/schema/interface" mode="link_use_from">
           <xsl:with-param name="item" select="'li'"/>
         </xsl:apply-templates>
-      </ul>
+      <xsl:text>&#xa;&#xa;</xsl:text>
+      <!-- </ul> --><xsl:text>&#xa;&#xa;</xsl:text>
     </xsl:when>
     <xsl:otherwise>
+      <xsl:call-template name="insertParagraph">
+        <xsl:with-param name="text">
       There is no mapping specification for this part of ISO 10303.
+        </xsl:with-param>
+      </xsl:call-template>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -204,7 +225,7 @@ $Id: sect_5_mapping.xsl,v 1.89 2019/03/28 19:39:31 mike Exp $
     select="concat('../../',$module_name,'/sys/5_mapping',$FILE_EXT)"/>
   <xsl:choose>
     <xsl:when test="$item='li'">
-      <li>
+      <!-- <li> --><xsl:text>* </xsl:text>
         <xsl:choose>
           <xsl:when test="position()=last()">
             <a href="{$module_href}"><xsl:value-of select="$part"/></a>
@@ -215,10 +236,12 @@ $Id: sect_5_mapping.xsl,v 1.89 2019/03/28 19:39:31 mike Exp $
             <xsl:value-of select="concat(' (',$module_display_name,');')"/>
           </xsl:otherwise>
         </xsl:choose>
-      </li>
+      <xsl:text>&#xa;&#xa;</xsl:text>
+      <!-- </li> --><xsl:text>&#xa;&#xa;</xsl:text>
     </xsl:when>
     <xsl:otherwise>
-      <a href="{$module_href}"><xsl:value-of select="$part"/></a>
+      <!-- <a href="{$module_href}"><xsl:value-of select="$part"/></a> -->
+      <xsl:text>&lt;&lt;</xsl:text><xsl:value-of select="$$module_href"/>,<xsl:value-of select="$part"/><xsl:text>&gt;&gt;</xsl:text>
       <xsl:value-of select="concat(' (',$module_display_name,');')"/>
     </xsl:otherwise>
   </xsl:choose>
@@ -230,107 +253,184 @@ $Id: sect_5_mapping.xsl,v 1.89 2019/03/28 19:39:31 mike Exp $
     select="concat('4_info_reqs',$FILE_EXT)"/>
   <xsl:variable name="sect52" 
     select="concat('5_mim',$FILE_EXT,'#mim_express')"/>
-  <p>
+  <!-- <p> -->
+  <xsl:call-template name="insertParagraph">
+    <xsl:with-param name="text">
     In the following, &quot;Application element&quot; designates any entity data
-    type defined in Clause <a href="{$sect4}">4</a>, any of its 
+    type defined in <!-- Clause <a href="{$sect4}">4</a> -->&lt;&lt;sect4&gt;&gt;, any of its 
     explicit attributes and any subtype constraint. 
     &quot;MIM element&quot; designates any entity data type defined in 
-    Clause <a href="{$sect52}">5.2</a> or imported with a USE FROM
+    <!-- Clause <a href="{$sect52}">5.2</a> -->&lt;&lt;sect52&gt;&gt; or imported with a USE FROM
     statement, from another EXPRESS schema, any of its 
-    attributes and any subtype constraint defined in Clause <a href="{$sect52}">5.2</a> or imported with a USE FROM
+    attributes and any subtype constraint defined in <!-- Clause <a href="{$sect52}">5.2</a> -->&lt;&lt;sect52&gt;&gt; or imported with a USE FROM
     statement.
-  </p>
-  <p>
+    </xsl:with-param>
+  </xsl:call-template>
+  <!-- </p>
+  <p> -->
+  <xsl:call-template name="insertParagraph">
+    <xsl:with-param name="text">
     This clause contains the mapping specification that defines how each 
-    application element of this part of ISO 10303 (see Clause <a href="{$sect4}">4</a>) maps to one
-    or more MIM elements (see Clause <a href="{$sect52}">5.2</a>).
-  </p>
+    application element of this part of ISO 10303 (see <!-- Clause <a href="{$sect4}">4</a> -->&lt;&lt;sect4&gt;&gt;) maps to one
+    or more MIM elements (see <!-- Clause <a href="{$sect52}">5.2</a> -->&lt;&lt;sect52&gt;&gt;).
+    </xsl:with-param>
+  </xsl:call-template>
+  <!-- </p>
 
-	<p>
+	<p> -->
+  <xsl:call-template name="insertParagraph">
+    <xsl:with-param name="text">
 The mapping for each application element is specified in a separate subclause below. 
 The mapping specification of an attribute of an ARM entity is a subclause of the clause that contains the mapping specification of this entity.
     Each mapping specification subclause contains up to five elements.
-  </p>
-  <p>
-    <b>Title:</b>
-The clause title contains:</p>
-<ul>
-<li>the name of the considered ARM entity or subtype constraint, or </li>
-<li>the name of the considered ARM entity attribute when this attribute refers to a type that is not an entity data type or a SELECT type that contains or may contain entity data types, or</li>
-<li>a composite expression, &lt;attribute name&gt; to &lt;referred type&gt;, when this attribute refers to a type that is not an entity data type or a SELECT type that contains or may contain entity data types.</li>
-</ul>
+    </xsl:with-param>
+  </xsl:call-template>
+  <!-- </p>
+  <p> -->
+  <xsl:call-template name="insertParagraph">
+    <xsl:with-param name="text">
+    <!-- <b> -->*Title:* <!-- </b> -->
+The clause title contains:
+    </xsl:with-param>
+  </xsl:call-template>
+  <!-- </p> -->
+  
+<!-- <ul> --><xsl:text>&#xa;</xsl:text>
+<!-- <li> --><xsl:text>* </xsl:text>the name of the considered ARM entity or subtype constraint, or <!-- </li> --><xsl:text>&#xa;&#xa;</xsl:text>
+<!-- <li> --><xsl:text>* </xsl:text>the name of the considered ARM entity attribute when this attribute refers to a type that is not an entity data type or a SELECT type that contains or may contain entity data types, or<!-- </li> --><xsl:text>&#xa;&#xa;</xsl:text>
+<!-- <li> --><xsl:text>* </xsl:text>a composite expression, &lt;attribute name&gt; to &lt;referred type&gt;, when this attribute refers to a type that is not an entity data type or a SELECT type that contains or may contain entity data types.<!-- </li> --><xsl:text>&#xa;&#xa;</xsl:text>
+<xsl:text>&#xa;&#xa;</xsl:text>
+<!-- </ul> --><xsl:text>&#xa;&#xa;</xsl:text>
 
 
-  <p>
-    <b>MIM element:</b> 
-    This section contains, depending on the considered application element:</p>
-		<ul>
-<li>the name of one or more MIM entity data types;</li>
-		<li>the name of a MIM entity attribute, presented with the syntax &lt;entity name&gt;.&lt;attribute name&gt;, when the considered ARM attribute refers to a type that is not an entity data type or a SELECT type that contains or may contain entity data types;</li>
-		<li>the term PATH, when the considered ARM entity attribute refers to an entity data type or to a SELECT type that contains or may contain entity data types;</li>
-		<li>the term IDENTICAL MAPPING, when both application objects
-    involved in an application assertion map to the same instance of a MIM entity data type;</li>
-		<li>the term NO MAPPING EXTENSION PROVIDED, when the extension to an extensible SELECT TYPE has no impact;</li>
-		<li>the syntax /SUPERTYPE(&lt;supertype name&gt;)/, when the considered ARM entity is mapped as its supertype;</li>
-		<li>one or more constructs /SUBTYPE(&lt;subtype name&gt;)/, when the mapping of the considered ARM entity is the union of the mapping of its subtypes.</li>
-		</ul>
-		<p>
+  <!-- <p> -->
+  <xsl:call-template name="insertParagraph">
+    <xsl:with-param name="text">
+    <!-- <b>MIM element:</b>  -->
+    *MIM element:* 
+    This section contains, depending on the considered application element:
+    </xsl:with-param>
+  </xsl:call-template>  
+  <!-- </p> -->
+  
+		<!-- <ul> --><xsl:text>&#xa;</xsl:text>
+<!-- <li> --><xsl:text>* </xsl:text>the name of one or more MIM entity data types;<!-- </li> --><xsl:text>&#xa;&#xa;</xsl:text>
+		<!-- <li> --><xsl:text>* </xsl:text>the name of a MIM entity attribute, presented with the syntax &lt;entity name&gt;.&lt;attribute name&gt;, when the considered ARM attribute refers to a type that is not an entity data type or a SELECT type that contains or may contain entity data types;<!-- </li> --><xsl:text>&#xa;&#xa;</xsl:text>
+		<!-- <li> --><xsl:text>* </xsl:text>the term PATH, when the considered ARM entity attribute refers to an entity data type or to a SELECT type that contains or may contain entity data types;<!-- </li> --><xsl:text>&#xa;&#xa;</xsl:text>
+		<!-- <li> --><xsl:text>* </xsl:text>the term IDENTICAL MAPPING, when both application objects
+    involved in an application assertion map to the same instance of a MIM entity data type;<!-- </li> --><xsl:text>&#xa;&#xa;</xsl:text>
+		<!-- <li> --><xsl:text>* </xsl:text>the term NO MAPPING EXTENSION PROVIDED, when the extension to an extensible SELECT TYPE has no impact;<!-- </li> --><xsl:text>&#xa;&#xa;</xsl:text>
+		<!-- <li> --><xsl:text>* </xsl:text>the syntax /SUPERTYPE(&lt;supertype name&gt;)/, when the considered ARM entity is mapped as its supertype;<!-- </li> --><xsl:text>&#xa;&#xa;</xsl:text>
+		<!-- <li> --><xsl:text>* </xsl:text>one or more constructs /SUBTYPE(&lt;subtype name&gt;)/, when the mapping of the considered ARM entity is the union of the mapping of its subtypes.<!-- </li> --><xsl:text>&#xa;&#xa;</xsl:text>
+		<!-- </ul> --><xsl:text>&#xa;&#xa;</xsl:text>
+    
+		<!-- <p> -->
+    <xsl:call-template name="insertParagraph">
+      <xsl:with-param name="text">
 When the mapping of an application element involves more than one MIM element, each of these MIM elements is 
     presented on a separate line in the mapping specification, enclosed between parentheses or brackets. 
-</p>
-  <p>
-    <b>Source:</b> This section contains:</p>
-		<ul>
-<li>the ISO standard number and part number in which the
+    </xsl:with-param>
+  </xsl:call-template>
+  <!-- </p>
+  
+  <p> -->
+  <xsl:call-template name="insertParagraph">
+    <xsl:with-param name="text">
+    <!-- <b> -->*Source:*<!-- </b> --> This section contains:
+    </xsl:with-param>
+  </xsl:call-template>
+  <!-- </p> -->
+  
+		<!-- <ul> --><xsl:text>&#xa;</xsl:text>
+<!-- <li> --><xsl:text>* </xsl:text>the ISO standard number and part number in which the
     MIM element is defined, for those MIM elements that are defined in a common
-    resource document;</li>
-<li>the ISO standard number and
-    part number of this part of ISO 10303, for those MIM elements that are defined in the MIM schema of this part.</li>
-</ul>
-  <p>
+    resource document;<!-- </li> --><xsl:text>&#xa;&#xa;</xsl:text>
+<!-- <li> --><xsl:text>* </xsl:text>the ISO standard number and
+    part number of this part of ISO 10303, for those MIM elements that are defined in the MIM schema of this part.<!-- </li> --><xsl:text>&#xa;&#xa;</xsl:text>
+<!-- </ul> --><xsl:text>&#xa;&#xa;</xsl:text>
+
+  <!-- <p> -->
+  <xsl:call-template name="insertParagraph">
+    <xsl:with-param name="text">
   This section is omitted when the keywords PATH or IDENTICAL MAPPING or NO MAPPING EXTENSION PROVIDED are used in the MIM element section.
-  </p> 
-  <p>
-    <b>Rules:</b> 
+    </xsl:with-param>
+  </xsl:call-template>
+  <!-- </p> --> 
+  
+  <!-- <p> -->
+  <xsl:call-template name="insertParagraph">
+    <xsl:with-param name="text">
+    <!-- <b>Rules:</b>  -->
+    *Rules:* 
     This section contains the name of one or more global rules that apply to the
     population of the MIM entity data types listed in the MIM element section or
     in the reference path. When no rule applies, this section is omitted.
-		</p>
-		<p>A reference to a
+      </xsl:with-param>
+    </xsl:call-template>
+		<!-- </p> -->
+    
+		<!-- <p> -->
+    <xsl:call-template name="insertParagraph">
+      <xsl:with-param name="text">
+    A reference to a
     global rule may be followed by a reference to the subclause in
     which the rule is defined.
-  </p> 
-  <p>
-    <b>Constraint:</b> 
+    </xsl:with-param>
+  </xsl:call-template>
+  <!-- </p> 
+  
+  <p> -->
+  <xsl:call-template name="insertParagraph">
+    <xsl:with-param name="text">
+    <!-- <b>Constraint:</b>  -->
+    *Constraint:* 
     This section contains the name of one or more subtype constraints that apply to the
     population of the MIM entity data types listed in the MIM element section or
     in the reference path. When no subtype constraint applies, this section is omitted.
-  </p>
-  <p>
+    </xsl:with-param>
+  </xsl:call-template>
+  <!-- </p>
+  
+  <p> -->
+  <xsl:call-template name="insertParagraph">
+    <xsl:with-param name="text">
     A reference to a subtype constraint may be followed by a reference to the subclause in
     which the subtype constraint is defined.
-  </p> 
+    </xsl:with-param>
+  </xsl:call-template>
+  <!-- </p> 
 
-  <p>
-    <b>Reference path:</b> This section contains:</p>
-		<ul>
-<li>the reference path to its supertypes in the common resources, 
+  <p> -->
+  <xsl:call-template name="insertParagraph">
+    <xsl:with-param name="text">
+    <!-- <b> -->*Reference path:*<!-- </b> --> This section contains:
+    </xsl:with-param>
+  </xsl:call-template>
+  <!-- </p> -->
+  
+		<!-- <ul> --><xsl:text>&#xa;</xsl:text>
+<!-- <li> --><xsl:text>* </xsl:text>the reference path to its supertypes in the common resources, 
 for each MIM element created within this part of ISO 10303; 
-</li>
-<li>
+<!-- </li> --><xsl:text>&#xa;&#xa;</xsl:text>
+<!-- <li> --><xsl:text>* </xsl:text>
 the specification of the relationships between MIM elements, when the mapping of an application element requires to relate instances of several
  MIM entity data types. In such a case, each line in the reference path
     documents the role of a MIM element relative to the referring MIM
     element or to the next referred MIM element. 
-		</li>
-		</ul>
+		<!-- </li> --><xsl:text>&#xa;&#xa;</xsl:text>
+		<!-- </ul> --><xsl:text>&#xa;&#xa;</xsl:text>
 
-		<p>For the expression of reference paths and of the
+		<!-- <p> -->
+    <xsl:call-template name="insertParagraph">
+      <xsl:with-param name="text">
+    For the expression of reference paths and of the
     constraints between MIM elements, the following notational conventions
     apply:
-  </p> 
+      </xsl:with-param>
+    </xsl:call-template>
+  <!-- </p> --> 
 
-  <table cellspacing="6">
+  <!-- <table cellspacing="6">
     <tbody>
       <tr valign="top">
         <td valign="top">[]</td>
@@ -422,7 +522,7 @@ relationship tree structure. The path between the relationship entity and the re
         </td>
       </tr>
       <tr valign="top">
-        <td valign="top">--</td>
+        <td valign="top">- -</td>
         <td valign="top">
           the text following is a comment or introduces a clause reference;
         </td>
@@ -447,10 +547,117 @@ the select or enumeration type, whose name precedes the &lt;* symbol, is an
  section enclosed by {} indicates a negative constraint placed on the mapping.</td>
       </tr>
     </tbody>
-  </table>
+  </table> -->
+  
+  <xsl:text>&#xa;</xsl:text>
+  
+    <xsl:text>[]:: </xsl:text>
+    <xsl:text>enclosed section constrains multiple MIM elements or
+      sections of the reference path are required to satisfy an
+      information requirement;</xsl:text>
+  
+  <xsl:text>&#xa;&#xa;</xsl:text>
+  
+    <xsl:text>():: </xsl:text>
+    <xsl:text>enclosed section constrains multiple MIM elements or
+      sections of the reference path are identified as alternatives
+      within the mapping to satisfy an information requirement;</xsl:text>
+  
+  <xsl:text>&#xa;&#xa;</xsl:text>
+  
+    <xsl:text>{}:: </xsl:text>
+    <xsl:text>enclosed section constrains the reference path to satisfy
+      an information requirement;</xsl:text>
+  
+  <xsl:text>&#xa;&#xa;</xsl:text>
+  
+    <xsl:text>&lt;&gt;:: </xsl:text>
+    <xsl:text>enclosed section constrains at one or more required
+      reference path;</xsl:text>
+  
+  <xsl:text>&#xa;&#xa;</xsl:text>
+  
+    <xsl:text>||:: </xsl:text>
+    <xsl:text>enclosed section constrains the supertype entity;</xsl:text>
+  
+  <xsl:text>&#xa;&#xa;</xsl:text>
+
+    <xsl:text>-&gt;:: </xsl:text>
+    <xsl:text>the attribute, whose name precedes the -&gt; symbol, references the entity or select type whose name follows the -&gt; symbol;</xsl:text>
+
+  <xsl:text>&#xa;&#xa;</xsl:text>
+
+    <xsl:text>&lt;-:: </xsl:text>
+    <xsl:text>the entity or select type, whose name precedes the &lt;- symbol, is referenced by the entity attribute whose name follows the &lt;- symbol;</xsl:text>
+
+  <xsl:text>&#xa;&#xa;</xsl:text>
+
+    <xsl:text>[i]:: </xsl:text>
+    <xsl:text>the attribute, whose name precedes the [i] symbol, is an aggregate; any element of that aggregate is referred to;</xsl:text>
+
+  <xsl:text>&#xa;&#xa;</xsl:text>
+
+    <xsl:text>[n]:: </xsl:text>
+    <xsl:text>the attribute, whose name precedes the [n] symbol, is an ordered aggregate; member n of that aggregate is referred to;</xsl:text>
+
+  <xsl:text>&#xa;&#xa;</xsl:text>
+
+    <xsl:text>=&gt;:: </xsl:text>
+    <xsl:text>the entity, whose name precedes the =&gt; symbol, is a supertype of the entity whose name follows the =&gt; symbol;</xsl:text>
+
+  <xsl:text>&#xa;&#xa;</xsl:text>
+
+    <xsl:text>&lt;=:: </xsl:text>
+    <xsl:text>the entity, whose name precedes the &lt;= symbol, is a subtype of the entity whose name follows the &lt;= symbol;</xsl:text>
+  
+  <xsl:text>&#xa;&#xa;</xsl:text>
+  
+    <xsl:text>=:: </xsl:text>
+    <xsl:text>the string, select, or enumeration type is constrained to a choice or value;</xsl:text>
+  
+  <xsl:text>&#xa;&#xa;</xsl:text>
+  
+    <xsl:text>\:: </xsl:text>
+    <xsl:text>the reference path expression continues on the next line;</xsl:text>
+  
+  <xsl:text>&#xa;&#xa;</xsl:text>
+  
+    <xsl:text>*:: </xsl:text>
+    
+    <xsl:text>one or more instances of the relationship entity data type may be assembled in a
+relationship tree structure. The path between the relationship entity and the related entities, is enclosed with braces;</xsl:text>
+  
+  <xsl:text>&#xa;&#xa;</xsl:text>
+  
+    <xsl:text>--:: </xsl:text>
+    <xsl:text>the text following is a comment or introduces a clause reference;</xsl:text>
+  
+  <xsl:text>&#xa;&#xa;</xsl:text>
+  
+    <xsl:text>*&gt;:: </xsl:text>
+    <xsl:text>the select or enumeration type, whose name precedes the *&gt; symbol, is
+      extended into the select or enumeration type whose name follows the *&gt; symbol;</xsl:text>
+  
+  <xsl:text>&#xa;&#xa;</xsl:text>
+  
+    <xsl:text>&lt;*:: </xsl:text>
+    <xsl:text>the select or enumeration type, whose name precedes the &lt;* symbol, is an
+      extension of the select or enumeration type whose name follows the &lt;* symbol;</xsl:text>
+  
+  <xsl:text>&#xa;&#xa;</xsl:text>
+  
+    <xsl:text>!{}:: </xsl:text>
+    <xsl:text>section enclosed by {} indicates a negative constraint placed on the mapping.</xsl:text>
+  
+  <xsl:text>&#xa;&#xa;</xsl:text>
+  
+  <xsl:call-template name="insertParagraph">
+    <xsl:with-param name="text">
   The definition and use of mapping templates are not supported in the
   present version of the application modules. However, use of predefined
   templates /MAPPING_OF/, /SUBTYPE/, and /SUPERTYPE/ is supported. 
+    </xsl:with-param>
+  </xsl:call-template>
 </xsl:template>
 
 
@@ -554,25 +761,32 @@ the select or enumeration type, whose name precedes the &lt;* symbol, is an
     <xsl:apply-templates select="." mode="map_attr_aname"/>  
   </xsl:variable>
   <xsl:variable name="app_obj_position" select="position()"/> <!-- MWD 2018-02-05  -->
-  <h2>
-    <a name="{$ae_map_aname}">
+  <!-- <h2>
+    <a name="{$ae_map_aname}"> -->
       <!--<xsl:value-of select="concat('5.1.',$sect_no,' ')"/> MWD 2018-02-05 -->
-      <xsl:value-of select="concat('5.1.',$app_obj_position,' ')"/>
+      <!-- <xsl:value-of select="concat('5.1.',$app_obj_position,' ')"/>
     </a>
     <a href="{$ae_xref}">
       <xsl:value-of select="$ae"/>
     </a>
     <xsl:if test="$module_ok='true'">
       <xsl:variable name="entity_node"
-        select="document($arm_xml)/express/schema/entity[@name=$arm_entity]"/>
+        select="document($arm_xml)/express/schema/entity[@name=$arm_entity]"/> -->
       <!-- 
         Commented out as the current method of getting expressg link
         assumes that all entities etc are in same module 
       <xsl:apply-templates select="$entity_node" mode="expressg_icon">
         <xsl:with-param name="original_schema" select="$schema_name"/>
       </xsl:apply-templates> -->
-    </xsl:if>
-  </h2>
+    <!-- </xsl:if>
+  </h2> -->
+  
+  <xsl:call-template name="insertHeaderADOC">
+    <xsl:with-param name="id" select="$ae_map_aname"/>
+    <xsl:with-param name="level" select="3"/>
+    <xsl:with-param name="header">&lt;&lt;<xsl:value-of select="$ae_xref"/>,<xsl:value-of select="$ae"/>&gt;&gt;</xsl:with-param>
+  </xsl:call-template>
+  
 <!--  <xsl:apply-templates select="." mode="output_mapping"/> -->
 
   <!-- output any issues against the mapping -->
@@ -603,20 +817,26 @@ the select or enumeration type, whose name precedes the &lt;* symbol, is an
     <xsl:variable name="map_xref"
       select="translate(concat('../../',@original_module,'/sys/5_mapping',$FILE_EXT,'#aeentity',@entity),$UPPER,$LOWER)"/>
 
-    <p>
+    <!-- <p> -->
+    <xsl:call-template name="insertParagraph">
+      <xsl:with-param name="text">
       This application object,  
-      <a href="{$ae_xref}">
-        <xsl:value-of select="@entity"/></a>, is defined in the module
-      <a href="{$ae_xref}"><xsl:value-of select="@original_module"/></a>.
+      <!-- <a href="{$ae_xref}">
+        <xsl:value-of select="@entity"/></a> -->&lt;&lt;<xsl:value-of select="$ae_xref"/>,<xsl:value-of select="@entity"/>&gt;&gt;, is defined in the module
+      <!-- <a href="{$ae_xref}"><xsl:value-of select="@original_module"/></a> -->&lt;&lt;<xsl:value-of select="$ae_xref"/>,<xsl:value-of select="@original_module"/>&gt;&gt;.
       This mapping section extends the 
-      <a href="{$map_xref}"> mapping of <xsl:value-of select="@entity"/></a>,
+      <!-- <a href="{$map_xref}"> mapping of <xsl:value-of select="@entity"/></a> -->&lt;&lt;<xsl:value-of select="$map_xref"/>, mapping of <xsl:value-of select="@entity"/>&gt;&gt;,
       to include assertions defined in this module.  
-    </p>
+      </xsl:with-param>
+    </xsl:call-template>
+    <!-- </p> -->
   </xsl:if>
 
   <xsl:if test="@extensible='YES'">
+    <xsl:call-template name="insertParagraph">
+      <xsl:with-param name="text">
     This section specifies the mapping of the entity 
-    <a href="{$ae_xref}"><xsl:value-of select="@entity"/></a>
+    <!-- <a href="{$ae_xref}"><xsl:value-of select="@entity"/></a> -->&lt;&lt;<xsl:value-of select="$ae_xref"/>,<xsl:value-of select="@entity"/>&gt;&gt;
     for the case where it maps onto the resource entity 
     <xsl:value-of select="./aimelt"/>.    
     Depending on the extensions of the Select
@@ -648,6 +868,8 @@ the select or enumeration type, whose name precedes the &lt;* symbol, is an
       <xsl:value-of select="translate($nselects,': ',', ')"/>
     </xsl:if>
     this mapping may be superseded in the application modules that define these extensions. 
+      </xsl:with-param>
+    </xsl:call-template>
   </xsl:if>
 
   <xsl:apply-templates select="./alt" mode="specification"/>
@@ -802,7 +1024,8 @@ the select or enumeration type, whose name precedes the &lt;* symbol, is an
   
 
 
-  <h2>
+  <!-- <h2> -->
+  <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="." mode="map_attr_aname_output"/>  
     <xsl:choose>
       <xsl:when test="@assertion_to">
@@ -829,7 +1052,8 @@ the select or enumeration type, whose name precedes the &lt;* symbol, is an
         </xsl:variable>
         
         <xsl:value-of select="concat($sect_no,' ')"/>
-        <a href="{$ae_xref}"><xsl:value-of select="../@entity"/></a>
+        <!-- <a href="{$ae_xref}"><xsl:value-of select="../@entity"/></a> -->
+        <xsl:text>&lt;&lt;</xsl:text><xsl:value-of select="$ae_xref"/>,<xsl:value-of select="../@entity"/><xsl:text>&gt;&gt;</xsl:text>
         to <xsl:call-template name="link_object">
         <xsl:with-param name="object_name" select="@assertion_to"/>
         <xsl:with-param name="object_used_in_schema_name" 
@@ -837,11 +1061,12 @@ the select or enumeration type, whose name precedes the &lt;* symbol, is an
         <xsl:with-param name="clause" select="'section'"/>
       </xsl:call-template>
       <!-- <xsl:value-of select="@assertion_to"/> -->
-        (as <a href="{$aa_xref}"><xsl:value-of select="@attribute"/></a>)
+        (as <!-- <a href="{$aa_xref}"><xsl:value-of select="@attribute"/></a> --><xsl:text>&lt;&lt;</xsl:text><xsl:value-of select="$aa_xref"/>,<xsl:value-of select="@attribute"/><xsl:text>&gt;&gt;</xsl:text>)
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="concat($sect_no,' ')"/>
-        <a href="{$aa_xref}"><xsl:value-of select="@attribute"/></a>
+        <!-- <a href="{$aa_xref}"><xsl:value-of select="@attribute"/></a> -->
+        <xsl:text>&lt;&lt;</xsl:text><xsl:value-of select="$aa_xref"/>,<xsl:value-of select="@attribute"/><xsl:text>&gt;&gt;</xsl:text>
       </xsl:otherwise>
     </xsl:choose>
 
@@ -856,7 +1081,8 @@ the select or enumeration type, whose name precedes the &lt;* symbol, is an
         <xsl:with-param name="original_schema" select="$schema_name"/>
       </xsl:apply-templates> -->
     </xsl:if>
-  </h2>
+  <!-- </h2> -->
+  <xsl:text>&#xa;&#xa;</xsl:text>
 
   <!-- output any issues against the mapping -->
   <xsl:apply-templates select="."  mode="output_mapping_issue"/>
@@ -888,13 +1114,15 @@ the select or enumeration type, whose name precedes the &lt;* symbol, is an
   <xsl:call-template name="output_string_with_linebreaks">
     <xsl:with-param name="string" select="string(.)"/>
   </xsl:call-template>
-  <br/>
+  <!-- <br/> -->
+  <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="aimelt" mode="specification">
-  <tr valign="top">
-    <td>MIM element:</td>
-    <td>
+  <!-- <tr valign="top">
+    <td>MIM element:</td> -->
+    <xsl:text>MIM element:::</xsl:text>
+    <!-- <td> -->
       <xsl:variable name="aimelt_string">
         <xsl:call-template name="remove_start_end_whitespace">
           <xsl:with-param name="string" select="string(.)"/>
@@ -904,8 +1132,9 @@ the select or enumeration type, whose name precedes the &lt;* symbol, is an
       <xsl:call-template name="output_string_with_linebreaks">
         <xsl:with-param name="string" select="$aimelt_string"/>
       </xsl:call-template>
-    </td>
-  </tr>
+    <!-- </td> -->
+  <!-- </tr> -->
+  <xsl:text>&#xa;&#xa;</xsl:text>
 </xsl:template>
 
 
@@ -916,28 +1145,32 @@ the select or enumeration type, whose name precedes the &lt;* symbol, is an
     </xsl:call-template>
   </xsl:variable> 
   <xsl:if test="string-length($str)>0">
-    <tr valign="top">
-      <td>Source:</td>
-      <td>
+    <!-- <tr valign="top"> -->
+      <!-- <td>Source:</td> -->
+      <xsl:text>Source::: </xsl:text>
+      <!-- <td> -->
         <xsl:call-template name="output_string_with_linebreaks">
           <xsl:with-param name="string" select="$str"/>
         </xsl:call-template>
-      </td>
-    </tr>
+      <!-- </td> -->
+    <!-- </tr> -->
+    <xsl:text>&#xa;&#xa;</xsl:text>
   </xsl:if>
 </xsl:template>
 
 <xsl:template match="rules" mode="specification">
   <xsl:variable name="str" select="string(.)"/>
   <xsl:if test="string-length($str)>0">
-    <tr valign="top">
-      <td>Rules:</td>
-      <td>
+    <!-- <tr valign="top"> -->
+      <!-- <td>Rules:</td> -->
+      <xsl:text>Rules::: </xsl:text>
+      <!-- <td> -->
         <xsl:call-template name="output_string_with_linebreaks">
           <xsl:with-param name="string" select="$str"/>
         </xsl:call-template>
-      </td>
-    </tr>
+      <!-- </td> -->
+    <!-- </tr> -->
+    <xsl:text>&#xa;&#xa;</xsl:text>
   </xsl:if>
 </xsl:template>
 
@@ -1026,9 +1259,9 @@ the select or enumeration type, whose name precedes the &lt;* symbol, is an
           </xsl:variable>
 
           <xsl:if test="string-length($refpath)=0">
-            <tr valign="top">
+            <!-- <tr valign="top">
               <td></td>
-              <td>
+              <td> -->
                 <xsl:variable name="msg">
                   <xsl:choose>
                     <xsl:when test="./../@inherited_from_module"></xsl:when>
@@ -1061,8 +1294,8 @@ the select or enumeration type, whose name precedes the &lt;* symbol, is an
                 </xsl:call-template>
                 </xsl:if>
                 
-              </td>
-            </tr>
+             <!--  </td>
+            </tr> -->
           </xsl:if>
 
               
@@ -1104,8 +1337,9 @@ the select or enumeration type, whose name precedes the &lt;* symbol, is an
 
 
           <xsl:if test="string-length($refpath_extend1)>0">
-            <tr valign="top">
-              <td>Reference path:&#160;&#160;</td>
+            <!-- <tr valign="top"> -->
+              <!-- <td>Reference path:&#160;&#160;</td> -->
+              <xsl:text>Reference path:&#160;&#160;:: </xsl:text>
 
               <!--
                    <xsl:apply-templates select="$refpath" mode="check_ref_path"/>
@@ -1113,12 +1347,13 @@ the select or enumeration type, whose name precedes the &lt;* symbol, is an
 
               <xsl:apply-templates select="." mode="check_ref_path"/>
 
-              <td>
+              <!-- <td> -->
                 <xsl:call-template name="output_string_with_linebreaks">
                   <xsl:with-param name="string" select="$refpath_extend1"/>
                 </xsl:call-template>
-              </td>
-            </tr>
+              <!-- </td> -->
+            <!-- </tr> -->
+            <xsl:text>&#xa;&#xa;</xsl:text>
           </xsl:if>
 
         </xsl:otherwise>
@@ -1145,15 +1380,17 @@ the select or enumeration type, whose name precedes the &lt;* symbol, is an
   </xsl:variable>
 
   <xsl:if test="string-length($str)>0">
-    <tr valign="top">
-      <td>Reference path:&#160;&#160;</td>
+    <!-- <tr valign="top"> -->
+      <!-- <td>Reference path:&#160;&#160;</td> -->
+      <xsl:text>Reference path:&#160;&#160;:: </xsl:text>
       <xsl:apply-templates select="." mode="check_ref_path"/>
-      <td>
+      <!-- <td> -->
         <xsl:call-template name="output_string_with_linebreaks">
           <xsl:with-param name="string" select="$str"/>
         </xsl:call-template>
-      </td>
-    </tr>
+      <!-- </td> -->
+    <!-- </tr> -->
+    <xsl:text>&#xa;&#xa;</xsl:text>
   </xsl:if>
 </xsl:template>
 
@@ -1161,10 +1398,12 @@ the select or enumeration type, whose name precedes the &lt;* symbol, is an
 <xsl:template match="alt_map" mode="output_id_description">
   <xsl:choose>
     <xsl:when test="@id">
-      <p/>
+      <!-- <p/> -->
+      <xsl:text>&#xa;&#xa;</xsl:text>
       <xsl:value-of select="concat('#',@id,':&#160;&#160;&#160;')"/>
       <xsl:apply-templates select="./description"/>
-      <p/>
+      <xsl:text>&#xa;&#xa;</xsl:text>
+      <!-- <p/> -->
     </xsl:when>
 
     <!-- use a description defined earlier in the mapping specification -->
@@ -1262,9 +1501,11 @@ the mapping specification')"/>
 </xsl:template>
 
 <xsl:template match="ae|aa|sc" mode="output_id_description">
-  <p/>
+  <!-- <p/> -->
+  <xsl:text>&#xa;&#xa;</xsl:text>
 	<xsl:apply-templates select="./description"/>
-	<p/>
+	<!-- <p/>  -->
+  <xsl:text>&#xa;&#xa;</xsl:text>
 </xsl:template>
 
 
@@ -1273,13 +1514,13 @@ the mapping specification')"/>
   <xsl:apply-templates select="." mode="output_id_description"/>
   <!-- only output a table if it will be populated -->
   <xsl:if test="./aimelt or ./source or ./rules or ./refpath or ./refpath_extend">
-    <table>
+    <!-- <table> -->
       <xsl:apply-templates select="./aimelt"  mode="specification"/>
       <xsl:apply-templates select="./source"  mode="specification"/>
       <xsl:apply-templates select="./rules"  mode="specification"/>
       <xsl:apply-templates select="./refpath"  mode="specification"/>
       <xsl:apply-templates select="./refpath_extend"  mode="specification"/>
-    </table>  
+    <!-- </table>   -->
   </xsl:if>
 </xsl:template>
 
@@ -1407,7 +1648,7 @@ the mapping specification')"/>
     </xsl:choose>
   </xsl:variable>
   <!-- need to put in whitespace to make HREF work in IExplorer -->
-  <a name="{$attr}"> </a>
+  <!-- <a name="{$attr}"> </a> -->
 
   <!-- cater for the fact that the assertion may be written as:
        aa attribute="SELF\Applied_activity_assignment.assigned_activity"
@@ -1435,7 +1676,7 @@ the mapping specification')"/>
       </xsl:choose>
     </xsl:variable>
     <!-- need to put in whitespace to make HREF work in IExplorer -->
-    <a name="{$attr1}"> </a>
+    <!-- <a name="{$attr1}"> </a> -->
   </xsl:if>  
 </xsl:template>
 
@@ -1530,12 +1771,20 @@ the mapping specification')"/>
 
   <xsl:variable name="sc_count" select="count(//sc)" />
   <xsl:variable name="ae_count" select="count(//ae)" />
-  <h2>
+  <!-- <h2>
     <a name="{$sc_map_aname}">
       <xsl:value-of select="concat('5.1.',$ae_count+position(),' ')"/>
     </a>
     <a href="{$sc_xref}"><xsl:value-of select="$sc"/></a>
-  </h2>
+  </h2> -->
+  
+  <xsl:call-template name="insertHeaderADOC">
+    <xsl:with-param name="id" select="$sc_map_aname"/>
+    <xsl:with-param name="level" select="3"/>
+    <xsl:with-param name="header">&lt;&lt;<xsl:value-of select="$sc_xref"/>,<xsl:value-of select="$sc"/>&gt;&gt;</xsl:with-param>
+  </xsl:call-template>
+
+  
 
   <!-- output any issues against the mapping -->
   <!-- commmented out below because it is not found 
@@ -1565,10 +1814,15 @@ the mapping specification')"/>
     <xsl:variable name="map_xref"
       select="translate(concat('../../',@original_module,'/sys/5_mapping',$FILE_EXT,'#scconstraint',@constraint),$UPPER,$LOWER)"/>
 
-    <p>The subtype constraint 
-      <a href="{$sc_xref}"><xsl:value-of select="@constraint"/></a> is defined in the module
-      <a href="{$sc_xref}"><xsl:value-of select="@original_module"/></a>.
-    </p>
+    <!-- <p> -->
+    <xsl:call-template name="insertParagraph">
+      <xsl:with-param name="text">
+    The subtype constraint 
+      <!-- <a href="{$sc_xref}"><xsl:value-of select="@constraint"/></a> -->&lt;&lt;<xsl:value-of select="$sc_xref"/>>,<xsl:value-of select="@constraint"/>&gt;&gt; is defined in the module
+      <!-- <a href="{$sc_xref}"><xsl:value-of select="@original_module"/></a> -->&lt;&lt;<xsl:value-of select="$sc_xref"/>>,<xsl:value-of select="@original_module"/>&gt;&gt;.
+      </xsl:with-param>
+    </xsl:call-template>
+    <!-- </p> -->
   </xsl:if>
 
   <xsl:choose>
@@ -1586,22 +1840,24 @@ the mapping specification')"/>
 <!-- This is the main template to output the mapping specification -->
 <xsl:template match="sc|alt_scmap" mode="output_mapping">
   <xsl:apply-templates select="." mode="output_id_description"/>
-  <table>
+  <!-- <table> -->
     <xsl:apply-templates select="./rules"  mode="specification"/>
     <xsl:apply-templates select="./constraint"  mode="specification"/>
     <xsl:apply-templates select="./source"  mode="specification"/>
-  </table>  
+  <!-- </table> -->  
 </xsl:template>
 
 <xsl:template match="constraint" mode="specification">
-  <tr valign="top">
-    <td>Constraint:</td>
-    <td>
+  <!-- <tr valign="top">
+    <td>Constraint:</td> -->
+    <xsl:text>Constraint::: </xsl:text>
+    <!-- <td> -->
       <xsl:call-template name="output_string_with_linebreaks">
         <xsl:with-param name="string" select="string(.)"/>
       </xsl:call-template>
-    </td>
-  </tr>
+    <!-- </td>
+  </tr> -->
+  <xsl:text>&#xa;&#xa;</xsl:text>
 </xsl:template>
 
 <!-- end of added to support mapping of subtype constraints -->
