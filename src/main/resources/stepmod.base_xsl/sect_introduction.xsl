@@ -13,18 +13,18 @@ $Id: sect_introduction.xsl,v 1.2 2002/01/15 10:18:15 robbod Exp $
 	xmlns:xalan="http://xml.apache.org/xalan" 
                 version="1.0">
 
-  <xsl:import href="module.xsl"/>
+<!--   <xsl:import href="module.xsl"/> -->
 
   <!-- 
        the stylesheet that allows different stylesheets to be applied 
        -->
-  <xsl:import href="module_clause.xsl"/>
+<!--   <xsl:import href="module_clause.xsl"/>
 
 
-  <xsl:output method="html"/>
+  <xsl:output method="html"/> -->
 
 <!-- overwrites the template declared in module.xsl -->
-<xsl:template match="module">
+<xsl:template match="module" mode="introduction">
   <xsl:apply-templates select="purpose"/>
 </xsl:template>
   

@@ -127,10 +127,12 @@
         <xsl:when test="contains($schema_name,'_arm')">
           <xsl:choose>
             <xsl:when test="count(../interface)>1">          
-              <xsl:value-of select="concat($clause_number, ' Required AM ARMs')"/>
+              <!-- <xsl:value-of select="concat($clause_number, ' Required AM ARMs')"/> -->
+              <xsl:text>Required AM ARMs</xsl:text>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:value-of select="concat($clause_number, ' Required AM ARM')"/>
+              <!-- <xsl:value-of select="concat($clause_number, ' Required AM ARM')"/> -->
+              <xsl:text>Required AM ARM</xsl:text>
             </xsl:otherwise>
           </xsl:choose>
         </xsl:when>
@@ -789,20 +791,24 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
         <xsl:when test="contains($schema_name,'_arm')">
           <xsl:choose>
             <xsl:when test="count(../constant)>1">
-              <xsl:value-of select="concat($clause_number, ' ARM constant definitions')"/>
+              <!-- <xsl:value-of select="concat($clause_number, ' ARM constant definitions')"/> -->
+              <xsl:text>ARM constant definitions</xsl:text>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:value-of select="concat($clause_number, ' ARM constant definition')"/>
+              <!-- <xsl:value-of select="concat($clause_number, ' ARM constant definition')"/> -->
+              <xsl:text>ARM constant definition</xsl:text>
             </xsl:otherwise>
           </xsl:choose>
         </xsl:when>
         <xsl:when test="contains($schema_name,'_mim')">
           <xsl:choose>
             <xsl:when test="count(../constant)>1">
-              <xsl:value-of select="concat($clause_number, ' MIM constant definitions')"/>
+              <!-- <xsl:value-of select="concat($clause_number, ' MIM constant definitions')"/> -->
+              <xsl:text>MIM constant definitions</xsl:text>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:value-of select="concat($clause_number, ' MIM constant definition')"/>
+              <!-- <xsl:value-of select="concat($clause_number, ' MIM constant definition')"/> -->
+              <xsl:text>MIM constant definition</xsl:text>
             </xsl:otherwise>
           </xsl:choose>
         </xsl:when>
@@ -1049,20 +1055,24 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
       <xsl:when test="contains($schema_name,'_arm')">
           <xsl:choose>
             <xsl:when test="count(../type)>1">
-              <xsl:value-of select="concat($clause_number, ' ARM type definitions')"/>
+              <!-- <xsl:value-of select="concat($clause_number, ' ARM type definitions')"/> -->
+              <xsl:text>ARM type definitions</xsl:text>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:value-of select="concat($clause_number, ' ARM type definition')"/>
+              <!-- <xsl:value-of select="concat($clause_number, ' ARM type definition')"/> -->
+              <xsl:text>ARM type definition</xsl:text>
             </xsl:otherwise>
           </xsl:choose>
       </xsl:when>
       <xsl:when test="contains($schema_name,'_mim')">
           <xsl:choose>
             <xsl:when test="count(../type)>1">
-              <xsl:value-of select="concat($clause_number, ' MIM type definitions')"/>
+              <!-- <xsl:value-of select="concat($clause_number, ' MIM type definitions')"/> -->
+              <xsl:text>MIM type definitions</xsl:text>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:value-of select="concat($clause_number, ' MIM type definition')"/>
+              <!-- <xsl:value-of select="concat($clause_number, ' MIM type definition')"/> -->
+              <xsl:text>MIM type definition</xsl:text>
             </xsl:otherwise>
           </xsl:choose>
       </xsl:when>
@@ -1534,20 +1544,24 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
         <xsl:when test="contains($schema_name,'_arm')">
           <xsl:choose>
             <xsl:when test="count(../entity)>1">
-              <xsl:value-of select="concat($clause_number, ' ARM entity definitions')"/>
+              <!-- <xsl:value-of select="concat($clause_number, ' ARM entity definitions')"/> -->
+              <xsl:text>ARM entity definitions</xsl:text>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:value-of select="concat($clause_number, ' ARM entity definition')"/>
+              <!-- <xsl:value-of select="concat($clause_number, ' ARM entity definition')"/> -->
+              <xsl:text>ARM entity definition</xsl:text>
             </xsl:otherwise>
           </xsl:choose>
         </xsl:when>
         <xsl:when test="contains($schema_name,'_mim')">
           <xsl:choose>
             <xsl:when test="count(../entity)>1">
-              <xsl:value-of select="concat($clause_number, ' MIM entity definitions')"/>
+              <!-- <xsl:value-of select="concat($clause_number, ' MIM entity definitions')"/> -->
+              <xsl:text>MIM entity definitions</xsl:text>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:value-of select="concat($clause_number, ' MIM entity definition')"/>
+              <!-- <xsl:value-of select="concat($clause_number, ' MIM entity definition')"/> -->
+              <xsl:text>MIM entity definition</xsl:text>
             </xsl:otherwise>
           </xsl:choose>
         </xsl:when>
@@ -2367,20 +2381,24 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
         <xsl:when test="contains($schema_name,'_arm')">
           <xsl:choose>
             <xsl:when test="count(../subtype.constraint)>1">
-              <xsl:value-of select="concat($clause_number, ' ARM subtype constraint definitions')"/>
+              <!-- <xsl:value-of select="concat($clause_number, ' ARM subtype constraint definitions')"/> -->
+              <xsl:text>ARM subtype constraint definitions</xsl:text>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:value-of select="concat($clause_number, ' ARM subtype constraint definition')"/>
+              <!-- <xsl:value-of select="concat($clause_number, ' ARM subtype constraint definition')"/> -->
+              <xsl:text>ARM subtype constraint definition</xsl:text>
             </xsl:otherwise>
           </xsl:choose>
         </xsl:when>
         <xsl:when test="contains($schema_name,'_mim')">
           <xsl:choose>
             <xsl:when test="count(../subtype.constraint)>1">
-              <xsl:value-of select="concat($clause_number, ' MIM subtype constraint definitions')"/>
+              <!-- <xsl:value-of select="concat($clause_number, ' MIM subtype constraint definitions')"/> -->
+              <xsl:text>MIM subtype constraint definitions</xsl:text>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:value-of select="concat($clause_number, ' MIM subtype constraint definition')"/>
+              <!-- <xsl:value-of select="concat($clause_number, ' MIM subtype constraint definition')"/> -->
+              <xsl:text>MIM subtype constraint definition</xsl:text>
             </xsl:otherwise>
           </xsl:choose>
         </xsl:when>
@@ -2816,20 +2834,24 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
         <xsl:when test="contains($schema_name,'_arm')">
           <xsl:choose>
             <xsl:when test="count(../function)>1">
-              <xsl:value-of select="concat($clause_number, ' ARM function definitions')"/>
+              <!-- <xsl:value-of select="concat($clause_number, ' ARM function definitions')"/> -->
+              <xsl:text>ARM function definitions</xsl:text>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:value-of select="concat($clause_number, ' ARM function definition')"/>
+              <!-- <xsl:value-of select="concat($clause_number, ' ARM function definition')"/> -->
+              <xsl:text>ARM function definition</xsl:text>
             </xsl:otherwise>
           </xsl:choose>
         </xsl:when>
         <xsl:when test="contains($schema_name,'_mim')">
           <xsl:choose>
             <xsl:when test="count(../function)>1">
-              <xsl:value-of select="concat($clause_number, ' MIM function definitions')"/>
+              <!-- <xsl:value-of select="concat($clause_number, ' MIM function definitions')"/> -->
+              <xsl:text>MIM function definitions</xsl:text>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:value-of select="concat($clause_number, ' MIM function definition')"/>
+              <!-- <xsl:value-of select="concat($clause_number, ' MIM function definition')"/> -->
+              <xsl:text>MIM function definition</xsl:text>
             </xsl:otherwise>
           </xsl:choose>
         </xsl:when>
@@ -2982,20 +3004,24 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
         <xsl:when test="contains($schema_name,'_arm')">
           <xsl:choose>
             <xsl:when test="count(../procedure)>1">
-              <xsl:value-of select="concat($clause_number, ' ARM procedure definitions')"/>
+              <!-- <xsl:value-of select="concat($clause_number, ' ARM procedure definitions')"/> -->
+              <xsl:text>ARM procedure definitions</xsl:text>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:value-of select="concat($clause_number, ' ARM procedure definition')"/>
+              <!-- <xsl:value-of select="concat($clause_number, ' ARM procedure definition')"/> -->
+              <xsl:text>ARM procedure definition</xsl:text>
             </xsl:otherwise>
           </xsl:choose>
         </xsl:when>
         <xsl:when test="contains($schema_name,'_mim')">
           <xsl:choose>
             <xsl:when test="count(../procedure)>1">
-              <xsl:value-of select="concat($clause_number, ' MIM procedure definitions')"/>
+              <!-- <xsl:value-of select="concat($clause_number, ' MIM procedure definitions')"/> -->
+              <xsl:text>MIM procedure definitions</xsl:text>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:value-of select="concat($clause_number, ' MIM procedure definition')"/>
+              <!-- <xsl:value-of select="concat($clause_number, ' MIM procedure definition')"/> -->
+              <xsl:text>MIM procedure definition</xsl:text>
             </xsl:otherwise>
           </xsl:choose>
         </xsl:when>
@@ -3250,20 +3276,24 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
         <xsl:when test="contains($schema_name,'_arm')">
           <xsl:choose>
             <xsl:when test="count(../rule)>1">
-              <xsl:value-of select="concat($clause_number, ' ARM rule definitions')"/>
+              <!-- <xsl:value-of select="concat($clause_number, ' ARM rule definitions')"/> -->
+              <xsl:text>ARM rule definitions</xsl:text>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:value-of select="concat($clause_number, ' ARM rule definition')"/>
+              <!-- <xsl:value-of select="concat($clause_number, ' ARM rule definition')"/> -->
+              <xsl:text>ARM rule definition</xsl:text>
             </xsl:otherwise>
           </xsl:choose>
         </xsl:when>
         <xsl:when test="contains($schema_name,'_mim')">
           <xsl:choose>
             <xsl:when test="count(../rule)>1">
-              <xsl:value-of select="concat($clause_number, ' MIM rule definitions')"/>
+              <!-- <xsl:value-of select="concat($clause_number, ' MIM rule definitions')"/> -->
+              <xsl:text>MIM rule definitions</xsl:text>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:value-of select="concat($clause_number, ' MIM rule definition')"/>
+              <!-- <xsl:value-of select="concat($clause_number, ' MIM rule definition')"/> -->
+              <xsl:text>MIM rule definition</xsl:text>
             </xsl:otherwise>
           </xsl:choose>
         </xsl:when>
@@ -4176,13 +4206,17 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
         <xsl:variable name="clause_header">
           <xsl:choose>
             <xsl:when test="contains($schema_name,'_arm')">
-              <xsl:value-of select="concat($clause_number, 
+              <!-- <xsl:value-of select="concat($clause_number, 
                                     ' ARM EXPRESS imported ',
+                                    $lkind,' modifications')"/> -->
+              <xsl:value-of select="concat('ARM EXPRESS imported ',
                                     $lkind,' modifications')"/>
             </xsl:when>
             <xsl:when test="contains($schema_name,'_mim')">
-              <xsl:value-of select="concat($clause_number, 
+              <!-- <xsl:value-of select="concat($clause_number, 
                                     ' MIM  EXPRESS imported '
+                                    ,$lkind,' modifications')"/> -->
+              <xsl:value-of select="concat('MIM EXPRESS imported '
                                     ,$lkind,' modifications')"/>
             </xsl:when>
           </xsl:choose>      

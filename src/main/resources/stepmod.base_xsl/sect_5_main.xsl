@@ -24,7 +24,8 @@ $Id: sect_5_main.xsl,v 1.2 2003/03/13 19:17:08 robbod Exp $
 <!-- overwrites the template declared in module.xsl -->
 <xsl:template match="module" mode="mim_main_module">
   <xsl:call-template name="clause_header">
-    <xsl:with-param name="heading" select="'5 Module interpreted model'"/>
+    <!-- <xsl:with-param name="heading" select="'5 Module interpreted model'"/> -->
+    <xsl:with-param name="heading" select="'Module interpreted model'"/>
     <xsl:with-param name="aname" select="'mim'"/>
   </xsl:call-template>
   
@@ -34,7 +35,7 @@ $Id: sect_5_main.xsl,v 1.2 2003/03/13 19:17:08 robbod Exp $
     </a>
   </h2> -->
   <!-- 5.1 Mapping specification -->
-  <xsl:apply-template select="." mode="mapping_module"/>
+  <xsl:apply-templates select="." mode="mapping_module"/>
   
   <!-- <h2>
     <a href="../sys/5_mim{$FILE_EXT}#mim_express">
@@ -42,7 +43,7 @@ $Id: sect_5_main.xsl,v 1.2 2003/03/13 19:17:08 robbod Exp $
     </a>
   </h2> -->
   <!-- 5.2 MIM EXPRESS short listing -->
-  <xsl:apply-template select="." mode="mim_module"/>
+  <xsl:apply-templates select="." mode="mim_module"/>
   
 </xsl:template>
 

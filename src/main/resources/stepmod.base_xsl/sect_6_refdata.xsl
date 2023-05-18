@@ -24,7 +24,8 @@ $Id: sect_6_refdata.xsl,v 1.1 2006/05/18 16:17:23 dmprice Exp $
 <!-- overwrites the template declared in module.xsl -->
 <xsl:template match="module" mode="refdata_module">
   <xsl:call-template name="clause_header">
-    <xsl:with-param name="heading" select="'6 Module reference data'"/>
+    <!-- <xsl:with-param name="heading" select="'6 Module reference data'"/> -->
+    <xsl:with-param name="heading" select="'Module reference data'"/>
     <xsl:with-param name="aname" select="'refdata'"/>
   </xsl:call-template>
 
