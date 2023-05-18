@@ -11,10 +11,7 @@ $Id: sect_5_mapping_check.xsl,v 1.28 2015/08/28 10:54:31 mikeward Exp $
 <!-- Updated: Alexander Dyuzhev, for stepmod2mn tool -->
 <xsl:stylesheet 
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xmlns:msxsl="urn:schemas-microsoft-com:xslt"
-  xmlns:exslt="http://exslt.org/common"
-  extension-element-prefixes="msxsl exslt"
-  exclude-result-prefixes="msxsl exslt"
+  xmlns:xalan="http://xml.apache.org/xalan"
   version="1.0">
 
   <xsl:import href="express.xsl"/><!-- MWD added --> 
@@ -322,20 +319,21 @@ $Id: sect_5_mapping_check.xsl,v 1.28 2015/08/28 10:54:31 mikeward Exp $
     </xsl:variable>
   
     <xsl:variable name="refpath_nodes">
-      <xsl:choose>
+      <!-- <xsl:choose>
         <xsl:when test="function-available('msxsl:node-set')">
           <xsl:value-of select="msxsl:node-set($refpath)"/>
         </xsl:when>
-        <xsl:when test="function-available('exslt:node-set')"><!-- MWD nodeset function renamed --> 
-          <xsl:value-of select="exslt:node-set($refpath)"/><!-- MWD nodeset function renamed --> 
-        </xsl:when>
-      </xsl:choose>
+        <xsl:when test="function-available('exslt:node-set')"> --><!-- MWD nodeset function renamed --> 
+          <!-- <xsl:value-of select="exslt:node-set($refpath)"/> --><!-- MWD nodeset function renamed --> 
+        <!-- </xsl:when>
+      </xsl:choose> -->
+      <xsl:value-of select="xalan:nodeset($refpath)"/>
     </xsl:variable>  
   
  
   
-  <xsl:choose><!-- MWD test for avaiablility of xsl processor added 2017-03-28 --> 
-    <xsl:when test="function-available('msxsl:node-set')">
+  <!-- <xsl:choose> --><!-- MWD test for avaiablility of xsl processor added 2017-03-28 --> 
+    <!-- <xsl:when test="function-available('msxsl:node-set')">
       
       <xsl:apply-templates select="msxsl:node-set($refpath)//word" mode="test" > 
         <xsl:with-param name="schemas" select="$dep-schemas" />
@@ -373,9 +371,26 @@ $Id: sect_5_mapping_check.xsl,v 1.28 2015/08/28 10:54:31 mikeward Exp $
       </xsl:apply-templates>
       
     </xsl:when>
-    
-  </xsl:choose>
+
+  </xsl:choose> -->
   
+      
+    <xsl:apply-templates select="xalan:nodeset($refpath)//word" mode="test" > 
+      <xsl:with-param name="schemas" select="$dep-schemas" />
+    </xsl:apply-templates>
+    
+    <xsl:apply-templates select="xalan:nodeset($refpath)//is-extended-by | xalan:nodeset($refpath)//extends" mode="test" >
+      <xsl:with-param name="schemas" select="$dep-schemas" />
+    </xsl:apply-templates>
+    
+    <xsl:apply-templates select="xalan:nodeset($refpath)//equals" mode="test" >
+      <xsl:with-param name="schemas" select="$dep-schemas" />
+    </xsl:apply-templates>
+    
+    <xsl:apply-templates select="xalan:nodeset($refpath)//is-subtype-of | xalan:nodeset($refpath)//is-supertype-of" mode="test" >
+      <xsl:with-param name="schemas" select="$dep-schemas" />
+    </xsl:apply-templates>
+    
   
   <!--<xsl:apply-templates select="exslt:node-set($refpath)//word" mode="test" ><!-\- MWD added -\-> 
     <xsl:with-param name="schemas" select="$dep-schemas" /><!-\- MWD added -\->
@@ -1073,8 +1088,8 @@ $Id: sect_5_mapping_check.xsl,v 1.28 2015/08/28 10:54:31 mikeward Exp $
     <xsl:if test="$this-schema" >
       <!-- open up the relevant schema  - which can be a resource or a mim schema -->
       <xsl:variable name="file_name" >
-        <xsl:choose>
-          <xsl:when test="function-available('exslt:node-set')" >
+        <!-- <xsl:choose>
+          <xsl:when test="function-available('exslt:node-set')" > -->
             <xsl:choose>
               <xsl:when test="substring-before($this-schema,'_mim')" >
                 <xsl:value-of select="concat('../data/modules/',substring-before($this-schema,'_mim'),'/mim.xml')" />
@@ -1089,8 +1104,8 @@ $Id: sect_5_mapping_check.xsl,v 1.28 2015/08/28 10:54:31 mikeward Exp $
                 BAD SCHEMA name !!! <xsl:value-of select="$this-schema"/>
               </xsl:otherwise>
             </xsl:choose>
-          </xsl:when>
-        </xsl:choose>
+          <!-- </xsl:when>
+        </xsl:choose> -->
       </xsl:variable>
       <xsl:if test="not(contains($done,concat(' ',$this-schema,' ')))" >
         <x><xsl:value-of select="translate($file_name,'ABCDEFGHIJKLMNOPQRSTUVWXYZ',

@@ -138,7 +138,7 @@ $Id: sect_2_refs.xsl,v 1.21 2018/08/22 23:06:22 mike Exp $
     <xsl:apply-templates select="$normref_nodes" mode="output_normrefs"/>
   </xsl:template>
   
-  <xsl:template match="module">
+  <xsl:template match="module" mode="norm_refs_module">
     
     <!-- <h2>2 Normative references</h2> -->
     <xsl:text>[bibliography]</xsl:text>

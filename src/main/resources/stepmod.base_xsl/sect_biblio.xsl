@@ -8,8 +8,8 @@ $Id: sect_biblio.xsl,v 1.12 2010/11/09 11:22:54 radack Exp $
      
 -->
 <!-- Updated: Alexander Dyuzhev, for stepmod2mn tool -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0" xmlns:msxsl="urn:schemas-microsoft-com:xslt" xmlns:exslt="http://exslt.org/common">
-	<xsl:import href="module.xsl"/>
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+<!-- 	<xsl:import href="module.xsl"/>-->
 	<!-- 
        the stylesheet that allows different stylesheets to be applied 
        -->
