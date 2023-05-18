@@ -12,12 +12,12 @@ $Id: sect_6_refdata.xsl,v 1.1 2006/05/18 16:17:23 dmprice Exp $
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version="1.0">
 
-  <xsl:import href="module.xsl"/>
+<!--   <xsl:import href="module.xsl"/> -->
 
   <!-- 
        the stylesheet that allows different stylesheets to be applied 
        -->
-  <xsl:import href="module_clause.xsl"/>
+  <!-- <xsl:import href="module_clause.xsl"/> -->
 
   <xsl:output method="html"/>
 

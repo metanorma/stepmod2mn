@@ -346,7 +346,7 @@
 			<!-- Annex A Short names of entities -->
 			<xsl:message>[INFO] Processing Annex A Short names of entities ...</xsl:message>		
 			<file path="sections/91-short-names.adoc">
-				<xsl:apply-templates select="resource" mode="annex_a"/> <!-- res_doc/sect_a_short_names.xsl  -->
+				<xsl:apply-templates select="module" mode="annex_a"/> <!-- res_doc/sect_a_short_names.xsl  -->
 			</file>
 			
 			<!-- Annex B Information object registration -->

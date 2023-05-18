@@ -12,18 +12,18 @@ $Id: sect_a_short_names.xsl,v 1.27 2018/01/18 20:20:21 mike Exp $
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version="1.0">
 
-  <xsl:import href="module.xsl"/>
+<!--   <xsl:import href="module.xsl"/> -->
 
   <!-- 
        the stylesheet that allows different stylesheets to be applied 
        -->
-  <xsl:import href="module_clause.xsl"/>
+<!--   <xsl:import href="module_clause.xsl"/> -->
 
 
   <xsl:output method="html"/>
 
 <!-- overwrites the template declared in module.xsl -->
-<xsl:template match="module">
+<xsl:template match="module" mode="annex_a">
   <xsl:call-template name="annex_header">
     <xsl:with-param name="annex_no" select="'A'"/>
     <xsl:with-param name="heading" select="'MIM short names'"/>
@@ -64,7 +64,7 @@ $Id: sect_a_short_names.xsl,v 1.27 2018/01/18 20:20:21 mike Exp $
     </xsl:when>
 
     <xsl:otherwise>
-      <p>
+      <!-- <p> -->
         <!--
              Entity names in this part of ISO 10303 have been defined in other
              parts of ISO 10303. Requirements on the use of the short names are
@@ -75,8 +75,12 @@ $Id: sect_a_short_names.xsl,v 1.27 2018/01/18 20:20:21 mike Exp $
         of the short names are found in the implementation methods included in ISO
         10303.   MWD 2018-01-10 http://wikistep.org/bugzilla/show_bug.cgi?id=6456 -->
         
-        Requirements on the use of the short names are found in the implementation methods included in ISO 10303. EXPRESS entity names and the equivalent short names are available from:</p>
-      
+      <xsl:call-template name="insertParagraph">
+        <xsl:with-param name="text">
+        Requirements on the use of the short names are found in the implementation methods included in ISO 10303. EXPRESS entity names and the equivalent short names are available from:
+        </xsl:with-param>
+      </xsl:call-template>
+      <!-- </p> -->
         <!--
       <p class="note">
         <small>
@@ -103,10 +107,27 @@ $Id: sect_a_short_names.xsl,v 1.27 2018/01/18 20:20:21 mike Exp $
       
       <p align="center">
         <small>
+          <xsl:text>[align=center]</xsl:text>
+          <xsl:text>&#xa;</xsl:text>
           <xsl:variable name="names_url" select="'http://standards.iso.org/iso/10303/tech/short_names/short-names.txt'"/>
-          <a href="{$names_url}" target="_blank">
+          
+          <!-- <a href="{$names_url}" target="_blank">
             <xsl:value-of select="$names_url"/>
-          </a>
+          </a> -->
+          
+          <xsl:call-template name="insertParagraph">
+            <xsl:with-param name="text">
+              <xsl:call-template name="insertHyperlink">
+                <xsl:with-param name="a">
+                  <a href="{$names_url}" target="_blank">
+                    <xsl:value-of select="$names_url"/>
+                  </a>
+                </xsl:with-param>
+                <xsl:with-param name="asText">true</xsl:with-param>
+              </xsl:call-template>
+            </xsl:with-param>
+          </xsl:call-template>
+          
         </small>
       </p>
       
@@ -141,9 +162,15 @@ $Id: sect_a_short_names.xsl,v 1.27 2018/01/18 20:20:21 mike Exp $
       </small>
     </p> MWD 2018-01-18 http://wikistep.org/bugzilla/show_bug.cgi?id=6456 -->
   
-  <p>Requirements on the use of the short names are found in the implementation methods included in ISO 10303. EXPRESS entity names and the equivalent short names are available from:</p>
+  <!-- <p> -->
+  <xsl:call-template name="insertParagraph">
+    <xsl:with-param name="text">
+      Requirements on the use of the short names are found in the implementation methods included in ISO 10303. EXPRESS entity names and the equivalent short names are available from:
+    </xsl:with-param>
+  </xsl:call-template>
+  <!-- </p> -->
   
-    <p align="center">
+    <!-- <p align="center">
       <xsl:variable name="names_url"
     select="'http://standards.iso.org/iso/10303/tech/short_names/short-names.txt'"/>
       <small>
@@ -151,7 +178,25 @@ $Id: sect_a_short_names.xsl,v 1.27 2018/01/18 20:20:21 mike Exp $
           <xsl:value-of select="$names_url"/>
       </a>
     </small>
-  </p>
+  </p> -->
+  
+    <xsl:text>[align=center]</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:variable name="names_url" select="'http://standards.iso.org/iso/10303/tech/short_names/short-names.txt'"/>		
+		<xsl:call-template name="insertParagraph">
+			<xsl:with-param name="text">
+			
+				<xsl:call-template name="insertHyperlink">
+					<xsl:with-param name="a">
+						<a href="{$names_url}" target="_blank">
+							<xsl:value-of select="$names_url"/>
+						</a>
+					</xsl:with-param>
+					<xsl:with-param name="asText">true</xsl:with-param>
+				</xsl:call-template>
+				
+			</xsl:with-param>
+		</xsl:call-template>
   
  
   
@@ -180,8 +225,9 @@ $Id: sect_a_short_names.xsl,v 1.27 2018/01/18 20:20:21 mike Exp $
 </xsl:template>
 
 <xsl:template match="shortname">
-  <tr>
-    <td width="77%" align="left">
+  <!-- <tr>
+    <td width="77%" align="left"> -->
+    <xsl:text>&#xa;</xsl:text>
       <!-- check that the entity exists in the mim -->
       <xsl:variable name="module_dir">
         <xsl:call-template name="module_directory">
@@ -204,8 +250,9 @@ $Id: sect_a_short_names.xsl,v 1.27 2018/01/18 20:20:21 mike Exp $
           </xsl:call-template>
         </xsl:otherwise>
       </xsl:choose>
-    </td>
-    <td width="23%" align="left">
+    <!-- </td> -->
+    <xsl:text>:: </xsl:text>
+    <!-- <td width="23%" align="left"> -->
       <xsl:choose>
         <xsl:when test="string-length(@name)>0">
           <xsl:value-of select="@name"/>          
@@ -218,8 +265,9 @@ $Id: sect_a_short_names.xsl,v 1.27 2018/01/18 20:20:21 mike Exp $
           </xsl:call-template>
         </xsl:otherwise>
       </xsl:choose>
-    </td>
-  </tr>
+    <!-- </td>
+  </tr> -->
+  <xsl:text>&#xa;&#xa;</xsl:text>
 </xsl:template>
   
 </xsl:stylesheet>
