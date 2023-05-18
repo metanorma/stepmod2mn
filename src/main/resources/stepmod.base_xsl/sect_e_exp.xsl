@@ -8,6 +8,7 @@ $Id: sect_e_exp.xsl,v 1.2 2002/03/04 07:50:08 robbod Exp $
   Purpose:
      
 -->
+<!-- Updated: Alexander Dyuzhev, for stepmod2mn tool -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version="1.0">
 
