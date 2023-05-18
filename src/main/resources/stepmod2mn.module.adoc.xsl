@@ -372,15 +372,25 @@
 			<!-- Annex E Computer interpretable listings -->
 			<xsl:message>[INFO] Processing Annex E Computer interpretable listings ...</xsl:message>		
 			<file path="sections/95-listings.adoc">
-				<xsl:apply-templates select="resource" mode="annex_e"/> <!-- sect_e_exp.xsl  -->
+				<xsl:apply-templates select="module" mode="annex_e"/> <!-- sect_e_exp.xsl -->
 			</file>
+      
+      <xsl:if test="module/usage_guide">
+        <!-- Annex F Application module implementation and usage guide -->
+        <xsl:message>[INFO] Processing Annex F Application module implementation and usage guide ...</xsl:message>		
+        <file path="sections/96-usage_guide.adoc">
+          <xsl:apply-templates select="module" mode="annex_f"/> <!-- sect_f_guide.xsl -->
+        </file>
+      </xsl:if>
 			
-			<xsl:message>[INFO] Processing Annex D EXPRESS-G diagrams ...</xsl:message>		
-			<!-- Annex D EXPRESS-G diagrams -->
-			<file path="sections/94-expressg-diagrams.adoc">
-				<xsl:apply-templates select="resource" mode="annexd"/> <!-- res_doc/sect_d_expg.xsl  -->
-			</file>
-				
+			<!-- Annex x Change history -->
+			<xsl:if test="module/changes">
+				<xsl:message>[INFO] Processing Annex Change history ...</xsl:message>		
+				<file path="sections/97-change-history.adoc">
+					<xsl:apply-templates select="module" mode="change_history"/> <!-- res_doc/sect_g_change.xsl -->
+				</file>
+			</xsl:if>
+      
 			<!-- Annex E F G H -->		
 			
 			<!-- Annex Technical discussion -->		
@@ -407,13 +417,7 @@
 				</file>
 			</xsl:if>
 			
-			<!-- Annex x Change history -->
-			<xsl:if test="resource/changes">
-				<xsl:message>[INFO] Processing Annex Change history ...</xsl:message>		
-				<file path="sections/97-change-history.adoc">
-					<xsl:apply-templates select="resource" mode="change_history"/> <!-- res_doc/sect_g_change.xsl -->
-				</file>
-			</xsl:if>
+			
 	
 		</xsl:variable>
 		
