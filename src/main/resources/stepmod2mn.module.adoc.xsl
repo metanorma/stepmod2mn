@@ -355,6 +355,12 @@
 				<xsl:apply-templates select="module" mode="annex_b"/> <!-- sect_b_obj_reg.xsl  -->
 			</file>
 
+      <!-- Annex C ARM EXPRESS-G -->
+			<xsl:message>[INFO] Processing Annex C ARM EXPRESS-G ...</xsl:message>		
+			<file path="sections/93-arm-express-g.adoc">
+				<xsl:apply-templates select="module" mode="annex_c"/> <!-- sect_c_arm_expg.xsl -->
+			</file>
+
 			<!-- Annex C Computer interpretable listings -->
 			<xsl:message>[INFO] Processing Annex C Computer interpretable listings ...</xsl:message>		
 			<file path="sections/93-listings.adoc">
