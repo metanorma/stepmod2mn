@@ -15,18 +15,18 @@ $Id: sect_g_change.xsl,v 1.17 2017/09/29 06:01:47 mikeward Exp $
   exclude-result-prefixes="xalan"
   version="1.0">
   
-  <xsl:import href="module.xsl"/>
+  <!-- <xsl:import href="module.xsl"/> -->
 
   <!-- 
        the stylesheet that allows different stylesheets to be applied 
        -->
-  <xsl:import href="module_clause.xsl"/>
+  <!-- <xsl:import href="module_clause.xsl"/> -->
 
 
   <xsl:output method="html"/>
 
 <!-- overwrites the template declared in module.xsl -->
-<xsl:template match="module">
+<xsl:template match="module" mode="change_history">
   <xsl:variable name="annex_letter">
     <xsl:choose>
       <xsl:when test="//changes and //usage_guide">G</xsl:when>
@@ -63,24 +63,37 @@ $Id: sect_g_change.xsl,v 1.17 2017/09/29 06:01:47 mikeward Exp $
       </xsl:if>
   </xsl:if>
 
-  <h2>
+  <!-- <h2>
     <a name="general">
       <xsl:value-of select="concat($annex_letter,'.1 General')"/>
     </a>
-  </h2>
+  </h2> -->
+  <xsl:call-template name="insertHeaderADOC">
+    <xsl:with-param name="id" select="'general'"/>		
+    <xsl:with-param name="level" select="2"/>
+    <xsl:with-param name="header" select="'General'"/>					
+  </xsl:call-template>
 
   <xsl:choose>
     <xsl:when test="changes">
-      <p>
+      <!-- <p> -->
+      <xsl:call-template name="insertParagraph">
+        <xsl:with-param name="text">
         This annex documents the history of technical modifications made to 
         <xsl:value-of select="concat('ISO/TS 10303-',@part)"/>.
-      </p>
+        </xsl:with-param>
+      </xsl:call-template>
+      <!-- </p> -->
       <xsl:apply-templates select="changes"/>
     </xsl:when>
     <xsl:otherwise>
-      <p>
+      <!-- <p> -->
+      <xsl:call-template name="insertParagraph">
+        <xsl:with-param name="text">
         This is the first edition of the part.
-      </p>
+        </xsl:with-param>
+      </xsl:call-template>
+      <!-- </p> -->
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -98,17 +111,29 @@ $Id: sect_g_change.xsl,v 1.17 2017/09/29 06:01:47 mikeward Exp $
     <xsl:for-each select="change">
       <xsl:sort data-type="number" select="@version"/>
       <xsl:variable name="aname" select="concat('change_',@version)"/>
-      <h2>
+      <!-- <h2>
         <a name="{$aname}">
           <xsl:value-of select="concat($annex_letter,'.',position()+1,' Changes made in edition ',@version)"/>
         </a>
-      </h2>
-      <h2>
+      </h2> -->
+      <xsl:call-template name="insertHeaderADOC">
+				<xsl:with-param name="id" select="$aname"/>		
+				<xsl:with-param name="level" select="2"/>
+				<xsl:with-param name="header" select="concat('Changes made in edition ',@version)"/>					
+			</xsl:call-template>
+      <!-- <h2>
         <a name="summary{@version}">
           <xsl:value-of select="concat($annex_letter,'.',position()+1,'.1 Summary of changes ')"/>
         </a>
-      </h2>
-      <p>
+      </h2> -->
+      <xsl:call-template name="insertHeaderADOC">
+				<xsl:with-param name="id" select="concat('summary', @version)"/>		
+				<xsl:with-param name="level" select="3"/>
+				<xsl:with-param name="header" select="'Summary of changes'"/>					
+			</xsl:call-template>
+      <!-- <p> -->
+      <xsl:call-template name="insertParagraph">
+				<xsl:with-param name="text">
         <xsl:choose>
           <xsl:when test="@version = /module/@version">This </xsl:when>
           <xsl:otherwise>The </xsl:otherwise>
@@ -126,7 +151,10 @@ $Id: sect_g_change.xsl,v 1.17 2017/09/29 06:01:47 mikeward Exp $
           <xsl:with-param name="number" select="string(@version - 1)"/>
         </xsl:call-template>
         edition listed below.
-      </p>
+      <!-- </p> -->
+        </xsl:with-param>
+			</xsl:call-template>
+      
       <xsl:apply-templates select="./description"/>
       <xsl:apply-templates select="./arm.changes">
         <xsl:with-param name="annex" select="concat($annex_letter,'.',position()+1)"/>
@@ -149,36 +177,58 @@ $Id: sect_g_change.xsl,v 1.17 2017/09/29 06:01:47 mikeward Exp $
   <xsl:template match="arm.changes">
     <xsl:param name="annex"/>
     <xsl:variable name="aname" select="concat(name(),../@version)"/>
-    <h2>
+    <!-- <h2>
       <a name="{$aname}">
         <xsl:value-of select="concat($annex, '.2 Changes made to the ARM')"/>
       </a>
-    </h2><xsl:apply-templates select="./description"/>
+    </h2> -->
+    <xsl:call-template name="insertHeaderADOC">
+			<xsl:with-param name="id" select="$aname"/>		
+			<xsl:with-param name="level" select="3"/>
+			<xsl:with-param name="header">Changes made to the ARM</xsl:with-param>
+		</xsl:call-template>
+    
+    <xsl:apply-templates select="./description"/>
     <xsl:apply-templates select="./arm.additions"/>
     <xsl:apply-templates select="./arm.modifications"/>
     <xsl:apply-templates select="./arm.deletions"/>
-    <p>
+    <!-- <p> -->
+    <xsl:call-template name="insertParagraph">
+      <xsl:with-param name="text">
       In addition, modifications have been made to the mapping specification, 
       the MIM schema and the EXPRESS-G diagrams to reflect and be consistent 
       with the modifications of the ARM. 
-    </p>
+      </xsl:with-param>
+    </xsl:call-template>
+    <!-- </p> -->
   </xsl:template>
   
   <xsl:template match="mapping.changes">   
     <xsl:param name="annex"/>
     <xsl:variable name="aname" select="concat(name(),../@version)"/>
     <xsl:variable name="section_number" select="count(../arm.changes)+2"/>
-    <h2>
+    <!-- <h2>
       <a name="{$aname}">
         <xsl:value-of select="concat($annex, '.', $section_number,' Changes made to the mapping')"/>
       </a>
-    </h2> 
+    </h2>  -->
+    <xsl:call-template name="insertHeaderADOC">
+			<xsl:with-param name="id" select="$aname"/>		
+			<xsl:with-param name="level" select="3"/>
+			<xsl:with-param name="header">Changes made to the mapping</xsl:with-param>
+		</xsl:call-template>
+    
     <xsl:apply-templates select="./description"/>
     <xsl:if test="./mapping.change">
-      <p> The following changes have been made to the ARM to MIM mapping:</p>
-      <ul>
+      <!-- <p>  -->
+      <xsl:call-template name="insertParagraph">
+        <xsl:with-param name="text">The following changes have been made to the ARM to MIM mapping:
+      <!-- </p> -->
+        </xsl:with-param>
+      </xsl:call-template>
+      <!-- <ul> -->
         <xsl:apply-templates select="mapping.change"/>
-      </ul>
+      <!-- </ul> -->
     </xsl:if>
   </xsl:template>
   
@@ -186,11 +236,16 @@ $Id: sect_g_change.xsl,v 1.17 2017/09/29 06:01:47 mikeward Exp $
     <xsl:param name="annex"/>
     <xsl:variable name="section_number" select="count(../arm.changes)+count(../mapping.changes)+2"/>
     <xsl:variable name="aname" select="concat(name(),../@version)"/>
-    <h2>
+    <!-- <h2>
       <a name="{$aname}">
         <xsl:value-of select="concat($annex,'.', $section_number,' Changes made to the MIM')"/>
       </a>
-    </h2>    
+    </h2>    --> 
+    <xsl:call-template name="insertHeaderADOC">
+			<xsl:with-param name="id" select="$aname"/>		
+			<xsl:with-param name="level" select="3"/>
+			<xsl:with-param name="header">Changes made to the MIM</xsl:with-param>
+		</xsl:call-template>
     <xsl:apply-templates select="./description"/>
     <xsl:apply-templates select="./mim.additions"/>
     <xsl:apply-templates select="./mim.modifications"/>
@@ -202,11 +257,17 @@ $Id: sect_g_change.xsl,v 1.17 2017/09/29 06:01:47 mikeward Exp $
     <xsl:variable name="section_number" 
       select="count(../arm.changes)+count(../mapping.changes)+count(../mim.changes)+2"/>
     <xsl:variable name="aname" select="concat(name(),../@version)"/>
-    <h2>
+    <!-- <h2>
       <a name="{$aname}">
         <xsl:value-of select="concat($annex, '.',$section_number,' Changes made to the ARM Longform')"/>
       </a>
-    </h2><xsl:apply-templates select="./description"/>
+    </h2> -->
+    <xsl:call-template name="insertHeaderADOC">
+			<xsl:with-param name="id" select="$aname"/>		
+			<xsl:with-param name="level" select="3"/>
+			<xsl:with-param name="header">Changes made to the ARM Longform</xsl:with-param>
+		</xsl:call-template>
+    <xsl:apply-templates select="./description"/>
     <xsl:apply-templates select="./arm.additions"/>
     <xsl:apply-templates select="./arm.modifications"/>
     <xsl:apply-templates select="./arm.deletions"/>
@@ -220,11 +281,16 @@ $Id: sect_g_change.xsl,v 1.17 2017/09/29 06:01:47 mikeward Exp $
               count(../mim.changes)+
               count(../arm_longform.changes)+2"/>
     <xsl:variable name="aname" select="concat(name(),../@version)"/>
-    <h2>
+    <!-- <h2>
       <a name="{$aname}">
         <xsl:value-of select="concat($annex,'.', $section_number,' Changes made to the MIM Longform')"/>
       </a>
-    </h2>    
+    </h2>  -->  
+    <xsl:call-template name="insertHeaderADOC">
+			<xsl:with-param name="id" select="$aname"/>		
+			<xsl:with-param name="level" select="3"/>
+			<xsl:with-param name="header">Changes made to the MIM Longform</xsl:with-param>
+		</xsl:call-template>    
     <xsl:apply-templates select="./description"/>
     <xsl:apply-templates select="./mim.additions"/>
     <xsl:apply-templates select="./mim.modifications"/>
@@ -285,7 +351,7 @@ $Id: sect_g_change.xsl,v 1.17 2017/09/29 06:01:47 mikeward Exp $
         </xsl:for-each>
       </objects>
     </xsl:variable>   
-    <xsl:choose>
+    <!-- <xsl:choose>
       
       <xsl:when test="function-available('msxsl:node-set')">
         <xsl:variable name="objectnodes" select="msxsl:node-set($objects)"/>
@@ -338,7 +404,33 @@ $Id: sect_g_change.xsl,v 1.17 2017/09/29 06:01:47 mikeward Exp $
       </xsl:when>
 
       <xsl:otherwise>BROWSER NOT SUPPORTED</xsl:otherwise>
-    </xsl:choose>
+    </xsl:choose> -->
+    <xsl:variable name="objectnodes" select="xalan:nodeset($objects)"/>
+    <xsl:for-each select="$objectnodes//modified.object">
+      <!-- <li> -->
+      <xsl:call-template name="insertULitem">
+        <xsl:with-param name="text">
+        <xsl:choose>
+          <xsl:when test="./description/ul">
+            <xsl:apply-templates select=".">
+              <xsl:with-param name="arm_mim_clause" select="$arm_mim_clause"/>
+              <xsl:with-param name="arm_mim_suffix" select="$arm_mim_suffix"/>
+            </xsl:apply-templates>
+          </xsl:when>
+          <xsl:when test="position()=last()">
+            <xsl:apply-templates select=".">
+              <xsl:with-param name="arm_mim_clause" select="$arm_mim_clause"/>
+              <xsl:with-param name="arm_mim_suffix" select="$arm_mim_suffix"/>
+            </xsl:apply-templates>.</xsl:when>
+          <xsl:otherwise><xsl:apply-templates select=".">
+            <xsl:with-param name="arm_mim_clause" select="$arm_mim_clause"/>
+            <xsl:with-param name="arm_mim_suffix" select="$arm_mim_suffix"/>
+          </xsl:apply-templates>;</xsl:otherwise>
+          </xsl:choose>
+      <!-- </li> -->
+        </xsl:with-param>
+      </xsl:call-template>
+    </xsl:for-each>
   </xsl:template>
   
   
@@ -469,18 +561,28 @@ $Id: sect_g_change.xsl,v 1.17 2017/09/29 06:01:47 mikeward Exp $
     <!-- MWD -->
     <xsl:choose>
       <xsl:when test="./ul">
-        <ul>
+        <!-- <ul> -->
           <xsl:for-each select="./ul/li">
-            <xsl:choose>
+            <!-- <xsl:choose>
               <xsl:when test="position()=last()"><li><xsl:apply-templates select="."/>.</li></xsl:when>
               <xsl:otherwise><li><xsl:apply-templates select="."/>;</li></xsl:otherwise>
-            </xsl:choose>
+            </xsl:choose> -->
+            <xsl:call-template name="insertULitem">
+							<xsl:with-param name="text">
+								<xsl:apply-templates select="."/>
+								<xsl:choose>
+									<xsl:when test="position()=last()">.</xsl:when>
+									<xsl:otherwise>;</xsl:otherwise>
+								</xsl:choose>
+							</xsl:with-param>
+						</xsl:call-template>
           </xsl:for-each>
-        </ul>
+        <!-- </ul> -->
       </xsl:when>
       <xsl:otherwise>
         <xsl:if test="string-length(normalize-space(./child::text()[1])!=0)">
-          <br/>  
+          <!-- <br/>   -->
+          <xsl:text> +&#xa;</xsl:text>
         </xsl:if>
         <xsl:apply-templates select="."/></xsl:otherwise>
     </xsl:choose>
@@ -492,64 +594,93 @@ $Id: sect_g_change.xsl,v 1.17 2017/09/29 06:01:47 mikeward Exp $
   
   
   <xsl:template match="arm.additions">    
-    <p>
+    <!-- <p> -->
+		<xsl:call-template name="insertParagraph">
+			<xsl:with-param name="text">
       The following ARM EXPRESS declarations and interface specifications have been added: 
-    </p>
-    <ul>  
+    <!-- </p> -->
+      </xsl:with-param>
+    </xsl:call-template>
+    
+    <!-- <ul> -->  
       <xsl:apply-templates select="." mode="modified.object"/>
-    </ul>
+    <!-- </ul> -->
   </xsl:template>
   
   <xsl:template match="arm.modifications">   
-    <p>
+    <!-- <p> -->
+		<xsl:call-template name="insertParagraph">
+			<xsl:with-param name="text">
       The following ARM EXPRESS declarations and interface specifications have been modified:  
-    </p>
-    <ul>  
+    <!-- </p> -->
+      </xsl:with-param>
+    </xsl:call-template>
+    <!-- <ul>  --> 
       <xsl:apply-templates select="." mode="modified.object"/>
-    </ul>
+    <!-- </ul> -->
   </xsl:template>
   
   <xsl:template match="arm.deletions">   
-    <p>
+    <!-- <p> -->
+		<xsl:call-template name="insertParagraph">
+			<xsl:with-param name="text">
       The following ARM EXPRESS declarations and interface specifications have been removed: 
-    </p>
-    <ul>  
+    <!-- </p> -->
+      </xsl:with-param>
+    </xsl:call-template>
+    <!-- <ul>   -->
       <xsl:apply-templates select="." mode="modified.object"/>
-    </ul>
+    <!-- </ul> -->
   </xsl:template>
   
 
   <xsl:template match="mapping.change">
-    <li>
+    <!-- <li> -->
+    <xsl:call-template name="insertULitem">
+      <xsl:with-param name="text">
       <xsl:apply-templates/>
-    </li>
+      </xsl:with-param>
+    </xsl:call-template>
+    <!-- </li> -->
   </xsl:template>
   
   <xsl:template match="mim.additions">    
-    <p>
+    <!-- <p> -->
+		<xsl:call-template name="insertParagraph">
+			<xsl:with-param name="text">
       The following MIM EXPRESS declarations and interface specifications have been added: 
-    </p>
-    <ul>  
+    <!-- </p> -->
+      </xsl:with-param>
+    </xsl:call-template>
+    <!-- <ul>   -->
       <xsl:apply-templates select="." mode="modified.object"/>
-    </ul>
+    <!-- </ul> -->
   </xsl:template>
   
   <xsl:template match="mim.modifications">   
-    <p>
+    <!-- <p> -->
+		<xsl:call-template name="insertParagraph">
+			<xsl:with-param name="text">
       The following MIM EXPRESS declarations and interface specifications have been modified:  
-    </p>
-    <ul>  
+    <!-- </p> -->
+      </xsl:with-param>
+    </xsl:call-template>
+    <!-- <ul>   --> 
       <xsl:apply-templates select="." mode="modified.object"/>
-    </ul>
+    <!-- </ul> -->
   </xsl:template>
   
   <xsl:template match="mim.deletions">   
-    <p>
+    <!-- <p> -->
+		<xsl:call-template name="insertParagraph">
+			<xsl:with-param name="text">
       The following MIM EXPRESS declarations and interface specifications have been removed: 
-    </p>
-    <ul>  
+    <!-- </p> -->
+      </xsl:with-param>
+    </xsl:call-template>
+    <!-- <ul>   --> 
       <xsl:apply-templates select="." mode="modified.object"/>
-    </ul>
+    <!-- </ul> -->
   </xsl:template>
   
   

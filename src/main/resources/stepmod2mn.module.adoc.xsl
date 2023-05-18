@@ -383,11 +383,11 @@
         </file>
       </xsl:if>
 			
-			<!-- Annex x Change history -->
+			<!-- Annex F/G Change history -->
 			<xsl:if test="module/changes">
 				<xsl:message>[INFO] Processing Annex Change history ...</xsl:message>		
 				<file path="sections/97-change-history.adoc">
-					<xsl:apply-templates select="module" mode="change_history"/> <!-- res_doc/sect_g_change.xsl -->
+					<xsl:apply-templates select="module" mode="change_history"/> <!-- sect_g_change.xsl -->
 				</file>
 			</xsl:if>
       
