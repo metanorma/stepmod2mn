@@ -257,29 +257,28 @@
 		<xsl:variable name="adoc">
 	
 			<!-- Abstract -->
+      <!-- sys/abstract.xml -->
 			<xsl:message>[INFO] Processing Abstract ...</xsl:message>
 			<file path="sections/00-abstract.adoc">
 				<xsl:apply-templates select="module" mode="abstract"/> <!-- module.xsl  -->
 			</file>
 			
-			
 			<!-- Foreword-->
-			<!-- draughting_elements/sys/foreword.xml -->
+			<!-- sys/foreword.xml -->
 			<xsl:message>[INFO] Processing Foreword ...</xsl:message>
 			<file path="sections/00-foreword.adoc">
 				<xsl:apply-templates select="module" mode="foreword"/> <!-- module.xsl  -->
 			</file>
       
-			
 			<!-- Introduction -->
-			<!-- draughting_elements/sys/introduction.xml -->
+			<!-- sys/introduction.xml -->
 			<xsl:message>[INFO] Processing Introduction ...</xsl:message>
 			<file path="sections/00-introduction.adoc">
-				<xsl:apply-templates select="module" mode="introduction"/> <!-- res_doc/sect_introduction.xsl  -->
+				<xsl:apply-templates select="module" mode="introduction"/> <!-- sect_introduction.xsl  -->
 			</file>
 					
 			<!-- 1 Scope -->
-			<!-- draughting_elements/sys/1_scope.xml -->
+			<!-- sys/1_scope.xml -->
 			<xsl:message>[INFO] Processing Scope ...</xsl:message>
 			<file path="sections/01-scope.adoc">
 				<xsl:apply-templates select="module" mode="scope_module"/>	<!-- sect_1_scope.xsl  -->	
@@ -304,15 +303,17 @@
 			</file>
 			
       <!-- 4 Information requirements -->
+      <!-- sys/4_info_reqs.xml -->
       <!-- 4.1 ARM entity definition -->
       <xsl:message>[INFO] Processing Information requirements ...</xsl:message>		
       <file path="sections/04-info_reqs.adoc">
         <xsl:apply-templates select="module" mode="info_reqs_module"/> <!-- sect_4_info_reqs.xsl -->
       </file>
       
-      
-      
       <!-- 5 Module interpreted model -->
+      <!-- sys/5_main.xml -->
+      <!-- sys/5_mapping.xml -->
+      <!-- sys/5_mim.xml -->
       <!-- 5.1 Mapping specification -->
       <!-- 5.2 MIM EXPRESS short listing -->
       <xsl:message>[INFO] Processing Module interpreted model ...</xsl:message>		
@@ -320,63 +321,51 @@
         <xsl:apply-templates select="module" mode="mim_main_module"/> <!-- sect_5_main.xsl  -->
       </file>
       
-      
 			<!-- 6 Module reference data -->
+      <!-- sys/6_refdata.xml -->
 			<xsl:message>[INFO] Processing Module reference data ...</xsl:message>		
       <file path="sections/06-refdata.adoc">
         <xsl:apply-templates select="module" mode="refdata_module"/> <!-- sect_6_refdata.xsl -->
       </file>
 			
-			
-			<!-- optional section -->
-			<!--- 4 EXPRESS short listing -->
-			<!-- 4.1 General -->
-			<!-- 4.2 Fundamental concepts and assumptions -->
-			<!-- 4.3 Draughting elements entity definitions -->		
-			<xsl:if test="resource/schema">
-				<file path="sections/04-schemas.adoc">
-					<xsl:for-each select="resource/schema">
-						<xsl:variable name="schema_pos" select="position()"/>
-						<xsl:message>[INFO] Processing Section <xsl:value-of select="$schema_pos + 3"/> ...</xsl:message>
-						<xsl:apply-templates select="../../resource" mode="schema_resource"> <!-- res_doc/sect_schema.xsl -->
-							 <xsl:with-param name="pos" select="$schema_pos"/>
-						 </xsl:apply-templates>		
-					</xsl:for-each>
-				</file>
-			</xsl:if>
-			
 			<!-- Annex A Short names of entities -->
+      <!-- sys/a_short_names.xml -->
 			<xsl:message>[INFO] Processing Annex A Short names of entities ...</xsl:message>		
 			<file path="sections/91-short-names.adoc">
 				<xsl:apply-templates select="module" mode="annex_a"/> <!-- sect_a_short_names.xsl  -->
 			</file>
 			
 			<!-- Annex B Information object registration -->
+      <!-- sys/b_obj_reg.xml -->
 			<xsl:message>[INFO] Processing Annex B Information object registration ...</xsl:message>		
 			<file path="sections/92-identifier.adoc">
 				<xsl:apply-templates select="module" mode="annex_b"/> <!-- sect_b_obj_reg.xsl  -->
 			</file>
 
       <!-- Annex C ARM EXPRESS-G -->
+      <!-- sys/c_arm_expg.xml -->
 			<xsl:message>[INFO] Processing Annex C ARM EXPRESS-G ...</xsl:message>		
 			<file path="sections/93-arm-express-g.adoc">
 				<xsl:apply-templates select="module" mode="annex_c"/> <!-- sect_c_arm_expg.xsl -->
 			</file>
 
       <!-- Annex D MIM EXPRESS-G -->
+      <!-- sys/d_mim_expg.xml -->
 			<xsl:message>[INFO] Processing Annex D MIM EXPRESS-G ...</xsl:message>		
 			<file path="sections/94-mim-express-g.adoc">
 				<xsl:apply-templates select="module" mode="annex_d"/> <!-- sect_d_mim_expg.xsl -->
 			</file>
       
 			<!-- Annex E Computer interpretable listings -->
+      <!-- sys/e_exp.xml -->
 			<xsl:message>[INFO] Processing Annex E Computer interpretable listings ...</xsl:message>		
 			<file path="sections/95-listings.adoc">
 				<xsl:apply-templates select="module" mode="annex_e"/> <!-- sect_e_exp.xsl -->
 			</file>
       
+      <!-- Annex F Application module implementation and usage guide -->
+      <!-- sys/f_guide.xml -->
       <xsl:if test="module/usage_guide">
-        <!-- Annex F Application module implementation and usage guide -->
         <xsl:message>[INFO] Processing Annex F Application module implementation and usage guide ...</xsl:message>		
         <file path="sections/96-usage_guide.adoc">
           <xsl:apply-templates select="module" mode="annex_f"/> <!-- sect_f_guide.xsl -->
@@ -384,6 +373,7 @@
       </xsl:if>
 			
 			<!-- Annex F/G Change history -->
+      <!-- sys/g_change -->
 			<xsl:if test="module/changes">
 				<xsl:message>[INFO] Processing Annex Change history ...</xsl:message>		
 				<file path="sections/97-change-history.adoc">
@@ -391,34 +381,6 @@
 				</file>
 			</xsl:if>
       
-			<!-- Annex E F G H -->		
-			
-			<!-- Annex Technical discussion -->		
-			<xsl:if test="string-length(normalize-space(resource/tech_discussion//text())) &gt; 0">			
-				<xsl:message>[INFO] Processing Annex Technical discussion ...</xsl:message>		
-				<file path="sections/95-tech-discussion.adoc">
-					<xsl:apply-templates select="resource" mode="tech_discussion"/> <!-- res_doc/sect_tech_discussion.xsl -->
-				</file>
-			</xsl:if>
-			
-			<!-- Annex Examples -->
-			<xsl:if test="string-length(normalize-space(resource/examples//text())) &gt; 0">
-				<xsl:message>[INFO] Processing Annex Examples ...</xsl:message>
-        <file path="sections/96-examples.adoc">
-					<xsl:apply-templates select="resource" mode="examples"/> <!-- res_doc/sect_examples.xsl -->
-				</file>
-			</xsl:if>
-				
-			<!-- Annex Additional scope -->
-			<xsl:if test="string-length(normalize-space(resource/add_scope//text())) &gt; 0">
-				<xsl:message>[INFO] Annex Additional scope ...</xsl:message>		
-				<file path="sections/97-add-scope.adoc">
-					<xsl:apply-templates select="resource" mode="additional_scope"/> <!-- res_doc/sect_add_scope.xsl -->
-				</file>
-			</xsl:if>
-			
-			
-	
 		</xsl:variable>
 		
 		<!-- <xsl:copy-of select="$adoc"/> -->
@@ -432,6 +394,7 @@
 		
 			
 		<!-- Bibliography -->
+    <!-- sys/biblio.xml -->
 		<!-- <xsl:if test="module/bibliography/*"> -->
     <xsl:message>[INFO] Processing Bibliography ...</xsl:message>
     <redirect:write file="{$outpath}/sections/99-bibliography.adoc">
@@ -441,68 +404,6 @@
     <xsl:text>&#xa;&#xa;</xsl:text>
 		<!-- </xsl:if> -->
 		
-		
-		
-		<!-- insert header, if there isn't bibliography in the document, but there are external docs refs -->
-		<!-- 
-		<xsl:if test="xalan:nodeset($adoc)//ExternalDocumentReference and not(resource/bibliography/*)">
-			<xsl:call-template name="insertHeaderADOC">
-				<xsl:with-param name="id" select="'bibliography'"/>		
-				<xsl:with-param name="level" select="1"/>
-				<xsl:with-param name="header" select="'Bibliography'"/>		
-			</xsl:call-template>		
-		</xsl:if>
-	
-		<xsl:variable name="ExternalDocumentReferences">
-			<xsl:for-each select="xalan:nodeset($adoc)//ExternalDocumentReference">
-				<xsl:copy-of select="."/>
-			</xsl:for-each>
-		</xsl:variable>
-		
-		<xsl:for-each select="xalan:nodeset($ExternalDocumentReferences)//ExternalDocumentReference">	
-			<xsl:if test="not(preceding-sibling::ExternalDocumentReference/@docid = current()/@docid)">
-				<xsl:text>* [[[</xsl:text>
-				<xsl:variable name="docid">
-				<xsl:choose>
-					<xsl:when test="starts-with(@docid, '/resources/')">
-						<xsl:value-of select="substring-after(@docid, '/resources/')"/>
-					</xsl:when>
-					<xsl:when test="starts-with(@docid, '/resource_docs/')">
-						<xsl:value-of select="substring-after(@docid, '/resource_docs/')"/>
-					</xsl:when>				
-					<xsl:otherwise>
-						<xsl:value-of select="@docid"/>
-					</xsl:otherwise>
-				</xsl:choose>
-			</xsl:variable>
-			<xsl:value-of select="$docid"/>			
-				<xsl:text>,repo:(current-metanorma-collection/</xsl:text>
-				<xsl:value-of select="$docid"/>
-				<xsl:text>)]]]</xsl:text>
-				<xsl:text>, _</xsl:text>
-				
-				<xsl:variable name="title">
-					<xsl:choose>
-						<xsl:when test="starts-with(@docid, '/resources/')">
-							<xsl:variable name="xmlfile" select="concat(substring-after(@docid, '/resources/'), '.xml')"/>				
-							<xsl:value-of select="document(concat($path, '../..', @docid, '/', $xmlfile))//*[@name and not(local-name() = 'application')][1]/@name"/>
-						</xsl:when>
-						<xsl:when test="starts-with(@docid, '/resource_docs/')">
-							<xsl:variable name="xmlfile" select="'resource.xml'"/>				
-							<xsl:value-of select="document(concat($path, '../..', @docid, '/', $xmlfile))/*/@name"/>
-						</xsl:when>
-					</xsl:choose>
-				</xsl:variable>
-				
-				<xsl:call-template name="module_display_name">
-					<xsl:with-param name="module" select="$title"/>
-				</xsl:call-template>
-				
-				<xsl:text>_</xsl:text>
-				<xsl:text>&#xa;&#xa;</xsl:text>
-			</xsl:if>
-		</xsl:for-each>
-		-->
 		
 	</xsl:template>
 	
