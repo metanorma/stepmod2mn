@@ -346,13 +346,13 @@
 			<!-- Annex A Short names of entities -->
 			<xsl:message>[INFO] Processing Annex A Short names of entities ...</xsl:message>		
 			<file path="sections/91-short-names.adoc">
-				<xsl:apply-templates select="module" mode="annex_a"/> <!-- res_doc/sect_a_short_names.xsl  -->
+				<xsl:apply-templates select="module" mode="annex_a"/> <!-- sect_a_short_names.xsl  -->
 			</file>
 			
 			<!-- Annex B Information object registration -->
 			<xsl:message>[INFO] Processing Annex B Information object registration ...</xsl:message>		
 			<file path="sections/92-identifier.adoc">
-				<xsl:apply-templates select="resource" mode="annex_b"/> <!-- res_doc/sect_b_obj_reg.xsl  -->
+				<xsl:apply-templates select="module" mode="annex_b"/> <!-- sect_b_obj_reg.xsl  -->
 			</file>
 
 			<!-- Annex C Computer interpretable listings -->
