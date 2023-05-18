@@ -363,17 +363,16 @@
 				<xsl:apply-templates select="module" mode="annex_c"/> <!-- sect_c_arm_expg.xsl -->
 			</file>
 
-      <!-- Annex C MIM EXPRESS-G -->
-			<xsl:message>[INFO] Processing Annex C MIM EXPRESS-G ...</xsl:message>		
+      <!-- Annex D MIM EXPRESS-G -->
+			<xsl:message>[INFO] Processing Annex D MIM EXPRESS-G ...</xsl:message>		
 			<file path="sections/94-mim-express-g.adoc">
 				<xsl:apply-templates select="module" mode="annex_d"/> <!-- sect_d_mim_expg.xsl -->
 			</file>
       
-
-			<!-- Annex C Computer interpretable listings -->
-			<xsl:message>[INFO] Processing Annex C Computer interpretable listings ...</xsl:message>		
-			<file path="sections/93-listings.adoc">
-				<xsl:apply-templates select="resource" mode="annexc"/> <!-- res_doc/sect_c_exp.xsl  -->
+			<!-- Annex E Computer interpretable listings -->
+			<xsl:message>[INFO] Processing Annex E Computer interpretable listings ...</xsl:message>		
+			<file path="sections/95-listings.adoc">
+				<xsl:apply-templates select="resource" mode="annex_e"/> <!-- sect_e_exp.xsl  -->
 			</file>
 			
 			<xsl:message>[INFO] Processing Annex D EXPRESS-G diagrams ...</xsl:message>		
