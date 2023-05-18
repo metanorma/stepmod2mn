@@ -313,12 +313,19 @@
       <!-- 5 Module interpreted model -->
       <!-- 5.1 Mapping specification -->
       <!-- 5.2 MIM EXPRESS short listing -->
-      <xsl:message>[INFO] Module interpreted model ...</xsl:message>		
+      <xsl:message>[INFO] Processing Module interpreted model ...</xsl:message>		
       <file path="sections/05-mim.adoc">
         <xsl:apply-templates select="module" mode="mim_main_module"/> <!-- sect_5_main.xsl  -->
       </file>
       
       
+			<!-- 6 Module reference data -->
+			<xsl:message>[INFO] Processing Module reference data ...</xsl:message>		
+      <file path="sections/06-refdata.adoc">
+        <xsl:apply-templates select="module" mode="refdata_module"/> <!-- sect_6_refdata.xsl -->
+      </file>
+			
+			
 			<!-- optional section -->
 			<!--- 4 EXPRESS short listing -->
 			<!-- 4.1 General -->
