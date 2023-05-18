@@ -414,14 +414,14 @@
 		
 			
 		<!-- Bibliography -->
-		<xsl:if test="resource/bibliography/*">
-			<xsl:message>[INFO] Processing Bibliography ...</xsl:message>
-			<redirect:write file="{$outpath}/sections/99-bibliography.adoc">
-				<xsl:apply-templates select="resource" mode="bibliography"/> <!-- res_doc/sect_biblio.xsl  -->	
-			</redirect:write>
-			<xsl:text>include::sections/99-bibliography.adoc[]</xsl:text>
-			<xsl:text>&#xa;&#xa;</xsl:text>
-		</xsl:if>
+		<!-- <xsl:if test="module/bibliography/*"> -->
+    <xsl:message>[INFO] Processing Bibliography ...</xsl:message>
+    <redirect:write file="{$outpath}/sections/99-bibliography.adoc">
+      <xsl:apply-templates select="module" mode="bibliography"/> <!-- res_doc/sect_biblio.xsl  -->	
+    </redirect:write>
+    <xsl:text>include::sections/99-bibliography.adoc[]</xsl:text>
+    <xsl:text>&#xa;&#xa;</xsl:text>
+		<!-- </xsl:if> -->
 		
 		
 		
