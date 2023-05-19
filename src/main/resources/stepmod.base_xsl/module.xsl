@@ -845,7 +845,7 @@ TT remove since locke is no longer available.
       The procedures used to develop this document and those intended for its further maintenance are
       described in the ISO/IEC Directives, Part 1. In particular, the different approval criteria needed for the
       different types of ISO documents should be noted. This document was drafted in accordance with the
-      editorial rules of the ISO/IEC Directives, Part 2 (see <a href="http://www.iso.org/directives" target="_blank">www.iso.org/directives</a>).
+      editorial rules of the ISO/IEC Directives, Part 2 (see http://www.iso.org/directives[www.iso.org/directives]).<!-- <a href="http://www.iso.org/directives" target="_blank">www.iso.org/directives</a>-->
       </xsl:with-param>
     </xsl:call-template>
     <!-- </p> -->
@@ -855,7 +855,7 @@ TT remove since locke is no longer available.
       Attention is drawn to the possibility that some of the elements of this document may be the subject of 
       patent rights. ISO shall not be held responsible for identifying any or all such patent rights. Details of 
       any patent rights identified during the development of the document will be in the Introduction and/or 
-      on the ISO list of patent declarations received (see <a href="http://www.iso.org/patents" target="_blank">www.iso.org/patents</a>). 
+      on the ISO list of patent declarations received (see http://www.iso.org/patents[www.iso.org/patents]).<!-- <a href="http://www.iso.org/patents" target="_blank">www.iso.org/patents</a> -->
       </xsl:with-param>
     </xsl:call-template>
     <!-- </p> -->
@@ -873,7 +873,7 @@ TT remove since locke is no longer available.
 			<xsl:with-param name="text">
       For an explanation on the voluntary nature of standards, the meaning of ISO specific terms and 
       expressions related to conformity assessment, as well as information about ISO's adherence to the 
-      World Trade Organization (WTO) principles in the Technical Barriers to Trade (TBT) see <a href="http://www.iso.org/iso/foreword.html" target="_blank">www.iso.org/iso/foreword.html</a>.
+      World Trade Organization (WTO) principles in the Technical Barriers to Trade (TBT) see http://www.iso.org/iso/foreword.html[www.iso.org/iso/foreword.html]. <!-- <a href="http://www.iso.org/iso/foreword.html" target="_blank">www.iso.org/iso/foreword.html</a> -->
       </xsl:with-param>
     </xsl:call-template>
     <!-- </p> -->
@@ -898,7 +898,7 @@ TT remove since locke is no longer available.
   <!-- <p> -->
   <xsl:call-template name="insertParagraph">
     <xsl:with-param name="text">
-    A list of all parts in the ISO 10303 series can be found on the <a href="http://standards.iso.org/iso/10303/tech/step_titles.htm" target="_blank">ISO website</a>. 
+    A list of all parts in the ISO 10303 series can be found on the http://standards.iso.org/iso/10303/tech/step_titles.htm[ISO website].  <!-- <a href="http://standards.iso.org/iso/10303/tech/step_titles.htm" target="_blank">ISO website</a> -->
     </xsl:with-param>
   </xsl:call-template>
   <!-- </p> -->
@@ -907,7 +907,7 @@ TT remove since locke is no longer available.
   <xsl:call-template name="insertParagraph">
     <xsl:with-param name="text">
     Any feedback or questions on this document should be directed to the user’s national standards body. 
-    A complete listing of these bodies can be found at <a href="https://www.iso.org/members.html">www.iso.org/members.html</a>.
+    A complete listing of these bodies can be found at https://www.iso.org/members.html[www.iso.org/members.html]. <!-- <a href="https://www.iso.org/members.html">www.iso.org/members.html</a> -->
     </xsl:with-param>
   </xsl:call-template>
   <!-- </p> -->
@@ -1521,10 +1521,10 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
         <xsl:text>| </xsl:text>
         <xsl:choose>
           <xsl:when test="$FILE_EXT='.xml'">
-            <td>ARM short form EXPRESS</td>
+            <!-- <td> -->ARM short form EXPRESS<!-- </td> -->
           </xsl:when>
           <xsl:otherwise>
-            <td>ARM short form EXPRESS</td>
+            <!-- <td> -->ARM short form EXPRESS<!-- </td> -->
           </xsl:otherwise>
         </xsl:choose>
         <xsl:text>| </xsl:text>
@@ -4757,8 +4757,15 @@ $module_ok,' Check the normatives references')"/>
 		<xsl:value-of select="@title"/>
 		</xsl:variable>
 	
-		<A name="{$title}"><h2><xsl:value-of select="concat('6.',$sect_no,' ')"/>
-			<xsl:value-of select="@title"/></h2></A>
+		<!-- <A name="{$title}"><h2><xsl:value-of select="concat('6.',$sect_no,' ')"/>
+			<xsl:value-of select="@title"/></h2></A> -->
+      
+    <xsl:call-template name="insertHeaderADOC">
+      <xsl:with-param name="id" select="$title"/>		
+      <xsl:with-param name="level" select="2"/>
+      <xsl:with-param name="header" select="@title"/>					
+    </xsl:call-template>
+    
 
     <xsl:apply-templates select="*[not(name(.)='refdata_subclause')]" />
 			
@@ -4776,9 +4783,16 @@ $module_ok,' Check the normatives references')"/>
 			<xsl:value-of select="@title"/>
 			</xsl:variable>
 									
-						<A name="{$subtitle}"><h2>
+						<!-- <A name="{$subtitle}"><h2>
 						<xsl:value-of select="concat($sect_sup,$sect_nos,' ')"/>
-						<xsl:value-of select="@title"/></h2></A>
+						<xsl:value-of select="@title"/></h2></A> -->
+            
+            <xsl:call-template name="insertHeaderADOC">
+              <xsl:with-param name="id" select="$subtitle"/>		
+              <xsl:with-param name="level" select="3"/>
+              <xsl:with-param name="header" select="@title"/>					
+            </xsl:call-template>
+
 
 			      <xsl:apply-templates/>
 				</xsl:for-each>
@@ -4832,8 +4846,15 @@ $module_ok,' Check the normatives references')"/>
 		<xsl:value-of select="@title"/>
 		</xsl:variable>
 	
-		<A name="{$title}"><h2><xsl:value-of select="concat('F.',$sect_no,' ')"/>
-			<xsl:value-of select="@title"/></h2></A>
+		<!-- <A name="{$title}"><h2><xsl:value-of select="concat('F.',$sect_no,' ')"/>
+			<xsl:value-of select="@title"/></h2></A> -->
+      
+    <xsl:call-template name="insertHeaderADOC">
+      <xsl:with-param name="id" select="$title"/>		
+      <xsl:with-param name="level" select="2"/>
+      <xsl:with-param name="header" select="@title"/>					
+    </xsl:call-template>
+      
 
     <xsl:apply-templates select="*[not(name(.)='guide_subclause')]" />
 			
@@ -4851,9 +4872,15 @@ $module_ok,' Check the normatives references')"/>
 			<xsl:value-of select="@title"/>
 			</xsl:variable>
 									
-						<A name="{$subtitle}"><h4>
+						<!-- <A name="{$subtitle}"><h4>
 						<xsl:value-of select="concat($sect_sup,$sect_nos,' ')"/>
-						<xsl:value-of select="@title"/></h4></A>
+						<xsl:value-of select="@title"/></h4></A> -->
+            
+            <xsl:call-template name="insertHeaderADOC">
+              <xsl:with-param name="id" select="$subtitle"/>		
+              <xsl:with-param name="level" select="3"/>
+              <xsl:with-param name="header" select="@title"/>					
+            </xsl:call-template>
 
 			      <xsl:apply-templates/>
 				</xsl:for-each>
