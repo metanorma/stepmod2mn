@@ -272,9 +272,14 @@
 			<!-- Introduction -->
 			<!-- draughting_elements/sys/introduction.xml -->
 			<xsl:message>[INFO] Processing Introduction ...</xsl:message>
-			<file path="sections/00-introduction.adoc">
-				<xsl:apply-templates select="resource" mode="introduction"/> <!-- res_doc/sect_introduction.xsl  -->
-			</file>
+      <xsl:variable name="introduction">
+        <xsl:apply-templates select="resource" mode="introduction"/> <!-- res_doc/sect_introduction.xsl  -->
+      </xsl:variable>
+      <xsl:if test="normalize-space($introduction) != ''">
+        <file path="sections/00-introduction.adoc">
+          <xsl:copy-of select="$introduction"/>
+        </file>
+      </xsl:if>
 					
 			<!-- 1 Scope -->
 			<!-- draughting_elements/sys/1_scope.xml -->
@@ -282,8 +287,6 @@
 			<file path="sections/01-scope.adoc">
 				<xsl:apply-templates select="resource" mode="scope_resource"/>	<!-- res_doc/sect_1_scope.xsl  -->	
 			</file>
-			
-			
 			
 			
 			<!-- 2 Normative references -->

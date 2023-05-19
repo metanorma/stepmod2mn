@@ -276,9 +276,14 @@
 			<!-- Introduction -->
 			<!-- sys/introduction.xml -->
 			<xsl:message>[INFO] Processing Introduction ...</xsl:message>
-			<file path="sections/00-introduction.adoc">
-				<xsl:apply-templates select="module" mode="introduction"/> <!-- sect_introduction.xsl  -->
-			</file>
+      <xsl:variable name="introduction">
+        <xsl:apply-templates select="module" mode="introduction"/> <!-- sect_introduction.xsl  -->
+      </xsl:variable>
+      <xsl:if test="normalize-space($introduction) != ''">
+        <file path="sections/00-introduction.adoc">
+          <xsl:copy-of select="$introduction"/>
+        </file>
+      </xsl:if>
 					
 			<!-- 1 Scope -->
 			<!-- sys/1_scope.xml -->
