@@ -14,9 +14,9 @@ $Id: sect_5_mapping_check.xsl,v 1.28 2015/08/28 10:54:31 mikeward Exp $
   xmlns:xalan="http://xml.apache.org/xalan"
   version="1.0">
 
-  <xsl:import href="express.xsl"/><!-- MWD added --> 
-  <xsl:import href="../nav/xsl/mapping_parse.xsl"/><!-- MWD added --> 
-  <xsl:import href="../nav/xsl/mim_tree.xsl"/><!-- MWD added --> 
+  <!-- <xsl:import href="express.xsl"/> --><!-- MWD added --> 
+  <!-- <xsl:import href="../nav/xsl/mapping_parse.xsl"/> --><!-- MWD added --> 
+  <!-- <xsl:import href="../nav/xsl/mim_tree.xsl"/> --><!-- MWD added --> 
   <xsl:variable name="UPPER" select="'ABCDEFGHIJKLMNOPQRSTUVWXYZ'"/><!-- MWD -->
   <xsl:variable name="LOWER" select="'abcdefghijklmnopqrstuvwxyz'"/><!-- MWD -->
   <xsl:variable name="NUMBERS" select="'0123456789'"/><!-- MWD -->
@@ -49,11 +49,13 @@ $Id: sect_5_mapping_check.xsl,v 1.28 2015/08/28 10:54:31 mikeward Exp $
       <xsl:when test="2 > string-length($schemas)" ><!-- MWD added --> 
       </xsl:when><!-- MWD added --> 
       <xsl:otherwise><!-- MWD added --> 
-        <xsl:copy-of select="exslt:node-set($schemas)"/><!-- MWD added --> 
+        <!-- <xsl:copy-of select="exslt:node-set($schemas)"/> --><!-- MWD added --> 
+        <xsl:copy-of select="xalan:nodeset($schemas)"/><!-- MWD added --> 
       </xsl:otherwise><!-- MWD added --> 
     </xsl:choose><!-- MWD added --> 
   </xsl:variable><!-- MWD added -->  
-  <xsl:variable name="dep-schemas" select="document(exslt:node-set($schemas-node-set)//x)" /><!-- MWD added --> 
+  <!-- <xsl:variable name="dep-schemas" select="document(exslt:node-set($schemas-node-set)//x)" /> --><!-- MWD added --> 
+  <xsl:variable name="dep-schemas" select="document(xalan:nodeset($schemas-node-set)//x)" /><!-- MWD added --> 
   <xsl:variable name="pseudo-schema-name" select="concat(/module_clause/@directory,'_pseudo_long_form_mim')"/><!-- MWD added --> 
 
   <!-- the SAXON and MSXML proprietary extensions are for node-set -->
@@ -781,7 +783,8 @@ $Id: sect_5_mapping_check.xsl,v 1.28 2015/08/28 10:54:31 mikeward Exp $
           Could check for preceding and following symbols   ???? to do ????-->
         <xsl:variable name="find-ent" select="substring-before(normalize-space(.),'.')" />
         <xsl:variable name="find-attr" select="substring-after(normalize-space(.),'.')" />
-        <xsl:variable name="found-ent" select="exslt:node-set($schemas)//entity[@name=$find-ent][explicit/@name=$find-attr]" />
+        <!-- <xsl:variable name="found-ent" select="exslt:node-set($schemas)//entity[@name=$find-ent][explicit/@name=$find-attr]" /> -->
+        <xsl:variable name="found-ent" select="xalan:nodeset($schemas)//entity[@name=$find-ent][explicit/@name=$find-attr]" />
         <xsl:choose>
           <xsl:when test="$found-ent" >
             <!--<xsl:value-of select="." /> found in schema 

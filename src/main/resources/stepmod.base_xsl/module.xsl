@@ -1786,7 +1786,7 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
     <xsl:text>| </xsl:text>
     <xsl:call-template name="insertHyperlink">
       <xsl:with-param name="a">
-        <a href="{$arm_lf}">
+        <a href="{$mim_lf}">
           <xsl:choose>
             <xsl:when test="$FILE_EXT='.xml'">
               XML
@@ -2235,17 +2235,18 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
       <xsl:with-param name="module" select="/module/@name"/>
     </xsl:call-template>           
   </xsl:variable>
-  <!-- <h2>
+  <!-- <h2> -->
     <xsl:variable name="name" select="concat('uof',$uof)"/>
-    <a name="{$name}">
+    <!--<a name="{$name}">
       <xsl:value-of select="concat('4.1.',position()+count(../uof),' ',$uof)"/>
-    </a>
-  </h2> -->
-  <xsl:call-template name="insertHeaderADOC">
-    <xsl:with-param name="id" select="$name"/>		
-    <xsl:with-param name="level" select="3"/>
-    <xsl:with-param name="header" select="normalize-space($uof)"/>					
-  </xsl:call-template>
+    </a> -->
+    <xsl:call-template name="insertHeaderADOC">
+      <xsl:with-param name="id" select="$name"/>		
+      <xsl:with-param name="level" select="3"/>
+      <xsl:with-param name="header" select="normalize-space($uof)"/>					
+      </xsl:call-template>
+  <!-- </h2> -->
+  
   
   
   <xsl:variable name="text">

@@ -18,31 +18,32 @@
 
 	<xsl:import href="stepmod.base_xsl/common.xsl"/>
 	
-	<xsl:import href="stepmod.base_xsl/res_doc/common.xsl"/>
-	<xsl:import href="stepmod.base_xsl/res_doc/express_description.xsl"/>
-	<xsl:import href="stepmod.base_xsl/res_doc/express_link.xsl"/>
-	<xsl:import href="stepmod.base_xsl/res_doc/expressg_icon.xsl"/>
-	<xsl:import href="stepmod.base_xsl/res_doc/express_code.xsl"/>
-	<xsl:import href="stepmod.base_xsl/res_doc/module.xsl"/>
-	<xsl:import href="stepmod.base_xsl/res_doc/sect_introduction.xsl"/>
-	<xsl:import href="stepmod.base_xsl/res_doc/sect_1_scope.xsl"/>
-	<xsl:import href="stepmod.base_xsl/res_doc/sect_2_refs.xsl"/>
-	<xsl:import href="stepmod.base_xsl/res_doc/sect_3_defs.xsl"/>
-	<xsl:import href="stepmod.base_xsl/res_doc/sect_4_express.xsl"/>
-	<xsl:import href="stepmod.base_xsl/res_doc/sect_4_info_reqs.xsl"/>
-	<xsl:import href="stepmod.base_xsl/res_doc/sect_5_main.xsl"/>
-	<xsl:import href="stepmod.base_xsl/res_doc/sect_5_mapping.xsl"/>
-	<xsl:import href="stepmod.base_xsl/res_doc/sect_5_mapping_check.xsl"/>
-	<xsl:import href="stepmod.base_xsl/res_doc/sect_5_mim.xsl"/>
-	<xsl:import href="stepmod.base_xsl/res_doc/sect_6_refdata.xsl"/>
-	<xsl:import href="stepmod.base_xsl/res_doc/sect_a_short_names.xsl"/>
-	<xsl:import href="stepmod.base_xsl/res_doc/sect_b_obj_reg.xsl"/>
-	<xsl:import href="stepmod.base_xsl/res_doc/sect_c_arm_expg.xsl "/>
-	<xsl:import href="stepmod.base_xsl/res_doc/sect_d_mim_expg.xsl"/>
-	<xsl:import href="stepmod.base_xsl/res_doc/sect_e_exp.xsl"/>
-	<xsl:import href="stepmod.base_xsl/res_doc/sect_f_guide.xsl"/>
-	<xsl:import href="stepmod.base_xsl/res_doc/sect_g_change.xsl"/>
-	<xsl:import href="stepmod.base_xsl/res_doc/sect_biblio.xsl"/>
+	<xsl:import href="stepmod.base_xsl/common.xsl"/>
+	<xsl:import href="stepmod.base_xsl/express.xsl"/>
+	<xsl:import href="stepmod.base_xsl/express_description.xsl"/>
+	<xsl:import href="stepmod.base_xsl/express_link.xsl"/>
+	<xsl:import href="stepmod.base_xsl/expressg_icon.xsl"/>
+	<xsl:import href="stepmod.base_xsl/express_code.xsl"/>
+	<xsl:import href="stepmod.base_xsl/module.xsl"/>
+	<xsl:import href="stepmod.base_xsl/sect_introduction.xsl"/>
+	<xsl:import href="stepmod.base_xsl/sect_1_scope.xsl"/>
+	<xsl:import href="stepmod.base_xsl/sect_2_refs.xsl"/>
+	<xsl:import href="stepmod.base_xsl/sect_3_defs.xsl"/>
+	<xsl:import href="stepmod.base_xsl/sect_4_express.xsl"/>
+	<xsl:import href="stepmod.base_xsl/sect_4_info_reqs.xsl"/>
+	<xsl:import href="stepmod.base_xsl/sect_5_main.xsl"/>
+	<xsl:import href="stepmod.base_xsl/sect_5_mapping.xsl"/>
+	<xsl:import href="stepmod.base_xsl/sect_5_mapping_check.xsl"/>
+	<xsl:import href="stepmod.base_xsl/sect_5_mim.xsl"/>
+	<xsl:import href="stepmod.base_xsl/sect_6_refdata.xsl"/>
+	<xsl:import href="stepmod.base_xsl/sect_a_short_names.xsl"/>
+	<xsl:import href="stepmod.base_xsl/sect_b_obj_reg.xsl"/>
+	<xsl:import href="stepmod.base_xsl/sect_c_arm_expg.xsl "/>
+	<xsl:import href="stepmod.base_xsl/sect_d_mim_expg.xsl"/>
+	<xsl:import href="stepmod.base_xsl/sect_e_exp.xsl"/>
+	<xsl:import href="stepmod.base_xsl/sect_f_guide.xsl"/>
+	<xsl:import href="stepmod.base_xsl/sect_g_change.xsl"/>
+	<xsl:import href="stepmod.base_xsl/sect_biblio.xsl"/>
 	
 	<xsl:import href="stepmod.base_xsl/projmg/resource_issues.xsl"/>
 

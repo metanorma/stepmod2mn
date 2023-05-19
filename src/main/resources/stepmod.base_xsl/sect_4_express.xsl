@@ -1186,6 +1186,12 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
     <xsl:with-param name="type_name" select="@name"/>
   </xsl:call-template>
 
+  <!-- boilerplate text for type select -->
+  <xsl:variable name="type_select_boilerplate">
+    <xsl:apply-templates select="./select" mode="description"/>
+  </xsl:variable>
+  
+  <xsl:copy-of select="$type_select_boilerplate"/>
 
   <xsl:apply-templates select="./select" mode="description"/>
 

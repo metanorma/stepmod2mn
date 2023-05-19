@@ -50,7 +50,7 @@
        This variable is overwritten when express_link.xsl is imported
        into another stylesheet.
        -->
-    <xsl:variable name="global_resource_xref_list2"/> <!-- there is sect_4_express.xsl yet -->
+    <xsl:variable name="global_resource_xref_list"/>
 
   
   
