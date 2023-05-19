@@ -400,8 +400,9 @@ $Id: sect_2_refs.xsl,v 1.21 2018/08/22 23:06:22 mike Exp $
   <xsl:choose>
     <xsl:when test="$abbr/term.ref/@normref">
       <xsl:variable name="ref" select="$abbr/term.ref/@normref"/>
+      <xsl:variable name="normrefs_xml" select="document(concat($path,'../../../data/basic/normrefs.xml'))"/>
       <xsl:apply-templates 
-        select="document('../data/basic/normrefs.xml')/normref.list/normref[@id=$ref]"
+        select="$normrefs_xml/normref.list/normref[@id=$ref]"
         mode="generate_node">
       </xsl:apply-templates>
     </xsl:when>
@@ -507,7 +508,8 @@ $Id: sect_2_refs.xsl,v 1.21 2018/08/22 23:06:22 mike Exp $
               <xsl:otherwise><xsl:value-of select="$ir_refn1"/></xsl:otherwise>
             </xsl:choose>
           </xsl:variable>
-          <xsl:variable name="normref.list" select="document('../data/basic/normrefs.xml')/normref.list"/>
+          <xsl:variable name="normrefs_xml" select="document(concat($path,'../../../data/basic/normrefs.xml'))"/>
+          <xsl:variable name="normref.list" select="$normrefs_xml/normref.list"/>
           
           <xsl:apply-templates 
             select="$normref.list/normref[@id=$normref.inc]"
