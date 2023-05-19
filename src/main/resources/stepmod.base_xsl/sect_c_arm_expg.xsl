@@ -40,7 +40,9 @@ $Id: sect_c_arm_expg.xsl,v 1.13 2006/10/13 21:18:00 darla Exp $
         The following diagram provides a graphical representation of the 
         <!-- EXPRESS structure and constructs specified in clause 4. -->
         ARM EXPRESS short listing defined in 
-        Clause <a href="./4_info_reqs{$FILE_EXT}">4</a>.
+        <!-- Clause <a href="./4_info_reqs{$FILE_EXT}">4</a>. -->
+        &lt;&lt;4_info_reqs&gt;&gt;.
+        
         The diagram is presented in EXPRESS-G.
         </xsl:with-param>
       </xsl:call-template>
@@ -76,7 +78,8 @@ $Id: sect_c_arm_expg.xsl,v 1.13 2006/10/13 21:18:00 darla Exp $
         The following diagrams provide a graphical representation of the 
         <!-- EXPRESS structure and constructs specified in clause 4. -->
         ARM EXPRESS short listing defined in 
-        Clause <a href="./4_info_reqs{$FILE_EXT}">4</a>.
+        <!-- Clause <a href="./4_info_reqs{$FILE_EXT}">4</a>. -->
+        &lt;&lt;4_info_reqs&gt;&gt;.
         The diagrams are presented in EXPRESS-G.
         </xsl:with-param>
       </xsl:call-template>

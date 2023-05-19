@@ -429,7 +429,8 @@
           <xsl:when test="contains($schema_node/@name,'_arm')">
             <xsl:variable name="penultimate"
               select="count(document($module_file)/module/arm/express-g/imgfile)-1"/>
-            See Annex <a href="c_arm_expg{$FILE_EXT}">C</a>, 
+            <!-- See Annex <a href="c_arm_expg{$FILE_EXT}">C</a>,  -->
+            See &lt;&lt;c_arm_expg&gt;&gt;, 
             <xsl:choose>
               <xsl:when
                 test="count(document($module_file)/module/arm/express-g/imgfile)=1">
@@ -463,7 +464,8 @@
           <xsl:otherwise>
             <xsl:variable name="penultimate"
               select="count(document($module_file)/module/mim/express-g/imgfile)-1"/>
-            See Annex <a href="d_mim_expg{$FILE_EXT}">D</a>, 
+            <!-- See Annex <a href="d_mim_expg{$FILE_EXT}">D</a>,  -->
+            See &lt;&lt;d_mim_expg&gt;&gt;, 
             <xsl:choose>
               <xsl:when
                 test="count(document($module_file)/module/mim/express-g/imgfile)=1">

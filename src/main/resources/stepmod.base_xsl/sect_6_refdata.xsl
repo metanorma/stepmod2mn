@@ -68,10 +68,10 @@ $Id: sect_6_refdata.xsl,v 1.1 2006/05/18 16:17:23 dmprice Exp $
         <xsl:with-param name="text">The standards related to the specification of reference data are:
 				<!-- <ul> -->
         <xsl:text>&#xa;&#xa;</xsl:text>
-				<!-- <li> --><xsl:text>* </xsl:text>the  <a target="_blank" href="http://www.omg.org/technology/documents/formal/uml.htm">UML 2 specification</a> is available from the OMG Web site;<xsl:text>&#xa;&#xa;</xsl:text><!-- </li> -->
-				<!-- <li> --><xsl:text>* </xsl:text>the <a target="_blank" href="http://www.omg.org/cgi-bin/doc?formal/05-04-01">ISO UML 1.4.2 specification</a> published as ISO/IEC 19501:2005(E) is available from the OMG Web site
-and from the <a href="http://www.iso.org">ISO</a> Web site;<xsl:text>&#xa;&#xa;</xsl:text><!-- </li> -->
-				<!-- <li> --><xsl:text>* </xsl:text>the <a target="_blank" href="http://www.w3.org/TR/owl-ref/">OWL Web Ontology Language Reference</a> is available from the W3C Web site.<xsl:text>&#xa;&#xa;</xsl:text><!-- </li> -->
+				<!-- <li> --><xsl:text>* </xsl:text>the http://www.omg.org/technology/documents/formal/uml.htm[UML 2 specification]<!-- <a target="_blank" href="http://www.omg.org/technology/documents/formal/uml.htm">UML 2 specification</a>--> is available from the OMG Web site;<xsl:text>&#xa;&#xa;</xsl:text><!-- </li> -->
+				<!-- <li> --><xsl:text>* </xsl:text>the http://www.omg.org/cgi-bin/doc?formal/05-04-01[ISO UML 1.4.2 specification]<!-- <a target="_blank" href="http://www.omg.org/cgi-bin/doc?formal/05-04-01">ISO UML 1.4.2 specification</a>--> published as ISO/IEC 19501:2005(E) is available from the OMG Web site
+and from the http://www.iso.org[ISO]<!-- <a href="http://www.iso.org">ISO</a>--> Web site;<xsl:text>&#xa;&#xa;</xsl:text><!-- </li> -->
+				<!-- <li> --><xsl:text>* </xsl:text>the http://www.w3.org/TR/owl-ref/[OWL Web Ontology Language Reference]<!--<a target="_blank" href="http://www.w3.org/TR/owl-ref/">OWL Web Ontology Language Reference</a>--> is available from the W3C Web site.<xsl:text>&#xa;&#xa;</xsl:text><!-- </li> -->
 				<!-- </ul> -->
         <xsl:text>&#xa;&#xa;</xsl:text>
         </xsl:with-param>

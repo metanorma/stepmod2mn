@@ -228,11 +228,13 @@ $Id: sect_5_mapping.xsl,v 1.89 2019/03/28 19:39:31 mike Exp $
       <!-- <li> --><xsl:text>* </xsl:text>
         <xsl:choose>
           <xsl:when test="position()=last()">
-            <a href="{$module_href}"><xsl:value-of select="$part"/></a>
+            <!-- <a href="{$module_href}"><xsl:value-of select="$part"/></a> -->
+            <xsl:text>&lt;&lt;</xsl:text><xsl:value-of select="$module_href"/>,<xsl:value-of select="$part"/><xsl:text>&gt;&gt;</xsl:text>
             <xsl:value-of select="concat(' (',$module_display_name,').')"/>
           </xsl:when>
           <xsl:otherwise>
-            <a href="{$module_href}"><xsl:value-of select="$part"/></a>
+            <!-- <a href="{$module_href}"><xsl:value-of select="$part"/></a> -->
+            <xsl:text>&lt;&lt;</xsl:text><xsl:value-of select="$module_href"/>,<xsl:value-of select="$part"/><xsl:text>&gt;&gt;</xsl:text>
             <xsl:value-of select="concat(' (',$module_display_name,');')"/>
           </xsl:otherwise>
         </xsl:choose>
