@@ -810,7 +810,7 @@ Purpose:
 			Attention is drawn to the possibility that some of the elements of this document may be the subject of 
 			patent rights. ISO shall not be held responsible for identifying any or all such patent rights. Details of 
 			any patent rights identified during the development of the document will be in the Introduction and/or 
-			on the ISO list of patent declarations received (see www.iso.org/patents[http://www.iso.org/patents]<!-- <a href="http://www.iso.org/patents" target="_blank">www.iso.org/patents</a> -->).
+			on the ISO list of patent declarations received (see http://www.iso.org/patents[www.iso.org/patents]<!-- <a href="http://www.iso.org/patents" target="_blank">www.iso.org/patents</a> -->).
 			</xsl:with-param>
 		</xsl:call-template>
 		
