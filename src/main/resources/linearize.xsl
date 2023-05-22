@@ -73,7 +73,7 @@
 		
 		<xsl:variable name="text_righttrim">
 			<xsl:choose>
-				<xsl:when test="not(following-sibling::*) and not(following-sibling::comment())">
+				<xsl:when test="(not(following-sibling::*) and not(following-sibling::comment())) or following-sibling::*[1][self::note or self::example]">
 					<xsl:value-of select="java:replaceAll(java:java.lang.String.new($text_lefttrim),'\s+$','')"/>
 				</xsl:when>
 				<xsl:otherwise>
