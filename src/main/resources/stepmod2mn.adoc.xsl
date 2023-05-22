@@ -889,7 +889,7 @@
 				<xsl:text>  </xsl:text><xsl:value-of select="@name"/><xsl:text>:</xsl:text>
 				<xsl:text>&#xa;</xsl:text>
 				<xsl:text>    path: </xsl:text>
-				<xsl:value-of select="concat('../../../resources/',@name,'/',@name,'_annotated.exp')"/>
+				<xsl:value-of select="concat('../../resources/',@name,'/',@name,'_annotated.exp')"/>
 				<xsl:text>&#xa;</xsl:text>
 			</xsl:for-each>
 		</redirect:write>
