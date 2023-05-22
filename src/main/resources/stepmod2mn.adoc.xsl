@@ -879,7 +879,8 @@
 	</xsl:template>
 	
 	<xsl:template name="generateSchemasYaml">
-		<file path="schemas.yaml">
+		<xsl:message>[INFO] Generation schemas.yaml ...</xsl:message>
+		<redirect:write file="{$outpath}/schemas.yaml">
 			<xsl:text>---</xsl:text>
 			<xsl:text>&#xa;</xsl:text>
 			<xsl:text>schemas:</xsl:text>
@@ -891,7 +892,7 @@
 				<xsl:value-of select="concat('../../../resources/',@name,'/',@name,'_annotated.exp')"/>
 				<xsl:text>&#xa;</xsl:text>
 			</xsl:for-each>
-		</file>
+		</redirect:write>
 	</xsl:template>
 	
 </xsl:stylesheet>

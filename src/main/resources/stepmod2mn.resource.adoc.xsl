@@ -252,6 +252,9 @@
 		<xsl:text>&#xa;</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
 		
+		<!-- Generation schemas.yaml -->
+		<xsl:call-template name="generateSchemasYaml"/>
+		
 		<xsl:variable name="adoc">
 	
 			<!-- Abstract -->
@@ -280,10 +283,6 @@
           <xsl:copy-of select="$introduction"/>
         </file>
       </xsl:if>
-			
-			<!-- schemas.yaml -->
-			<xsl:message>[INFO] Generation schemas.yaml ...</xsl:message>
-			<xsl:call-template name="generateSchemasYaml"/>
 			
 			<!-- 1 Scope -->
 			<!-- draughting_elements/sys/1_scope.xml -->
