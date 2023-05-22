@@ -2653,12 +2653,13 @@ the types, entity specializations, and functions that are specific to this part 
 		
 		<!-- MWD 2018-07-04 6538 the above paragraph replaced with this one -->
 		<!-- <p> -->	
-		<xsl:call-template name="insertParagraph">
+		<!-- commented: see https://github.com/metanorma/stepmod2mn/issues/32 -->
+		<!-- <xsl:call-template name="insertParagraph">
 			<xsl:with-param name="text">
 			The following documents are referred to in the text in such a way that some or all of their content constitutes requirements of this document. 
 			For dated references, only the edition cited applies. For undated references, the latest edition of the referenced document (including any amendments) applies.
 			</xsl:with-param>
-		</xsl:call-template>
+		</xsl:call-template> -->
 		<!-- </p> -->		
 		
 		<!-- output any issues -->
