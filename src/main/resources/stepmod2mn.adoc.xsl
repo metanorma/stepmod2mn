@@ -878,4 +878,20 @@
 		</xsl:choose>
 	</xsl:template>
 	
+	<xsl:template name="generateSchemasYaml">
+		<file path="schemas.yaml">
+			<xsl:text>---</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>schemas:</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:for-each select="resource/schema">
+				<xsl:text>  </xsl:text><xsl:value-of select="@name"/><xsl:text>:</xsl:text>
+				<xsl:text>&#xa;</xsl:text>
+				<xsl:text>    path: </xsl:text>
+				<xsl:value-of select="concat('../../../resources/',@name,'/',@name,'_annotated.exp')"/>
+				<xsl:text>&#xa;</xsl:text>
+			</xsl:for-each>
+		</file>
+	</xsl:template>
+	
 </xsl:stylesheet>

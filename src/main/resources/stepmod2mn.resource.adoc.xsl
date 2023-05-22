@@ -280,7 +280,11 @@
           <xsl:copy-of select="$introduction"/>
         </file>
       </xsl:if>
-					
+			
+			<!-- schemas.yaml -->
+			<xsl:message>[INFO] Generation schemas.yaml ...</xsl:message>
+			<xsl:call-template name="generateSchemasYaml"/>
+			
 			<!-- 1 Scope -->
 			<!-- draughting_elements/sys/1_scope.xml -->
 			<xsl:message>[INFO] Processing Scope ...</xsl:message>
