@@ -247,7 +247,10 @@
 			</xsl:otherwise>
 		</xsl:choose>
 		
-		<br/><br/>
+		<br/>
+		<xsl:if test="not(parent::li) and normalize-space(following-sibling::node()) != ''">
+			<br/>
+		</xsl:if>
 	</xsl:template>
 	
 	<!-- <xsl:template match="ul/li | li" mode="stepmod2mn">

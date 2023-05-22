@@ -602,16 +602,33 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 	<!-- <ul> -->
 	
 	<xsl:if test="local-name(..) = 'li'"> <!-- nested list -->
-		<xsl:text>&#xa;</xsl:text>
+		<!-- <xsl:text>&#xa;</xsl:text> -->
 	</xsl:if>
 	
-	<xsl:text>&#xa;</xsl:text>
-	<xsl:if test="normalize-space(preceding-sibling::node()) != ''">
+	<xsl:if test="not(preceding-sibling::*[1][self::p])">
 		<xsl:text>&#xa;</xsl:text>
 	</xsl:if>
+	<xsl:if test="preceding-sibling::node()[1][normalize-space() != ''][self::text()]">
+		<xsl:text>&#xa;</xsl:text>
+	</xsl:if>
+	<!-- <xsl:if test="normalize-space(preceding-sibling::node()[1]) != ''">
+		<xsl:text>&#xa;</xsl:text>
+	</xsl:if> -->
+	<xsl:variable name="ul_content">
 		<xsl:apply-templates/>
+	</xsl:variable>
+	<xsl:copy-of select="$ul_content"/>
 	<!-- </ul> -->
-	<xsl:text>&#xa;&#xa;</xsl:text>	
+	
+	<xsl:choose>
+		<xsl:when test="not(java:endsWith(java:java.lang.String.new($ul_content),'&#xa;'))">
+			<xsl:text>&#xa;&#xa;</xsl:text>
+		</xsl:when>
+		<xsl:when test="not(java:endsWith(java:java.lang.String.new($ul_content),'&#xa;&#xa;'))">
+			<xsl:text>&#xa;</xsl:text>
+		</xsl:when>
+	</xsl:choose>
+	
 </xsl:template>
 
 <!--
