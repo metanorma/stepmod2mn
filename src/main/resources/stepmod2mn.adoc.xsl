@@ -382,7 +382,15 @@
 		</xsl:variable>
 		<xsl:choose>
 			<xsl:when test="$asText = 'true'">
-				<xsl:value-of select="$href"/><xsl:text>[</xsl:text><xsl:value-of select="normalize-space(xalan:nodeset($a)/*/text())"/><xsl:text>]</xsl:text>
+				<xsl:variable name="link_text" select="normalize-space(xalan:nodeset($a)/*/text())"/>
+				<xsl:choose>
+					<xsl:when test="$href = $link_text and (starts-with($href,'www.') or starts-with($href, 'http://') or starts-with($href, 'https://'))">
+						<xsl:value-of select="$href"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="$href"/><xsl:text>[</xsl:text><xsl:value-of select="$link_text"/><xsl:text>]</xsl:text>
+					</xsl:otherwise>
+				</xsl:choose>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:element name="ExternalDocumentReference">
