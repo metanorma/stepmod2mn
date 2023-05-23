@@ -593,7 +593,7 @@
          </xsl:otherwise>
       </xsl:choose>
 	</xsl:template>
-	<xsl:template match="sup" mode="text">
+	<xsl:template match="sup2" mode="text">
 		<xsl:text>^^</xsl:text><xsl:apply-templates mode="text"/><xsl:text>^^</xsl:text>
 	</xsl:template>
 	
@@ -905,5 +905,34 @@
 			</xsl:for-each>
 		</redirect:write>
 	</xsl:template>
+	
+	<!-- for debug purposes -->
+	<xsl:template match="*" mode="print_as_xml">
+		<xsl:text>&#xa;&lt;</xsl:text>
+		<xsl:value-of select="local-name()"/>
+		<xsl:for-each select="@*">
+			<xsl:text> </xsl:text>
+			<xsl:value-of select="local-name()"/>
+			<xsl:text>="</xsl:text>
+			<xsl:value-of select="."/>
+			<xsl:text>"</xsl:text>
+		</xsl:for-each>
+		
+		<xsl:for-each select="namespace::*">
+			<xsl:text> xmlns</xsl:text>
+			<xsl:variable name="xmlns_name" select="local-name()"/>
+			<xsl:if test="$xmlns_name != ''">:<xsl:value-of select="$xmlns_name"/></xsl:if>
+			<xsl:text>="</xsl:text>
+			<xsl:value-of select="."/>
+			<xsl:text>"</xsl:text>
+		</xsl:for-each>
+		
+		<xsl:text>&gt;</xsl:text>
+		<xsl:apply-templates mode="print_as_xml"/>
+		<xsl:text>&lt;/</xsl:text>
+		<xsl:value-of select="local-name()"/>
+		<xsl:text>&gt;</xsl:text>
+	</xsl:template>
+
 	
 </xsl:stylesheet>
