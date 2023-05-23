@@ -906,6 +906,127 @@
 		</redirect:write>
 	</xsl:template>
 	
+	<!-- Example:
+		directives:
+			- documents-inline
+		bibdata:
+			title:
+				- language: en
+					content: "Industrial automation systems and integration - - Product data representation and exchange - - Integrated generic resource: Fundamentals of product description and support"
+				- language: fr
+					content: "Systèmes d'automatisation industrielle et intégration - - Représentation et échange de données de produits - - Ressources génériques intégrées: Principes de description et de support de produits"
+			type: collection
+			docid:
+				type: iso
+				id: 10303-41
+			edition: 6
+			copyright:
+				owner:
+					name: International Standards Organization
+					abbreviation: ISO
+				from: 2019
+		manifest:
+			level: collection
+			title: ISO Collection
+			manifest:
+				- level: document
+					title: Document
+					docref:
+						- fileref: document.xml
+							identifier: iso10303-41
+							sectionsplit: true
+				- level: attachments
+					title: Attachments
+					docref:
+						- fileref: ../../../resources/action_schema/action_schema.exp
+							identifier: action_schema.exp
+							attachment: true
+							...
+		-->
+	<xsl:template name="generateCollectionYaml">
+		<xsl:param name="data_element"/>
+		<xsl:variable name="data" select="xalan:nodeset($data_element)"/>
+		<xsl:message>[INFO] Generation collection.yaml ...</xsl:message>
+		<redirect:write file="{$outpath}/collection.yml">
+			<xsl:text>directives:</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>  - documents-inline</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>bibdata:</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>  title:</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:for-each select="$data//title">
+				<xsl:text>    - language: </xsl:text><xsl:value-of select="@lang"/>
+				<xsl:text>&#xa;</xsl:text>
+				<xsl:text>      content: "</xsl:text><xsl:value-of select="."/><xsl:text>"</xsl:text>
+				<xsl:text>&#xa;</xsl:text>
+			</xsl:for-each>
+			<xsl:text>  type: collection</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>  docid:</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>    type: iso</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>    id: </xsl:text><xsl:value-of select="$data//docid"/>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>  edition: </xsl:text><xsl:value-of select="$data//edition"/>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>  copyright:</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>    owner:</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>      name: International Standards Organization</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>      abbreviation: ISO</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>    from: </xsl:text><xsl:value-of select="$data//year"/>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>manifest:</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>  level: collection</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>  title: ISO Collection</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>  manifest:</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>    - level: document</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>      title: Document</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>      docref:</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>        - fileref: document.xml</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>          identifier: iso10303-</xsl:text><xsl:value-of select="$data//part"/>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>          sectionsplit: true</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>    - level: attachments</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>      title: Attachments</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>      docref:</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:for-each select="resource/schema">
+				<xsl:text>        - fileref: </xsl:text><xsl:value-of select="concat('../../../resources/',@name,'/',@name,'.exp')"/>
+				<xsl:text>&#xa;</xsl:text>
+				<xsl:text>          identifier: </xsl:text><xsl:value-of select="@name"/><xsl:text>.exp</xsl:text>
+				<xsl:text>&#xa;</xsl:text>
+				<xsl:text>          attachment: true</xsl:text>
+				<xsl:text>&#xa;</xsl:text>
+			</xsl:for-each>
+			<xsl:for-each select="resource/schema">
+				<xsl:text>        - fileref: </xsl:text><xsl:value-of select="concat('sections/schemadocs/',@name,'.htm')"/>
+				<xsl:text>&#xa;</xsl:text>
+				<xsl:text>          identifier: </xsl:text><xsl:value-of select="@name"/><xsl:text>.htm</xsl:text>
+				<xsl:text>&#xa;</xsl:text>
+				<xsl:text>          attachment: true</xsl:text>
+				<xsl:text>&#xa;</xsl:text>
+			</xsl:for-each>
+		</redirect:write>
+	</xsl:template>
+	
 	<!-- for debug purposes -->
 	<xsl:template match="*" mode="print_as_xml">
 		<xsl:text>&#xa;&lt;</xsl:text>

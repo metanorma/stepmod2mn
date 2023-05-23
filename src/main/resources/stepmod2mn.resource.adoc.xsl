@@ -160,7 +160,7 @@
 		<xsl:variable name="title-part-en"><xsl:apply-templates select="resource" mode="display_name"/></xsl:variable>
 		<xsl:variable name="title-part-fr"><xsl:apply-templates select="resource" mode="display_name_french"/></xsl:variable>
 		
-		<xsl:text>= </xsl:text><xsl:value-of select="$title-main-en"/>: <xsl:value-of select="$title-intro-en"/>: <xsl:value-of select="$title-part-en"/>
+		<xsl:text>= </xsl:text><xsl:value-of select="$title-intro-en"/>: <xsl:value-of select="$title-main-en"/>: <xsl:value-of select="$title-part-en"/>
 		<xsl:text>&#xa;</xsl:text>
 		<xsl:text>:docnumber: 10303</xsl:text><!-- <xsl:apply-templates select="resource" mode="docnumber"/> --><!-- res_doc/sect_1_scope.xsl -->
 		<xsl:text>&#xa;</xsl:text>
@@ -254,6 +254,20 @@
 		
 		<!-- Generation schemas.yaml -->
 		<xsl:call-template name="generateSchemasYaml"/>
+		
+		<!-- Generation collection.yml -->
+		<xsl:call-template name="generateCollectionYaml">
+			<xsl:with-param name="data_element">
+				<data>
+					<title lang="en"><xsl:value-of select="$title-intro-en"/> -- <xsl:value-of select="$title-main-en"/> -- <xsl:value-of select="$title-part-en"/></title>
+					<title lang="fr"><xsl:value-of select="$title-intro-fr"/> -- <xsl:value-of select="$title-main-fr"/> -- <xsl:value-of select="$title-part-fr"/></title>
+					<docid>10303-<xsl:value-of select="resource/@part"/></docid>
+					<edition><xsl:value-of select="resource/@version"/></edition>
+					<year><xsl:value-of select="substring(resource/@publication.year,1,4)"/></year>
+					<part><xsl:value-of select="resource/@part"/></part>
+				</data>
+			</xsl:with-param>
+		</xsl:call-template>
 		
 		<xsl:variable name="adoc">
 	

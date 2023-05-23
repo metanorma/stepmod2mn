@@ -257,6 +257,23 @@
 		<xsl:text>&#xa;</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
 		
+		<!-- Generation schemas.yaml -->
+		<xsl:call-template name="generateSchemasYaml"/>
+		
+		<!-- Generation collection.yml -->
+		<xsl:call-template name="generateCollectionYaml">
+			<xsl:with-param name="data_element">
+				<data>
+					<title lang="en"><xsl:value-of select="$title-intro-en"/> -- <xsl:value-of select="$title-main-en"/> -- <xsl:value-of select="$title-part-en"/></title>
+					<title lang="fr"><xsl:value-of select="$title-intro-fr"/> -- <xsl:value-of select="$title-main-fr"/> -- <xsl:value-of select="$title-part-fr"/></title>
+					<docid>10303-<xsl:value-of select="resource/@part"/></docid>
+					<edition><xsl:value-of select="resource/@version"/></edition>
+					<year><xsl:value-of select="substring(resource/@publication.year,1,4)"/></year>
+					<part><xsl:value-of select="resource/@part"/></part>
+				</data>
+			</xsl:with-param>
+		</xsl:call-template>
+		
 		<xsl:variable name="adoc">
 	
 			<!-- Abstract -->
