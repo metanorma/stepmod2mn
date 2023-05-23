@@ -58,6 +58,22 @@ $Id: sect_biblio.xsl,v 1.2 2002/12/19 21:02:58 nigelshaw Exp $
     </xsl:otherwise>
   </xsl:choose>
 
+	<!-- https://github.com/metanorma/stepmod2mn/issues/32#issuecomment-1556860065 -->
+	<!-- Example:
+	* [[[action_schema.exp,repo:(current-metanorma-collection/action_schema.exp)]]]
+	* [[[action_schema.htm,repo:(current-metanorma-collection/action_schema.htm)]]]
+	-->
+	<xsl:for-each select="./schema">
+		<xsl:text>* [[[</xsl:text><xsl:value-of select="@name"/><xsl:text></xsl:text>.exp,repo:(current-metanorma-collection/<xsl:value-of select="@name"/><xsl:text>.exp)]]]</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+	</xsl:for-each>
+	<xsl:text>&#xa;</xsl:text>
+	<xsl:for-each select="./schema">
+		<xsl:text>* [[[</xsl:text><xsl:value-of select="@name"/><xsl:text></xsl:text>.htm,repo:(current-metanorma-collection/<xsl:value-of select="@name"/><xsl:text>.htm)]]]</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+	</xsl:for-each>
+	<xsl:text>&#xa;</xsl:text>
+
 </xsl:template>
   
 </xsl:stylesheet>
