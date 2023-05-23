@@ -3823,6 +3823,7 @@
 									<xsl:with-param name="object_used_in_schema_name" 
 										select="../../@name"/>
 									<xsl:with-param name="clause" select="'section'"/>
+									<xsl:with-param name="skipLink" select="'false'"/>
 								</xsl:call-template></b> type. 
 								<xsl:if test="@selectitems and (string-length(@selectitems)!=0)">
 									It adds the data 

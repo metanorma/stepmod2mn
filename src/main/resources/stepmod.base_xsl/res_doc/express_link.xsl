@@ -581,6 +581,7 @@
 		<xsl:param name="clause" select="section"/>
 		<!-- the schema in which the object has been used -->
 		<xsl:param name="object_used_in_schema_name"/>
+		<xsl:param name="skipLink">true</xsl:param>
 
 		<!-- make sure that the arguments don't have any whitespace -->
 		<xsl:variable name="lobject_name" 
@@ -600,14 +601,21 @@
 					</xsl:call-template>
 				</xsl:variable>
 				
-				<xsl:call-template name="insertHyperlinkSkip">
-					<xsl:with-param name="a">
-						<A HREF="{$xref}">
-							<xsl:value-of select="$lobject_name"/>
-						</A>
-					</xsl:with-param>
-				</xsl:call-template>
-				<xsl:value-of select="$lobject_name"/>
+				<xsl:choose>
+					<xsl:when test="$skipLink = 'true'">
+						<xsl:call-template name="insertHyperlinkSkip">
+							<xsl:with-param name="a">
+								<A HREF="{$xref}">
+									<xsl:value-of select="$lobject_name"/>
+								</A>
+							</xsl:with-param>
+						</xsl:call-template>
+						<xsl:value-of select="$lobject_name"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:text>&lt;&lt;</xsl:text><xsl:value-of select="$lobject_name"/><xsl:text>&gt;&gt;</xsl:text>
+					</xsl:otherwise>
+				</xsl:choose>
 				
 				<!-- debug 
 				<xsl:message>     
