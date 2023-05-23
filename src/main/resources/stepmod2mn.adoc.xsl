@@ -198,7 +198,7 @@
 		<xsl:param name="keep-with-previous" select="'false'"/>
 		
 		<xsl:choose>
-			<xsl:when test="$keep-with-previous = 'true'">+<br/>+<br/></xsl:when>
+			<xsl:when test="$keep-with-previous = 'true'"> +<br/>+<br/></xsl:when>
 			<xsl:otherwise><br/><br/></xsl:otherwise>
 		</xsl:choose>
 		

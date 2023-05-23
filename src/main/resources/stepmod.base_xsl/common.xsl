@@ -849,6 +849,11 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 			</p>
 		</xsl:otherwise>
 	</xsl:choose> -->
+	
+	<xsl:if test="preceding-sibling::node()[1][self::text()][normalize-space() != '']">
+		<xsl:text>&#xa;&#xa;</xsl:text>
+	</xsl:if>
+	
   <xsl:choose>
 		<xsl:when test="following-sibling::*[1][local-name() = 'example' or local-name() = 'note']">
 			<xsl:call-template name="insertParagraph">
