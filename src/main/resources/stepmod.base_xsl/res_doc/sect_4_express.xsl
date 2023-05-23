@@ -1307,12 +1307,13 @@
 		<!-- </p> -->
 		
 		<!-- commented, because express_ref:[...] inserted above -->
-		<!-- <xsl:apply-templates select="./explicit" mode="description"/>    
+		<!-- uncommented for https://github.com/metanorma/stepmod2mn/issues/32, and because  express_ref: commented above, in commit Nov 7, 2020-->
+		<xsl:apply-templates select="./explicit" mode="description"/>    
 		<xsl:apply-templates select="./derived" mode="description"/>    
 		<xsl:apply-templates select="./inverse" mode="description"/>  
 		<xsl:apply-templates select="./unique" mode="description"/>
 		<xsl:call-template name="output_where_formal"/>
-		<xsl:call-template name="output_where_informal"/>-->
+		<xsl:call-template name="output_where_informal"/>
 	</xsl:template>
 
 
