@@ -1958,13 +1958,15 @@ the types, entity specializations, and functions that are specific to this part 
 			</a>
 		</code> -->
 		<xsl:if test="$xref != ''">
-			<xsl:text>[[</xsl:text><xsl:value-of select="$xref"/><xsl:text>]]&#xa;</xsl:text>
+			<xsl:text>[[</xsl:text><xsl:value-of select="$xref"/><xsl:text>]]</xsl:text> <!-- &#xa; -->
 		</xsl:if>
 		<code>
 		<xsl:call-template name="insertLutaMLCodeStart"/>
 			<!-- <xsl:text>*)&#xa;</xsl:text>		 -->
 			<xsl:text>SCHEMA </xsl:text><xsl:value-of select="concat($schema_name,';')"/>
+		<xsl:if test="not($express_xml/express/schema/interface)">
 		<xsl:call-template name="insertCodeEnd"/>
+		</xsl:if>
 		</code>
 
 		<!-- output all the EXPRESS specifications -->
@@ -1972,13 +1974,14 @@ the types, entity specializations, and functions that are specific to this part 
 	 The template is in sect4_express.xsl -->
 		<xsl:if test="$express_xml/express/schema/interface">
 			<!-- <a name="interfaces"/> -->
-			<xsl:text>[[interfaces_</xsl:text><xsl:value-of select="$schema_name"/><xsl:text>]]</xsl:text>
-			<xsl:text>&#xa;</xsl:text>
+			<!-- <xsl:text>[[interfaces_</xsl:text><xsl:value-of select="$schema_name"/><xsl:text>]]</xsl:text> -->
+			<xsl:text>&#xa;&#xa;</xsl:text>
 		</xsl:if>
 		<!-- start
 		express_xml=<xsl:value-of select="concat($resource_dir,'/',@name,'.xml')"/> -->
 		<xsl:apply-templates select="$express_xml/express/schema/interface">
 			<xsl:with-param name="doctype" select="$doctype"/>
+			<xsl:with-param name="skipLutaMLCodeStart">true</xsl:with-param>
 		</xsl:apply-templates>
 <!-- end -->
 

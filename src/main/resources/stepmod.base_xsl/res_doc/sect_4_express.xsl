@@ -178,6 +178,7 @@
 				 +++++++++++++++++++ -->
 	<xsl:template match="interface">
 		<xsl:param name="doctype"/>
+		<xsl:param name="skipLutaMLCodeStart">false</xsl:param>
 		<xsl:variable name="schema_name" select="../@name"/>      
 		<xsl:if test="position()=1">
 			<xsl:variable name="clause_number">
@@ -194,7 +195,7 @@
 			</xsl:if>
 		<!-- <p> -->
 			<code>
-			<xsl:if test="position()=1">
+			<xsl:if test="position()=1 and $skipLutaMLCodeStart = 'false'">
 				<xsl:call-template name="insertLutaMLCodeStart"/>
 			</xsl:if>
 
