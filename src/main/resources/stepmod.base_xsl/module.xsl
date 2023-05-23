@@ -1442,7 +1442,7 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
     </a>
   </div> -->
 
-  <xsl:text>[#table_e1]</xsl:text>
+  <xsl:text>[[table_e1]]</xsl:text>
   <xsl:text>&#xa;</xsl:text>
   <xsl:text>[cols="^,^",options="header"]</xsl:text>
   <xsl:text>&#xa;</xsl:text>

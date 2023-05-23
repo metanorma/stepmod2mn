@@ -1375,7 +1375,8 @@ Purpose:
 			corresponding short names as specified or referenced in this part of ISO
 			10303. It also provides a listing of each EXPRESS schema specified in this
 			part of ISO 10303 without comments or other explanatory text. These
-			listings are available in computer-interpretable form in Table C.1 and can
+			<!-- listings are available in computer-interpretable form in Table C.1 and can -->
+			listings are available in computer-interpretable form in &lt;&lt;tablec1&gt;&gt; and can
 			be found at the following URLs:
 			</xsl:with-param>
 		</xsl:call-template>
@@ -1422,7 +1423,7 @@ Purpose:
 		</div> -->
 		
 		
-		<xsl:text>[#table_e1]</xsl:text>
+		<xsl:text>[[tablec1]]</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
 		<xsl:text>[cols="^,^",options="header"]</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
