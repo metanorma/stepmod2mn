@@ -4,6 +4,7 @@
 <!--
      $Id: issues.xsl,v 1.17 2005/01/14 19:29:54 thendrix Exp $
 -->
+<!-- Updated: Alexander Dyuzhev, for stepmod2mn tool-->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 	
@@ -188,8 +189,12 @@
   </xsl:variable>
 
   <blockquote>
-    <span style="background-color: {$bg_color}">
-      <b>
+  <xsl:call-template name="insertQuoteStart"/>
+    <!-- <span style="background-color: {$bg_color}">
+      <b> -->
+      
+      <xsl:call-template name="insertHyperlink">
+				<xsl:with-param name="a">
         <a href="../dvlp/issues{$FILE_EXT}#{$issue_target}">
           <xsl:apply-templates select="." mode="status_icon"/>
           Issue:
@@ -198,9 +203,14 @@
                                 ' by ', string(@by),
                                 ' (', string(@date), 
                                 ') [', string(@category),', ',string(@status), ', ',$resolution,']')" />
+        
         </a>
-      </b> 
-      <br/>
+        </xsl:with-param>
+      </xsl:call-template>
+      <!-- </b> 
+      <br/> -->
+      <xsl:text>&#xa;</xsl:text>
+      
 <!-- commented out as tc184-sc4.rg no longer operational      
       <xsl:if test="@seds='yes'">
         <i>
@@ -215,27 +225,43 @@
       </xsl:if>
 -->
       <xsl:if test="@ballot_comment='yes'">
-        <i>
-          Registered as a Ballot comment by:
+        <xsl:text>&#xa;</xsl:text>
+        
+        <!-- <i> -->
+          <xsl:text>_Registered as a Ballot comment by:</xsl:text>
           <xsl:value-of select="concat(@member_body,' (',@ballot,')')"/>
+          <xsl:text>_</xsl:text>
           
-        </i>
-        <br/>
+        <!-- </i> -->
+        <!-- <br/> -->
+        <xsl:text>&#xa;&#xa;</xsl:text>
       </xsl:if>      
       <xsl:apply-templates/>
-    </span>
+    <!-- </span> -->
+    <xsl:call-template name="insertQuoteEnd"/>
   </blockquote>
 </xsl:template>
 
 
   <xsl:template match="comment">
-  <blockquote>
+  <!-- <blockquote>
     <b>Comment: </b>
     <i><xsl:value-of select="string(@status)" /></i>
     (<xsl:value-of select="concat(string(@by),' ', string(@date))" />
     <b>)</b><br/>
     <xsl:apply-templates />
-  </blockquote>
+  </blockquote> -->
+  <blockquote>
+    <xsl:call-template name="insertQuoteStart"/>
+      <xsl:text>*Comment:* _</xsl:text>
+      <xsl:value-of select="string(@status)" />
+      <xsl:text>_ (</xsl:text>
+      <xsl:value-of select="concat(string(@by),' ', string(@date))" />
+      <xsl:text>)</xsl:text>
+      <xsl:text>&#xa;&#xa;</xsl:text>
+      <xsl:apply-templates />
+    <xsl:call-template name="insertQuoteEnd"/>
+    </blockquote>
   </xsl:template>
 
   <xsl:template name="issue_ae_map_aname">
@@ -247,13 +273,22 @@
   </xsl:template>
 
 <xsl:template match="issue_management">
-  <blockquote>
+  <!-- <blockquote>
     <b>Issue Management: </b>
     <xsl:for-each select="@*" >
     <xsl:value-of select="concat(name(),': ', string(.))" /><br/>
     </xsl:for-each>
     <xsl:apply-templates />
-  </blockquote>
+  </blockquote> -->
+  <blockquote>		
+    <xsl:call-template name="insertQuoteStart"/>
+      <xsl:text> *Issue Management:* </xsl:text>
+      <xsl:for-each select="@*" >
+        <xsl:value-of select="concat(name(),': ', string(.))" /><xsl:text>&#xa;</xsl:text>
+      </xsl:for-each>
+      <xsl:apply-templates />
+    <xsl:call-template name="insertQuoteEnd"/>
+    </blockquote>
   </xsl:template>
 
 <xsl:template match="ae"  mode="output_mapping_issue">

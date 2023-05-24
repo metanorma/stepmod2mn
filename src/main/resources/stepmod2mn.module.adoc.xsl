@@ -44,7 +44,7 @@
 	<xsl:import href="stepmod.base_xsl/sect_g_change.xsl"/>
 	<xsl:import href="stepmod.base_xsl/sect_biblio.xsl"/>
 	
-	<xsl:import href="stepmod.base_xsl/projmg/resource_issues.xsl"/>
+	<xsl:import href="stepmod.base_xsl/projmg/issues.xsl"/>
 
 	<xsl:output method="text" encoding="UTF-8"/> <!-- text, xml for debug -->
 

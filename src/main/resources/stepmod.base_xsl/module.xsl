@@ -1113,7 +1113,12 @@ TT remove since locke is no longer available.
   <xsl:apply-templates select=".." mode="output_clause_issue">
     <xsl:with-param name="clause" select="'purpose'"/>
   </xsl:apply-templates>
-  <xsl:apply-templates/>
+  
+  <xsl:call-template name="insertParagraph">
+    <xsl:with-param name="text">
+      <xsl:apply-templates/>
+    </xsl:with-param>
+  </xsl:call-template>
 
   <xsl:if test="../changes">  
     <xsl:variable name="annex_letter">
@@ -1157,7 +1162,8 @@ TT remove since locke is no longer available.
 
     The information requirements of the application are specified in Clause 
     <!-- <a href="4_info_reqs{$FILE_EXT}">4</a> using terminology appropriate to -->
-    &lt;lt;sec_4_info_reqs&gt;&gt; using terminology appropriate to
+    The information requirements of the application are specified in 
+    &lt;&lt;sec_4_info_reqs&gt;&gt; using terminology appropriate to
     the application. 
 
     A graphical representation of the information requirements, referred to
