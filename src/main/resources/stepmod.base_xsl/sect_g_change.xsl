@@ -116,6 +116,7 @@ $Id: sect_g_change.xsl,v 1.17 2017/09/29 06:01:47 mikeward Exp $
           <xsl:value-of select="concat($annex_letter,'.',position()+1,' Changes made in edition ',@version)"/>
         </a>
       </h2> -->
+      <xsl:text>&#xa;&#xa;</xsl:text>
       <xsl:call-template name="insertHeaderADOC">
 				<xsl:with-param name="id" select="$aname"/>		
 				<xsl:with-param name="level" select="2"/>
