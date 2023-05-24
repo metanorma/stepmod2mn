@@ -1666,7 +1666,7 @@ width="20" height="20"/> -->
 				<xsl:with-param name="module" select="$module"/>
 			</xsl:call-template>
 		</xsl:variable>
-		<xsl:value-of select="concat('../data/modules/',$mod_dir)"/>
+		<xsl:value-of select="concat($path,'../../../data/modules/',$mod_dir)"/>
 	</xsl:template>
 
 

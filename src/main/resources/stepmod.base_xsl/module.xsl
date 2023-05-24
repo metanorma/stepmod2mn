@@ -1830,8 +1830,9 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
   </xsl:call-template>
   <xsl:variable name="c_expg"
     select="concat('./c_arm_expg',$FILE_EXT)"/>
-  <xsl:variable name="sect51" 
-    select="concat('./5_mapping',$FILE_EXT,'#mapping')"/>
+  <!-- <xsl:variable name="sect51" 
+    select="concat('./5_mapping',$FILE_EXT,'#mapping')"/> -->
+  <xsl:variable name="sect51">mapping</xsl:variable> 
 
   <xsl:variable name="current_module">
     <xsl:call-template name="module_display_name">
@@ -1845,6 +1846,7 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
     </xsl:call-template>
   </xsl:variable>
 
+  <xsl:text>arm_xml=</xsl:text><xsl:value-of select="concat($module_dir,'/arm.xml')"/>
   <xsl:variable name="arm_xml" select="concat($module_dir,'/arm.xml')"/>
 
   <xsl:variable name="arm_node" select="document($arm_xml)"/>
@@ -1854,8 +1856,7 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
   <xsl:call-template name="insertParagraph">
     <xsl:with-param name="text">
     This clause specifies the information requirements for the 
-    <!-- <b><xsl:value-of select="$current_module"/></b> -->
-    *<xsl:value-of select="$current_module"/>*
+    <b><xsl:value-of select="$current_module"/></b>
     application module. The information requirements are specified as the
     Application Reference Model (ARM) of this application module.
     </xsl:with-param>
