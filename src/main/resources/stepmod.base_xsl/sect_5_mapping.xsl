@@ -251,20 +251,22 @@ $Id: sect_5_mapping.xsl,v 1.89 2019/03/28 19:39:31 mike Exp $
 
 <xsl:template name="mapping_syntax">
   <!-- boiler plate text for mapping syntax -->
-  <xsl:variable name="sect4" 
-    select="concat('4_info_reqs',$FILE_EXT)"/>
-  <xsl:variable name="sect52" 
-    select="concat('5_mim',$FILE_EXT,'#mim_express')"/>
+  <!-- <xsl:variable name="sect4" 
+    select="concat('4_info_reqs',$FILE_EXT)"/> -->
+  <xsl:variable name="sect4">arm</xsl:variable>
+  <!-- <xsl:variable name="sect52" 
+    select="concat('5_mim',$FILE_EXT,'#mim_express')"/> -->
+  <xsl:variable name="sect52">mim_express</xsl:variable>
   <!-- <p> -->
   <xsl:call-template name="insertParagraph">
     <xsl:with-param name="text">
     In the following, &quot;Application element&quot; designates any entity data
-    type defined in <!-- Clause <a href="{$sect4}">4</a> -->&lt;&lt;sect4&gt;&gt;, any of its 
+    type defined in <!-- Clause <a href="{$sect4}">4</a> -->&lt;&lt;<xsl:value-of select="$sect4"/>&gt;&gt;, any of its 
     explicit attributes and any subtype constraint. 
     &quot;MIM element&quot; designates any entity data type defined in 
-    <!-- Clause <a href="{$sect52}">5.2</a> -->&lt;&lt;sect52&gt;&gt; or imported with a USE FROM
+    <!-- Clause <a href="{$sect52}">5.2</a> -->&lt;&lt;<xsl:value-of select="$sect52"/>&gt;&gt; or imported with a USE FROM
     statement, from another EXPRESS schema, any of its 
-    attributes and any subtype constraint defined in <!-- Clause <a href="{$sect52}">5.2</a> -->&lt;&lt;sect52&gt;&gt; or imported with a USE FROM
+    attributes and any subtype constraint defined in <!-- Clause <a href="{$sect52}">5.2</a> -->&lt;&lt;<xsl:value-of select="$sect52"/>&gt;&gt; or imported with a USE FROM
     statement.
     </xsl:with-param>
   </xsl:call-template>
@@ -414,8 +416,7 @@ When the mapping of an application element involves more than one MIM element, e
 <!-- <li> --><xsl:text>* </xsl:text>the reference path to its supertypes in the common resources, 
 for each MIM element created within this part of ISO 10303; 
 <!-- </li> --><xsl:text>&#xa;&#xa;</xsl:text>
-<!-- <li> --><xsl:text>* </xsl:text>
-the specification of the relationships between MIM elements, when the mapping of an application element requires to relate instances of several
+<!-- <li> --><xsl:text>* </xsl:text>the specification of the relationships between MIM elements, when the mapping of an application element requires to relate instances of several
  MIM entity data types. In such a case, each line in the reference path
     documents the role of a MIM element relative to the referring MIM
     element or to the next referred MIM element. 
@@ -703,12 +704,13 @@ relationship tree structure. The path between the relationship entity and the re
            another module -->
       <!-- TEH except when it isnt - as in derived_geometry -->
       <xsl:when test="@original_module">
-        <xsl:value-of 
-          select="concat('../../',@original_module,'/sys/4_info_reqs',$FILE_EXT,'#',$ae_aname)"/>
+        <!-- <xsl:value-of select="concat('../../',@original_module,'/sys/4_info_reqs',$FILE_EXT,'#',$ae_aname)"/> -->
+        <xsl:value-of select="$ae_aname"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of 
-          select="concat('./4_info_reqs',$FILE_EXT,'#',$ae_aname)"/>        
+        <!-- <xsl:value-of 
+          select="concat('./4_info_reqs',$FILE_EXT,'#',$ae_aname)"/>         -->
+        <xsl:value-of select="$ae_aname"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
@@ -943,8 +945,9 @@ relationship tree structure. The path between the relationship entity and the re
       <!-- original_module specified then the ARM object is declared in
            another module -->
       <xsl:when test="../@original_module">
-        <xsl:value-of 
-          select="concat('../../',../@original_module,'/sys/4_info_reqs',$FILE_EXT,'#',$aa_aname)"/>
+        <!-- <xsl:value-of 
+          select="concat('../../',../@original_module,'/sys/4_info_reqs',$FILE_EXT,'#',$aa_aname)"/> -->
+        <xsl:value-of select="$aa_aname"/>
 
       </xsl:when>
       <!-- inherited_from_module specified then the ARM attribute is
@@ -958,12 +961,14 @@ relationship tree structure. The path between the relationship entity and the re
           </xsl:call-template>
         </xsl:variable>
 
-        <xsl:value-of 
-          select="concat('../../',@inherited_from_module,'/sys/4_info_reqs',$FILE_EXT,'#',$aa_inh_aname)"/>
+        <!-- <xsl:value-of 
+          select="concat('../../',@inherited_from_module,'/sys/4_info_reqs',$FILE_EXT,'#',$aa_inh_aname)"/> -->
+        <xsl:value-of select="$aa_inh_aname"/>
 
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="concat('./4_info_reqs',$FILE_EXT,'#',$aa_aname)"/>        
+        <!-- <xsl:value-of select="concat('./4_info_reqs',$FILE_EXT,'#',$aa_aname)"/>         -->
+        <xsl:value-of select="$aa_aname"/>        
       </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
@@ -1043,12 +1048,14 @@ relationship tree structure. The path between the relationship entity and the re
             <!-- if original_module specified then the ARM object is
                  declared in another module -->
             <xsl:when test="../@original_module">
-              <xsl:value-of 
-                select="concat('../../',../@original_module,'/sys/4_info_reqs',$FILE_EXT,'#',$ae_aname)"/>
+              <!-- <xsl:value-of 
+                select="concat('../../',../@original_module,'/sys/4_info_reqs',$FILE_EXT,'#',$ae_aname)"/> -->
+              <xsl:value-of select="$ae_aname"/>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:value-of 
-                select="concat('./4_info_reqs',$FILE_EXT,'#',$ae_aname)"/>        
+              <!-- <xsl:value-of 
+                select="concat('./4_info_reqs',$FILE_EXT,'#',$ae_aname)"/>         -->
+              <xsl:value-of select="$ae_aname"/>
             </xsl:otherwise>
           </xsl:choose>
         </xsl:variable>
@@ -1717,12 +1724,14 @@ the mapping specification')"/>
     <xsl:choose>
       <!-- if original_module specified then the ARM object is declared in another module -->
       <xsl:when test="@original_module">
-        <xsl:value-of 
-          select="concat('../../',@original_module,'/sys/4_info_reqs',$FILE_EXT,'#',$sc_aname)"/>
+        <!-- <xsl:value-of 
+          select="concat('../../',@original_module,'/sys/4_info_reqs',$FILE_EXT,'#',$sc_aname)"/> -->
+        <xsl:value-of select="$sc_aname"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of 
-          select="concat('./4_info_reqs',$FILE_EXT,'#',$sc_aname)"/>        
+        <!-- <xsl:value-of 
+          select="concat('./4_info_reqs',$FILE_EXT,'#',$sc_aname)"/>         -->
+        <xsl:value-of select="$sc_aname"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
