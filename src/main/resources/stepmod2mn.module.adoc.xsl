@@ -18,7 +18,6 @@
 
 	<xsl:import href="stepmod.base_xsl/common.xsl"/>
 	
-	<xsl:import href="stepmod.base_xsl/common.xsl"/>
 	<xsl:import href="stepmod.base_xsl/express.xsl"/>
 	<xsl:import href="stepmod.base_xsl/express_description.xsl"/>
 	<xsl:import href="stepmod.base_xsl/express_link.xsl"/>
@@ -293,14 +292,14 @@
 			<!-- Introduction -->
 			<!-- sys/introduction.xml -->
 			<xsl:message>[INFO] Processing Introduction ...</xsl:message>
-      <xsl:variable name="introduction">
-        <xsl:apply-templates select="module" mode="introduction"/> <!-- sect_introduction.xsl  -->
-      </xsl:variable>
-      <xsl:if test="normalize-space($introduction) != ''">
-        <file path="sections/00-introduction.adoc">
-          <xsl:copy-of select="$introduction"/>
-        </file>
-      </xsl:if>
+			<xsl:variable name="introduction">
+				<xsl:apply-templates select="module" mode="introduction"/> <!-- sect_introduction.xsl  -->
+			</xsl:variable>
+			<xsl:if test="normalize-space($introduction) != ''">
+				<file path="sections/00-introduction.adoc">
+					<xsl:copy-of select="$introduction"/>
+				</file>
+			</xsl:if>
 					
 			<!-- 1 Scope -->
 			<!-- sys/1_scope.xml -->

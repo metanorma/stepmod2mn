@@ -718,6 +718,9 @@ TT remove since locke is no longer available.
       
       <xsl:choose>
         <xsl:when test="@previous.revision.cancelled='NO'">
+          <xsl:call-template name="insertParagraph">
+            <xsl:with-param name="text">
+        
           This <xsl:value-of select="$this_edition"/> edition <!--of  
           <xsl:value-of select="$part_no"/>--> 
           cancels and replaces the
@@ -725,6 +728,9 @@ TT remove since locke is no longer available.
           (<xsl:value-of
             select="concat($part_no,':',@previous.revision.year)"/>),
           which has been technically revised. 
+          
+            </xsl:with-param>
+          </xsl:call-template>
           
           
           <!-- No longer use @revision.complete
@@ -755,6 +761,8 @@ TT remove since locke is no longer available.
         
         <xsl:otherwise>
           <!-- cancelled -->
+          <xsl:call-template name="insertParagraph">
+            <xsl:with-param name="text">
           This <xsl:value-of select="$this_edition"/> edition <!--of 
           <xsl:value-of select="$part_no"/>--> cancels and replaces the
           <xsl:value-of select="$prev_edition"/> edition
@@ -782,8 +790,12 @@ TT remove since locke is no longer available.
               which has been technically revised.
             </xsl:otherwise>
           </xsl:choose>
+            </xsl:with-param>
+          </xsl:call-template>
+          
         </xsl:otherwise>
       </xsl:choose>
+
       <xsl:if test="./changes">
         <xsl:variable name="annex_letter">
           <xsl:choose>
@@ -888,11 +900,7 @@ TT remove since locke is no longer available.
     <!-- </p> -->
     
     <xsl:if test="@version!='1'">
-      <xsl:call-template name="insertParagraph">
-        <xsl:with-param name="text">
-          <xsl:apply-templates select="." mode="edition_sentence"/>  
-        </xsl:with-param>
-      </xsl:call-template>
+      <xsl:apply-templates select="." mode="edition_sentence"/>
     </xsl:if>
     
   <!-- <p> -->

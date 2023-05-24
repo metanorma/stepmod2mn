@@ -588,9 +588,9 @@ $Id: sect_g_change.xsl,v 1.17 2017/09/29 06:01:47 mikeward Exp $
     </xsl:choose>
   </xsl:template>
   
-  <xsl:template match="li">
+  <!-- <xsl:template match="li">
     <xsl:value-of select="."/>
-  </xsl:template>
+  </xsl:template> -->
   
   
   <xsl:template match="arm.additions">    
