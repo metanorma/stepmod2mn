@@ -90,6 +90,44 @@ $Id: common.xsl,v 1.204 2018/10/07 10:51:54 mike Exp $
 </xsl:template>
 
 
+<xsl:template match="module" mode="display_name">
+	<xsl:text>Application module: </xsl:text>
+	<xsl:call-template name="module_display_name">
+		<xsl:with-param name="module" select="@name"/>
+	</xsl:call-template>
+</xsl:template>
+
+<xsl:template match="module" mode="display_name_french">
+	<xsl:choose>
+		<xsl:when test="string-length(normalize-space(@name.french))=0">
+			<xsl:text>Module d'application: </xsl:text>
+			<xsl:choose>
+				<xsl:when test="$ERROR_CHECK_ISOCOVER='YES'">
+					<xsl:call-template name="error_message">
+						<xsl:with-param 
+							name="message" 
+							select="concat('Error FT: No French title (module/@name.french) provided for ',@name)"/>
+					</xsl:call-template>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:call-template name="module_display_name">
+						<xsl:with-param name="module" select="@name"/>
+					</xsl:call-template>  
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:when>
+		<xsl:otherwise>
+			<xsl:text>Module d'application: </xsl:text>
+			<xsl:call-template name="module_display_name">
+				<xsl:with-param name="module" select="@name.french"/>
+			</xsl:call-template>                
+		</xsl:otherwise>
+	</xsl:choose>
+
+
+	<xsl:if test="@name.french">
+	</xsl:if>
+</xsl:template>
 
 
 <!-- output the clause heading -->

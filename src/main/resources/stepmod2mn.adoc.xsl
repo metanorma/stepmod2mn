@@ -20,12 +20,25 @@
 	
 	
 	<xsl:template name="getLanguage">
-		<xsl:variable name="lang" select="java:toLowerCase(java:java.lang.String.new(resource/@language))"/>
 		<xsl:choose>
-			<xsl:when test="$lang = 'e'">en</xsl:when> 
-			<xsl:when test="$lang = 'd'">de</xsl:when> 
-			<xsl:when test="$lang = 'z'">zh</xsl:when> 
-			<xsl:otherwise><xsl:value-of select="resource/@language"/></xsl:otherwise>
+			<xsl:when test="resource">
+				<xsl:variable name="lang" select="java:toLowerCase(java:java.lang.String.new(resource/@language))"/>
+				<xsl:choose>
+					<xsl:when test="$lang = 'e'">en</xsl:when> 
+					<xsl:when test="$lang = 'd'">de</xsl:when> 
+					<xsl:when test="$lang = 'z'">zh</xsl:when> 
+					<xsl:otherwise><xsl:value-of select="resource/@language"/></xsl:otherwise>
+				</xsl:choose>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:variable name="lang" select="java:toLowerCase(java:java.lang.String.new(module/@language))"/>
+				<xsl:choose>
+					<xsl:when test="$lang = 'e'">en</xsl:when> 
+					<xsl:when test="$lang = 'd'">de</xsl:when> 
+					<xsl:when test="$lang = 'z'">zh</xsl:when> 
+					<xsl:otherwise><xsl:value-of select="module/@language"/></xsl:otherwise>
+				</xsl:choose>
+			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
 
