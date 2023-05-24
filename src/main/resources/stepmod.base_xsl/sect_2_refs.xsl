@@ -157,12 +157,13 @@ $Id: sect_2_refs.xsl,v 1.21 2018/08/22 23:06:22 mike Exp $
     
     <!-- MWD 2018-07-04 6538 the above paragraph replaced with this one -->
     <!-- <p> -->
-    <xsl:call-template name="insertParagraph">
+    <!-- no need put boilerplate text into bibliography section -->
+    <!-- <xsl:call-template name="insertParagraph">
 			<xsl:with-param name="text">
       The following documents are referred to in the text in such a way that some or all of their content constitutes requirements of this document. 
       For dated references, only the edition cited applies. For undated references, the latest edition of the referenced document (including any amendments) applies.
       </xsl:with-param>
-    </xsl:call-template>
+    </xsl:call-template> -->
     <!-- </p>  -->
     
     
@@ -248,6 +249,7 @@ $Id: sect_2_refs.xsl,v 1.21 2018/08/22 23:06:22 mike Exp $
       </xsl:otherwise>
     </xsl:choose> -->
     <xsl:variable name="normref_nodes" select="xalan:nodeset($normref_list)"/>
+    <!-- <xsl:apply-templates select="$normref_nodes" mode="print_as_xml"/> -->
     <xsl:apply-templates select="$normref_nodes" mode="output_normrefs"/>
   </xsl:template>
 
@@ -673,6 +675,7 @@ $Id: sect_2_refs.xsl,v 1.21 2018/08/22 23:06:22 mike Exp $
         <xsl:value-of select="$stdnumber"/> -->
       
       <xsl:text>* [[[</xsl:text>
+      <xsl:if test="translate(substring(@id,1,1),'0123456789','') = ''">_</xsl:if>
 			<xsl:value-of select="@id"/>
 			<xsl:text>,</xsl:text>
 			<xsl:value-of select="$stdnumber"/>
@@ -680,11 +683,11 @@ $Id: sect_2_refs.xsl,v 1.21 2018/08/22 23:06:22 mike Exp $
         
         <xsl:if test="stdref[@published='n']">
           <xsl:text> footnote:[To be published.]</xsl:text><!-- <sup><a href="#tobepub">1</a>)</sup> -->
-        </xsl:if>,
+        </xsl:if><xsl:text>, </xsl:text>
         
         <!-- &#160; <i> -->
         <xsl:text>_</xsl:text>
-          <xsl:value-of select="stdref/stdtitle"/>
+          <xsl:value-of select="normalize-space(stdref/stdtitle)"/>
           <xsl:variable name="subtitle" select="normalize-space(stdref/subtitle)"/>
           <xsl:choose>
           <xsl:when test="substring($subtitle, string-length($subtitle)) = '.'">
@@ -707,6 +710,7 @@ $Id: sect_2_refs.xsl,v 1.21 2018/08/22 23:06:22 mike Exp $
         <xsl:text>_</xsl:text>
         <!--<xsl:value-of select="$id"/>-->
       <!-- </p> -->
+      <xsl:text>&#xa;&#xa;</xsl:text>
     </xsl:if>
   </xsl:template>
 
