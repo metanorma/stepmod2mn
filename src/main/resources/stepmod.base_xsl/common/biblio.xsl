@@ -3,8 +3,10 @@
 <!--
     $Id: biblio.xsl,v 1.5 2010/11/09 00:51:07 radack Exp $
   -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:msxsl="urn:schemas-microsoft-com:xslt" xmlns:exslt="http://exslt.org/common" exclude-result-prefixes="msxsl exslt" version="1.0">
-	<xsl:variable name="bib_file">../../data/basic/bibliography.xml</xsl:variable>
+<!-- Updated: Alexander Dyuzhev, for stepmod2mn tool -->
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan" exclude-result-prefixes="xalan" version="1.0">
+	<!-- <xsl:variable name="bib_file">../../data/basic/bibliography.xml</xsl:variable> -->
+	<xsl:variable name="bib_file"><xsl:value-of select="$path"/>../../../data/basic/bibliography.xml</xsl:variable>
 	<xsl:template name="get_bib_file">
 		<xsl:param name="doc_type"/>
 		<xsl:value-of select="$bib_file"/>
@@ -68,13 +70,29 @@
 			</xsl:choose>
 		</xsl:variable>
 		<xsl:variable name="frag" select="concat('bibitem_',@id)"/>
-		<p>
+    <!-- <xsl:apply-templates select="." mode="print_as_xml"/> -->
+		<!-- <p>
 			<A NAME="{$frag}"/>
 
 			[<xsl:value-of select="$number_start+$number"/>] 
       <xsl:apply-templates select="." mode="bibitem_content"/>
 			<xsl:apply-templates select="ulink"/>
-		</p>
+		</p> -->
+    
+    <xsl:text>* [[[</xsl:text>
+		<xsl:value-of select="$frag"/>
+    <xsl:choose>
+      <xsl:when test="stdnumber">,<xsl:value-of select="stdnumber"/></xsl:when>
+      <xsl:when test="number">,<xsl:value-of select="number"/></xsl:when>
+    </xsl:choose>
+		<xsl:text>]]], </xsl:text>
+    <xsl:variable name="bibitem_text">
+      <xsl:apply-templates select="." mode="bibitem_content"/>
+      <xsl:apply-templates select="ulink"/>
+    </xsl:variable>
+    <xsl:value-of select="normalize-space($bibitem_text)"/>
+    <xsl:text>&#xa;&#xa;</xsl:text>
+    
 	</xsl:template>
 	<!-- item is a standard -->
 	<xsl:template match="bibitem" mode="bibitem_content">
@@ -276,7 +294,7 @@
 				</xsl:apply-templates>
 			</bibitems>
 		</xsl:variable>
-		<xsl:choose>
+		<!-- <xsl:choose>
 			<xsl:when test="function-available('msxsl:node-set')">
 				<xsl:variable name="bibitem_nodes" select="msxsl:node-set($bibitems)"/>
 				<xsl:if test="$bibitem_nodes//bibitem[@published='n']">
@@ -315,7 +333,26 @@
 					</table>
 				</xsl:if>
 			</xsl:when>
-		</xsl:choose>
+		</xsl:choose> -->
+    
+    <xsl:variable name="bibitem_nodes" select="xalan:nodeset($bibitems)"/>
+    <xsl:if test="$bibitem_nodes//bibitem[@published='n']">
+      <table width="200">
+        <tr>
+          <td>
+            <hr/>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a name="tobepub">
+              <sup>1)</sup> To be published.
+</a>
+          </td>
+        </tr>
+      </table>
+    </xsl:if>
+    
 	</xsl:template>
 	<!-- collect up all bibitems in order to check for unpublished bib items -->
 	<xsl:template match="bibliography" mode="collect_bibitems">
@@ -353,10 +390,31 @@
 				<xsl:variable name="ap_xml" select="concat($ap_dir,'/application_protocol.xml')"/>
 				<xsl:variable name="ap_nodes" select="document(string($ap_xml))"/>
 				<xsl:variable name="number" select="position()"/>
-				<p>
+				<!-- <p>
           [<xsl:value-of select="$number_start+$number"/>] 
           <xsl:apply-templates select="$ap_nodes/application_protocol" mode="bibitem"/>
-				</p>
+				</p> -->
+        
+        <xsl:variable name="stdnumber">
+          <xsl:call-template name="get_protocol_stdnumber">
+            <xsl:with-param name="application_protocol" select="$ap_nodes/application_protocol"/>
+          </xsl:call-template>
+        </xsl:variable>
+        <xsl:variable name="id" select="translate($stdnumber, '/  ', '_')"/>
+        
+        <xsl:text>* [[[</xsl:text>
+        <xsl:value-of select="concat('bibitem_',$id)"/>
+        <xsl:choose>
+          <xsl:when test="stdnumber">,<xsl:value-of select="stdnumber"/></xsl:when>
+          <xsl:when test="number">,<xsl:value-of select="number"/></xsl:when>
+        </xsl:choose>
+        <xsl:text>]]], </xsl:text>
+        <xsl:variable name="bibitem_text">
+          <xsl:apply-templates select="$ap_nodes/application_protocol" mode="bibitem"/>
+        </xsl:variable>
+        <xsl:value-of select="normalize-space($bibitem_text)"/>
+        <xsl:text>&#xa;&#xa;</xsl:text>
+        
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:call-template name="error_message">
@@ -384,13 +442,37 @@
 						<xsl:with-param name="module" select="$module"/>
 					</xsl:call-template>
 				</xsl:variable>
-				<xsl:variable name="module_xml" select="concat('../',$module_dir,'/module.xml')"/>
+				<!-- <xsl:variable name="module_xml" select="concat('../',$module_dir,'/module.xml')"/> -->
+				<xsl:variable name="module_xml" select="concat($module_dir,'/module.xml')"/>
+        
 				<xsl:variable name="module_nodes" select="document(string($module_xml))"/>
 				<xsl:variable name="number" select="position()"/>
-				<p>
+				<!-- <p>
           [<xsl:value-of select="$number_start+$number"/>] 
           <xsl:apply-templates select="$module_nodes/module" mode="bibitem"/>
-				</p>
+				</p> -->
+        <!-- <xsl:apply-templates select="$module_nodes/module" mode="print_as_xml"/> -->
+        
+        <xsl:variable name="stdnumber">
+          <xsl:call-template name="get_module_stdnumber_undated">
+            <xsl:with-param name="module" select="$module_nodes/module"/>
+          </xsl:call-template>
+        </xsl:variable>
+        <xsl:variable name="id" select="translate($stdnumber, '/  ', '_')"/>
+        
+        <xsl:text>* [[[</xsl:text>
+        <xsl:value-of select="concat('bibitem_',$id)"/>
+        <xsl:choose>
+          <xsl:when test="stdnumber">,<xsl:value-of select="stdnumber"/></xsl:when>
+          <xsl:when test="number">,<xsl:value-of select="number"/></xsl:when>
+        </xsl:choose>
+        <xsl:text>]]], </xsl:text>
+        <xsl:variable name="bibitem_text">
+          <xsl:apply-templates select="$module_nodes/module" mode="bibitem"/>
+        </xsl:variable>
+        <xsl:value-of select="normalize-space($bibitem_text)"/>
+        <xsl:text>&#xa;&#xa;</xsl:text>
+        
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:call-template name="error_message">
@@ -417,10 +499,30 @@
 				<xsl:variable name="resdoc_xml" select="concat($resdoc_dir,'/resource.xml')"/>
 				<xsl:variable name="resdoc_nodes" select="document(string($resdoc_xml))"/>
 				<xsl:variable name="number" select="position()"/>
-				<p>
+				<!-- <p>
           [<xsl:value-of select="$number_start+$number"/>] 
           <xsl:apply-templates select="$resdoc_nodes/resource" mode="bibitem"/>
-				</p>
+				</p> -->
+        
+        <xsl:variable name="stdnumber">
+          <xsl:call-template name="get_protocol_stdnumber">
+            <xsl:with-param name="application_protocol" select="$resdoc_nodes/resource"/>
+          </xsl:call-template>
+        </xsl:variable>
+        <xsl:variable name="id" select="translate($stdnumber, '/  ', '_')"/>
+        
+        <xsl:text>* [[[</xsl:text>
+        <xsl:value-of select="concat('bibitem_',$id)"/>
+        <xsl:choose>
+          <xsl:when test="stdnumber">,<xsl:value-of select="stdnumber"/></xsl:when>
+          <xsl:when test="number">,<xsl:value-of select="number"/></xsl:when>
+        </xsl:choose>
+        <xsl:text>]]], </xsl:text>
+        <xsl:variable name="bibitem_text">
+          <xsl:apply-templates select="$resdoc_nodes/resource" mode="bibitem"/>
+        </xsl:variable>
+        <xsl:value-of select="normalize-space($bibitem_text)"/>
+        <xsl:text>&#xa;&#xa;</xsl:text>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:call-template name="error_message">

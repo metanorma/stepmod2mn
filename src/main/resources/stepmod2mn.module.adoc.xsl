@@ -43,6 +43,8 @@
 	<xsl:import href="stepmod.base_xsl/sect_f_guide.xsl"/>
 	<xsl:import href="stepmod.base_xsl/sect_g_change.xsl"/>
 	<xsl:import href="stepmod.base_xsl/sect_biblio.xsl"/>
+  <xsl:import href="stepmod.base_xsl/common/biblio.xsl"/>
+  <xsl:import href="stepmod.base_xsl/elt_list.xsl"/>
 	
 	<xsl:import href="stepmod.base_xsl/projmg/issues.xsl"/>
 

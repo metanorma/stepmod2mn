@@ -3,32 +3,34 @@
 <!--
     $Id: sect_biblio.xsl,v 1.25 2010/02/23 14:18:30 radack Exp $
   -->
+<!-- Updated: Alexander Dyuzhev, for stepmod2mn tool-->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-		xmlns:msxsl="urn:schemas-microsoft-com:xslt"
-		xmlns:exslt="http://exslt.org/common"
-		exclude-result-prefixes="msxsl exslt"
+		xmlns:xalan="http://xml.apache.org/xalan"
+		exclude-result-prefixes="xalan"
 		version="1.0">
   <xsl:template name="render_elt_list">
     <xsl:param name="elt_list"/>
     <xsl:variable name="elt_list_pruned">
-      <xsl:choose>
+      <!-- <xsl:choose>
 	<xsl:when test="function-available('msxsl:node-set')">
 	  <xsl:apply-templates select="msxsl:node-set($elt_list)/elt-list" mode="prune-elt-list"/>
 	</xsl:when>
 	<xsl:when test="function-available('exslt:node-set')">
 	  <xsl:apply-templates select="exslt:node-set($elt_list)/elt-list" mode="prune-elt-list"/>
 	</xsl:when>
-      </xsl:choose>
+      </xsl:choose> -->
+      <xsl:apply-templates select="xalan:nodeset($elt_list)/elt-list" mode="prune-elt-list"/>
     </xsl:variable>
-    <xsl:choose>
+    <!-- <xsl:choose>
       <xsl:when test="function-available('msxsl:node-set')">
 	<xsl:apply-templates select="msxsl:node-set($elt_list_pruned)/elt-list" mode="render-elt-list"/>
       </xsl:when>
       <xsl:when test="function-available('exslt:node-set')">
 	<xsl:apply-templates select="exslt:node-set($elt_list_pruned)/elt-list" mode="render-elt-list"/>
       </xsl:when>
-    </xsl:choose>
+    </xsl:choose> -->
+    <xsl:apply-templates select="xalan:nodeset($elt_list_pruned)/elt-list" mode="render-elt-list"/>
   </xsl:template>
 
   <!-- pruning -->
@@ -38,14 +40,15 @@
       <xsl:apply-templates mode="prune-elt-list"/>
     </xsl:variable>
     <xsl:variable name="count">
-      <xsl:choose>
+      <!-- <xsl:choose>
 	<xsl:when test="function-available('msxsl:node-set')">
 	  <xsl:value-of select="count(msxsl:node-set($pruned)/*)"/>
 	</xsl:when>
 	<xsl:when test="function-available('exslt:node-set')">
 	  <xsl:value-of select="count(exslt:node-set($pruned)/*)"/>
 	</xsl:when>
-      </xsl:choose>
+      </xsl:choose> -->
+      <xsl:value-of select="count(xalan:nodeset($pruned)/*)"/>
     </xsl:variable>
     <xsl:if test="$count > 0">
       <xsl:copy>
