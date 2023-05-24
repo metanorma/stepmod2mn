@@ -442,11 +442,13 @@
             </xsl:choose>
             
             <xsl:for-each select="document($module_file)/module/arm/express-g/imgfile">
-              <xsl:variable name="imgfile">
+              <!-- <xsl:variable name="imgfile">
                 <xsl:call-template name="set_file_ext">
                   <xsl:with-param name="filename" select="concat('../',@file)"/>   
                 </xsl:call-template>
-              </xsl:variable>
+              </xsl:variable> -->
+              <xsl:variable name="imgfile" select="@file"/>   
+              
               <!-- <a href="{$imgfile}">
                 <xsl:value-of select="concat('C.',position())"/>
               </a> -->
@@ -1283,7 +1285,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
   <!-- <p> -->
   <!-- <blockquote> -->
     <code>
-      *)<br/>
+      <!-- *)<br/> -->
       <xsl:call-template name="insertLutaMLCodeStart"/>
       <xsl:text>TYPE </xsl:text>
       <xsl:value-of select="@name" /><xsl:text>=</xsl:text>

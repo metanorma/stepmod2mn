@@ -439,6 +439,7 @@
     </xsl:call-template>
   </xsl:variable>
 
+  <xsl:text> </xsl:text>
   <xsl:choose>
     <xsl:when test="contains($express_file_ok,'ERROR')">
       <xsl:call-template name="error_message">
@@ -453,7 +454,8 @@
       <!-- <A HREF="{$express_file_to_ref}#{$xref}">
         <xsl:value-of select="$schema_name"/>
       </A> -->
-      <xsl:text>&lt;&lt;</xsl:text><xsl:value-of select="$xref"/>,<xsl:value-of select="$schema_name"/>
+      <!-- <xsl:text>&lt;&lt;</xsl:text><xsl:value-of select="$xref"/>,<xsl:value-of select="$schema_name"/> -->
+      <xsl:value-of select="$schema_name"/>
     </xsl:otherwise>
   </xsl:choose>
 
@@ -498,10 +500,8 @@
       <!-- <A HREF="{$xref}">
         <xsl:value-of select="$lobject_name"/>
       </A> -->
-      <xsl:text>&lt;&lt;</xsl:text><xsl:value-of select="$xref"/>,<xsl:value-of select="$lobject_name"/>
-      
-        
-       
+      <!-- <xsl:text>&lt;&lt;</xsl:text><xsl:value-of select="$xref"/>,<xsl:value-of select="$lobject_name"/> -->
+      <xsl:value-of select="$lobject_name"/>
       
       <!-- xsl:message>     
         <xsl:value-of select="concat('xr:{',$object_name,':',$xref,'}')"/>
@@ -540,7 +540,8 @@
         <!-- <A HREF="{$xref}">
           <xsl:value-of select="$lobject_name"/>
         </A> -->
-        <xsl:text>&lt;&lt;</xsl:text><xsl:value-of select="$xref"/>,<xsl:value-of select="$lobject_name"/>
+        <!-- <xsl:text>&lt;&lt;</xsl:text><xsl:value-of select="$xref"/>,<xsl:value-of select="$lobject_name"/> -->
+        <xsl:value-of select="$lobject_name"/>
         
         
         <!-- xsl:message>     
@@ -1369,7 +1370,8 @@ Needs to deal with expressions starting with not ( i.e. ANDOR above
       <!-- <A HREF="{$xref}">
         <xsl:value-of select="$lobject_name"/>
       </A> -->
-      <xsl:text>&lt;&lt;</xsl:text><xsl:value-of select="$xref"/>,<xsl:value-of select="$lobject_name"/>
+      <!-- <xsl:text>&lt;&lt;</xsl:text><xsl:value-of select="$xref"/>,<xsl:value-of select="$lobject_name"/> -->
+      <xsl:value-of select="$lobject_name"/>
     </xsl:when>
 
     <xsl:otherwise>
