@@ -1535,10 +1535,12 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
         <xsl:text>| </xsl:text>
         <xsl:choose>
           <xsl:when test="$FILE_EXT='.xml'">
-            <!-- <td> -->ARM short form EXPRESS<!-- </td> -->
+            <!-- <td>ARM short form EXPRESS</td> -->
+            <xsl:text>ARM short form EXPRESS</xsl:text>
           </xsl:when>
           <xsl:otherwise>
-            <!-- <td> -->ARM short form EXPRESS<!-- </td> -->
+            <!-- <td>ARM short form EXPRESS</td> -->
+            <xsl:text>ARM short form EXPRESS</xsl:text>
           </xsl:otherwise>
         </xsl:choose>
         <xsl:text>| </xsl:text>
@@ -1575,7 +1577,7 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
             <td>MIM short form EXPRESS</td>
           </xsl:otherwise>
         </xsl:choose> -->
-        
+        <xsl:text>&#xa;</xsl:text>
         <xsl:text>| </xsl:text>
         <xsl:choose>
           <xsl:when test="$FILE_EXT='.xml'">MIM short form EXPRESS</xsl:when>
@@ -1620,7 +1622,8 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
         </xsl:call-template>        
       <!-- </tr> -->
       <xsl:apply-templates select="mim_lf" mode="annexe"/>
-
+      
+    <xsl:text>&#xa;</xsl:text>
     <xsl:text>|===</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
