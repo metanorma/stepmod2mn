@@ -11,6 +11,7 @@ Purpose:
 	xmlns:xalan="http://xml.apache.org/xalan" 
 	xmlns:java="http://xml.apache.org/xalan/java" 
 	xmlns:str="http://exslt.org/strings"
+	exclude-result-prefixes="xalan"
 		version="1.0" extension-element-prefixes="str">
 		
 		<!-- xmlns:msxsl="urn:schemas-microsoft-com:xslt"

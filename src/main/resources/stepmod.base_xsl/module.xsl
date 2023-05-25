@@ -12,6 +12,7 @@ $Id: module.xsl,v 1.252 2018/08/23 11:13:36 mike Exp $
     xmlns:java="http://xml.apache.org/xalan/java"
     xmlns:str="http://exslt.org/strings"
     xmlns:xalan="http://xml.apache.org/xalan"
+		exclude-result-prefixes="xalan"
                 version="1.0">
 
   <!--

@@ -11,6 +11,7 @@ $Id: expressg_icon.xsl,v 1.1 2003/08/26 05:32:50 thendrix Exp $
 <xsl:stylesheet 
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"  
 	xmlns:xalan="http://xml.apache.org/xalan" 
+	exclude-result-prefixes="xalan"
   version="1.0">
 
 <!-- xmlns:msxsl="urn:schemas-microsoft-com:xslt"

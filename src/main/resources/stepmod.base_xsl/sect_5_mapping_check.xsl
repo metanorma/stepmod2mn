@@ -12,6 +12,7 @@ $Id: sect_5_mapping_check.xsl,v 1.28 2015/08/28 10:54:31 mikeward Exp $
 <xsl:stylesheet 
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:xalan="http://xml.apache.org/xalan"
+	exclude-result-prefixes="xalan"
   version="1.0">
 
   <!-- <xsl:import href="express.xsl"/> --><!-- MWD added --> 
@@ -376,7 +377,8 @@ $Id: sect_5_mapping_check.xsl,v 1.28 2015/08/28 10:54:31 mikeward Exp $
 
   </xsl:choose> -->
   
-      
+		<xsl:apply-templates select="xalan:nodeset($refpath)" mode="print_as_xml"/>
+			
     <xsl:apply-templates select="xalan:nodeset($refpath)//word" mode="test" > 
       <xsl:with-param name="schemas" select="$dep-schemas" />
     </xsl:apply-templates>

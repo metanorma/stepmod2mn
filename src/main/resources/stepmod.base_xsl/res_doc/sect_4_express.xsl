@@ -14,6 +14,7 @@
 <xsl:stylesheet 
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:xalan="http://xml.apache.org/xalan" 
+	exclude-result-prefixes="xalan"
 	version="1.0"
 >
 

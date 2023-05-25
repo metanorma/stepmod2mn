@@ -10,6 +10,7 @@ $Id: common.xsl,v 1.204 2018/10/07 10:51:54 mike Exp $
 <xsl:stylesheet 
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"   
 	xmlns:xalan="http://xml.apache.org/xalan" xmlns:java="http://xml.apache.org/xalan/java"
+	exclude-result-prefixes="xalan"
 	version="1.0">
 
 <!-- xmlns:msxsl="urn:schemas-microsoft-com:xslt"
