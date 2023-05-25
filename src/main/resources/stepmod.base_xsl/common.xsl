@@ -17,6 +17,8 @@ $Id: common.xsl,v 1.204 2018/10/07 10:51:54 mike Exp $
 	xmlns:exslt="http://exslt.org/common"
 	exclude-result-prefixes="msxsl exslt" -->
 
+	<xsl:output method="html"/>
+
 	<!-- replace the file extension with .xml or .htm according to FILE_EXT -->
 	<xsl:template name="set_file_ext">
 		<xsl:param name="filename"/>   
@@ -35,8 +37,6 @@ $Id: common.xsl,v 1.204 2018/10/07 10:51:54 mike Exp $
 		</xsl:variable>
 		<xsl:value-of select="concat($nfilename,$FILE_EXT)"/>
 	</xsl:template>
-
-	<xsl:output method="html"/>
 
 
 <!--

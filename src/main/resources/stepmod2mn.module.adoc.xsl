@@ -37,7 +37,7 @@
 	<xsl:import href="stepmod.base_xsl/sect_6_refdata.xsl"/>
 	<xsl:import href="stepmod.base_xsl/sect_a_short_names.xsl"/>
 	<xsl:import href="stepmod.base_xsl/sect_b_obj_reg.xsl"/>
-	<xsl:import href="stepmod.base_xsl/sect_c_arm_expg.xsl "/>
+	<xsl:import href="stepmod.base_xsl/sect_c_arm_expg.xsl"/>
 	<xsl:import href="stepmod.base_xsl/sect_d_mim_expg.xsl"/>
 	<xsl:import href="stepmod.base_xsl/sect_e_exp.xsl"/>
 	<xsl:import href="stepmod.base_xsl/sect_f_guide.xsl"/>

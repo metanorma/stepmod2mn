@@ -17,7 +17,7 @@
 	version="1.0"
 >
 
-  <xsl:import href="common.xsl"/>
+<!--   <xsl:import href="common.xsl"/> -->
 
 
 <!--   <xsl:output method="html"/> -->

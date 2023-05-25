@@ -15,7 +15,7 @@ $Id: expressg_icon.xsl,v 1.13 2014/06/13 12:58:59 nigelshaw Exp $
   exclude-result-prefixes="xalan"
   version="1.0">
 
-  <xsl:import href="common.xsl"/>
+  <!-- <xsl:import href="common.xsl"/> -->
 
   <xsl:output method="html"/>
 
