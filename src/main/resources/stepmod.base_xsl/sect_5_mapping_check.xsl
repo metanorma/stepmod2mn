@@ -395,29 +395,29 @@ $Id: sect_5_mapping_check.xsl,v 1.28 2015/08/28 10:54:31 mikeward Exp $
   </xsl:choose> -->
   
     <xsl:apply-templates select="xalan:nodeset($refpath)" mode="print_as_xml"/>
-    dep-schemas=<xsl:apply-templates select="xalan:nodeset($dep-schemas)" mode="print_as_xml"/>
+   <!--  dep-schemas=<xsl:apply-templates select="xalan:nodeset($dep-schemas)" mode="print_as_xml"/>
     schemas-node-set=<xsl:apply-templates select="xalan:nodeset($schemas-node-set)" mode="print_as_xml"/>
     schema-name=<xsl:value-of select="$schema-name"/>
     mim_schema_name=<xsl:value-of select="$mim_schema_name"/>
     mim_file=<xsl:value-of select="$mim_file"/>
-    path=<xsl:value-of select="$path"/>
+    path=<xsl:value-of select="$path"/> -->
     
-    <xsl:text>here3</xsl:text>
+    <!--<xsl:text>here3</xsl:text> -->
     <xsl:apply-templates select="xalan:nodeset($refpath)//word" mode="test" > 
       <xsl:with-param name="schemas" select="$dep-schemas" />
     </xsl:apply-templates>
     
-    <xsl:text>here4</xsl:text>
+    <!-- <xsl:text>here4</xsl:text> -->
     <xsl:apply-templates select="xalan:nodeset($refpath)//is-extended-by | xalan:nodeset($refpath)//extends" mode="test" >
       <xsl:with-param name="schemas" select="$dep-schemas" />
     </xsl:apply-templates>
     
-    <xsl:text>here5</xsl:text>
+    <!-- <xsl:text>here5</xsl:text> -->
     <xsl:apply-templates select="xalan:nodeset($refpath)//equals" mode="test" >
       <xsl:with-param name="schemas" select="$dep-schemas" />
     </xsl:apply-templates>
     
-    <xsl:text>here6</xsl:text>
+    <!-- <xsl:text>here6</xsl:text> -->
     <xsl:apply-templates select="xalan:nodeset($refpath)//is-subtype-of | xalan:nodeset($refpath)//is-supertype-of" mode="test" >
       <xsl:with-param name="schemas" select="$dep-schemas" />
     </xsl:apply-templates>
