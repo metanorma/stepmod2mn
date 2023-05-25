@@ -327,7 +327,7 @@
           <!-- found integrated resource schema, so get IR title -->
           <xsl:variable name="reference">
             <xsl:value-of
-              select="document(concat('../data/resources/',$module,'/',$module,'.xml'))/express/@reference"/>
+              select="document(concat($path,'../../../data/resources/',$module,'/',$module,'.xml'))/express/@reference"/>
           </xsl:variable>
 
           <xsl:choose>

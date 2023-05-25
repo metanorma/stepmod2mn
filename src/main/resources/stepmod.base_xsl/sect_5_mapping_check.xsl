@@ -26,11 +26,11 @@ $Id: sect_5_mapping_check.xsl,v 1.28 2015/08/28 10:54:31 mikeward Exp $
     <xsl:call-template name="mapping-full-parse"/><!-- MWD added --> 
   </xsl:variable><!-- MWD added --> 
   <xsl:variable name="mim_file" 
-                select="concat('../data/modules/',/module_clause/@directory,'/mim.xml')"/><!-- MWD added --> 
+                select="concat($path,'../../../data/modules/',/module_clause/@directory,'/mim.xml')"/><!-- MWD added --> 
   <xsl:variable name="mim_node" select="document($mim_file)/express"/><!-- MWD added --> 
   <xsl:variable name="mim_schema_name" select="$mim_node//schema/@name"/><!-- MWD added --> 
   <xsl:variable name="arm_file" 
-                select="concat('../data/modules/',/module_clause/@directory,'/arm.xml')"/><!-- MWD added --> 
+                select="concat($path,'../../../data/modules/',/module_clause/@directory,'/arm.xml')"/><!-- MWD added --> 
   <xsl:variable name="arm_node" select="document($arm_file)/express"/><!-- MWD added --> 
   <xsl:variable name="schema-name" select="concat($mod_dir_from_5mvxml,'_mim')"/><!--MWD from mapping_view -->
   <xsl:variable name="schemas" ><!-- MWD added --> 
@@ -702,7 +702,7 @@ $Id: sect_5_mapping_check.xsl,v 1.28 2015/08/28 10:54:31 mikeward Exp $
 
 <xsl:template name="mapping-full-parse"><!-- MWD new template added -->
    <xsl:variable name="module_file" 
-     select="concat('../data/modules/', $mod_dir_from_5mvxml,'/module.xml')"/>
+     select="concat($path,'../../../data/modules/', $mod_dir_from_5mvxml,'/module.xml')"/>
    <xsl:variable name="module_node" select="document($module_file)/module"/>
 	<module>
 	<xsl:attribute name="name">
@@ -1095,13 +1095,13 @@ $Id: sect_5_mapping_check.xsl,v 1.28 2015/08/28 10:54:31 mikeward Exp $
           <xsl:when test="function-available('exslt:node-set')" > -->
             <xsl:choose>
               <xsl:when test="substring-before($this-schema,'_mim')" >
-                <xsl:value-of select="concat('../data/modules/',substring-before($this-schema,'_mim'),'/mim.xml')" />
+                <xsl:value-of select="concat($path,'../../../data/modules/',substring-before($this-schema,'_mim'),'/mim.xml')" />
               </xsl:when>
               <xsl:when test="substring-before($this-schema,'_schema')" >
-                <xsl:value-of select="concat('../data/resources/',$this-schema,'/',$this-schema,'.xml')" />
+                <xsl:value-of select="concat($path,'../../../data/resources/',$this-schema,'/',$this-schema,'.xml')" />
               </xsl:when>
               <xsl:when test="starts-with($this-schema,'aic_')" >
-                <xsl:value-of select="concat('../data/resources/',$this-schema,'/',$this-schema,'.xml')" />
+                <xsl:value-of select="concat($path,'../../../data/resources/',$this-schema,'/',$this-schema,'.xml')" />
               </xsl:when>
               <xsl:otherwise>
                 BAD SCHEMA name !!! <xsl:value-of select="$this-schema"/>

@@ -1790,7 +1790,7 @@ width="20" height="20"/> -->
 
 	<xsl:template name="resource_file">
 		<xsl:param name="resource"/>
-		<xsl:value-of select="concat('../data/resources/',$resource,'/',$resource,'.xml')"/>
+		<xsl:value-of select="concat($path,'../../../data/resources/',$resource,'/',$resource,'.xml')"/>
 	</xsl:template>
 
 
@@ -1802,7 +1802,7 @@ width="20" height="20"/> -->
 	<xsl:template name="resource_expg_file">
 		<xsl:param name="resource"/>
 		<xsl:param name="expg_file"/>
-		<xsl:value-of select="concat('../data/resources/',$resource,'/',$expg_file)"/>
+		<xsl:value-of select="concat($path,'../../../data/resources/',$resource,'/',$expg_file)"/>
 	</xsl:template>
 
 	<!-- return the target for an express entity
@@ -5098,7 +5098,7 @@ is case sensitive.')"/>
 			</xsl:call-template>
 		</xsl:variable>
 		
-		<xsl:value-of select="concat('../data/business_object_models/', $model_dir)"/>
+		<xsl:value-of select="concat($path,'../../../data/business_object_models/', $model_dir)"/>
 		<!--<xsl:value-of select="string('../data/business_object_models/managed_model_based_3d_engineering')"/>-->
 	</xsl:template>
 	

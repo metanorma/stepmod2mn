@@ -1263,7 +1263,7 @@
 		<xsl:variable name="remaining_resources" select="$resources[position()!=1]"/>
 
 		<xsl:variable name="express_file" 
-			select="concat('../data/resources/',
+			select="concat($path,'../../../data/resources/',
 							$first_resource/@name,'/',$first_resource/@name,'.xml')"/>
 		<xsl:variable name="object_nodes"
 			select="document($express_file)/express/schema/entity|/express/schema/type|/express/schema/subtype.constraint|/express/schema/function|/express/schema/procedure|/express/schema/rule|/express/schema/constant"/>
