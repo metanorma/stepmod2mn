@@ -744,7 +744,7 @@ $Id: sect_5_mapping_check.xsl,v 1.28 2015/08/28 10:54:31 mikeward Exp $
 
   <xsl:template match="word" mode="test"><!-- MWD new template added; amended 2015-08-20 -->
     <xsl:param name="schemas" />
-    word=<xsl:value-of select="."/>
+    <!-- word=<xsl:value-of select="."/> -->
     <xsl:if test="string-length(.) != string-length(translate(.,$UPPER,'')) 
       and not(string(.) ='BOOLEAN' ) 
       and not(starts-with(string(.),'ISO ')) 
@@ -863,7 +863,7 @@ $Id: sect_5_mapping_check.xsl,v 1.28 2015/08/28 10:54:31 mikeward Exp $
         <xsl:variable name="find-ent" select="normalize-space(.)" />
         
         <xsl:variable name="found-ent" select="$schemas//*[@name=$find-ent][contains('entity type',name())]" />
-        <xsl:text>found-ent=</xsl:text><xsl:value-of select="$found-ent"/>
+        <!-- <xsl:text>found-ent=</xsl:text><xsl:value-of select="$found-ent"/> -->
         <!--<br/>-->
         <xsl:choose>
           <xsl:when test="$found-ent" >
