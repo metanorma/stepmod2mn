@@ -1354,7 +1354,7 @@ relationship tree structure. The path between the relationship entity and the re
                    <xsl:apply-templates select="$refpath" mode="check_ref_path"/>
                    -->
 
-              <xsl:apply-templates select="." mode="check_ref_path"/>
+              <!-- <xsl:apply-templates select="." mode="check_ref_path"/> -->
 
               <!-- <td> -->
                 <xsl:call-template name="output_string_with_linebreaks">
@@ -1392,7 +1392,7 @@ relationship tree structure. The path between the relationship entity and the re
     <!-- <tr valign="top"> -->
       <!-- <td>Reference path:&#160;&#160;</td> -->
       <xsl:text>Reference path:&#160;&#160;:: </xsl:text>
-      <xsl:apply-templates select="." mode="check_ref_path"/>
+      <!-- <xsl:apply-templates select="." mode="check_ref_path"/> -->
       <!-- <td> -->
         <xsl:call-template name="output_string_with_linebreaks">
           <xsl:with-param name="string" select="$str"/>

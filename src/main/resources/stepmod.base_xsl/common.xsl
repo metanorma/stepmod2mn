@@ -3578,10 +3578,10 @@ width="20" height="20"/> -->
 						<xsl:value-of select="concat($mod_dir,'/arm_lf.xml')"/>
 					</xsl:when>
 					<xsl:when test="$arm_mim_res='ir_express' or $arm_mim_res='ir' or $arm_mim_res='resdoc'">     
-						<xsl:value-of select="concat($path, '../../data/resources/',$schema,'/',$schema,'.xml')"/>     
+						<xsl:value-of select="concat($path, '../../../data/resources/',$schema,'/',$schema,'.xml')"/>     
 					</xsl:when>
 					<xsl:when test="$arm_mim_res='reference'">
-						<xsl:value-of select="concat($path, '../../data/reference/',$schema,'/',$schema,'.xml')"/>
+						<xsl:value-of select="concat($path, '../../../data/reference/',$schema,'/',$schema,'.xml')"/>
 					</xsl:when>
 					<xsl:when test="$arm_mim_res='bom'"><!-- BOM -->
 						<xsl:value-of select="concat($mod_dir,'/bom.xml')"/>
