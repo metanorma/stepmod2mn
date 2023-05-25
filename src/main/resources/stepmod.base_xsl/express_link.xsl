@@ -136,7 +136,7 @@
         
         <!-- get schema node contained in express file -->
         <xsl:variable name="if_schema_node"
-            select="document(concat($path, '../', string($express_file_to_read)))//express/schema" />
+            select="document(concat($path, '../../', string($express_file_to_read)))//express/schema" />
         
         <!-- add separator before name of schema -->
         <xsl:variable name="if_schema_name_list_item" select="concat('|', $if_schema_name)"/>

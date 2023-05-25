@@ -22,16 +22,33 @@ $Id: sect_5_mapping_check.xsl,v 1.28 2015/08/28 10:54:31 mikeward Exp $
   <xsl:variable name="LOWER" select="'abcdefghijklmnopqrstuvwxyz'"/><!-- MWD -->
   <xsl:variable name="NUMBERS" select="'0123456789'"/><!-- MWD -->
   <xsl:variable name="apos">'</xsl:variable><!-- MWD added --> 
-  <xsl:variable name="mod_dir_from_5mvxml" select="//module_clause/@directory"/><!-- MWD added --> 
+  <!-- <xsl:variable name="mod_dir_from_5mvxml" select="//module_clause/@directory"/> --><!-- MWD added -->
+  <xsl:variable name="mod_dir_from_5mvxml" select="/module/@name"/>
   <xsl:variable name="mappings-result"><!-- MWD added --> 
     <xsl:call-template name="mapping-full-parse"/><!-- MWD added --> 
   </xsl:variable><!-- MWD added --> 
-  <xsl:variable name="mim_file" 
-                select="concat($path,'../../../data/modules/',/module_clause/@directory,'/mim.xml')"/><!-- MWD added --> 
+  <!-- <xsl:variable name="mim_file" 
+                select="concat($path,'../../../data/modules/',/module_clause/@directory,'/mim.xml')"/> --><!-- MWD added --> 
+  <xsl:variable name="mim_file">
+    <xsl:variable name="module_dir">
+      <xsl:call-template name="module_directory">
+        <xsl:with-param name="module" select="/module/@name"/>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:value-of select="concat($module_dir, '/mim.xml')"/>
+  </xsl:variable>
   <xsl:variable name="mim_node" select="document($mim_file)/express"/><!-- MWD added --> 
   <xsl:variable name="mim_schema_name" select="$mim_node//schema/@name"/><!-- MWD added --> 
-  <xsl:variable name="arm_file" 
-                select="concat($path,'../../../data/modules/',/module_clause/@directory,'/arm.xml')"/><!-- MWD added --> 
+  <!-- <xsl:variable name="arm_file" 
+                select="concat($path,'../../../data/modules/',/module_clause/@directory,'/arm.xml')"/> --><!-- MWD added --> 
+  <xsl:variable name="arm_file">
+    <xsl:variable name="module_dir">
+      <xsl:call-template name="module_directory">
+        <xsl:with-param name="module" select="/module/@name"/>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:value-of select="concat($module_dir, '/arm.xml')"/>
+  </xsl:variable>
   <xsl:variable name="arm_node" select="document($arm_file)/express"/><!-- MWD added --> 
   <xsl:variable name="schema-name" select="concat($mod_dir_from_5mvxml,'_mim')"/><!--MWD from mapping_view -->
   <xsl:variable name="schemas" ><!-- MWD added --> 
@@ -321,19 +338,19 @@ $Id: sect_5_mapping_check.xsl,v 1.28 2015/08/28 10:54:31 mikeward Exp $
       </refpath>
     </xsl:variable>
   
-    <xsl:variable name="refpath_nodes">
-      <!-- <xsl:choose>
+		
+    <!--  <xsl:variable name="refpath_nodes">
+      <xsl:choose>
         <xsl:when test="function-available('msxsl:node-set')">
           <xsl:value-of select="msxsl:node-set($refpath)"/>
         </xsl:when>
-        <xsl:when test="function-available('exslt:node-set')"> --><!-- MWD nodeset function renamed --> 
+        <xsl:when test="function-available('exslt:node-set')"> --> --><!-- MWD nodeset function renamed --> 
           <!-- <xsl:value-of select="exslt:node-set($refpath)"/> --><!-- MWD nodeset function renamed --> 
         <!-- </xsl:when>
-      </xsl:choose> -->
-      <xsl:value-of select="xalan:nodeset($refpath)"/>
-    </xsl:variable>  
+      </xsl:choose>
+    </xsl:variable> -->
   
- 
+    <xsl:variable name="refpath_nodes" select="xalan:nodeset($refpath)"/>
   
   <!-- <xsl:choose> --><!-- MWD test for avaiablility of xsl processor added 2017-03-28 --> 
     <!-- <xsl:when test="function-available('msxsl:node-set')">
@@ -377,20 +394,30 @@ $Id: sect_5_mapping_check.xsl,v 1.28 2015/08/28 10:54:31 mikeward Exp $
 
   </xsl:choose> -->
   
-		<xsl:apply-templates select="xalan:nodeset($refpath)" mode="print_as_xml"/>
-			
+    <xsl:apply-templates select="xalan:nodeset($refpath)" mode="print_as_xml"/>
+    dep-schemas=<xsl:apply-templates select="xalan:nodeset($dep-schemas)" mode="print_as_xml"/>
+    schemas-node-set=<xsl:apply-templates select="xalan:nodeset($schemas-node-set)" mode="print_as_xml"/>
+    schema-name=<xsl:value-of select="$schema-name"/>
+    mim_schema_name=<xsl:value-of select="$mim_schema_name"/>
+    mim_file=<xsl:value-of select="$mim_file"/>
+    path=<xsl:value-of select="$path"/>
+    
+    <xsl:text>here3</xsl:text>
     <xsl:apply-templates select="xalan:nodeset($refpath)//word" mode="test" > 
       <xsl:with-param name="schemas" select="$dep-schemas" />
     </xsl:apply-templates>
     
+    <xsl:text>here4</xsl:text>
     <xsl:apply-templates select="xalan:nodeset($refpath)//is-extended-by | xalan:nodeset($refpath)//extends" mode="test" >
       <xsl:with-param name="schemas" select="$dep-schemas" />
     </xsl:apply-templates>
     
+    <xsl:text>here5</xsl:text>
     <xsl:apply-templates select="xalan:nodeset($refpath)//equals" mode="test" >
       <xsl:with-param name="schemas" select="$dep-schemas" />
     </xsl:apply-templates>
     
+    <xsl:text>here6</xsl:text>
     <xsl:apply-templates select="xalan:nodeset($refpath)//is-subtype-of | xalan:nodeset($refpath)//is-supertype-of" mode="test" >
       <xsl:with-param name="schemas" select="$dep-schemas" />
     </xsl:apply-templates>
@@ -717,6 +744,7 @@ $Id: sect_5_mapping_check.xsl,v 1.28 2015/08/28 10:54:31 mikeward Exp $
 
   <xsl:template match="word" mode="test"><!-- MWD new template added; amended 2015-08-20 -->
     <xsl:param name="schemas" />
+    word=<xsl:value-of select="."/>
     <xsl:if test="string-length(.) != string-length(translate(.,$UPPER,'')) 
       and not(string(.) ='BOOLEAN' ) 
       and not(starts-with(string(.),'ISO ')) 
@@ -833,7 +861,9 @@ $Id: sect_5_mapping_check.xsl,v 1.28 2015/08/28 10:54:31 mikeward Exp $
         (not(contains(.,'.'))) and string-length(translate(.,'1234567890. ',''))>0 " >
         <!-- most likely an entity reference so check for existence -->
         <xsl:variable name="find-ent" select="normalize-space(.)" />
+        
         <xsl:variable name="found-ent" select="$schemas//*[@name=$find-ent][contains('entity type',name())]" />
+        <xsl:text>found-ent=</xsl:text><xsl:value-of select="$found-ent"/>
         <!--<br/>-->
         <xsl:choose>
           <xsl:when test="$found-ent" >
