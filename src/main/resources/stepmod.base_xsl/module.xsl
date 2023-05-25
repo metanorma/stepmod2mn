@@ -4916,17 +4916,18 @@ $module_ok,' Check the normatives references')"/>
 
 <xsl:template match="imgfile" mode="expressg">
   <xsl:variable name="file">
-    <xsl:call-template name="set_file_ext">
+    <!-- <xsl:call-template name="set_file_ext">
       <xsl:with-param name="filename" select="@file"/>
-    </xsl:call-template>
+    </xsl:call-template> -->
+    <xsl:value-of select="substring-before(@file,'.')"/>
   </xsl:variable>
-  <xsl:variable name="href" select="concat('../',$file)"/>
+  <xsl:variable name="href" select="concat('../',$file,'.svg')"/>
   <!-- <p>
     <a href="{$href}">
       <xsl:apply-templates select="." mode="title"/>
     </a>
   </p> -->
-  <xsl:call-template name="insertParagraph">
+  <!-- <xsl:call-template name="insertParagraph">
     <xsl:with-param name="text">
       <xsl:text>* </xsl:text>
       <xsl:text>&lt;&lt;</xsl:text>
@@ -4935,7 +4936,14 @@ $module_ok,' Check the normatives references')"/>
       <xsl:value-of select="$href"/>
       <xsl:text>&gt;&gt;</xsl:text>
     </xsl:with-param>
-  </xsl:call-template>
+  </xsl:call-template> -->
+  
+  <xsl:text>.</xsl:text><xsl:apply-templates select="." mode="title"/>
+  <xsl:text>&#xa;</xsl:text>
+  <!-- Example: image::../mimexpg1.xml[] -->
+  <xsl:text>image::</xsl:text><xsl:value-of select="$href"/>
+  <xsl:text>&#xa;&#xa;</xsl:text>
+  
 </xsl:template>
 
 <xsl:template match="imgfile" mode="title">
@@ -4950,28 +4958,36 @@ $module_ok,' Check the normatives references')"/>
       <xsl:when test="name(../..)='arm'">
         <xsl:choose>
           <xsl:when test="$number=1">
-            <xsl:value-of 
+            <!--<xsl:value-of 
               select="concat('Figure C.',$number, 
-                      ' &#8212; ARM schema level EXPRESS-G diagram ',$number,' of 1')"/>
+                      ' &#8212; ARM schema level EXPRESS-G diagram ',$number,' of 1')"/> -->
+            <xsl:value-of 
+              select="concat('ARM schema level EXPRESS-G diagram ',$number,' of 1')"/>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:value-of 
+            <!-- <xsl:value-of 
               select="concat('Figure C.',$number, 
-                      ' &#8212; ARM entity level EXPRESS-G diagram ',($number - 1),' of ',$total)"/>
+                      ' &#8212; ARM entity level EXPRESS-G diagram ',($number - 1),' of ',$total)"/> -->
+            <xsl:value-of 
+              select="concat('ARM entity level EXPRESS-G diagram ',($number - 1),' of ',$total)"/>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:when>
       <xsl:when test="name(../..)='mim'">
         <xsl:choose>
           <xsl:when test="$number=1">
-            <xsl:value-of 
+            <!-- <xsl:value-of 
               select="concat('Figure D.',$number, 
-                      ' &#8212; MIM schema level EXPRESS-G diagram ',$number,' of 1')"/>
+                      ' &#8212; MIM schema level EXPRESS-G diagram ',$number,' of 1')"/> -->
+            <xsl:value-of 
+              select="concat('MIM schema level EXPRESS-G diagram ',$number,' of 1')"/>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:value-of 
+            <!-- <xsl:value-of 
               select="concat('Figure D.',$number, 
-                      ' &#8212; MIM entity level EXPRESS-G diagram ',($number - 1),' of ',$total)"/>
+                      ' &#8212; MIM entity level EXPRESS-G diagram ',($number - 1),' of ',$total)"/> -->
+            <xsl:value-of 
+              select="concat('MIM entity level EXPRESS-G diagram ',($number - 1),' of ',$total)"/>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:when>
