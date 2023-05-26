@@ -4414,17 +4414,20 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
           <xsl:with-param name="text">
             <xsl:choose>
               <xsl:when test="./note">
-                NOTE&#160;1&#160;&#160;The list of entity data types may be
+                <!-- NOTE&#160;1&#160;&#160;The list of entity data types may be -->
+                The list of entity data types may be
                 extended in application modules that use the constructs of
                 this module.
               </xsl:when>
               <xsl:when test="string-length($ext_notes)>0">
-                NOTE&#160;1&#160;&#160;The list of entity data types may be
+                <!-- NOTE&#160;1&#160;&#160;The list of entity data types may be -->
+                The list of entity data types may be
                 extended in application modules that use the constructs of
                 this module.
               </xsl:when>
               <xsl:otherwise>
-                NOTE&#160;&#160;The list of entity data types may be
+                <!-- NOTE&#160;&#160;The list of entity data types may be -->
+                The list of entity data types may be
                 extended in application modules that use the constructs of
                 this module.
               </xsl:otherwise>
@@ -4517,7 +4520,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
               <small> -->
             <xsl:call-template name="insertNote">
               <xsl:with-param name="text">
-                <xsl:choose>
+                <!-- <xsl:choose>
                   <xsl:when test="./note">
                     NOTE&#160;1&#160;&#160;
                   </xsl:when>
@@ -4527,7 +4530,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
                   <xsl:otherwise>
                     NOTE&#160;&#160;
                   </xsl:otherwise>
-                </xsl:choose>The list of entity data types may be
+                </xsl:choose>-->The list of entity data types may be
                 extended in application modules that use the constructs of
                 this module.                 
               </xsl:with-param>
@@ -4554,7 +4557,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
               <small> -->
             <xsl:call-template name="insertNote">
               <xsl:with-param name="text">
-                <xsl:choose>
+                <!-- <xsl:choose>
                   <xsl:when test="./note">
                     NOTE&#160;1&#160;&#160;
                   </xsl:when>
@@ -4564,7 +4567,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
                   <xsl:otherwise>
                     NOTE&#160;&#160;
                   </xsl:otherwise>
-                </xsl:choose>This empty extensible select requires
+                </xsl:choose>-->This empty extensible select requires
                 extension in a further module to ensure that entities that refer to it have
                 at least one valid instantiation.
               </xsl:with-param>
