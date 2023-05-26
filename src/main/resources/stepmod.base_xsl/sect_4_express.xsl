@@ -137,7 +137,7 @@
             </xsl:otherwise>
           </xsl:choose>
         </xsl:when>
-        <xsl:when test="contains($schema_name,'_mim')">
+        <xsl:when test="contains($schema_name,'_mim')"><xsl:text>{blank}</xsl:text>
         </xsl:when>
       </xsl:choose>      
     </xsl:variable>
@@ -167,8 +167,10 @@
         <xsl:value-of select="$clause_header"/>
       </A>
     </h2> -->
+    <!-- DEBUG: <xsl:for-each select="ancestor::*"><xsl:value-of select="local-name()"/>/</xsl:for-each> -->
+    <!-- current xpath is express/schema/interface -->
     <xsl:call-template name="insertHeaderADOC">
-      <xsl:with-param name="id">interfaces</xsl:with-param>
+      <xsl:with-param name="id">interfaces_<xsl:value-of select="$schema_name"/></xsl:with-param>
       <xsl:with-param name="header" select="$clause_header"/>					
     </xsl:call-template>
     

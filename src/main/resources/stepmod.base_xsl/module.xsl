@@ -1676,8 +1676,7 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
         <xsl:with-param name="module" select="../@name"/>
       </xsl:call-template>
     </xsl:variable>
-    <xsl:text>arm_xml=</xsl:text>
-    <xsl:value-of select="concat($module_dir,'/arm.xml')"/>
+    
     <xsl:variable name="arm_xml" select="concat($module_dir,'/arm.xml')"/>
     <xsl:variable name="arm_node" select="document($arm_xml)"/>
     <!-- <p> -->
