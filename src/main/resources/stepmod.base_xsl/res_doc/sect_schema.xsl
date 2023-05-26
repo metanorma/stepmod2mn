@@ -7,6 +7,7 @@ $Id: sect_schema.xsl,v 1.3 2003/08/24 22:10:35 thendrix Exp $
   Purpose: Output section 4 Information model as a web page
      
 -->
+<!-- Updated: Alexander Dyuzhev, for stepmod2mn tool-->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version="1.0">
 

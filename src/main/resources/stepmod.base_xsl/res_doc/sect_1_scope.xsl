@@ -4,6 +4,7 @@
 $Id: sect_1_scope.xsl,v 1.6 2008/12/16 15:44:48 darla Exp $
 	Purpose: Output the Scope section as a web page
 -->
+<!-- Updated: Alexander Dyuzhev, for stepmod2mn tool-->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:java="http://xml.apache.org/xalan/java" 
 								version="1.0">
 

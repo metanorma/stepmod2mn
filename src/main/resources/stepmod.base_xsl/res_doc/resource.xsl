@@ -6,10 +6,12 @@ Owner:   Developed by Eurostep and supplied to NIST under contract.
 Purpose:
 
 -->
+<!-- Updated: Alexander Dyuzhev, for stepmod2mn tool-->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"		
 	xmlns:xalan="http://xml.apache.org/xalan" 
 	xmlns:java="http://xml.apache.org/xalan/java" 
 	xmlns:str="http://exslt.org/strings"
+	exclude-result-prefixes="xalan"
 		version="1.0" extension-element-prefixes="str">
 		
 		<!-- xmlns:msxsl="urn:schemas-microsoft-com:xslt"
@@ -809,7 +811,7 @@ Purpose:
 			Attention is drawn to the possibility that some of the elements of this document may be the subject of 
 			patent rights. ISO shall not be held responsible for identifying any or all such patent rights. Details of 
 			any patent rights identified during the development of the document will be in the Introduction and/or 
-			on the ISO list of patent declarations received (see www.iso.org/patents[http://www.iso.org/patents]<!-- <a href="http://www.iso.org/patents" target="_blank">www.iso.org/patents</a> -->).
+			on the ISO list of patent declarations received (see http://www.iso.org/patents[www.iso.org/patents]<!-- <a href="http://www.iso.org/patents" target="_blank">www.iso.org/patents</a> -->).
 			</xsl:with-param>
 		</xsl:call-template>
 		
@@ -1374,7 +1376,8 @@ Purpose:
 			corresponding short names as specified or referenced in this part of ISO
 			10303. It also provides a listing of each EXPRESS schema specified in this
 			part of ISO 10303 without comments or other explanatory text. These
-			listings are available in computer-interpretable form in Table C.1 and can
+			<!-- listings are available in computer-interpretable form in Table C.1 and can -->
+			listings are available in computer-interpretable form in &lt;&lt;tablec1&gt;&gt; and can
 			be found at the following URLs:
 			</xsl:with-param>
 		</xsl:call-template>
@@ -1421,7 +1424,7 @@ Purpose:
 		</div> -->
 		
 		
-		<xsl:text>[#table_e1]</xsl:text>
+		<xsl:text>[[tablec1]]</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
 		<xsl:text>[cols="^,^",options="header"]</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
@@ -1751,7 +1754,7 @@ Purpose:
 
 					<xsl:value-of select="concat('.EXPRESS-G diagram of the ', $schema, ' (', $rel_clauseno,' of ', $img_count, ')' )" />
 					<xsl:text>&#xa;</xsl:text>
-					<!-- for ../../../../ see https://github.com/metanorma/stepmod2mn/issues/14 -->
+					<!-- for ../../../../ see https://github.com/metanorma/stepmod2mn/issues/14#issuecomment-785857308 -->
 					<xsl:value-of select="concat('image::', '../../../../resources/', $schema, '/', $filename_no_ext, '.svg[]')"/>
 					
 					<!-- </li> -->
@@ -1957,13 +1960,15 @@ the types, entity specializations, and functions that are specific to this part 
 			</a>
 		</code> -->
 		<xsl:if test="$xref != ''">
-			<xsl:text>[[</xsl:text><xsl:value-of select="$xref"/><xsl:text>]]&#xa;</xsl:text>
+			<xsl:text>[[</xsl:text><xsl:value-of select="$xref"/><xsl:text>]]</xsl:text> <!-- &#xa; -->
 		</xsl:if>
 		<code>
 		<xsl:call-template name="insertLutaMLCodeStart"/>
 			<!-- <xsl:text>*)&#xa;</xsl:text>		 -->
 			<xsl:text>SCHEMA </xsl:text><xsl:value-of select="concat($schema_name,';')"/>
+		<xsl:if test="not($express_xml/express/schema/interface)">
 		<xsl:call-template name="insertCodeEnd"/>
+		</xsl:if>
 		</code>
 
 		<!-- output all the EXPRESS specifications -->
@@ -1971,13 +1976,14 @@ the types, entity specializations, and functions that are specific to this part 
 	 The template is in sect4_express.xsl -->
 		<xsl:if test="$express_xml/express/schema/interface">
 			<!-- <a name="interfaces"/> -->
-			<xsl:text>[[interfaces_</xsl:text><xsl:value-of select="$schema_name"/><xsl:text>]]</xsl:text>
-			<xsl:text>&#xa;</xsl:text>
+			<!-- <xsl:text>[[interfaces_</xsl:text><xsl:value-of select="$schema_name"/><xsl:text>]]</xsl:text> -->
+			<xsl:text>&#xa;&#xa;</xsl:text>
 		</xsl:if>
 		<!-- start
 		express_xml=<xsl:value-of select="concat($resource_dir,'/',@name,'.xml')"/> -->
 		<xsl:apply-templates select="$express_xml/express/schema/interface">
 			<xsl:with-param name="doctype" select="$doctype"/>
+			<xsl:with-param name="skipLutaMLCodeStart">true</xsl:with-param>
 		</xsl:apply-templates>
 <!-- end -->
 
@@ -2502,26 +2508,16 @@ the types, entity specializations, and functions that are specific to this part 
 			
 				<xsl:variable name="normref_xml" select="document(concat($path, '../../../data/basic/normrefs.xml'))"/>
 				<xsl:variable name="normref_node" select="$normref_xml/normref.list/normref[@id=$id]"/>
-				<xsl:choose>
-					<xsl:when test="$normref_node">
+				
+				<xsl:if test="$normref_node">
+				
+					<xsl:variable name="normref">
+						<xsl:apply-templates select="$normref_xml/normref.list/normref[@id=$id]" mode="prune_normrefs_list"/>
+					</xsl:variable>
+					<!-- return the normref to be added to the list -->
+					<xsl:value-of select="$normref"/>
+				</xsl:if>						
 					
-						<xsl:variable name="normref">
-							<xsl:apply-templates select="$normref_xml/normref.list/normref[@id=$id]" mode="prune_normrefs_list"/>
-						</xsl:variable>
-						<!-- return the normref to be added to the list -->
-						<xsl:value-of select="$normref"/>
-						
-					</xsl:when>
-					
-					<xsl:otherwise>
-						<xsl:call-template name="error_message">
-							<xsl:with-param name="message">
-								<xsl:value-of select="concat('Error 7: reference with id ', $id, ' not found')"/>
-							</xsl:with-param>
-						</xsl:call-template>
-					</xsl:otherwise>
-					
-				</xsl:choose>
 			</xsl:when>
 
 			<xsl:when test="contains($first,'resource:')">
@@ -2652,12 +2648,13 @@ the types, entity specializations, and functions that are specific to this part 
 		
 		<!-- MWD 2018-07-04 6538 the above paragraph replaced with this one -->
 		<!-- <p> -->	
-		<xsl:call-template name="insertParagraph">
+		<!-- commented: see https://github.com/metanorma/stepmod2mn/issues/32 -->
+		<!-- <xsl:call-template name="insertParagraph">
 			<xsl:with-param name="text">
 			The following documents are referred to in the text in such a way that some or all of their content constitutes requirements of this document. 
 			For dated references, only the edition cited applies. For undated references, the latest edition of the referenced document (including any amendments) applies.
 			</xsl:with-param>
-		</xsl:call-template>
+		</xsl:call-template> -->
 		<!-- </p> -->		
 		
 		<!-- output any issues -->
@@ -3643,50 +3640,27 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 										
 										<xsl:variable name="normrefs_resdoc_default_node" select="$normrefs_resdoc_default_xml/normrefs/normref.inc[@normref=$ref]"/>
 										
-										<xsl:choose>
-											<xsl:when test="$normrefs_resdoc_default_node">
-												<xsl:apply-templates select="$normrefs_resdoc_default_xml/normrefs/normref.inc[@normref=$ref]/term.ref" mode="normref">
-													<xsl:with-param name="current_resource" select="$current_resource"/>
-													<xsl:with-param name="moreNormRefs" select="$moreNormRefs"/>
-												</xsl:apply-templates>
-											</xsl:when>
-											
-											<xsl:otherwise>
-												<xsl:call-template name="error_message">
-													<xsl:with-param name="message">
-														<xsl:value-of select="concat('Error 7: reference with id ', $ref, ' not found')"/>
-													</xsl:with-param>
-												</xsl:call-template>
-											</xsl:otherwise>
-											
-										</xsl:choose>
-										
+										<xsl:if test="$normrefs_resdoc_default_node">
+											<xsl:apply-templates select="$normrefs_resdoc_default_xml/normrefs/normref.inc[@normref=$ref]/term.ref" mode="normref">
+												<xsl:with-param name="current_resource" select="$current_resource"/>
+												<xsl:with-param name="moreNormRefs" select="$moreNormRefs"/>
+											</xsl:apply-templates>
+										</xsl:if>
+																					
 									</xsl:when>
 									<xsl:when test="$doctype='aic'">
-									
 									
 										<xsl:variable name="normrefs_aic_default_xml" select="document(concat($path, '../../../data/basic/normrefs_aic_default.xml'))"/>
 										
 										<xsl:variable name="normrefs_aic_default_node" select="$normrefs_aic_default_xml/normrefs/normref.inc[@normref=$ref]"/>
-										
-										<xsl:choose>
-											<xsl:when test="$normrefs_aic_default_node">
-												<xsl:apply-templates select="$normrefs_aic_default_xml/normrefs/normref.inc[@normref=$ref]/term.ref" mode="normref">
-													<xsl:with-param name="current_resource" select="$current_resource"/>
-													<xsl:with-param name="moreNormRefs" select="$moreNormRefs"/>
-												</xsl:apply-templates>
-											</xsl:when>
+																				
+										<xsl:if test="$normrefs_aic_default_node">
+											<xsl:apply-templates select="$normrefs_aic_default_xml/normrefs/normref.inc[@normref=$ref]/term.ref" mode="normref">
+												<xsl:with-param name="current_resource" select="$current_resource"/>
+												<xsl:with-param name="moreNormRefs" select="$moreNormRefs"/>
+											</xsl:apply-templates>
+										</xsl:if>
 											
-											<xsl:otherwise>
-												<xsl:call-template name="error_message">
-													<xsl:with-param name="message">
-														<xsl:value-of select="concat('Error 7: reference with id ', $ref, ' not found')"/>
-													</xsl:with-param>
-												</xsl:call-template>
-											</xsl:otherwise>
-											
-										</xsl:choose>
-										
 									</xsl:when>
 								</xsl:choose>
 								<!-- check to see if any terms from the same normref are 

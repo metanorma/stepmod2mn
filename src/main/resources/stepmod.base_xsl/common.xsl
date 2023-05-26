@@ -5,14 +5,19 @@ $Id: common.xsl,v 1.204 2018/10/07 10:51:54 mike Exp $
 	Owner:   Developed by Eurostep and supplied to NIST under contract.
 	Purpose: Templates that are common to most other stylesheets
 -->
+<!-- Updated: Alexander Dyuzhev, for stepmod2mn tool-->
+
 <xsl:stylesheet 
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"   
 	xmlns:xalan="http://xml.apache.org/xalan" xmlns:java="http://xml.apache.org/xalan/java"
+	exclude-result-prefixes="xalan"
 	version="1.0">
 
 <!-- xmlns:msxsl="urn:schemas-microsoft-com:xslt"
 	xmlns:exslt="http://exslt.org/common"
 	exclude-result-prefixes="msxsl exslt" -->
+
+	<xsl:output method="html"/>
 
 	<!-- replace the file extension with .xml or .htm according to FILE_EXT -->
 	<xsl:template name="set_file_ext">
@@ -32,8 +37,6 @@ $Id: common.xsl,v 1.204 2018/10/07 10:51:54 mike Exp $
 		</xsl:variable>
 		<xsl:value-of select="concat($nfilename,$FILE_EXT)"/>
 	</xsl:template>
-
-	<xsl:output method="html"/>
 
 
 <!--
@@ -88,6 +91,44 @@ $Id: common.xsl,v 1.204 2018/10/07 10:51:54 mike Exp $
 </xsl:template>
 
 
+<xsl:template match="module" mode="display_name">
+	<xsl:text>Application module: </xsl:text>
+	<xsl:call-template name="module_display_name">
+		<xsl:with-param name="module" select="@name"/>
+	</xsl:call-template>
+</xsl:template>
+
+<xsl:template match="module" mode="display_name_french">
+	<xsl:choose>
+		<xsl:when test="string-length(normalize-space(@name.french))=0">
+			<xsl:text>Module d'application: </xsl:text>
+			<xsl:choose>
+				<xsl:when test="$ERROR_CHECK_ISOCOVER='YES'">
+					<xsl:call-template name="error_message">
+						<xsl:with-param 
+							name="message" 
+							select="concat('Error FT: No French title (module/@name.french) provided for ',@name)"/>
+					</xsl:call-template>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:call-template name="module_display_name">
+						<xsl:with-param name="module" select="@name"/>
+					</xsl:call-template>  
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:when>
+		<xsl:otherwise>
+			<xsl:text>Module d'application: </xsl:text>
+			<xsl:call-template name="module_display_name">
+				<xsl:with-param name="module" select="@name.french"/>
+			</xsl:call-template>                
+		</xsl:otherwise>
+	</xsl:choose>
+
+
+	<xsl:if test="@name.french">
+	</xsl:if>
+</xsl:template>
 
 
 <!-- output the clause heading -->
@@ -600,16 +641,33 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 	<!-- <ul> -->
 	
 	<xsl:if test="local-name(..) = 'li'"> <!-- nested list -->
-		<xsl:text>&#xa;</xsl:text>
+		<!-- <xsl:text>&#xa;</xsl:text> -->
 	</xsl:if>
 	
-	<xsl:text>&#xa;</xsl:text>
-	<xsl:if test="normalize-space(preceding-sibling::node()) != ''">
+	<xsl:if test="not(preceding-sibling::*[1][self::p])">
 		<xsl:text>&#xa;</xsl:text>
 	</xsl:if>
+	<xsl:if test="preceding-sibling::node()[1][normalize-space() != ''][self::text()]">
+		<xsl:text>&#xa;</xsl:text>
+	</xsl:if>
+	<!-- <xsl:if test="normalize-space(preceding-sibling::node()[1]) != ''">
+		<xsl:text>&#xa;</xsl:text>
+	</xsl:if> -->
+	<xsl:variable name="ul_content">
 		<xsl:apply-templates/>
+	</xsl:variable>
+	<xsl:copy-of select="$ul_content"/>
 	<!-- </ul> -->
-	<xsl:text>&#xa;&#xa;</xsl:text>	
+	
+	<xsl:choose>
+		<xsl:when test="not(java:endsWith(java:java.lang.String.new($ul_content),'&#xa;'))">
+			<xsl:text>&#xa;&#xa;</xsl:text>
+		</xsl:when>
+		<xsl:when test="not(java:endsWith(java:java.lang.String.new($ul_content),'&#xa;&#xa;'))">
+			<xsl:text>&#xa;</xsl:text>
+		</xsl:when>
+	</xsl:choose>
+	
 </xsl:template>
 
 <!--
@@ -830,6 +888,11 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 			</p>
 		</xsl:otherwise>
 	</xsl:choose> -->
+	
+	<xsl:if test="preceding-sibling::node()[1][self::text()][normalize-space() != '']">
+		<xsl:text>&#xa;&#xa;</xsl:text>
+	</xsl:if>
+	
   <xsl:choose>
 		<xsl:when test="following-sibling::*[1][local-name() = 'example' or local-name() = 'note']">
 			<xsl:call-template name="insertParagraph">
@@ -1604,7 +1667,7 @@ width="20" height="20"/> -->
 				<xsl:with-param name="module" select="$module"/>
 			</xsl:call-template>
 		</xsl:variable>
-		<xsl:value-of select="concat('../data/modules/',$mod_dir)"/>
+		<xsl:value-of select="concat($path,'../../../data/modules/',$mod_dir)"/>
 	</xsl:template>
 
 
@@ -1728,7 +1791,7 @@ width="20" height="20"/> -->
 
 	<xsl:template name="resource_file">
 		<xsl:param name="resource"/>
-		<xsl:value-of select="concat('../data/resources/',$resource,'/',$resource,'.xml')"/>
+		<xsl:value-of select="concat($path,'../../../data/resources/',$resource,'/',$resource,'.xml')"/>
 	</xsl:template>
 
 
@@ -1740,7 +1803,7 @@ width="20" height="20"/> -->
 	<xsl:template name="resource_expg_file">
 		<xsl:param name="resource"/>
 		<xsl:param name="expg_file"/>
-		<xsl:value-of select="concat('../data/resources/',$resource,'/',$expg_file)"/>
+		<xsl:value-of select="concat($path,'../../../data/resources/',$resource,'/',$expg_file)"/>
 	</xsl:template>
 
 	<!-- return the target for an express entity
@@ -1895,7 +1958,7 @@ width="20" height="20"/> -->
 						<!-- <a href="{$href}"><b><xsl:apply-templates/></b></a>             -->
 						<xsl:call-template name="insertHyperlink">
 							<xsl:with-param name="a">
-								<a href="{$href}"><xsl:text>*</xsl:text><xsl:apply-templates/><xsl:text>*</xsl:text></a>            
+								<a href="{$href}"><xsl:apply-templates/></a>            
 							</xsl:with-param>
 						</xsl:call-template>
 					</xsl:when>
@@ -1903,7 +1966,7 @@ width="20" height="20"/> -->
 						<!-- <a href="{$href}"><b><xsl:value-of select="$item"/></b></a> -->            
 						<xsl:call-template name="insertHyperlink">
 							<xsl:with-param name="a">
-								<a href="{$href}"><xsl:text>*</xsl:text><xsl:value-of select="$item"/><xsl:text>*</xsl:text></a>							
+								<a href="{$href}"><xsl:value-of select="$item"/></a>							
 							</xsl:with-param>
 						</xsl:call-template>						
 					</xsl:otherwise>
@@ -3515,10 +3578,10 @@ width="20" height="20"/> -->
 						<xsl:value-of select="concat($mod_dir,'/arm_lf.xml')"/>
 					</xsl:when>
 					<xsl:when test="$arm_mim_res='ir_express' or $arm_mim_res='ir' or $arm_mim_res='resdoc'">     
-						<xsl:value-of select="concat('../data/resources/',$schema,'/',$schema,'.xml')"/>     
+						<xsl:value-of select="concat($path, '../../../data/resources/',$schema,'/',$schema,'.xml')"/>     
 					</xsl:when>
 					<xsl:when test="$arm_mim_res='reference'">
-						<xsl:value-of select="concat('../data/reference/',$schema,'/',$schema,'.xml')"/>
+						<xsl:value-of select="concat($path, '../../../data/reference/',$schema,'/',$schema,'.xml')"/>
 					</xsl:when>
 					<xsl:when test="$arm_mim_res='bom'"><!-- BOM -->
 						<xsl:value-of select="concat($mod_dir,'/bom.xml')"/>
@@ -3527,7 +3590,7 @@ width="20" height="20"/> -->
 			</xsl:variable>
 
 			<xsl:variable name="express_nodes"
-				select="document(concat($path, '../../', string($express_file)))"/>
+				select="document(string($express_file))"/>
 			<xsl:choose>
 				<xsl:when test="string-length($wr) != 0">
 					<xsl:if test="not($express_nodes/express/schema[@name=$schema]/entity[@name=$entity_type]/where[@label=$wr])">
@@ -5036,7 +5099,7 @@ is case sensitive.')"/>
 			</xsl:call-template>
 		</xsl:variable>
 		
-		<xsl:value-of select="concat('../data/business_object_models/', $model_dir)"/>
+		<xsl:value-of select="concat($path,'../../../data/business_object_models/', $model_dir)"/>
 		<!--<xsl:value-of select="string('../data/business_object_models/managed_model_based_3d_engineering')"/>-->
 	</xsl:template>
 	

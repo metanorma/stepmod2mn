@@ -6,6 +6,8 @@ $Id: common.xsl,v 1.33 2008/05/21 20:50:25 abf Exp $
 	Purpose:
 		 Templates that are common to most other stylesheets
 -->
+<!-- Updated: Alexander Dyuzhev, for stepmod2mn tool-->
+
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 								version="1.0">
 

@@ -7,6 +7,7 @@ $Id: sect_e_examples.xsl,v 1.2 2002/12/20 12:35:58 nigelshaw Exp $
   Purpose:
      
 -->
+<!-- Updated: Alexander Dyuzhev, for stepmod2mn tool-->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version="1.0">
 

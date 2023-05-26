@@ -7,8 +7,10 @@ $Id: sect_introduction.xsl,v 1.13 2010/10/20 07:44:26 robbod Exp $
 	Purpose: Output introduction as a web page
 		 
 -->
+<!-- Updated: Alexander Dyuzhev, for stepmod2mn tool-->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"  
 	xmlns:xalan="http://xml.apache.org/xalan" 
+	exclude-result-prefixes="xalan"
 	version="1.0">
 
 <!-- xmlns:msxsl="urn:schemas-microsoft-com:xslt"
@@ -88,7 +90,9 @@ $Id: sect_introduction.xsl,v 1.13 2010/10/20 07:44:26 robbod Exp $
 						</xsl:call-template>
 						
 						
-						<xsl:for-each select="../schema">
+						<!-- https://github.com/metanorma/stepmod2mn/issues/32 -->
+						<!-- List -->
+						<!-- <xsl:for-each select="../schema">
 							<xsl:text>* </xsl:text>
 							<xsl:choose>
 								<xsl:when test="position()!=last()">
@@ -102,7 +106,22 @@ $Id: sect_introduction.xsl,v 1.13 2010/10/20 07:44:26 robbod Exp $
 								</xsl:otherwise>
 							</xsl:choose>
 						</xsl:for-each>					
-						<xsl:text>&#xa;&#xa;</xsl:text>
+						<xsl:text>&#xa;&#xa;</xsl:text> -->
+            
+						<!-- replaced by macros -->
+						<xsl:text>[lutaml_express, schemas, context, leveloffset=+1]</xsl:text>
+						<xsl:text>&#xa;</xsl:text>
+						<xsl:text>---</xsl:text>
+						<xsl:text>&#xa;</xsl:text>
+						<xsl:text>{% for schema in context.schemas %}</xsl:text>
+						<xsl:text>&#xa;</xsl:text>
+						<xsl:text>* {{ schema.id }}{% if forloop.last == true %}.{% else %};{% endif %}</xsl:text>
+						<xsl:text>&#xa;</xsl:text>
+						<xsl:text>{% endfor %}</xsl:text>
+						<xsl:text>&#xa;</xsl:text>
+						<xsl:text>---</xsl:text>
+						<xsl:text>&#xa;</xsl:text>
+						<xsl:text>&#xa;</xsl:text>
 						
 					</xsl:when>
 					<xsl:otherwise>

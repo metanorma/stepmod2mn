@@ -9,7 +9,7 @@
 		 Used to establish links (URLs) for entities and types that are
 		 referenced in a schema 
 -->
-
+<!-- Updated: Alexander Dyuzhev, for stepmod2mn tool-->
 <xsl:stylesheet 
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	version="1.0">
@@ -581,6 +581,7 @@
 		<xsl:param name="clause" select="section"/>
 		<!-- the schema in which the object has been used -->
 		<xsl:param name="object_used_in_schema_name"/>
+		<xsl:param name="skipLink">true</xsl:param>
 
 		<!-- make sure that the arguments don't have any whitespace -->
 		<xsl:variable name="lobject_name" 
@@ -600,14 +601,21 @@
 					</xsl:call-template>
 				</xsl:variable>
 				
-				<xsl:call-template name="insertHyperlinkSkip">
-					<xsl:with-param name="a">
-						<A HREF="{$xref}">
-							<xsl:value-of select="$lobject_name"/>
-						</A>
-					</xsl:with-param>
-				</xsl:call-template>
-				<xsl:value-of select="$lobject_name"/>
+				<xsl:choose>
+					<xsl:when test="$skipLink = 'true'">
+						<xsl:call-template name="insertHyperlinkSkip">
+							<xsl:with-param name="a">
+								<A HREF="{$xref}">
+									<xsl:value-of select="$lobject_name"/>
+								</A>
+							</xsl:with-param>
+						</xsl:call-template>
+						<xsl:value-of select="$lobject_name"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:text>&lt;&lt;</xsl:text><xsl:value-of select="$lobject_name"/><xsl:text>&gt;&gt;</xsl:text>
+					</xsl:otherwise>
+				</xsl:choose>
 				
 				<!-- debug 
 				<xsl:message>     
@@ -1255,7 +1263,7 @@
 		<xsl:variable name="remaining_resources" select="$resources[position()!=1]"/>
 
 		<xsl:variable name="express_file" 
-			select="concat('../data/resources/',
+			select="concat($path,'../../../data/resources/',
 							$first_resource/@name,'/',$first_resource/@name,'.xml')"/>
 		<xsl:variable name="object_nodes"
 			select="document($express_file)/express/schema/entity|/express/schema/type|/express/schema/subtype.constraint|/express/schema/function|/express/schema/procedure|/express/schema/rule|/express/schema/constant"/>

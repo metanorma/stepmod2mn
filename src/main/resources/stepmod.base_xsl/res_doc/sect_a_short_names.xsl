@@ -8,6 +8,7 @@ $Id: sect_a_short_names.xsl,v 1.10 2018/01/18 20:20:21 mike Exp $
 	Purpose:
 		 
 -->
+<!-- Updated: Alexander Dyuzhev, for stepmod2mn tool-->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 								version="1.0">
 

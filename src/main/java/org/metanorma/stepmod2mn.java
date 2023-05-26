@@ -19,6 +19,9 @@ import java.util.Scanner;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Source;
 import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
@@ -36,7 +39,10 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
@@ -159,14 +165,16 @@ public class stepmod2mn {
         CommandLineParser parser = new DefaultParser();
                
         boolean cmdFail = false;
-        
+
+        // optionsInfo
         try {
             CommandLine cmdInfo = parser.parse(optionsInfo, args);
             printVersion(cmdInfo.hasOption("version"));            
         } catch (ParseException exp) {
             cmdFail = true;
-        }
-        
+        }// END optionsInfo
+
+        // optionsSVG
         if(cmdFail) {
             try {
                 CommandLine cmd = parser.parse(optionsSVG, args);
@@ -191,8 +199,9 @@ public class stepmod2mn {
             } catch (ParseException exp) {
                 cmdFail = true;
             }
-        }
-        
+        } // END optionsSVG
+
+        // optionsSVGscope
         if(cmdFail) {
             try {
                 CommandLine cmd = parser.parse(optionsSVGscope, args);
@@ -222,8 +231,9 @@ public class stepmod2mn {
             } catch (ParseException exp) {
                 cmdFail = true;
             }
-        }
-        
+        } // END optionsSVGscope
+
+        // options
         if(cmdFail) {            
             try {             
                 CommandLine cmd = parser.parse(options, args);
@@ -249,6 +259,13 @@ public class stepmod2mn {
                 String outFileName = "";
                 if (cmd.hasOption("output")) {
                     outFileName = cmd.getOptionValue("output");
+                    String outPath_normalized = outFileName;
+                    if (outPath_normalized.startsWith("./") || outPath_normalized.startsWith(".\\")) {
+                        outPath_normalized = outPath_normalized.substring(2);
+                    }
+                    File fXMLout = new File(outPath_normalized);
+                    outFileName = fXMLout.getAbsoluteFile().toString();
+                    new File(fXMLout.getParent()).mkdirs();
                 }
 
                 String boilerplatePath = "";
@@ -328,11 +345,10 @@ public class stepmod2mn {
                     System.exit(ERROR_EXIT_CODE);
                 }
                 cmdFail = false;
-                //}
             } catch (ParseException exp) {
                 cmdFail = true;            
             }
-        }
+        } // END options
         
         // flush temporary folder
         if (!DEBUG) {
@@ -362,7 +378,19 @@ public class stepmod2mn {
             // load linearized xml
             Source src = new StreamSource(new StringReader(linearizedXML));
             ClassLoader cl = this.getClass().getClassLoader();
-            String systemID = "stepmod2mn.adoc.xsl";
+
+            String xslKind = "resource";
+
+            String rootElement = getRootElement(linearizedXML);
+            switch (rootElement) {
+                case "resource":
+                case "module":
+                    xslKind = rootElement;
+                    break;
+            }
+
+            String systemID = "stepmod2mn." + xslKind + ".adoc.xsl";
+
             //InputStream in = cl.getResourceAsStream(systemID);
             URL url = cl.getResource(systemID);
             
@@ -522,7 +550,27 @@ public class stepmod2mn {
         }
         return "";
     }
-    
+
+    private String getRootElement (String xml) {
+        try {
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            DocumentBuilder db = null;
+            db = dbf.newDocumentBuilder();
+
+            InputSource is = new InputSource();
+            is.setCharacterStream(new StringReader(xml));
+
+            Document doc = db.parse(is);
+            Element root = doc.getDocumentElement();
+            String rootName = root.getNodeName();
+            return rootName;
+        } catch (SAXException | IOException | ParserConfigurationException e) {
+            e.printStackTrace(System.err);
+            System.exit(ERROR_EXIT_CODE);
+        }
+        return "";
+    }
+
     private void generateSVG(String xmlFilePath, String image, String outPath) throws IOException, TransformerException, SAXParseException {
         List<String> xmlFiles;
         String extension = ".xml";

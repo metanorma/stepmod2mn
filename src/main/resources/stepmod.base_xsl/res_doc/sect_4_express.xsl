@@ -9,10 +9,12 @@
 		 Used to display the commented XML encoded Express
 		 in the schema clauses 4, etc of a resource.
 -->
+<!-- Updated: Alexander Dyuzhev, for stepmod2mn tool-->
 
 <xsl:stylesheet 
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:xalan="http://xml.apache.org/xalan" 
+	exclude-result-prefixes="xalan"
 	version="1.0"
 >
 
@@ -177,6 +179,7 @@
 				 +++++++++++++++++++ -->
 	<xsl:template match="interface">
 		<xsl:param name="doctype"/>
+		<xsl:param name="skipLutaMLCodeStart">false</xsl:param>
 		<xsl:variable name="schema_name" select="../@name"/>      
 		<xsl:if test="position()=1">
 			<xsl:variable name="clause_number">
@@ -193,7 +196,7 @@
 			</xsl:if>
 		<!-- <p> -->
 			<code>
-			<xsl:if test="position()=1">
+			<xsl:if test="position()=1 and $skipLutaMLCodeStart = 'false'">
 				<xsl:call-template name="insertLutaMLCodeStart"/>
 			</xsl:if>
 
@@ -1305,12 +1308,13 @@
 		<!-- </p> -->
 		
 		<!-- commented, because express_ref:[...] inserted above -->
-		<!-- <xsl:apply-templates select="./explicit" mode="description"/>    
+		<!-- uncommented for https://github.com/metanorma/stepmod2mn/issues/32, and because  express_ref: commented above, in commit Nov 7, 2020-->
+		<xsl:apply-templates select="./explicit" mode="description"/>    
 		<xsl:apply-templates select="./derived" mode="description"/>    
 		<xsl:apply-templates select="./inverse" mode="description"/>  
 		<xsl:apply-templates select="./unique" mode="description"/>
 		<xsl:call-template name="output_where_formal"/>
-		<xsl:call-template name="output_where_informal"/>-->
+		<xsl:call-template name="output_where_informal"/>
 	</xsl:template>
 
 
@@ -3821,6 +3825,7 @@
 									<xsl:with-param name="object_used_in_schema_name" 
 										select="../../@name"/>
 									<xsl:with-param name="clause" select="'section'"/>
+									<xsl:with-param name="skipLink" select="'false'"/>
 								</xsl:call-template></b> type. 
 								<xsl:if test="@selectitems and (string-length(@selectitems)!=0)">
 									It adds the data 
