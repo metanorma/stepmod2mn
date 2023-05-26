@@ -1958,7 +1958,7 @@ width="20" height="20"/> -->
 						<!-- <a href="{$href}"><b><xsl:apply-templates/></b></a>             -->
 						<xsl:call-template name="insertHyperlink">
 							<xsl:with-param name="a">
-								<a href="{$href}"><xsl:text>*</xsl:text><xsl:apply-templates/><xsl:text>*</xsl:text></a>            
+								<a href="{$href}"><xsl:apply-templates/></a>            
 							</xsl:with-param>
 						</xsl:call-template>
 					</xsl:when>
@@ -1966,7 +1966,7 @@ width="20" height="20"/> -->
 						<!-- <a href="{$href}"><b><xsl:value-of select="$item"/></b></a> -->            
 						<xsl:call-template name="insertHyperlink">
 							<xsl:with-param name="a">
-								<a href="{$href}"><xsl:text>*</xsl:text><xsl:value-of select="$item"/><xsl:text>*</xsl:text></a>							
+								<a href="{$href}"><xsl:value-of select="$item"/></a>							
 							</xsl:with-param>
 						</xsl:call-template>						
 					</xsl:otherwise>
