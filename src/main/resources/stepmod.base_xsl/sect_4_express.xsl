@@ -218,7 +218,7 @@
             </xsl:otherwise>
           </xsl:choose> 
           <xsl:if test="position()=last()"><xsl:text>&#xa;(*</xsl:text><!-- <br/>(*--></xsl:if>
-          <xsl:text>&#xa;&#xa;</xsl:text>
+          <xsl:text>&#xa;</xsl:text> <!-- &#xa; -->
 
         </xsl:when>
         <xsl:when test="@kind='use'">
@@ -247,7 +247,7 @@
             </xsl:otherwise>
           </xsl:choose> 
           <xsl:if test="position()=last()"><xsl:text>&#xa;(*</xsl:text></xsl:if>
-          <xsl:text>&#xa;&#xa;</xsl:text>
+          <xsl:text>&#xa;</xsl:text> <!-- &#xa; -->
 
       </xsl:when>
         <xsl:otherwise>
@@ -260,6 +260,7 @@
           </xsl:call-template>
         </xsl:otherwise>
       </xsl:choose>
+      <xsl:call-template name="insertCodeEnd"/>
     </code>
   <!-- </blockquote> -->
   <!-- </p> -->
