@@ -269,6 +269,8 @@
 			</xsl:with-param>
 		</xsl:call-template>
 		
+		<xsl:call-template name="generateHtmlAttachmentsSH"/>
+		
 		<xsl:variable name="adoc">
 	
 			<!-- Abstract -->

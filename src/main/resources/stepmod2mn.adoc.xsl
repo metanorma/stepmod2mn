@@ -1040,6 +1040,98 @@
 		</redirect:write>
 	</xsl:template>
 	
+	<xsl:template name="generateHtmlAttachmentsSH">
+		<xsl:message>[INFO] Generation html_attachments.sh ...</xsl:message>
+		<redirect:write file="{$outpath}/html_attachments.sh">
+			<xsl:text>mkdir sections/schemadocs</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>for f in</xsl:text>
+			<!-- Example: action_schema application_context_schema approval_schema basic_attribute_schema certification_schema contract_schema date_time_schema document_schema effectivity_schema experience_schema external_reference_schema group_schema language_schema location_schema management_resources_schema measure_schema person_organization_schema product_definition_schema product_property_definition_schema product_property_representation_schema qualifications_schema security_classification_schema support_resource_schema</xsl:text> -->
+			<xsl:for-each select="resource/schema">
+				<xsl:text> </xsl:text>
+				<xsl:value-of select="@name"/>
+			</xsl:for-each>
+			
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>do</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>  fname="sections/schemadocs/${f}.adoc"</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>  cat &lt;&lt; EOF &gt; $fname</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>= X</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>:lutaml-express-index: schemas; schemas.yaml;</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>:bare: true</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>:mn-document-class: iso</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>:mn-output-extensions: html</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text></xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>[lutaml, schemas, context, leveloffset=+1]</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>---</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>{% for schema in context.schemas %}</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>{% if schema.id == "${f}" %}</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>{% assign schemaname = schema.id | append: "$" | remove: "_schema$" | remove: "$" | replace: "_", " " | capitalize %}</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text></xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>[%unnumbered]</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>= {{schemaname }}</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text></xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>[source%unnumbered]</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>--</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>{{ schema.source }}</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>--</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>{% endif %}</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>{% endfor %}</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>---</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>EOF</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>done</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text></xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>for f in sections/schemadocs/*.adoc; do</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>  local="${f##*/}"</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>  cp $f $local</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>  echo "compile $f"</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>  bundle exec metanorma $local</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>  rm $local</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>  mv "${local%%.adoc}.html" "sections/schemadocs/${local%%.adoc}.htm"</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>  mv "${local%%.adoc}.err" sections/schemadocs</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>  mv "${local%%.adoc}.presentation.xml" sections/schemadocs</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>done</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+		</redirect:write>
+	</xsl:template>
+	
 	<!-- for debug purposes -->
 	<xsl:template match="*" mode="print_as_xml">
 		<xsl:text>&#xa;&lt;</xsl:text>
