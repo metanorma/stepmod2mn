@@ -271,7 +271,9 @@
 		
 		<xsl:call-template name="generateHtmlAttachmentsSH"/>
 		
-		<xsl:call-template name="generateCollectionSH"/>
+		<xsl:call-template name="generateCollectionSH">
+			<xsl:with-param name="partnumber" select="resource/@part"/>
+		</xsl:call-template>
 		
 		<xsl:variable name="adoc">
 	

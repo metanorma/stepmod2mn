@@ -1133,13 +1133,15 @@
 	</xsl:template>
 	
 	<xsl:template name="generateCollectionSH">
+		<xsl:param name="partnumber"/>
 		<xsl:message>[INFO] Generation collection.sh ...</xsl:message>
 		<redirect:write file="{$outpath}/collection.sh">
 			<xsl:text>./html_attachments.sh</xsl:text>
 			<xsl:text>&#xa;</xsl:text>
 			<xsl:text>bundle exec metanorma -x xml document.adoc</xsl:text>
 			<xsl:text>&#xa;</xsl:text>
-			<xsl:text>bundle exec metanorma collection collection.yml -x xml,html,presentation -w iso10303-41</xsl:text>
+			<xsl:text>bundle exec metanorma collection collection.yml -x xml,html,presentation -w iso10303</xsl:text>
+			<xsl:if test="$partnumber != ''"><xsl:text>-</xsl:text><xsl:value-of select="$partnumber"/></xsl:if>
 			<xsl:text>&#xa;</xsl:text>
 		</redirect:write>
 	</xsl:template>
