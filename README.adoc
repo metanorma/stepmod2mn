@@ -27,6 +27,13 @@ or save it to specified path:
 java -jar target/stepmod2mn-1.11.jar <XML-FileName> --output <ADOC-FileName>
 ----
 
+convert all resource.xml and module.xml in the specified folder and sub-folders:
+
+[source,sh]
+----
+java -jar target/stepmod2mn-1.11.jar <Input-folder>
+----
+
 generate SVG images in the tree data/:
 
 [source,sh]
