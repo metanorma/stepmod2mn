@@ -95,6 +95,10 @@ public class Util {
         }
         
     }
+
+    public static boolean isUrl(String urlname) {
+        return urlname.toLowerCase().startsWith("http") || urlname.toLowerCase().startsWith("www.");
+    }
     
     public static boolean isUrlExists(String urlname){
         try {

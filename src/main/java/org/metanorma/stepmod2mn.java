@@ -14,9 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import java.util.List;
-import java.util.Scanner;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.xml.parsers.DocumentBuilder;
@@ -272,22 +270,26 @@ public class stepmod2mn {
                 if (cmd.hasOption("boilerplatepath")) {
                     boilerplatePath = cmd.getOptionValue("boilerplatepath") + File.separator;
                 }
-                
+
+                boolean isInputFolder = false;
+
+                List<Map.Entry<String,String>> inputOutputFiles = new ArrayList<>();
+
                 // if remote file (http or https)
-                if (argXMLin.toLowerCase().startsWith("http") || argXMLin.toLowerCase().startsWith("www.")) {
+                if (Util.isUrl(argXMLin)) {
 
                     if (!Util.isUrlExists(argXMLin)) {
                         System.out.println(String.format(INPUT_NOT_FOUND, XML_INPUT, argXMLin));
                         System.exit(ERROR_EXIT_CODE);
                     }
 
-                    resourcePath = Util.getParentUrl(argXMLin);
-
                     if (!cmd.hasOption("output")) {
                         outFileName = Paths.get(System.getProperty("user.dir"), Util.getFilenameFromURL(argXMLin)).toString();
                         outFileName = outFileName.substring(0, outFileName.lastIndexOf('.') + 1);
                         outFileName = outFileName + FORMAT;
                     }
+
+                    inputOutputFiles.add(new AbstractMap.SimpleEntry<>(argXMLin, outFileName));
 
                     /*
                     //download to temp folder
@@ -312,31 +314,52 @@ public class stepmod2mn {
                         System.exit(ERROR_EXIT_CODE);
                     }
 
-                    //parent path for input resource.xml
-                    //resourcePath = new File(argXMLin).getParent() + File.separator;
-                    resourcePath = fXMLin.getParent() + File.separator;
-                    //System.out.println("resourcePath=" + resourcePath);
-
                     if (!cmd.hasOption("output")) { // if local file, then save result in input folder
                         //outFileName = fXMLin.getAbsolutePath();
                         Path outPath = Paths.get(fXMLin.getParent(), "document." + FORMAT);
                         outFileName = outPath.toString();
-                    }                    
+                    }
+
+                    if (fXMLin.isDirectory()) {
+                        isInputFolder = true;
+
+                        try (Stream<Path> walk = Files.walk(Paths.get(fXMLin.getAbsolutePath()))) {
+                            List<String> inputXMLfiles = walk.map(x -> x.toString())
+                                    .filter(f -> f.endsWith("resource.ttf") || f.endsWith("module.xml")).collect(Collectors.toList());
+
+                            for (String inputXmlFile: inputXMLfiles) {
+                                Path outPath = Paths.get((new File(inputXmlFile)).getParent(), "document." + FORMAT);
+                                String outAdocFile = outPath.toString();
+                                inputOutputFiles.add(new AbstractMap.SimpleEntry<>(inputXmlFile, outAdocFile));
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        inputOutputFiles.add(new AbstractMap.SimpleEntry<>(argXMLin, outFileName));
+                    }
                 }
 
-                File fileOut = new File(outFileName);
-
-                /*DEBUG = cmd.hasOption("debug"); */
-
-                System.out.println(String.format(INPUT_LOG, XML_INPUT, argXMLin));                
-                System.out.println(String.format(OUTPUT_LOG, FORMAT.toUpperCase(), fileOut));
-                System.out.println();
-
                 try {
-                    stepmod2mn app = new stepmod2mn();
-                    app.setResourcePath(resourcePath);
-                    app.setBoilerplatePath(boilerplatePath);
-                    app.convertstepmod2mn(argXMLin, fileOut);                    
+                    for (Map.Entry<String,String> entry: inputOutputFiles) {
+                        String filenameIn = entry.getKey();
+                        String filenameOut = entry.getValue();
+                        File fileIn = new File(filenameIn);
+                        File fileOut = new File(filenameOut);
+                        stepmod2mn app = new stepmod2mn();
+                        System.out.println(String.format(INPUT_LOG, XML_INPUT, filenameIn));
+                        System.out.println(String.format(OUTPUT_LOG, FORMAT.toUpperCase(), filenameOut));
+                        System.out.println();
+                        app.setBoilerplatePath(boilerplatePath);
+                        if (Util.isUrl(filenameIn)) {
+                            resourcePath = Util.getParentUrl(filenameIn);
+                        } else {
+                            //parent path for input resource.xml
+                            resourcePath = fileIn.getParent() + File.separator;
+                        }
+                        app.setResourcePath(resourcePath);
+                        app.convertstepmod2mn(filenameIn, fileOut);
+                    }
                     System.out.println("End!");
 
                 } catch (Exception e) {
@@ -489,7 +512,7 @@ public class stepmod2mn {
 
             File fXMLin = new File(xmlFilePath);
 
-            if (xmlFilePath.toLowerCase().startsWith("http") || xmlFilePath.toLowerCase().startsWith("www.")) {
+            if (Util.isUrl(xmlFilePath)) {
                 try {
                     URL url = new URL(xmlFilePath);
                     xmlInputStream = url.openStream();
