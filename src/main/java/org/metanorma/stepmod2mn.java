@@ -62,6 +62,7 @@ public class stepmod2mn {
     static final String INPUT_LOG = "Input: %s (%s)";    
     static final String OUTPUT_LOG = "Output: %s (%s)";
 
+    static final String FORMAT = "adoc";
     static boolean DEBUG = false;
 
     static String VER = Util.getAppVersion();
@@ -255,7 +256,6 @@ public class stepmod2mn {
                 
                 String resourcePath = "";
 
-                String format = "adoc";
                 String outFileName = "";
                 if (cmd.hasOption("output")) {
                     outFileName = cmd.getOptionValue("output");
@@ -285,6 +285,8 @@ public class stepmod2mn {
 
                     if (!cmd.hasOption("output")) {
                         outFileName = Paths.get(System.getProperty("user.dir"), Util.getFilenameFromURL(argXMLin)).toString();
+                        outFileName = outFileName.substring(0, outFileName.lastIndexOf('.') + 1);
+                        outFileName = outFileName + FORMAT;
                     }
 
                     /*
@@ -316,13 +318,10 @@ public class stepmod2mn {
                     //System.out.println("resourcePath=" + resourcePath);
 
                     if (!cmd.hasOption("output")) { // if local file, then save result in input folder
-                      outFileName = fXMLin.getAbsolutePath();
+                        //outFileName = fXMLin.getAbsolutePath();
+                        Path outPath = Paths.get(fXMLin.getParent(), "document." + FORMAT);
+                        outFileName = outPath.toString();
                     }                    
-                }
-
-                if (!cmd.hasOption("output")) {
-                    outFileName = outFileName.substring(0, outFileName.lastIndexOf('.') + 1);
-                    outFileName = outFileName + format;
                 }
 
                 File fileOut = new File(outFileName);
@@ -330,7 +329,7 @@ public class stepmod2mn {
                 /*DEBUG = cmd.hasOption("debug"); */
 
                 System.out.println(String.format(INPUT_LOG, XML_INPUT, argXMLin));                
-                System.out.println(String.format(OUTPUT_LOG, format.toUpperCase(), fileOut));
+                System.out.println(String.format(OUTPUT_LOG, FORMAT.toUpperCase(), fileOut));
                 System.out.println();
 
                 try {
@@ -435,7 +434,7 @@ public class stepmod2mn {
                 }
                 writeBuffer(sbBuffer, outputFile);
             }
-            System.out.println("Saved " + Util.getFileSize(adocFileOut) + " bytes.");
+            System.out.println("Saved (" + adocFileOut.getName() + ") " + Util.getFileSize(adocFileOut) + " bytes.");
             
         } catch (SAXParseException e) {            
             throw (e);

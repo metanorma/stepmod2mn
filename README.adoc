@@ -13,7 +13,7 @@ You will need the `maven` build tool and `make`.
 
 == Usage
 
-convert specified xml file into adoc format and save it to data/resource_docs/draughting_elements/resource.adoc:
+convert specified xml file into adoc format and save it to document.adoc:
 
 [source,sh]
 ----
@@ -47,6 +47,8 @@ e.g.
 ----
 java -jar target/stepmod2mn-1.11.jar data/resource_docs/draughting_elements/resource.xml 
 ----
+
+NOTE: resulted ADOC found in data/resource_docs/draughting_elements/document.adoc
 
 [source,sh]
 ----
