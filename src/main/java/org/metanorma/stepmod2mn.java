@@ -1,14 +1,7 @@
 package org.metanorma;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
-import java.io.StringReader;
-import java.io.StringWriter;
+import java.io.*;
+import java.net.URI;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -272,6 +265,7 @@ public class stepmod2mn {
                 }
 
                 boolean isInputFolder = false;
+                String inputFolder = "";
 
                 List<Map.Entry<String,String>> inputOutputFiles = new ArrayList<>();
 
@@ -322,10 +316,11 @@ public class stepmod2mn {
 
                     if (fXMLin.isDirectory()) {
                         isInputFolder = true;
+                        inputFolder = fXMLin.getAbsolutePath();
 
                         try (Stream<Path> walk = Files.walk(Paths.get(fXMLin.getAbsolutePath()))) {
                             List<String> inputXMLfiles = walk.map(x -> x.toString())
-                                    .filter(f -> f.endsWith("resource.ttf") || f.endsWith("module.xml")).collect(Collectors.toList());
+                                    .filter(f -> f.endsWith("resource.xml") || f.endsWith("module.xml")).collect(Collectors.toList());
 
                             for (String inputXmlFile: inputXMLfiles) {
                                 Path outPath = Paths.get((new File(inputXmlFile)).getParent(), "document." + FORMAT);
@@ -360,6 +355,32 @@ public class stepmod2mn {
                         app.setResourcePath(resourcePath);
                         app.convertstepmod2mn(filenameIn, fileOut);
                     }
+
+                    if (isInputFolder) {
+                        // Generate metanorma.yml in the root of pat
+                        StringBuilder metanormaYml = new StringBuilder();
+                        metanormaYml.append("---").append("\n")
+                                .append("metanorma:").append("\n")
+                                .append("  source:").append("\n")
+                                .append("    files:").append("\n");
+                        URI pathRootFolderURI = Paths.get(inputFolder).toUri();
+                        for (Map.Entry<String,String> entry: inputOutputFiles) {
+                            String resultAdoc = entry.getValue();
+                            URI resultAdocURI = Paths.get(resultAdoc).toUri();
+                            URI relativeURI = pathRootFolderURI.relativize(resultAdocURI);
+                            metanormaYml.append("      - " + relativeURI).append("\n");
+                        }
+                        metanormaYml.append("\n")
+                                .append("  collection:").append("\n")
+                                .append("    organization: \"ISO/TC 184/SC 4/WG 12\"").append("\n")
+                                .append("    name: \"ISO 10303 in Metanorma\"").append("\n");
+
+                        //append string buffer/builder to buffered writer
+                        BufferedWriter writer = new BufferedWriter(new FileWriter(Paths.get(inputFolder,"metanorma.yml").toFile()));
+                        writer.write(metanormaYml.toString());
+                        writer.close();
+                    }
+
                     System.out.println("End!");
 
                 } catch (Exception e) {

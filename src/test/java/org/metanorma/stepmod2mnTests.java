@@ -36,7 +36,7 @@ public class stepmod2mnTests {
     public static void setUpBeforeClass() throws Exception {
         XMLFILE_STEPMOD = System.getProperty("inputXML");
         if (XMLFILE_STEPMOD == null) {
-            System.out.println("Environment variable 'inputXML' is empty!");
+            System.out.println("The parameter 'inputXML' is empty!");
         }
     }
     
