@@ -271,6 +271,8 @@
 		
 		<xsl:call-template name="generateHtmlAttachmentsSH"/>
 		
+		<xsl:call-template name="generateCollectionSH"/>
+		
 		<xsl:variable name="adoc">
 	
 			<!-- Abstract -->
