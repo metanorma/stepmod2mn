@@ -136,8 +136,8 @@ $Id: sect_d_mim_expg.xsl,v 1.14 2006/10/13 21:18:18 darla Exp $
   </xsl:call-template>
   <!-- </p> -->
   <!-- <a name="mimexpg"/> -->
-  <xsl:text>[[mimexpg]]</xsl:text>
-  <xsl:text>&#xa;</xsl:text>
+  <!-- <xsl:text>[[mimexpg]]</xsl:text>
+  <xsl:text>&#xa;</xsl:text> -->
   <xsl:apply-templates select="mim/express-g"/>
 </xsl:template>
   

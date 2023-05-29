@@ -1042,17 +1042,17 @@ TT remove since locke is no longer available.
     <xsl:call-template name="insertParagraph">
       <xsl:with-param name="text">
         <!-- Clause <a href="1_scope{$FILE_EXT}">1</a> defines the scope of the -->
-    &lt;&lt;sec_1_scope&gt;&gt; defines the scope of the
+    &lt;&lt;scope&gt;&gt; defines the scope of the
     application module and summarizes the functionality and data covered. 
 
     <!-- Clause <a href="3_defs{$FILE_EXT}">3</a> lists the words defined in -->
-    &lt;&lt;sec_3_defs&gt;&gt; lists the words defined in
+    &lt;&lt;defns&gt;&gt; lists the words defined in
     this part of ISO 10303 and gives pointers to words defined elsewhere. 
 
     The information requirements of the application are specified in Clause 
     <!-- <a href="4_info_reqs{$FILE_EXT}">4</a> using terminology appropriate to -->
     The information requirements of the application are specified in 
-    &lt;&lt;sec_4_info_reqs&gt;&gt; using terminology appropriate to
+    &lt;&lt;arm&gt;&gt; using terminology appropriate to
     the application. 
 
     A graphical representation of the information requirements, referred to
@@ -1063,11 +1063,11 @@ TT remove since locke is no longer available.
     requirements. 
     This interpretation produces the module interpreted model (MIM). 
     <!-- This interpretation, given in <a href="5_mapping{$FILE_EXT}#mapping">5.1</a>, -->
-    This interpretation, given in &lt;&lt;sec_5_mapping_mapping&gt;&gt;,
+    This interpretation, given in &lt;&lt;mapping&gt;&gt;,
     shows the correspondence between the information requirements and the
     MIM. The short listing of the MIM specifies the interface to the
     <!-- resources and is given in <a href="5_mim{$FILE_EXT}#mim_express">5.2</a>.   -->
-    resources and is given in &lt;&lt;sec_5_mim_mim_express&gt;&gt;.  
+    resources and is given in &lt;&lt;mim_express&gt;&gt;.  
 
     A graphical representation of the short listing of the MIM is given
     <!-- in Annex <a href="d_mim_expg{$FILE_EXT}">D</a>. -->
@@ -4178,6 +4178,10 @@ $module_ok,' Check the normatives references')"/>
       <xsl:text>&gt;&gt;</xsl:text>
     </xsl:with-param>
   </xsl:call-template> -->
+    <xsl:text>[[</xsl:text>
+    <xsl:value-of select="$file"/>
+    <xsl:text>]]</xsl:text>
+    <xsl:text>&#xa;</xsl:text>
     <xsl:text>.</xsl:text>
     <xsl:apply-templates select="." mode="title"/>
     <xsl:text>&#xa;</xsl:text>

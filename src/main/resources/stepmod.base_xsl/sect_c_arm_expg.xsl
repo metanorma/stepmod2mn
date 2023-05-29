@@ -135,8 +135,8 @@ $Id: sect_c_arm_expg.xsl,v 1.13 2006/10/13 21:18:00 darla Exp $
 
 
   <!-- <a name="armexpg"/> -->
-  <xsl:text>[[armexpg]]</xsl:text>
-  <xsl:text>&#xa;</xsl:text>
+  <!-- <xsl:text>[[armexpg]]</xsl:text>
+  <xsl:text>&#xa;</xsl:text> -->
   <xsl:apply-templates select="arm/express-g"/>
 </xsl:template>
 

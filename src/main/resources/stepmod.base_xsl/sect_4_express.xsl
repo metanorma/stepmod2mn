@@ -434,8 +434,8 @@
             <xsl:variable name="penultimate"
               select="count(document($module_file)/module/arm/express-g/imgfile)-1"/>
             <!-- See Annex <a href="c_arm_expg{$FILE_EXT}">C</a>,  -->
-            See &lt;&lt;c_arm_expg&gt;&gt;, 
-            <xsl:choose>
+            See &lt;&lt;AnnexC&gt;&gt;, 
+            <!-- <xsl:choose>
               <xsl:when
                 test="count(document($module_file)/module/arm/express-g/imgfile)=1">
                 Figure
@@ -443,7 +443,7 @@
               <xsl:otherwise>
                 Figures
               </xsl:otherwise>
-            </xsl:choose>
+            </xsl:choose> -->
             
             <xsl:for-each select="document($module_file)/module/arm/express-g/imgfile">
               <!-- <xsl:variable name="imgfile">
@@ -451,7 +451,7 @@
                   <xsl:with-param name="filename" select="concat('../',@file)"/>   
                 </xsl:call-template>
               </xsl:variable> -->
-              <xsl:variable name="imgfile" select="@file"/>   
+              <xsl:variable name="imgfile" select="substring-before(@file,'.')"/>
               
               <!-- <a href="{$imgfile}">
                 <xsl:value-of select="concat('C.',position())"/>
@@ -460,7 +460,7 @@
               <xsl:if test="position()!=last()">
                 <xsl:choose>
                   <xsl:when test="position()!=$penultimate">, </xsl:when>
-                  <xsl:otherwise>and </xsl:otherwise>
+                  <xsl:otherwise> and </xsl:otherwise>
                 </xsl:choose>
               </xsl:if>
             </xsl:for-each>
