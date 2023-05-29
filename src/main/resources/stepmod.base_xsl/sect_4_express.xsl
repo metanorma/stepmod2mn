@@ -1304,8 +1304,8 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
       <!-- *)<br/> -->
       <xsl:call-template name="insertLutaMLCodeStart"/>
       <xsl:text>TYPE </xsl:text>
-      <xsl:value-of select="@name" /><xsl:text>=</xsl:text>
-        <xsl:apply-templates select="./aggregate" mode="code"/>        
+      <xsl:value-of select="@name" /><xsl:text> = </xsl:text>
+        <xsl:apply-templates select="./aggregate" mode="code"/>
         <xsl:choose>
           <xsl:when test="./where">
             <xsl:apply-templates select="./*" mode="underlying"/>;<xsl:text>&#xa;</xsl:text><!-- <br/> -->
@@ -1381,7 +1381,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
     <xsl:text>GENERIC_ENTITY </xsl:text>
   </xsl:if>
 
-  <xsl:text>SELECT </xsl:text><xsl:if test="@basedon">
+  <xsl:text>SELECT</xsl:text><xsl:if test="@basedon"><xsl:text> </xsl:text>
     <xsl:text>BASED_ON </xsl:text>
       <xsl:call-template name="link_object">
         <xsl:with-param name="object_name" select="@basedon"/>
