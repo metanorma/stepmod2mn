@@ -488,26 +488,16 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 			.Split-it-right sample divider
 			image::images/a1.png[Alt1]
 		-->
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>[[</xsl:text>
-		<xsl:value-of select="concat('figure', $number, $letter)"/>
-		<xsl:text>]]</xsl:text>
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>.</xsl:text><xsl:value-of select="./title"/>
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>image::</xsl:text>
-		
-		<xsl:variable name="img">
-			<xsl:apply-templates select="./img">
-				<xsl:with-param name="alt" select="$title"/>
-			</xsl:apply-templates>
-		</xsl:variable>		
-		<xsl:value-of select="$img"/>
-		<!-- alt -->
-		<xsl:text>[</xsl:text>
-		<xsl:value-of select="./title"/>
-		<xsl:text>]</xsl:text>
-		<xsl:text>&#xa;&#xa;</xsl:text>
+		<xsl:call-template name="insertImage">
+			<xsl:with-param name="id" select="concat('figure', $number, $letter)"/>
+			<xsl:with-param name="title" select="./title"/>
+			<xsl:with-param name="path">
+				<xsl:apply-templates select="./img">
+					<xsl:with-param name="alt" select="$title"/>
+				</xsl:apply-templates>
+			</xsl:with-param>
+			<xsl:with-param name="alttext" select="./title"/>
+		</xsl:call-template>
 		
 	</xsl:template>
 

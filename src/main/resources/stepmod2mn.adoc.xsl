@@ -420,6 +420,30 @@
 	
 	<xsl:template name="insertHyperlinkSkip"/>
 	
+	<xsl:template name="insertImage">
+		<xsl:param name="id"/>
+		<xsl:param name="title"/>
+		<xsl:param name="path"/>
+		<xsl:param name="alttext"/>
+		<xsl:text>&#xa;</xsl:text>
+    <xsl:if test="normalize-space($id) != ''">
+		<xsl:text>[[</xsl:text>
+      <xsl:value-of select="$id"/>
+      <xsl:text>]]</xsl:text>
+      <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="normalize-space($title) != ''">
+      <xsl:text>.</xsl:text><xsl:value-of select="$title"/>
+      <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
+		<xsl:text>image::</xsl:text>
+		<xsl:value-of select="$path"/>
+		<xsl:text>[</xsl:text>
+		<xsl:value-of select="$alttext"/>
+		<xsl:text>]</xsl:text>
+		<xsl:text>&#xa;&#xa;</xsl:text>
+		
+	</xsl:template>
 	
 	<xsl:template match="@*|node()" mode="text">
 		<xsl:copy>

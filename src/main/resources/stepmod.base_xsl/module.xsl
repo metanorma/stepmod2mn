@@ -4151,9 +4151,9 @@ $module_ok,' Check the normatives references')"/>
     </xsl:for-each>
   </xsl:template>
   <xsl:template match="express-g">
-    <xsl:text>&#xa;</xsl:text>
+    <!-- <xsl:text>&#xa;</xsl:text> -->
     <xsl:apply-templates select="imgfile|img" mode="expressg"/>
-    <xsl:text>&#xa;&#xa;</xsl:text>
+    <xsl:text>&#xa;</xsl:text>
   </xsl:template>
   <xsl:template match="imgfile" mode="expressg">
     <xsl:variable name="file">
@@ -4178,18 +4178,13 @@ $module_ok,' Check the normatives references')"/>
       <xsl:text>&gt;&gt;</xsl:text>
     </xsl:with-param>
   </xsl:call-template> -->
-    <xsl:text>[[</xsl:text>
-    <xsl:value-of select="$file"/>
-    <xsl:text>]]</xsl:text>
-    <xsl:text>&#xa;</xsl:text>
-    <xsl:text>.</xsl:text>
-    <xsl:apply-templates select="." mode="title"/>
-    <xsl:text>&#xa;</xsl:text>
-    <!-- Example: image::../mimexpg1.xml[] -->
-    <xsl:text>image::</xsl:text>
-    <xsl:value-of select="$href"/>
-    <xsl:text>[]</xsl:text>
-    <xsl:text>&#xa;&#xa;</xsl:text>
+    <xsl:call-template name="insertImage">
+      <xsl:with-param name="id" select="$file"/>
+      <xsl:with-param name="title">
+        <xsl:apply-templates select="." mode="title"/>
+      </xsl:with-param>
+      <xsl:with-param name="path" select="$href"/>
+    </xsl:call-template>
   </xsl:template>
   <xsl:template match="imgfile" mode="title">
     <xsl:variable name="number">
