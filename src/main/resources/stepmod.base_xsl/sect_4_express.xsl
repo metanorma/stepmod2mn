@@ -450,6 +450,7 @@
               </xsl:otherwise>
             </xsl:choose> -->
             
+            <xsl:text>&lt;&lt;</xsl:text>
             <xsl:for-each select="document($module_file)/module/arm/express-g/imgfile">
               <!-- <xsl:variable name="imgfile">
                 <xsl:call-template name="set_file_ext">
@@ -461,14 +462,16 @@
               <!-- <a href="{$imgfile}">
                 <xsl:value-of select="concat('C.',position())"/>
               </a> -->
-              <xsl:text>&lt;&lt;</xsl:text><xsl:value-of select="$imgfile"/><xsl:text>&gt;&gt;</xsl:text>
+              <xsl:value-of select="$imgfile"/>
               <xsl:if test="position()!=last()">
-                <xsl:choose>
+                <!-- <xsl:choose>
                   <xsl:when test="position()!=$penultimate">, </xsl:when>
                   <xsl:otherwise> and </xsl:otherwise>
-                </xsl:choose>
+                </xsl:choose> -->
+                <xsl:text>;and!</xsl:text>
               </xsl:if>
             </xsl:for-each>
+            <xsl:text>&gt;&gt; </xsl:text>
             for a graphical representation of this schema.
           </xsl:when>
 
@@ -487,6 +490,7 @@
               </xsl:otherwise>
             </xsl:choose> -->
             
+            <xsl:text>&lt;&lt;</xsl:text>
             <xsl:for-each select="document($module_file)/module/mim/express-g/imgfile">
               <!-- <xsl:variable name="imgfile">
                 <xsl:call-template name="set_file_ext">
@@ -497,14 +501,16 @@
               <!-- <a href="{$imgfile}">
                 <xsl:value-of select="concat('D.',position())"/>
               </a> -->
-              <xsl:text>&lt;&lt;</xsl:text><xsl:value-of select="$imgfile"/><xsl:text>&gt;&gt;</xsl:text>
+              <xsl:value-of select="$imgfile"/>
               <xsl:if test="position()!=last()">
-                <xsl:choose>
+                <!-- <xsl:choose>
                   <xsl:when test="position()!=$penultimate">, </xsl:when>
                   <xsl:otherwise> and </xsl:otherwise>
-                </xsl:choose>
+                </xsl:choose> -->
+                <xsl:text>;and!</xsl:text>
               </xsl:if>
             </xsl:for-each>
+            <xsl:text>&gt;&gt; </xsl:text>
             for a graphical representation of this schema.            
           </xsl:otherwise>
         </xsl:choose>
