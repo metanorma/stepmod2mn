@@ -12,8 +12,8 @@ public class RegExEscaping {
     public static String escapeFormattingCommands(String text) {
         StringBuilder parts = new StringBuilder();
         
-        //Words in Asciidoc are delimited by blank space or punctuation (,;".?!).
-        String delimeters = "\\s\\(,;\"\\.\\?\\!\\)";
+        //Words in Asciidoc are delimited by blank space or punctuation (,;:".?!).
+        String delimeters = "\\s\\(,;:\"\\.\\?\\!\\)";
         String regexDelimeters = "[" + delimeters + "]+";
         
         String regexWord = "[^" + delimeters + "]+";
