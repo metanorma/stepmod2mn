@@ -171,6 +171,7 @@
     <!-- current xpath is express/schema/interface -->
     <xsl:call-template name="insertHeaderADOC">
       <xsl:with-param name="id">interfaces_<xsl:value-of select="$schema_name"/></xsl:with-param>
+			<xsl:with-param name="level" select="3"/>
       <xsl:with-param name="header" select="$clause_header"/>					
     </xsl:call-template>
     
@@ -202,23 +203,25 @@
             <xsl:with-param name="clause" select="'section'"/>
           </xsl:call-template>
 
-          <xsl:text>&#160;&#160;&#160;--&#160;</xsl:text>
           <xsl:choose>
             <xsl:when test="./interfaced.item">
               <!-- if interface items then output source tail comment now -->
+              <xsl:text>&#160;&#160;&#160;--&#160;</xsl:text>
               <xsl:apply-templates select="." mode="source"/>
               <xsl:apply-templates select="./interfaced.item"/>;
               <!-- <xsl:if test="position()=last()"><br/>(*</xsl:if>
               <br/><br/> -->
             </xsl:when>
             <xsl:otherwise><xsl:text>;</xsl:text>
+              <xsl:text>&#160;&#160;&#160;--&#160;</xsl:text>
               <xsl:apply-templates select="." mode="source"/>
               <!-- <xsl:if test="position()=last()"><br/>(*</xsl:if>
               <br/><br/> -->
             </xsl:otherwise>
           </xsl:choose> 
-          <xsl:if test="position()=last()"><xsl:text>&#xa;(*</xsl:text><!-- <br/>(*--></xsl:if>
-          <xsl:text>&#xa;</xsl:text> <!-- &#xa; -->
+					
+          <!-- <xsl:if test="position()=last()"><br/>(*</xsl:if>
+          <xsl:text>&#xa;</xsl:text> -->
 
         </xsl:when>
         <xsl:when test="@kind='use'">
@@ -231,23 +234,25 @@
             <xsl:with-param name="clause" select="'section'"/>
           </xsl:call-template>
 
-          <xsl:text>&#160;&#160;&#160;--&#160;</xsl:text>
           <xsl:choose>
             <xsl:when test="./interfaced.item">
               <!-- if interface items then out put source tail comment now -->
+              <xsl:text>&#160;&#160;&#160;--&#160;</xsl:text>
               <xsl:apply-templates select="." mode="source"/>
               <xsl:apply-templates select="./interfaced.item"/>;
               <!-- <xsl:if test="position()=last()"><br/>(*</xsl:if>
               <br/><br/>           -->
             </xsl:when>
             <xsl:otherwise><xsl:text>;</xsl:text>
+              <xsl:text>&#160;&#160;&#160;--&#160;</xsl:text>
               <xsl:apply-templates select="." mode="source"/>
               <!-- <xsl:if test="position()=last()"><br/>(*</xsl:if>
               <br/><br/> -->
             </xsl:otherwise>
           </xsl:choose> 
-          <xsl:if test="position()=last()"><xsl:text>&#xa;(*</xsl:text></xsl:if>
-          <xsl:text>&#xa;</xsl:text> <!-- &#xa; -->
+					
+          <!-- <xsl:if test="position()=last()"><xsl:text>&#xa;(*</xsl:text></xsl:if>
+          <xsl:text>&#xa;</xsl:text>  --><!-- &#xa; -->
 
       </xsl:when>
         <xsl:otherwise>
@@ -410,7 +415,7 @@
               </small>
             </td>
           </tr> -->
-          <xsl:value-of select="$schema_name"/><xsl:text>:: </xsl:text>
+          <xsl:text>*</xsl:text><xsl:value-of select="$schema_name"/><xsl:text>*:: </xsl:text>
           <xsl:apply-templates select="." mode="source"/>
           <xsl:text>&#xa;&#xa;</xsl:text>
         </xsl:for-each>
