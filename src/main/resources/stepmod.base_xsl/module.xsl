@@ -3611,7 +3611,7 @@ test="document('../data/basic/normrefs.xml')/normref.list/normref[@id=$normref]/
               <xsl:call-template name="insertHeaderADOC">
                 <xsl:with-param name="id" select="concat('sec_3.1.',$section_no)"/>
                 <xsl:with-param name="attributes" select="'.nonterm'"/>
-                <xsl:with-param name="level" select="2"/>
+                <xsl:with-param name="level" select="3"/>
                 <!-- 3 -->
                 <xsl:with-param name="header" select="concat('Terms defined in ',$stdnumber)"/>
               </xsl:call-template>
@@ -3674,7 +3674,7 @@ test="document('../data/basic/normrefs.xml')/normref.list/normref[@id=$normref]/
                 </h2> -->
                   <xsl:call-template name="insertHeaderADOC">
                     <xsl:with-param name="id" select="concat('sec_3.',$section_no)"/>
-                    <xsl:with-param name="level" select="2"/>
+                    <xsl:with-param name="level" select="3"/>
                     <xsl:with-param name="header" select="concat('Terms defined in ', $stdnumber)"/>
                   </xsl:call-template>
                   <!-- <p> -->
@@ -3873,7 +3873,7 @@ $module_ok,' Check the normatives references')"/>
     <!-- </h2> -->
     <xsl:call-template name="insertHeaderADOC">
       <xsl:with-param name="id" select="concat('sec_',$section)"/>
-      <xsl:with-param name="level" select="2"/>
+      <xsl:with-param name="level" select="3"/>
       <!-- 3 -->
       <xsl:with-param name="header" select="'Other terms and definitions'"/>
     </xsl:call-template>
@@ -4034,7 +4034,7 @@ $module_ok,' Check the normatives references')"/>
     </xsl:variable>
     <xsl:call-template name="insertHeaderADOC">
       <xsl:with-param name="id" select="concat('sec_', $section,'.',position())"/>
-      <xsl:with-param name="level" select="3"/>
+      <xsl:with-param name="level" select="4"/>
       <xsl:with-param name="header" select="normalize-space($header)"/>
     </xsl:call-template>
     <!-- <xsl:apply-templates select="def"/> -->
