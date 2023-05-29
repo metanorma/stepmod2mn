@@ -648,8 +648,8 @@ Purpose:
 			</xsl:call-template>           
 		</xsl:variable>
 
-		<xsl:text>[abstract]</xsl:text>
-		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>.Abstract</xsl:text>
+		<xsl:text>&#xa;&#xa;</xsl:text>
 		
 		<!-- THX deleted per ISO review of part 107
 				 PS Added back in following review of Part 61 -->

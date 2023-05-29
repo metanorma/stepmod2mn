@@ -443,8 +443,8 @@ TT remove since locke is no longer available.
         <xsl:with-param name="module" select="./@name"/>
       </xsl:call-template>
     </xsl:variable>
-    <xsl:text>[abstract]</xsl:text>
-    <xsl:text>&#xa;</xsl:text>
+    <xsl:text>.Abstract</xsl:text>
+    <xsl:text>&#xa;&#xa;</xsl:text>
     <!-- replaced by below  
   <P>
     This document is the
