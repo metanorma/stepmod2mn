@@ -1213,7 +1213,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
   
   <xsl:copy-of select="$type_select_boilerplate"/>
 
-  <xsl:apply-templates select="./select" mode="description"/>
+  <!-- <xsl:apply-templates select="./select" mode="description"/> -->
 
   <!-- output description from external file -->
   <xsl:call-template name="output_external_description">
