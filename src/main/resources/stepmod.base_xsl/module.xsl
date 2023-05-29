@@ -4188,6 +4188,7 @@ $module_ok,' Check the normatives references')"/>
     <!-- Example: image::../mimexpg1.xml[] -->
     <xsl:text>image::</xsl:text>
     <xsl:value-of select="$href"/>
+    <xsl:text>[]</xsl:text>
     <xsl:text>&#xa;&#xa;</xsl:text>
   </xsl:template>
   <xsl:template match="imgfile" mode="title">

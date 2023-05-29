@@ -275,8 +275,8 @@ $Id: sect_5_mapping.xsl,v 1.89 2019/03/28 19:39:31 mike Exp $
   <xsl:call-template name="insertParagraph">
     <xsl:with-param name="text">
     This clause contains the mapping specification that defines how each 
-    application element of this part of ISO 10303 (see <!-- Clause <a href="{$sect4}">4</a> -->&lt;&lt;sect4&gt;&gt;) maps to one
-    or more MIM elements (see <!-- Clause <a href="{$sect52}">5.2</a> -->&lt;&lt;sect52&gt;&gt;).
+    application element of this part of ISO 10303 (see <!-- Clause <a href="{$sect4}">4</a> -->&lt;&lt;<xsl:value-of select="$sect4"/>&gt;&gt;) maps to one
+    or more MIM elements (see <!-- Clause <a href="{$sect52}">5.2</a> -->&lt;&lt;<xsl:value-of select="$sect52"/>&gt;&gt;).
     </xsl:with-param>
   </xsl:call-template>
   <!-- </p>
