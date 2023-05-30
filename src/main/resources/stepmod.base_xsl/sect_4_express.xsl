@@ -137,7 +137,7 @@
             </xsl:otherwise>
           </xsl:choose>
         </xsl:when>
-        <xsl:when test="contains($schema_name,'_mim')"><xsl:text>{blank}</xsl:text>
+        <xsl:when test="contains($schema_name,'_mim')">
         </xsl:when>
       </xsl:choose>      
     </xsl:variable>
@@ -169,11 +169,13 @@
     </h2> -->
     <!-- DEBUG: <xsl:for-each select="ancestor::*"><xsl:value-of select="local-name()"/>/</xsl:for-each> -->
     <!-- current xpath is express/schema/interface -->
-    <xsl:call-template name="insertHeaderADOC">
-      <xsl:with-param name="id">interfaces_<xsl:value-of select="$schema_name"/></xsl:with-param>
-			<xsl:with-param name="level" select="3"/>
-      <xsl:with-param name="header" select="$clause_header"/>					
-    </xsl:call-template>
+    <xsl:if test="normalize-space($clause_header) != ''">
+      <xsl:call-template name="insertHeaderADOC">
+        <xsl:with-param name="id">interfaces_<xsl:value-of select="$schema_name"/></xsl:with-param>
+        <xsl:with-param name="level" select="3"/>
+        <xsl:with-param name="header" select="$clause_header"/>					
+      </xsl:call-template>
+    </xsl:if>
     
     <!-- <p> -->
     <xsl:call-template name="insertParagraph">
@@ -208,7 +210,7 @@
               <!-- if interface items then output source tail comment now -->
               <xsl:text>&#160;&#160;&#160;--&#160;</xsl:text>
               <xsl:apply-templates select="." mode="source"/>
-              <xsl:apply-templates select="./interfaced.item"/>;
+              <xsl:apply-templates select="./interfaced.item"/><xsl:text>;</xsl:text>
               <!-- <xsl:if test="position()=last()"><br/>(*</xsl:if>
               <br/><br/> -->
             </xsl:when>
@@ -239,7 +241,7 @@
               <!-- if interface items then out put source tail comment now -->
               <xsl:text>&#160;&#160;&#160;--&#160;</xsl:text>
               <xsl:apply-templates select="." mode="source"/>
-              <xsl:apply-templates select="./interfaced.item"/>;
+              <xsl:apply-templates select="./interfaced.item"/><xsl:text>;</xsl:text>
               <!-- <xsl:if test="position()=last()"><br/>(*</xsl:if>
               <br/><br/>           -->
             </xsl:when>
@@ -269,7 +271,6 @@
     </code>
   <!-- </blockquote> -->
   <!-- </p> -->
-	
   <xsl:if test="position()=last()">
     <xsl:call-template name="interface_notes">
       <xsl:with-param name="schema_node" select=".."/>
@@ -1002,7 +1003,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
       </xsl:call-template>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="@expression"/>;
+        <xsl:value-of select="@expression"/><xsl:text>;</xsl:text>
       </xsl:otherwise>
   </xsl:choose>
 
@@ -1046,7 +1047,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
         </xsl:call-template>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="$expression"/>;
+        <xsl:value-of select="$expression"/><xsl:text>;</xsl:text>
       </xsl:otherwise>
     </xsl:choose>
 
@@ -1142,7 +1143,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
     <xsl:call-template name="insertHeaderADOC">
       <xsl:with-param name="id" select="concat('types_', $schema_name)"/>
       <xsl:with-param name="header" select="$clause_header"/>					
-      <xsl:with-param name="level" select="2"/>					
+      <xsl:with-param name="level" select="3"/>					
     </xsl:call-template>
     
     <!-- <p> -->
@@ -1197,7 +1198,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
 
       <xsl:call-template name="insertHeaderADOC">
         <xsl:with-param name="id" select="$aname"/>
-        <xsl:with-param name="level" select="3"/>
+        <xsl:with-param name="level" select="4"/>
         <xsl:with-param name="header" select="@name"/>
         <xsl:with-param name="indexed" select="'true'"/>
       </xsl:call-template>
@@ -1639,7 +1640,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
     <xsl:call-template name="insertHeaderADOC">
       <xsl:with-param name="id" select="concat('entities_', $schema_name)"/>
       <xsl:with-param name="header" select="$clause_header"/>
-      <xsl:with-param name="level" select="2"/>
+      <xsl:with-param name="level" select="3"/>
     </xsl:call-template>
 
     <!-- <p> -->
@@ -1701,7 +1702,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
   
   <xsl:call-template name="insertHeaderADOC">
     <xsl:with-param name="id" select="$aname"/>
-    <xsl:with-param name="level" select="3"/>
+    <xsl:with-param name="level" select="4"/>
     <xsl:with-param name="header" select="@name"/>
     <xsl:with-param name="indexed" select="'true'"/>
   </xsl:call-template>
@@ -3167,7 +3168,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
       <xsl:text>PROCEDURE </xsl:text><xsl:value-of select="@name"/>
     <xsl:apply-templates select="./parameter" mode="code"/><xsl:text> : </xsl:text>
     <xsl:apply-templates select="./aggregate" mode="code"/>
-    <xsl:apply-templates select="./*" mode="underlying"/>;
+    <xsl:apply-templates select="./*" mode="underlying"/><xsl:text>;</xsl:text>
   <!-- </code> -->
     <xsl:apply-templates select="./algorithm" mode="code"/><br/>
 <!--     <code> -->
