@@ -1258,7 +1258,7 @@ provided  that links throught SC4ONLINE to a new repository -->
      <td><a href="{$parts_url}" target="_blank" ><xsl:value-of select="$parts_url"/></a></td>
    </tr>
   </table> -->
-    <xsl:text>Short names::: </xsl:text>
+    <xsl:text>Short names: :: </xsl:text>
     <xsl:call-template name="insertHyperlink">
       <xsl:with-param name="a">
         <a href="{$names_url}" target="_blank">
@@ -1268,7 +1268,7 @@ provided  that links throught SC4ONLINE to a new repository -->
       <xsl:with-param name="asText">true</xsl:with-param>
     </xsl:call-template>
     <xsl:text>&#xa;</xsl:text>
-    <xsl:text>EXPRESS::: </xsl:text>
+    <xsl:text>EXPRESS: :: </xsl:text>
     <xsl:call-template name="insertHyperlink">
       <xsl:with-param name="a">
         <a href="{$parts_url}" target="_blank">
@@ -1297,7 +1297,7 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
   </table>
   
   <p/>  -->
-      <xsl:text>Additional information::: </xsl:text>
+      <xsl:text>Additional information: :: </xsl:text>
       <xsl:call-template name="insertHyperlink">
         <xsl:with-param name="a">
           <a href="{$information_url}" target="_blank">

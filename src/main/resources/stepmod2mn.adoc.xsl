@@ -639,7 +639,7 @@
 	</xsl:template>
 	
 	
-	<xsl:template match="text()[not(ancestor::blockquote or ancestor::code or ancestor::screen or ancestor::li_label)]" mode="text">
+	<xsl:template match="text()[not(ancestor::blockquote or ancestor::code or ancestor::screen or ancestor::li_label or ancestor::refpath)]" mode="text">
 		<xsl:value-of select="java:org.metanorma.RegExEscaping.escapeFormattingCommands(.)"/>
 	</xsl:template>
 	

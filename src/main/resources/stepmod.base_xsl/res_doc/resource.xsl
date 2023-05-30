@@ -1398,7 +1398,7 @@ Purpose:
 		</table>
 		<p/> -->
 		
-		<xsl:text>Short names::: </xsl:text>
+		<xsl:text>Short names: :: </xsl:text>
 			<xsl:call-template name="insertHyperlink">
 				<xsl:with-param name="a">
 					<a href="{$names_url}"   target="_blank"><xsl:value-of select="$names_url"/></a>
@@ -1406,7 +1406,7 @@ Purpose:
 				<xsl:with-param name="asText">true</xsl:with-param>
 			</xsl:call-template>
 		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>EXPRESS::: </xsl:text>
+		<xsl:text>EXPRESS: :: </xsl:text>
 			<xsl:call-template name="insertHyperlink">
 				<xsl:with-param name="a">
 					<a href="{$parts_url}"   target="_blank"><xsl:value-of select="$parts_url"/></a>

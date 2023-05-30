@@ -9,7 +9,7 @@
 		exclude-result-prefixes="mml tbx xlink xalan java" 
 		version="1.0">
 
-	<xsl:preserve-space elements="code screen mml:*"/>
+	<xsl:preserve-space elements="code screen mml:* refpath"/>
 	
 	<xsl:output method="xml" encoding="UTF-8" indent="no"/>
 	
@@ -38,7 +38,7 @@
 				<xsl:apply-templates select="@*|node()"/>
 		</xsl:copy>
 	</xsl:template>
-	<xsl:template match="text()[not(parent::code or parent::screen or parent::*[@xml-space='preserve'] or parent::mml:* or parent::b or parent::B or parent::i or parent::I or parent::tt or parent::TT or parent::sup or parent::SUP or parent::sub or parent::SUB)]">
+	<xsl:template match="text()[not(parent::code or parent::screen or parent::*[@xml-space='preserve'] or parent::mml:* or parent::b or parent::B or parent::i or parent::I or parent::tt or parent::TT or parent::sup or parent::SUP or parent::sub or parent::SUB or parent::refpath)]">
 		<xsl:choose>
 			<xsl:when test="contains(., '&#xa;')">
 				<xsl:variable name="text_" select="translate(., '&#xa;&#x9;', '  ')"/>

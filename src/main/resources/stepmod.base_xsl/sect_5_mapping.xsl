@@ -1130,7 +1130,7 @@ relationship tree structure. The path between the relationship entity and the re
 <xsl:template match="aimelt" mode="specification">
   <!-- <tr valign="top">
     <td>MIM element:</td> -->
-    <xsl:text>MIM element:::</xsl:text>
+    <xsl:text>MIM element: :: </xsl:text>
     <!-- <td> -->
       <xsl:variable name="aimelt_string">
         <xsl:call-template name="remove_start_end_whitespace">
@@ -1156,7 +1156,7 @@ relationship tree structure. The path between the relationship entity and the re
   <xsl:if test="string-length($str)>0">
     <!-- <tr valign="top"> -->
       <!-- <td>Source:</td> -->
-      <xsl:text>Source::: </xsl:text>
+      <xsl:text>Source: :: </xsl:text>
       <!-- <td> -->
         <xsl:call-template name="output_string_with_linebreaks">
           <xsl:with-param name="string" select="$str"/>
@@ -1172,7 +1172,7 @@ relationship tree structure. The path between the relationship entity and the re
   <xsl:if test="string-length($str)>0">
     <!-- <tr valign="top"> -->
       <!-- <td>Rules:</td> -->
-      <xsl:text>Rules::: </xsl:text>
+      <xsl:text>Rules: :: </xsl:text>
       <!-- <td> -->
         <xsl:call-template name="output_string_with_linebreaks">
           <xsl:with-param name="string" select="$str"/>
@@ -1348,7 +1348,7 @@ relationship tree structure. The path between the relationship entity and the re
           <xsl:if test="string-length($refpath_extend1)>0">
             <!-- <tr valign="top"> -->
               <!-- <td>Reference path:&#160;&#160;</td> -->
-              <xsl:text>Reference path:&#160;&#160;:: </xsl:text>
+              <xsl:text>Reference path: :: </xsl:text>
 
               <!--
                    <xsl:apply-templates select="$refpath" mode="check_ref_path"/>
@@ -1391,7 +1391,7 @@ relationship tree structure. The path between the relationship entity and the re
   <xsl:if test="string-length($str)>0">
     <!-- <tr valign="top"> -->
       <!-- <td>Reference path:&#160;&#160;</td> -->
-      <xsl:text>Reference path:&#160;&#160;:: </xsl:text>
+      <xsl:text>Reference path: :: </xsl:text>
       <!-- <xsl:apply-templates select="." mode="check_ref_path"/> -->
       <!-- <td> -->
         <xsl:call-template name="output_string_with_linebreaks">
@@ -1511,10 +1511,15 @@ the mapping specification')"/>
 
 <xsl:template match="ae|aa|sc" mode="output_id_description">
   <!-- <p/> -->
-  <xsl:text>&#xa;&#xa;</xsl:text>
-	<xsl:apply-templates select="./description"/>
-	<!-- <p/>  -->
-  <xsl:text>&#xa;&#xa;</xsl:text>
+  <xsl:variable name="description">
+    <xsl:apply-templates select="./description"/>
+  </xsl:variable>
+  <xsl:if test="normalize-space($description) != ''">
+    <xsl:text>&#xa;&#xa;</xsl:text>
+    <xsl:value-of select="$description"/>
+    <!-- <p/>  -->
+    <xsl:text>&#xa;&#xa;</xsl:text>
+  </xsl:if>
 </xsl:template>
 
 
@@ -1861,7 +1866,7 @@ the mapping specification')"/>
 <xsl:template match="constraint" mode="specification">
   <!-- <tr valign="top">
     <td>Constraint:</td> -->
-    <xsl:text>Constraint::: </xsl:text>
+    <xsl:text>Constraint: :: </xsl:text>
     <!-- <td> -->
       <xsl:call-template name="output_string_with_linebreaks">
         <xsl:with-param name="string" select="string(.)"/>
