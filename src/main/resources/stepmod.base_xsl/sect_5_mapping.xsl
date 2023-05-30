@@ -585,12 +585,12 @@ the select or enumeration type, whose name precedes the &lt;* symbol, is an
   
   <xsl:text>&#xa;&#xa;</xsl:text>
 
-    <xsl:text>\-&gt;:: </xsl:text>
+    <xsl:text>-&gt;:: </xsl:text>
     <xsl:text>the attribute, whose name precedes the -&gt; symbol, references the entity or select type whose name follows the -&gt; symbol;</xsl:text>
 
   <xsl:text>&#xa;&#xa;</xsl:text>
 
-    <xsl:text>\&lt;-:: </xsl:text>
+    <xsl:text>&lt;-:: </xsl:text>
     <xsl:text>the entity or select type, whose name precedes the &lt;- symbol, is referenced by the entity attribute whose name follows the &lt;- symbol;</xsl:text>
 
   <xsl:text>&#xa;&#xa;</xsl:text>
@@ -605,12 +605,12 @@ the select or enumeration type, whose name precedes the &lt;* symbol, is an
 
   <xsl:text>&#xa;&#xa;</xsl:text>
 
-    <xsl:text>\=&gt;:: </xsl:text>
+    <xsl:text>=&gt;:: </xsl:text>
     <xsl:text>the entity, whose name precedes the =&gt; symbol, is a supertype of the entity whose name follows the =&gt; symbol;</xsl:text>
 
   <xsl:text>&#xa;&#xa;</xsl:text>
 
-    <xsl:text>\&lt;=:: </xsl:text>
+    <xsl:text>&lt;=:: </xsl:text>
     <xsl:text>the entity, whose name precedes the &lt;= symbol, is a subtype of the entity whose name follows the &lt;= symbol;</xsl:text>
   
   <xsl:text>&#xa;&#xa;</xsl:text>
