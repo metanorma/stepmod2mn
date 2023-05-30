@@ -1060,22 +1060,36 @@ relationship tree structure. The path between the relationship entity and the re
           </xsl:choose>
         </xsl:variable>
         
-        <xsl:value-of select="concat($sect_no,' ')"/>
+        <!-- <xsl:value-of select="concat($sect_no,' ')"/> -->
         <!-- <a href="{$ae_xref}"><xsl:value-of select="../@entity"/></a> -->
-        <xsl:text>&lt;&lt;</xsl:text><xsl:value-of select="$ae_xref"/>,<xsl:value-of select="../@entity"/><xsl:text>&gt;&gt;</xsl:text>
-        to <xsl:call-template name="link_object">
-        <xsl:with-param name="object_name" select="@assertion_to"/>
-        <xsl:with-param name="object_used_in_schema_name" 
-          select="$schema_name"/>
-        <xsl:with-param name="clause" select="'section'"/>
-      </xsl:call-template>
-      <!-- <xsl:value-of select="@assertion_to"/> -->
-        (as <!-- <a href="{$aa_xref}"><xsl:value-of select="@attribute"/></a> --><xsl:text>&lt;&lt;</xsl:text><xsl:value-of select="$aa_xref"/>,<xsl:value-of select="@attribute"/><xsl:text>&gt;&gt;</xsl:text>)
+        
+        <xsl:call-template name="insertHeaderADOC">
+          <xsl:with-param name="level" select="4"/>
+          <xsl:with-param name="header">
+            <xsl:text>&lt;&lt;</xsl:text><xsl:value-of select="$ae_xref"/>,<xsl:value-of select="../@entity"/><xsl:text>&gt;&gt;</xsl:text>
+            
+            <xsl:text> to </xsl:text><xsl:call-template name="link_object">
+            <xsl:with-param name="object_name" select="@assertion_to"/>
+            <xsl:with-param name="object_used_in_schema_name" 
+              select="$schema_name"/>
+            <xsl:with-param name="clause" select="'section'"/>
+          </xsl:call-template>
+          <!-- <xsl:value-of select="@assertion_to"/> -->
+            <xsl:text> (as </xsl:text><!-- <a href="{$aa_xref}"><xsl:value-of select="@attribute"/></a> --><xsl:text>&lt;&lt;</xsl:text><xsl:value-of select="$aa_xref"/>,<xsl:value-of select="@attribute"/><xsl:text>&gt;&gt;</xsl:text>)
+          </xsl:with-param>
+        </xsl:call-template>
+          
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="concat($sect_no,' ')"/>
+        <!-- <xsl:value-of select="concat($sect_no,' ')"/> -->
         <!-- <a href="{$aa_xref}"><xsl:value-of select="@attribute"/></a> -->
-        <xsl:text>&lt;&lt;</xsl:text><xsl:value-of select="$aa_xref"/>,<xsl:value-of select="@attribute"/><xsl:text>&gt;&gt;</xsl:text>
+        <xsl:call-template name="insertHeaderADOC">
+          <xsl:with-param name="level" select="4"/>
+          <xsl:with-param name="header">
+            <xsl:text>&lt;&lt;</xsl:text><xsl:value-of select="$aa_xref"/>,<xsl:value-of select="@attribute"/><xsl:text>&gt;&gt;</xsl:text>
+          </xsl:with-param>
+        </xsl:call-template>
+                
       </xsl:otherwise>
     </xsl:choose>
 
@@ -1091,7 +1105,7 @@ relationship tree structure. The path between the relationship entity and the re
       </xsl:apply-templates> -->
     </xsl:if>
   <!-- </h2> -->
-  <xsl:text>&#xa;&#xa;</xsl:text>
+  <!-- <xsl:text>&#xa;&#xa;</xsl:text> -->
 
   <!-- output any issues against the mapping -->
   <xsl:apply-templates select="."  mode="output_mapping_issue"/>
