@@ -4933,7 +4933,7 @@ is case sensitive.')"/>
 		<xsl:variable name="subtitle"
 			select="concat('&#8212; Part ',$part,': Application module: ', $module_name,'.')"/>
 		<!-- Printing of standard line starts here -->
-		<xsl:value-of select="$stdnumber"/>
+		<!-- <xsl:value-of select="$stdnumber"/> -->
 		<xsl:choose>
 			<!-- if the module is a TS or IS module and is referring to a CD or CD-TS module -->
 			<xsl:when
@@ -4946,7 +4946,7 @@ is case sensitive.')"/>
 				http://locke.dcnicn.com/bugzilla/iso10303/show_bug.cgi?id=3401#c5        
 			<xsl:when test="@published='n'">&#160;<sup><a href="#tobepub">1</a>)</sup>
 			</xsl:when> -->
-		</xsl:choose>,&#160; <!-- <i>
+		</xsl:choose><!--,&#160;  <i>
 			<xsl:value-of select="$stdtitle"/>
 			<xsl:value-of select="$subtitle"/>
 		</i> -->
