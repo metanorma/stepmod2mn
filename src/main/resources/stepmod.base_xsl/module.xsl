@@ -2272,7 +2272,8 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
     <!-- <p> -->
     <xsl:call-template name="insertParagraph">
       <xsl:with-param name="text">
-    Short names of entities defined in this schema are described in Annex A. Unambiguous identification of this schema is defined in Annex B. 
+    <!-- Short names of entities defined in this schema are described in Annex A. Unambiguous identification of this schema is defined in Annex B.  -->
+    Short names of entities defined in this schema are described in &lt;&lt;AnnexA&gt;&gt;. Unambiguous identification of this schema is defined in &lt;&lt;AnnexB&gt;&gt;. 
     </xsl:with-param>
     </xsl:call-template>
     <!-- </p> -->
