@@ -1241,7 +1241,8 @@ provided  that links throught SC4ONLINE to a new repository -->
     corresponding short names as specified or referenced in this part of ISO
     10303. It also provides a listing of each EXPRESS schema specified in this
     part of ISO 10303 without comments nor other explanatory text. These
-    listings are available in computer-interpretable form in Table E.1 and can
+    <!-- listings are available in computer-interpretable form in Table E.1 and can -->
+    listings are available in computer-interpretable form in &lt;&lt;table_e1&gt;&gt; and can
     be found at the following URLs:
     </xsl:with-param>
     </xsl:call-template>
