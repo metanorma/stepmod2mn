@@ -192,6 +192,22 @@
   </xsl:if>
   <!-- <p> -->
   <!-- <blockquote> -->
+  
+    <!-- for Index -->
+    <xsl:choose>
+      <xsl:when test="contains($schema_name,'_mim')">
+        <xsl:text>(((</xsl:text>
+        <xsl:value-of select="@schema"/>
+        <xsl:text>,MIM interface</xsl:text>
+        <xsl:text>)))</xsl:text>
+      </xsl:when>
+      <xsl:when test="contains($schema_name,'_arm')">
+        <xsl:text>(((</xsl:text>
+        <xsl:value-of select="@schema"/>
+        <xsl:text>,ARM interface</xsl:text>
+        <xsl:text>)))</xsl:text>
+      </xsl:when>
+    </xsl:choose>
     <code>
 			<xsl:call-template name="insertLutaMLCodeStart"/>
       <!-- <xsl:if test="contains($schema_name,'_arm') and position()=1">*)<br/></xsl:if> -->
@@ -1201,6 +1217,16 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
         <xsl:with-param name="level" select="4"/>
         <xsl:with-param name="header" select="@name"/>
         <xsl:with-param name="indexed" select="'true'"/>
+        <xsl:with-param name="index_term">
+          <xsl:choose>
+            <xsl:when test="contains($schema_name,'_arm')">
+              <xsl:text>ARM object definition</xsl:text>
+            </xsl:when>
+            <xsl:when test="contains($schema_name,'_mim')">
+              <xsl:text>MIM object definition</xsl:text>
+            </xsl:when>
+          </xsl:choose>
+        </xsl:with-param>
       </xsl:call-template>
 
   <xsl:call-template name="check_type_name">
@@ -1705,6 +1731,16 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
     <xsl:with-param name="level" select="4"/>
     <xsl:with-param name="header" select="@name"/>
     <xsl:with-param name="indexed" select="'true'"/>
+    <xsl:with-param name="index_term">
+      <xsl:choose>
+        <xsl:when test="contains($schema_name,'_arm')">
+          <xsl:text>ARM object definition</xsl:text>
+        </xsl:when>
+        <xsl:when test="contains($schema_name,'_mim')">
+          <xsl:text>MIM object definition</xsl:text>
+        </xsl:when>
+      </xsl:choose>
+    </xsl:with-param>
   </xsl:call-template>
 
   <xsl:choose>

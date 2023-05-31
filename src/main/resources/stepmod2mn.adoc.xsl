@@ -51,6 +51,9 @@
 		<xsl:param name="annex_id"/>		
 		<xsl:param name="obligation"/>
 		<xsl:param name="indexed" select="'false'"/>
+		<xsl:param name="index_term">term</xsl:param> <!-- default -->
+    <xsl:param name="index_term2"/>
+    <xsl:param name="index_term3"/>
 		<xsl:choose>
 			<xsl:when test="$annex_no != '' or $annex_id != ''">
 				<xsl:text>[[</xsl:text>
@@ -90,8 +93,24 @@
 		<xsl:text> </xsl:text>		
 		<xsl:value-of select="$header"/>
 		<xsl:if test="$indexed = 'true'">
-			<xsl:variable name="index_term" select="concat(' (((', $header,  ',term)))')"/>
-			<xsl:value-of select="$index_term"/>
+      <xsl:text> (((</xsl:text>
+      <xsl:choose>
+        <xsl:when test="$index_term2 != '' or $index_term3 != ''">
+          <xsl:value-of select="$index_term"/>
+          <xsl:text>,</xsl:text>
+          <xsl:value-of select="$index_term2"/>
+          <xsl:if test="$index_term3 != ''">
+            <xsl:text>,</xsl:text>
+            <xsl:value-of select="$index_term3"/>
+          </xsl:if>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$header"/>
+          <xsl:text>,</xsl:text>
+          <xsl:value-of select="$index_term"/>
+        </xsl:otherwise>
+      </xsl:choose>
+      <xsl:text>)))</xsl:text>
 		</xsl:if>
 		<xsl:text>&#xa;&#xa;</xsl:text>
 	</xsl:template>

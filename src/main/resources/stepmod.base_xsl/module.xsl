@@ -4038,6 +4038,9 @@ $module_ok,' Check the normatives references')"/>
       <xsl:with-param name="id" select="concat('sec_', $section,'.',position())"/>
       <xsl:with-param name="level" select="4"/>
       <xsl:with-param name="header" select="normalize-space($header)"/>
+      <xsl:with-param name="indexed">true</xsl:with-param>
+      <xsl:with-param name="index_term" select="term"/>
+      <xsl:with-param name="index_term2">term</xsl:with-param>
     </xsl:call-template>
     <!-- <xsl:apply-templates select="def"/> -->
     <xsl:call-template name="insertParagraph">
@@ -4180,11 +4183,55 @@ $module_ok,' Check the normatives references')"/>
       <xsl:text>&gt;&gt;</xsl:text>
     </xsl:with-param>
   </xsl:call-template> -->
+  <xsl:variable name="title">
+    <xsl:apply-templates select="." mode="title"/>
+  </xsl:variable>
+  
+  <xsl:variable name="index_text">
+    <xsl:choose>
+      <xsl:when test="name(../..)='arm'">ARM EXPRESS-G</xsl:when>
+      <xsl:when test="name(../..)='mim'">MIM EXPRESS-G</xsl:when>
+    </xsl:choose>
+  </xsl:variable>
+  <xsl:variable name="imgfile_content" select="document(concat($path,@file))"/>
+  <xsl:variable name="hrefs">
+    <xsl:for-each select="$imgfile_content//img.area/@href">
+      <xsl:variable name="item">
+        <xsl:choose>
+          <xsl:when test="contains(.,'4_info_reqs.xml#')">
+            <xsl:value-of select="substring-after(.,'4_info_reqs.xml#')"/>
+          </xsl:when>
+          <xsl:when test="contains(.,'5_mim.xml#')">
+            <xsl:value-of select="substring-after(.,'5_mim.xml#')"/>
+          </xsl:when>
+        </xsl:choose>
+      </xsl:variable>
+      <xsl:if test="$item != ''">
+        <href>
+          <xsl:choose>
+            <xsl:when test="contains($item,'.')"><xsl:value-of select="substring-after($item,'.')"/></xsl:when>
+            <xsl:otherwise><xsl:value-of select="$item"/></xsl:otherwise>
+          </xsl:choose>
+        </href>
+      </xsl:if>
+    </xsl:for-each>
+  </xsl:variable>
+  <!-- <xsl:apply-templates select="xalan:nodeset($hrefs)" mode="print_as_xml"/> -->
+  
+  <xsl:variable name="index">
+    <xsl:for-each select="xalan:nodeset($hrefs)/href">
+      <xsl:if test="position() = 1"><xsl:text> </xsl:text></xsl:if>
+      <xsl:text>(((</xsl:text>
+      <xsl:value-of select="."/>
+      <xsl:text>,</xsl:text>
+      <xsl:value-of select="$index_text"/>
+      <xsl:text>)))</xsl:text>
+    </xsl:for-each>
+  </xsl:variable>
+  
     <xsl:call-template name="insertImage">
       <xsl:with-param name="id" select="$file"/>
-      <xsl:with-param name="title">
-        <xsl:apply-templates select="." mode="title"/>
-      </xsl:with-param>
+      <xsl:with-param name="title" select="concat($title,$index)"/>
       <xsl:with-param name="path" select="$href"/>
     </xsl:call-template>
   </xsl:template>

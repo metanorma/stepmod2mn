@@ -789,6 +789,9 @@ relationship tree structure. The path between the relationship entity and the re
     <xsl:with-param name="id" select="$ae_map_aname"/>
     <xsl:with-param name="level" select="3"/>
     <xsl:with-param name="header">&lt;&lt;<xsl:value-of select="$ae_xref"/>,<xsl:value-of select="$ae"/>&gt;&gt;</xsl:with-param>
+    <xsl:with-param name="indexed" select="'true'"/>
+    <xsl:with-param name="index_term"><xsl:value-of select="$ae"/></xsl:with-param>
+    <xsl:with-param name="index_term2">mapping specification</xsl:with-param>
   </xsl:call-template>
   
 <!--  <xsl:apply-templates select="." mode="output_mapping"/> -->
