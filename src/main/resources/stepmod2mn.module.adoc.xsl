@@ -279,10 +279,11 @@
 	
 			<!-- Abstract -->
       <!-- sys/abstract.xml -->
-			<xsl:message>[INFO] Processing Abstract ...</xsl:message>
+			<!-- commented, see https://github.com/metanorma/iso-10303-stepmod/issues/33 -->
+			<!-- <xsl:message>[INFO] Processing Abstract ...</xsl:message>
 			<file path="sections/00-abstract.adoc">
-				<xsl:apply-templates select="module" mode="abstract"/> <!-- module.xsl  -->
-			</file>
+				<xsl:apply-templates select="module" mode="abstract"/> --> <!-- module.xsl  -->
+			<!-- </file> -->
 			
 			<!-- Foreword-->
 			<!-- sys/foreword.xml -->

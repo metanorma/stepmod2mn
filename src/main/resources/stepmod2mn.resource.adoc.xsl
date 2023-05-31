@@ -269,13 +269,20 @@
 			</xsl:with-param>
 		</xsl:call-template>
 		
+		<xsl:call-template name="generateHtmlAttachmentsSH"/>
+		
+		<xsl:call-template name="generateCollectionSH">
+			<xsl:with-param name="partnumber" select="resource/@part"/>
+		</xsl:call-template>
+		
 		<xsl:variable name="adoc">
 	
 			<!-- Abstract -->
-			<xsl:message>[INFO] Processing Abstract ...</xsl:message>
+			<!-- commented, see https://github.com/metanorma/iso-10303-stepmod/issues/33 -->
+			<!-- <xsl:message>[INFO] Processing Abstract ...</xsl:message>
 			<file path="sections/00-abstract.adoc">
-				<xsl:apply-templates select="resource" mode="abstract"/> <!-- res_doc/resource.xsl  -->
-			</file>
+				<xsl:apply-templates select="resource" mode="abstract"/> --> <!-- res_doc/resource.xsl  -->
+			<!-- </file> -->
 			
 			
 			<!-- Foreword-->

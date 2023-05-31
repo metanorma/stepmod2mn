@@ -648,8 +648,8 @@ Purpose:
 			</xsl:call-template>           
 		</xsl:variable>
 
-		<xsl:text>[abstract]</xsl:text>
-		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>.Abstract</xsl:text>
+		<xsl:text>&#xa;&#xa;</xsl:text>
 		
 		<!-- THX deleted per ISO review of part 107
 				 PS Added back in following review of Part 61 -->
@@ -1398,7 +1398,7 @@ Purpose:
 		</table>
 		<p/> -->
 		
-		<xsl:text>Short names::: </xsl:text>
+		<xsl:text>Short names: :: </xsl:text>
 			<xsl:call-template name="insertHyperlink">
 				<xsl:with-param name="a">
 					<a href="{$names_url}"   target="_blank"><xsl:value-of select="$names_url"/></a>
@@ -1406,7 +1406,7 @@ Purpose:
 				<xsl:with-param name="asText">true</xsl:with-param>
 			</xsl:call-template>
 		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>EXPRESS::: </xsl:text>
+		<xsl:text>EXPRESS: :: </xsl:text>
 			<xsl:call-template name="insertHyperlink">
 				<xsl:with-param name="a">
 					<a href="{$parts_url}"   target="_blank"><xsl:value-of select="$parts_url"/></a>
@@ -1752,13 +1752,17 @@ Purpose:
 						<xsl:value-of select="substring-before(@file,'.xml')"/>
 					</xsl:variable>
 
-					<xsl:value-of select="concat('.EXPRESS-G diagram of the ', $schema, ' (', $rel_clauseno,' of ', $img_count, ')' )" />
-					<xsl:text>&#xa;</xsl:text>
+					<!-- <xsl:value-of select="concat('.EXPRESS-G diagram of the ', $schema, ' (', $rel_clauseno,' of ', $img_count, ')' )" />
+					<xsl:text>&#xa;</xsl:text> -->
 					<!-- for ../../../../ see https://github.com/metanorma/stepmod2mn/issues/14#issuecomment-785857308 -->
-					<xsl:value-of select="concat('image::', '../../../../resources/', $schema, '/', $filename_no_ext, '.svg[]')"/>
+					<!-- <xsl:value-of select="concat('image::', '../../../../resources/', $schema, '/', $filename_no_ext, '.svg[]')"/> -->
+					<xsl:call-template name="insertImage">
+						<xsl:with-param name="title" select="concat('.EXPRESS-G diagram of the ', $schema, ' (', $rel_clauseno,' of ', $img_count, ')' )" />
+						<xsl:with-param name="path" select="concat('../../../../resources/', $schema, '/', $filename_no_ext, '.svg')"/>
+					</xsl:call-template>
 					
 					<!-- </li> -->
-					<xsl:text>&#xa;&#xa;</xsl:text>
+					<!-- <xsl:text>&#xa;&#xa;</xsl:text> -->
 				
 					<xsl:apply-templates select="." mode="svg_end"/> <!-- imgfile | img -->
 					
@@ -1939,7 +1943,8 @@ the types, entity specializations, and functions that are specific to this part 
 		<!-- <p> -->
 		<xsl:call-template name="insertParagraph">
 			<xsl:with-param name="text">
-			Short names of entities defined in this schema are described in Annex A. Unambiguous identification of this schema is defined in Annex B.
+			<!-- Short names of entities defined in this schema are described in Annex A. Unambiguous identification of this schema is defined in Annex B. -->
+			Short names of entities defined in this schema are described in &lt;&lt;AnnexA&gt;&gt;. Unambiguous identification of this schema is defined in &lt;&lt;AnnexB&gt;&gt;.
 			</xsl:with-param>
 		</xsl:call-template>
 		<!-- </p> -->
@@ -4404,8 +4409,11 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 		
 		<xsl:variable name="svg_filename" select="concat(substring-before(@file, '.xml'), '.svg')"/>
 		<!-- image::basic_attribute_schemaexpg1.svg[] -->
-		<xsl:text>image::../</xsl:text><xsl:value-of select="$svg_filename"/><xsl:text>[]</xsl:text>
-		<xsl:text>&#xa;&#xa;</xsl:text>
+		<!-- <xsl:text>image::../</xsl:text><xsl:value-of select="$svg_filename"/><xsl:text>[]</xsl:text> -->
+		<!-- <xsl:text>&#xa;&#xa;</xsl:text> -->
+		<xsl:call-template name="insertImage">
+			<xsl:with-param name="path" select="concat('../', $svg_filename)"/>
+		</xsl:call-template>
 
 		
 		<!-- unordered list example -->

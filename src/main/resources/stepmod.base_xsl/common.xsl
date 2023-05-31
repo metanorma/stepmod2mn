@@ -488,26 +488,16 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 			.Split-it-right sample divider
 			image::images/a1.png[Alt1]
 		-->
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>[[</xsl:text>
-		<xsl:value-of select="concat('figure', $number, $letter)"/>
-		<xsl:text>]]</xsl:text>
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>.</xsl:text><xsl:value-of select="./title"/>
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>image::</xsl:text>
-		
-		<xsl:variable name="img">
-			<xsl:apply-templates select="./img">
-				<xsl:with-param name="alt" select="$title"/>
-			</xsl:apply-templates>
-		</xsl:variable>		
-		<xsl:value-of select="$img"/>
-		<!-- alt -->
-		<xsl:text>[</xsl:text>
-		<xsl:value-of select="./title"/>
-		<xsl:text>]</xsl:text>
-		<xsl:text>&#xa;&#xa;</xsl:text>
+		<xsl:call-template name="insertImage">
+			<xsl:with-param name="id" select="concat('figure', $number, $letter)"/>
+			<xsl:with-param name="title" select="./title"/>
+			<xsl:with-param name="path">
+				<xsl:apply-templates select="./img">
+					<xsl:with-param name="alt" select="$title"/>
+				</xsl:apply-templates>
+			</xsl:with-param>
+			<xsl:with-param name="alttext" select="./title"/>
+		</xsl:call-template>
 		
 	</xsl:template>
 
@@ -4943,7 +4933,7 @@ is case sensitive.')"/>
 		<xsl:variable name="subtitle"
 			select="concat('&#8212; Part ',$part,': Application module: ', $module_name,'.')"/>
 		<!-- Printing of standard line starts here -->
-		<xsl:value-of select="$stdnumber"/>
+		<!-- <xsl:value-of select="$stdnumber"/> -->
 		<xsl:choose>
 			<!-- if the module is a TS or IS module and is referring to a CD or CD-TS module -->
 			<xsl:when
@@ -4956,7 +4946,7 @@ is case sensitive.')"/>
 				http://locke.dcnicn.com/bugzilla/iso10303/show_bug.cgi?id=3401#c5        
 			<xsl:when test="@published='n'">&#160;<sup><a href="#tobepub">1</a>)</sup>
 			</xsl:when> -->
-		</xsl:choose>,&#160; <!-- <i>
+		</xsl:choose><!--,&#160;  <i>
 			<xsl:value-of select="$stdtitle"/>
 			<xsl:value-of select="$subtitle"/>
 		</i> -->

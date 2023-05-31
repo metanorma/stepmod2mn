@@ -465,6 +465,7 @@
         <xsl:choose>
           <xsl:when test="stdnumber">,<xsl:value-of select="stdnumber"/></xsl:when>
           <xsl:when test="number">,<xsl:value-of select="number"/></xsl:when>
+          <xsl:when test="normalize-space($stdnumber) != ''">,<xsl:value-of select="$stdnumber"/></xsl:when>
         </xsl:choose>
         <xsl:text>]]], </xsl:text>
         <xsl:variable name="bibitem_text">

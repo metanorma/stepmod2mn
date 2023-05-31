@@ -275,8 +275,8 @@ $Id: sect_5_mapping.xsl,v 1.89 2019/03/28 19:39:31 mike Exp $
   <xsl:call-template name="insertParagraph">
     <xsl:with-param name="text">
     This clause contains the mapping specification that defines how each 
-    application element of this part of ISO 10303 (see <!-- Clause <a href="{$sect4}">4</a> -->&lt;&lt;sect4&gt;&gt;) maps to one
-    or more MIM elements (see <!-- Clause <a href="{$sect52}">5.2</a> -->&lt;&lt;sect52&gt;&gt;).
+    application element of this part of ISO 10303 (see <!-- Clause <a href="{$sect4}">4</a> -->&lt;&lt;<xsl:value-of select="$sect4"/>&gt;&gt;) maps to one
+    or more MIM elements (see <!-- Clause <a href="{$sect52}">5.2</a> -->&lt;&lt;<xsl:value-of select="$sect52"/>&gt;&gt;).
     </xsl:with-param>
   </xsl:call-template>
   <!-- </p>
@@ -789,6 +789,9 @@ relationship tree structure. The path between the relationship entity and the re
     <xsl:with-param name="id" select="$ae_map_aname"/>
     <xsl:with-param name="level" select="3"/>
     <xsl:with-param name="header">&lt;&lt;<xsl:value-of select="$ae_xref"/>,<xsl:value-of select="$ae"/>&gt;&gt;</xsl:with-param>
+    <xsl:with-param name="indexed" select="'true'"/>
+    <xsl:with-param name="index_term"><xsl:value-of select="$ae"/></xsl:with-param>
+    <xsl:with-param name="index_term2">mapping specification</xsl:with-param>
   </xsl:call-template>
   
 <!--  <xsl:apply-templates select="." mode="output_mapping"/> -->
@@ -1060,22 +1063,36 @@ relationship tree structure. The path between the relationship entity and the re
           </xsl:choose>
         </xsl:variable>
         
-        <xsl:value-of select="concat($sect_no,' ')"/>
+        <!-- <xsl:value-of select="concat($sect_no,' ')"/> -->
         <!-- <a href="{$ae_xref}"><xsl:value-of select="../@entity"/></a> -->
-        <xsl:text>&lt;&lt;</xsl:text><xsl:value-of select="$ae_xref"/>,<xsl:value-of select="../@entity"/><xsl:text>&gt;&gt;</xsl:text>
-        to <xsl:call-template name="link_object">
-        <xsl:with-param name="object_name" select="@assertion_to"/>
-        <xsl:with-param name="object_used_in_schema_name" 
-          select="$schema_name"/>
-        <xsl:with-param name="clause" select="'section'"/>
-      </xsl:call-template>
-      <!-- <xsl:value-of select="@assertion_to"/> -->
-        (as <!-- <a href="{$aa_xref}"><xsl:value-of select="@attribute"/></a> --><xsl:text>&lt;&lt;</xsl:text><xsl:value-of select="$aa_xref"/>,<xsl:value-of select="@attribute"/><xsl:text>&gt;&gt;</xsl:text>)
+        
+        <xsl:call-template name="insertHeaderADOC">
+          <xsl:with-param name="level" select="4"/>
+          <xsl:with-param name="header">
+            <xsl:text>&lt;&lt;</xsl:text><xsl:value-of select="$ae_xref"/>,<xsl:value-of select="../@entity"/><xsl:text>&gt;&gt;</xsl:text>
+            
+            <xsl:text> to </xsl:text><xsl:call-template name="link_object">
+            <xsl:with-param name="object_name" select="@assertion_to"/>
+            <xsl:with-param name="object_used_in_schema_name" 
+              select="$schema_name"/>
+            <xsl:with-param name="clause" select="'section'"/>
+          </xsl:call-template>
+          <!-- <xsl:value-of select="@assertion_to"/> -->
+            <xsl:text> (as </xsl:text><!-- <a href="{$aa_xref}"><xsl:value-of select="@attribute"/></a> --><xsl:text>&lt;&lt;</xsl:text><xsl:value-of select="$aa_xref"/>,<xsl:value-of select="@attribute"/><xsl:text>&gt;&gt;</xsl:text>)
+          </xsl:with-param>
+        </xsl:call-template>
+          
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="concat($sect_no,' ')"/>
+        <!-- <xsl:value-of select="concat($sect_no,' ')"/> -->
         <!-- <a href="{$aa_xref}"><xsl:value-of select="@attribute"/></a> -->
-        <xsl:text>&lt;&lt;</xsl:text><xsl:value-of select="$aa_xref"/>,<xsl:value-of select="@attribute"/><xsl:text>&gt;&gt;</xsl:text>
+        <xsl:call-template name="insertHeaderADOC">
+          <xsl:with-param name="level" select="4"/>
+          <xsl:with-param name="header">
+            <xsl:text>&lt;&lt;</xsl:text><xsl:value-of select="$aa_xref"/>,<xsl:value-of select="@attribute"/><xsl:text>&gt;&gt;</xsl:text>
+          </xsl:with-param>
+        </xsl:call-template>
+                
       </xsl:otherwise>
     </xsl:choose>
 
@@ -1091,7 +1108,7 @@ relationship tree structure. The path between the relationship entity and the re
       </xsl:apply-templates> -->
     </xsl:if>
   <!-- </h2> -->
-  <xsl:text>&#xa;&#xa;</xsl:text>
+  <!-- <xsl:text>&#xa;&#xa;</xsl:text> -->
 
   <!-- output any issues against the mapping -->
   <xsl:apply-templates select="."  mode="output_mapping_issue"/>
@@ -1130,7 +1147,7 @@ relationship tree structure. The path between the relationship entity and the re
 <xsl:template match="aimelt" mode="specification">
   <!-- <tr valign="top">
     <td>MIM element:</td> -->
-    <xsl:text>MIM element:::</xsl:text>
+    <xsl:text>MIM element: :: </xsl:text>
     <!-- <td> -->
       <xsl:variable name="aimelt_string">
         <xsl:call-template name="remove_start_end_whitespace">
@@ -1156,7 +1173,7 @@ relationship tree structure. The path between the relationship entity and the re
   <xsl:if test="string-length($str)>0">
     <!-- <tr valign="top"> -->
       <!-- <td>Source:</td> -->
-      <xsl:text>Source::: </xsl:text>
+      <xsl:text>Source: :: </xsl:text>
       <!-- <td> -->
         <xsl:call-template name="output_string_with_linebreaks">
           <xsl:with-param name="string" select="$str"/>
@@ -1172,7 +1189,7 @@ relationship tree structure. The path between the relationship entity and the re
   <xsl:if test="string-length($str)>0">
     <!-- <tr valign="top"> -->
       <!-- <td>Rules:</td> -->
-      <xsl:text>Rules::: </xsl:text>
+      <xsl:text>Rules: :: </xsl:text>
       <!-- <td> -->
         <xsl:call-template name="output_string_with_linebreaks">
           <xsl:with-param name="string" select="$str"/>
@@ -1348,7 +1365,7 @@ relationship tree structure. The path between the relationship entity and the re
           <xsl:if test="string-length($refpath_extend1)>0">
             <!-- <tr valign="top"> -->
               <!-- <td>Reference path:&#160;&#160;</td> -->
-              <xsl:text>Reference path:&#160;&#160;:: </xsl:text>
+              <xsl:text>Reference path: :: </xsl:text>
 
               <!--
                    <xsl:apply-templates select="$refpath" mode="check_ref_path"/>
@@ -1391,7 +1408,7 @@ relationship tree structure. The path between the relationship entity and the re
   <xsl:if test="string-length($str)>0">
     <!-- <tr valign="top"> -->
       <!-- <td>Reference path:&#160;&#160;</td> -->
-      <xsl:text>Reference path:&#160;&#160;:: </xsl:text>
+      <xsl:text>Reference path: :: </xsl:text>
       <!-- <xsl:apply-templates select="." mode="check_ref_path"/> -->
       <!-- <td> -->
         <xsl:call-template name="output_string_with_linebreaks">
@@ -1511,10 +1528,15 @@ the mapping specification')"/>
 
 <xsl:template match="ae|aa|sc" mode="output_id_description">
   <!-- <p/> -->
-  <xsl:text>&#xa;&#xa;</xsl:text>
-	<xsl:apply-templates select="./description"/>
-	<!-- <p/>  -->
-  <xsl:text>&#xa;&#xa;</xsl:text>
+  <xsl:variable name="description">
+    <xsl:apply-templates select="./description"/>
+  </xsl:variable>
+  <xsl:if test="normalize-space($description) != ''">
+    <xsl:text>&#xa;&#xa;</xsl:text>
+    <xsl:value-of select="$description"/>
+    <!-- <p/>  -->
+    <xsl:text>&#xa;&#xa;</xsl:text>
+  </xsl:if>
 </xsl:template>
 
 
@@ -1861,7 +1883,7 @@ the mapping specification')"/>
 <xsl:template match="constraint" mode="specification">
   <!-- <tr valign="top">
     <td>Constraint:</td> -->
-    <xsl:text>Constraint::: </xsl:text>
+    <xsl:text>Constraint: :: </xsl:text>
     <!-- <td> -->
       <xsl:call-template name="output_string_with_linebreaks">
         <xsl:with-param name="string" select="string(.)"/>

@@ -1,22 +1,13 @@
 package org.metanorma;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
-import java.io.StringReader;
-import java.io.StringWriter;
+import java.io.*;
+import java.net.URI;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import java.util.List;
-import java.util.Scanner;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.xml.parsers.DocumentBuilder;
@@ -62,6 +53,7 @@ public class stepmod2mn {
     static final String INPUT_LOG = "Input: %s (%s)";    
     static final String OUTPUT_LOG = "Output: %s (%s)";
 
+    static final String FORMAT = "adoc";
     static boolean DEBUG = false;
 
     static String VER = Util.getAppVersion();
@@ -255,7 +247,6 @@ public class stepmod2mn {
                 
                 String resourcePath = "";
 
-                String format = "adoc";
                 String outFileName = "";
                 if (cmd.hasOption("output")) {
                     outFileName = cmd.getOptionValue("output");
@@ -272,20 +263,27 @@ public class stepmod2mn {
                 if (cmd.hasOption("boilerplatepath")) {
                     boilerplatePath = cmd.getOptionValue("boilerplatepath") + File.separator;
                 }
-                
+
+                boolean isInputFolder = false;
+                String inputFolder = "";
+
+                List<Map.Entry<String,String>> inputOutputFiles = new ArrayList<>();
+
                 // if remote file (http or https)
-                if (argXMLin.toLowerCase().startsWith("http") || argXMLin.toLowerCase().startsWith("www.")) {
+                if (Util.isUrl(argXMLin)) {
 
                     if (!Util.isUrlExists(argXMLin)) {
                         System.out.println(String.format(INPUT_NOT_FOUND, XML_INPUT, argXMLin));
                         System.exit(ERROR_EXIT_CODE);
                     }
 
-                    resourcePath = Util.getParentUrl(argXMLin);
-
                     if (!cmd.hasOption("output")) {
                         outFileName = Paths.get(System.getProperty("user.dir"), Util.getFilenameFromURL(argXMLin)).toString();
+                        outFileName = outFileName.substring(0, outFileName.lastIndexOf('.') + 1);
+                        outFileName = outFileName + FORMAT;
                     }
+
+                    inputOutputFiles.add(new AbstractMap.SimpleEntry<>(argXMLin, outFileName));
 
                     /*
                     //download to temp folder
@@ -310,34 +308,79 @@ public class stepmod2mn {
                         System.exit(ERROR_EXIT_CODE);
                     }
 
-                    //parent path for input resource.xml
-                    //resourcePath = new File(argXMLin).getParent() + File.separator;
-                    resourcePath = fXMLin.getParent() + File.separator;
-                    //System.out.println("resourcePath=" + resourcePath);
-
                     if (!cmd.hasOption("output")) { // if local file, then save result in input folder
-                      outFileName = fXMLin.getAbsolutePath();
-                    }                    
+                        //outFileName = fXMLin.getAbsolutePath();
+                        Path outPath = Paths.get(fXMLin.getParent(), "document." + FORMAT);
+                        outFileName = outPath.toString();
+                    }
+
+                    if (fXMLin.isDirectory()) {
+                        isInputFolder = true;
+                        inputFolder = fXMLin.getAbsolutePath();
+
+                        try (Stream<Path> walk = Files.walk(Paths.get(fXMLin.getAbsolutePath()))) {
+                            List<String> inputXMLfiles = walk.map(x -> x.toString())
+                                    .filter(f -> f.endsWith("resource.xml") || f.endsWith("module.xml")).collect(Collectors.toList());
+
+                            for (String inputXmlFile: inputXMLfiles) {
+                                Path outPath = Paths.get((new File(inputXmlFile)).getParent(), "document." + FORMAT);
+                                String outAdocFile = outPath.toString();
+                                inputOutputFiles.add(new AbstractMap.SimpleEntry<>(inputXmlFile, outAdocFile));
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        inputOutputFiles.add(new AbstractMap.SimpleEntry<>(argXMLin, outFileName));
+                    }
                 }
-
-                if (!cmd.hasOption("output")) {
-                    outFileName = outFileName.substring(0, outFileName.lastIndexOf('.') + 1);
-                    outFileName = outFileName + format;
-                }
-
-                File fileOut = new File(outFileName);
-
-                /*DEBUG = cmd.hasOption("debug"); */
-
-                System.out.println(String.format(INPUT_LOG, XML_INPUT, argXMLin));                
-                System.out.println(String.format(OUTPUT_LOG, format.toUpperCase(), fileOut));
-                System.out.println();
 
                 try {
-                    stepmod2mn app = new stepmod2mn();
-                    app.setResourcePath(resourcePath);
-                    app.setBoilerplatePath(boilerplatePath);
-                    app.convertstepmod2mn(argXMLin, fileOut);                    
+                    for (Map.Entry<String,String> entry: inputOutputFiles) {
+                        String filenameIn = entry.getKey();
+                        String filenameOut = entry.getValue();
+                        File fileIn = new File(filenameIn);
+                        File fileOut = new File(filenameOut);
+                        stepmod2mn app = new stepmod2mn();
+                        System.out.println(String.format(INPUT_LOG, XML_INPUT, filenameIn));
+                        System.out.println(String.format(OUTPUT_LOG, FORMAT.toUpperCase(), filenameOut));
+                        System.out.println();
+                        app.setBoilerplatePath(boilerplatePath);
+                        if (Util.isUrl(filenameIn)) {
+                            resourcePath = Util.getParentUrl(filenameIn);
+                        } else {
+                            //parent path for input resource.xml
+                            resourcePath = fileIn.getParent() + File.separator;
+                        }
+                        app.setResourcePath(resourcePath);
+                        app.convertstepmod2mn(filenameIn, fileOut);
+                    }
+
+                    if (isInputFolder) {
+                        // Generate metanorma.yml in the root of pat
+                        StringBuilder metanormaYml = new StringBuilder();
+                        metanormaYml.append("---").append("\n")
+                                .append("metanorma:").append("\n")
+                                .append("  source:").append("\n")
+                                .append("    files:").append("\n");
+                        URI pathRootFolderURI = Paths.get(inputFolder).toUri();
+                        for (Map.Entry<String,String> entry: inputOutputFiles) {
+                            String resultAdoc = entry.getValue();
+                            URI resultAdocURI = Paths.get(resultAdoc).toUri();
+                            URI relativeURI = pathRootFolderURI.relativize(resultAdocURI);
+                            metanormaYml.append("      - " + relativeURI).append("\n");
+                        }
+                        metanormaYml.append("\n")
+                                .append("  collection:").append("\n")
+                                .append("    organization: \"ISO/TC 184/SC 4/WG 12\"").append("\n")
+                                .append("    name: \"ISO 10303 in Metanorma\"").append("\n");
+
+                        //append string buffer/builder to buffered writer
+                        BufferedWriter writer = new BufferedWriter(new FileWriter(Paths.get(inputFolder,"metanorma.yml").toFile()));
+                        writer.write(metanormaYml.toString());
+                        writer.close();
+                    }
+
                     System.out.println("End!");
 
                 } catch (Exception e) {
@@ -435,7 +478,7 @@ public class stepmod2mn {
                 }
                 writeBuffer(sbBuffer, outputFile);
             }
-            System.out.println("Saved " + Util.getFileSize(adocFileOut) + " bytes.");
+            System.out.println("Saved (" + adocFileOut.getName() + ") " + Util.getFileSize(adocFileOut) + " bytes.");
             
         } catch (SAXParseException e) {            
             throw (e);
@@ -490,7 +533,7 @@ public class stepmod2mn {
 
             File fXMLin = new File(xmlFilePath);
 
-            if (xmlFilePath.toLowerCase().startsWith("http") || xmlFilePath.toLowerCase().startsWith("www.")) {
+            if (Util.isUrl(xmlFilePath)) {
                 try {
                     URL url = new URL(xmlFilePath);
                     xmlInputStream = url.openStream();

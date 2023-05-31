@@ -676,7 +676,7 @@ $Id: sect_2_refs.xsl,v 1.21 2018/08/22 23:06:22 mike Exp $
         <xsl:value-of select="$stdnumber"/> -->
       
       <xsl:text>* [[[</xsl:text>
-      <xsl:if test="translate(substring(@id,1,1),'0123456789','') = ''">_</xsl:if>
+      <xsl:if test="translate(substring(@id,1,1),'0123456789','') = ''">bibitem_</xsl:if>
 			<xsl:value-of select="@id"/>
 			<xsl:text>,</xsl:text>
 			<xsl:value-of select="$stdnumber"/>

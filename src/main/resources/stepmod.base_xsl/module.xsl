@@ -443,8 +443,8 @@ TT remove since locke is no longer available.
         <xsl:with-param name="module" select="./@name"/>
       </xsl:call-template>
     </xsl:variable>
-    <xsl:text>[abstract]</xsl:text>
-    <xsl:text>&#xa;</xsl:text>
+    <xsl:text>.Abstract</xsl:text>
+    <xsl:text>&#xa;&#xa;</xsl:text>
     <!-- replaced by below  
   <P>
     This document is the
@@ -1042,17 +1042,17 @@ TT remove since locke is no longer available.
     <xsl:call-template name="insertParagraph">
       <xsl:with-param name="text">
         <!-- Clause <a href="1_scope{$FILE_EXT}">1</a> defines the scope of the -->
-    &lt;&lt;sec_1_scope&gt;&gt; defines the scope of the
+    &lt;&lt;scope&gt;&gt; defines the scope of the
     application module and summarizes the functionality and data covered. 
 
     <!-- Clause <a href="3_defs{$FILE_EXT}">3</a> lists the words defined in -->
-    &lt;&lt;sec_3_defs&gt;&gt; lists the words defined in
+    &lt;&lt;defns&gt;&gt; lists the words defined in
     this part of ISO 10303 and gives pointers to words defined elsewhere. 
 
     The information requirements of the application are specified in Clause 
     <!-- <a href="4_info_reqs{$FILE_EXT}">4</a> using terminology appropriate to -->
     The information requirements of the application are specified in 
-    &lt;&lt;sec_4_info_reqs&gt;&gt; using terminology appropriate to
+    &lt;&lt;arm&gt;&gt; using terminology appropriate to
     the application. 
 
     A graphical representation of the information requirements, referred to
@@ -1063,11 +1063,11 @@ TT remove since locke is no longer available.
     requirements. 
     This interpretation produces the module interpreted model (MIM). 
     <!-- This interpretation, given in <a href="5_mapping{$FILE_EXT}#mapping">5.1</a>, -->
-    This interpretation, given in &lt;&lt;sec_5_mapping_mapping&gt;&gt;,
+    This interpretation, given in &lt;&lt;mapping&gt;&gt;,
     shows the correspondence between the information requirements and the
     MIM. The short listing of the MIM specifies the interface to the
     <!-- resources and is given in <a href="5_mim{$FILE_EXT}#mim_express">5.2</a>.   -->
-    resources and is given in &lt;&lt;sec_5_mim_mim_express&gt;&gt;.  
+    resources and is given in &lt;&lt;mim_express&gt;&gt;.  
 
     A graphical representation of the short listing of the MIM is given
     <!-- in Annex <a href="d_mim_expg{$FILE_EXT}">D</a>. -->
@@ -1241,7 +1241,8 @@ provided  that links throught SC4ONLINE to a new repository -->
     corresponding short names as specified or referenced in this part of ISO
     10303. It also provides a listing of each EXPRESS schema specified in this
     part of ISO 10303 without comments nor other explanatory text. These
-    listings are available in computer-interpretable form in Table E.1 and can
+    <!-- listings are available in computer-interpretable form in Table E.1 and can -->
+    listings are available in computer-interpretable form in &lt;&lt;table_e1&gt;&gt; and can
     be found at the following URLs:
     </xsl:with-param>
     </xsl:call-template>
@@ -1258,7 +1259,7 @@ provided  that links throught SC4ONLINE to a new repository -->
      <td><a href="{$parts_url}" target="_blank" ><xsl:value-of select="$parts_url"/></a></td>
    </tr>
   </table> -->
-    <xsl:text>Short names::: </xsl:text>
+    <xsl:text>Short names: :: </xsl:text>
     <xsl:call-template name="insertHyperlink">
       <xsl:with-param name="a">
         <a href="{$names_url}" target="_blank">
@@ -1268,7 +1269,7 @@ provided  that links throught SC4ONLINE to a new repository -->
       <xsl:with-param name="asText">true</xsl:with-param>
     </xsl:call-template>
     <xsl:text>&#xa;</xsl:text>
-    <xsl:text>EXPRESS::: </xsl:text>
+    <xsl:text>EXPRESS: :: </xsl:text>
     <xsl:call-template name="insertHyperlink">
       <xsl:with-param name="a">
         <a href="{$parts_url}" target="_blank">
@@ -1297,7 +1298,7 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
   </table>
   
   <p/>  -->
-      <xsl:text>Additional information::: </xsl:text>
+      <xsl:text>Additional information: :: </xsl:text>
       <xsl:call-template name="insertHyperlink">
         <xsl:with-param name="a">
           <a href="{$information_url}" target="_blank">
@@ -1324,7 +1325,7 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
   </div> -->
     <xsl:text>[[table_e1]]</xsl:text>
     <xsl:text>&#xa;</xsl:text>
-    <xsl:text>[cols="^,^",options="header"]</xsl:text>
+    <xsl:text>[cols="^,^,^,^",options="header"]</xsl:text>
     <xsl:text>&#xa;</xsl:text>
     <xsl:choose>
       <xsl:when test="./mim_lf or ./arm_lf">
@@ -2272,7 +2273,8 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
     <!-- <p> -->
     <xsl:call-template name="insertParagraph">
       <xsl:with-param name="text">
-    Short names of entities defined in this schema are described in Annex A. Unambiguous identification of this schema is defined in Annex B. 
+    <!-- Short names of entities defined in this schema are described in Annex A. Unambiguous identification of this schema is defined in Annex B.  -->
+    Short names of entities defined in this schema are described in &lt;&lt;AnnexA&gt;&gt;. Unambiguous identification of this schema is defined in &lt;&lt;AnnexB&gt;&gt;. 
     </xsl:with-param>
     </xsl:call-template>
     <!-- </p> -->
@@ -3611,7 +3613,7 @@ test="document('../data/basic/normrefs.xml')/normref.list/normref[@id=$normref]/
               <xsl:call-template name="insertHeaderADOC">
                 <xsl:with-param name="id" select="concat('sec_3.1.',$section_no)"/>
                 <xsl:with-param name="attributes" select="'.nonterm'"/>
-                <xsl:with-param name="level" select="2"/>
+                <xsl:with-param name="level" select="3"/>
                 <!-- 3 -->
                 <xsl:with-param name="header" select="concat('Terms defined in ',$stdnumber)"/>
               </xsl:call-template>
@@ -3674,7 +3676,7 @@ test="document('../data/basic/normrefs.xml')/normref.list/normref[@id=$normref]/
                 </h2> -->
                   <xsl:call-template name="insertHeaderADOC">
                     <xsl:with-param name="id" select="concat('sec_3.',$section_no)"/>
-                    <xsl:with-param name="level" select="2"/>
+                    <xsl:with-param name="level" select="3"/>
                     <xsl:with-param name="header" select="concat('Terms defined in ', $stdnumber)"/>
                   </xsl:call-template>
                   <!-- <p> -->
@@ -3873,7 +3875,7 @@ $module_ok,' Check the normatives references')"/>
     <!-- </h2> -->
     <xsl:call-template name="insertHeaderADOC">
       <xsl:with-param name="id" select="concat('sec_',$section)"/>
-      <xsl:with-param name="level" select="2"/>
+      <xsl:with-param name="level" select="3"/>
       <!-- 3 -->
       <xsl:with-param name="header" select="'Other terms and definitions'"/>
     </xsl:call-template>
@@ -4034,8 +4036,11 @@ $module_ok,' Check the normatives references')"/>
     </xsl:variable>
     <xsl:call-template name="insertHeaderADOC">
       <xsl:with-param name="id" select="concat('sec_', $section,'.',position())"/>
-      <xsl:with-param name="level" select="3"/>
+      <xsl:with-param name="level" select="4"/>
       <xsl:with-param name="header" select="normalize-space($header)"/>
+      <xsl:with-param name="indexed">true</xsl:with-param>
+      <xsl:with-param name="index_term" select="term"/>
+      <xsl:with-param name="index_term2">term</xsl:with-param>
     </xsl:call-template>
     <!-- <xsl:apply-templates select="def"/> -->
     <xsl:call-template name="insertParagraph">
@@ -4151,9 +4156,9 @@ $module_ok,' Check the normatives references')"/>
     </xsl:for-each>
   </xsl:template>
   <xsl:template match="express-g">
-    <xsl:text>&#xa;</xsl:text>
+    <!-- <xsl:text>&#xa;</xsl:text> -->
     <xsl:apply-templates select="imgfile|img" mode="expressg"/>
-    <xsl:text>&#xa;&#xa;</xsl:text>
+    <xsl:text>&#xa;</xsl:text>
   </xsl:template>
   <xsl:template match="imgfile" mode="expressg">
     <xsl:variable name="file">
@@ -4178,13 +4183,57 @@ $module_ok,' Check the normatives references')"/>
       <xsl:text>&gt;&gt;</xsl:text>
     </xsl:with-param>
   </xsl:call-template> -->
-    <xsl:text>.</xsl:text>
+  <xsl:variable name="title">
     <xsl:apply-templates select="." mode="title"/>
-    <xsl:text>&#xa;</xsl:text>
-    <!-- Example: image::../mimexpg1.xml[] -->
-    <xsl:text>image::</xsl:text>
-    <xsl:value-of select="$href"/>
-    <xsl:text>&#xa;&#xa;</xsl:text>
+  </xsl:variable>
+  
+  <xsl:variable name="index_text">
+    <xsl:choose>
+      <xsl:when test="name(../..)='arm'">ARM EXPRESS-G</xsl:when>
+      <xsl:when test="name(../..)='mim'">MIM EXPRESS-G</xsl:when>
+    </xsl:choose>
+  </xsl:variable>
+  <xsl:variable name="imgfile_content" select="document(concat($path,@file))"/>
+  <xsl:variable name="hrefs">
+    <xsl:for-each select="$imgfile_content//img.area/@href">
+      <xsl:variable name="item">
+        <xsl:choose>
+          <xsl:when test="contains(.,'4_info_reqs.xml#')">
+            <xsl:value-of select="substring-after(.,'4_info_reqs.xml#')"/>
+          </xsl:when>
+          <xsl:when test="contains(.,'5_mim.xml#')">
+            <xsl:value-of select="substring-after(.,'5_mim.xml#')"/>
+          </xsl:when>
+        </xsl:choose>
+      </xsl:variable>
+      <xsl:if test="$item != ''">
+        <href>
+          <xsl:choose>
+            <xsl:when test="contains($item,'.')"><xsl:value-of select="substring-after($item,'.')"/></xsl:when>
+            <xsl:otherwise><xsl:value-of select="$item"/></xsl:otherwise>
+          </xsl:choose>
+        </href>
+      </xsl:if>
+    </xsl:for-each>
+  </xsl:variable>
+  <!-- <xsl:apply-templates select="xalan:nodeset($hrefs)" mode="print_as_xml"/> -->
+  
+  <xsl:variable name="index">
+    <xsl:for-each select="xalan:nodeset($hrefs)/href">
+      <xsl:if test="position() = 1"><xsl:text> </xsl:text></xsl:if>
+      <xsl:text>(((</xsl:text>
+      <xsl:value-of select="."/>
+      <xsl:text>,</xsl:text>
+      <xsl:value-of select="$index_text"/>
+      <xsl:text>)))</xsl:text>
+    </xsl:for-each>
+  </xsl:variable>
+  
+    <xsl:call-template name="insertImage">
+      <xsl:with-param name="id" select="$file"/>
+      <xsl:with-param name="title" select="concat($title,$index)"/>
+      <xsl:with-param name="path" select="$href"/>
+    </xsl:call-template>
   </xsl:template>
   <xsl:template match="imgfile" mode="title">
     <xsl:variable name="number">

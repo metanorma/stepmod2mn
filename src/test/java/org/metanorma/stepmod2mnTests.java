@@ -36,7 +36,7 @@ public class stepmod2mnTests {
     public static void setUpBeforeClass() throws Exception {
         XMLFILE_STEPMOD = System.getProperty("inputXML");
         if (XMLFILE_STEPMOD == null) {
-            System.out.println("Environment variable 'inputXML' is empty!");
+            System.out.println("The parameter 'inputXML' is empty!");
         }
     }
     
@@ -67,9 +67,10 @@ public class stepmod2mnTests {
     @Test
     public void successConvertToAdoc() throws ParseException {
         System.out.println(name.getMethodName());
-        String outFileName = new File(XMLFILE_STEPMOD).getAbsolutePath();
-        outFileName = outFileName.substring(0, outFileName.lastIndexOf('.') + 1);
-        Path fileout = Paths.get(outFileName + "adoc");
+        //String outFileName = new File(XMLFILE_STEPMOD).getAbsolutePath();
+        //outFileName = outFileName.substring(0, outFileName.lastIndexOf('.') + 1);
+        //Path fileout = Paths.get(outFileName + "adoc");
+        Path fileout = Paths.get(new File(XMLFILE_STEPMOD).getParent(), "document.adoc");
         fileout.toFile().delete();
         
         String[] args = new String[]{XMLFILE_STEPMOD};
