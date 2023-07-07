@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.metanorma</groupId>
 	<artifactId>stepmod2mn</artifactId>
-	<version>1.11</version>
+	<version>1.12</version>
 	<name>STEPmod XML to Metanorma AsciiDoc converter</name>
 	<packaging>jar</packaging>
 	<url>https://www.metanorma.org</url>
@@ -87,6 +87,16 @@
 			<groupId>xalan</groupId>
 			<artifactId>xalan</artifactId>
 			<version>2.7.3</version>
+		</dependency>
+		<dependency>
+			<groupId>xalan</groupId>
+			<artifactId>serializer</artifactId>
+			<version>2.7.3</version>
+		</dependency>
+		<dependency>
+			<groupId>xerces</groupId>
+			<artifactId>xercesImpl</artifactId>
+			<version>2.12.2</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
