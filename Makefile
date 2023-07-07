@@ -1,8 +1,9 @@
 #!make
 SHELL ?= /bin/bash
 
-#JAR_VERSION := $(shell mvn -q -Dexec.executable="echo" -Dexec.args='$${project.version}' --non-recursive exec:exec -DforceStdout)
-JAR_VERSION := 1.11
+#JAR_VERSION := 1.12
+JAR_VERSION := $(shell mvn -q -Dexec.executable="echo" -Dexec.args='$${project.version}' --non-recursive exec:exec -DforceStdout)
+
 JAR_FILE := stepmod2mn-$(JAR_VERSION).jar
 
 SRCDIR := src/test/resources

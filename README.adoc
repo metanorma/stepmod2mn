@@ -17,54 +17,54 @@ convert specified xml file into adoc format and save it to document.adoc:
 
 [source,sh]
 ----
-java -jar target/stepmod2mn-1.11.jar <XML-FileName>
+java -jar target/stepmod2mn-1.12.jar <XML-FileName>
 ----
 
 or save it to specified path:
 
 [source,sh]
 ----
-java -jar target/stepmod2mn-1.11.jar <XML-FileName> --output <ADOC-FileName>
+java -jar target/stepmod2mn-1.12.jar <XML-FileName> --output <ADOC-FileName>
 ----
 
 convert all resource.xml and module.xml in the specified folder and sub-folders:
 
 [source,sh]
 ----
-java -jar target/stepmod2mn-1.11.jar <Input-folder>
+java -jar target/stepmod2mn-1.12.jar <Input-folder>
 ----
 
 generate SVG images in the tree data/:
 
 [source,sh]
 ----
-java -jar target/stepmod2mn-1.11.jar <start folder to process xml maps files> --svg
+java -jar target/stepmod2mn-1.12.jar <start folder to process xml maps files> --svg
 ----
 
 generate SVG image for Express Imagemap XML and Image:
 
 [source,sh]
 ----
-java -jar stepmod2mn-1.11.jar --xml <Express Imagemap XML file path> --image <Image file name> [--svg <resulted SVG map file or folder>]
+java -jar stepmod2mn-1.12.jar --xml <Express Imagemap XML file path> --image <Image file name> [--svg <resulted SVG map file or folder>]
 ----
 
 e.g.
 
 [source,sh]
 ----
-java -jar target/stepmod2mn-1.11.jar data/resource_docs/draughting_elements/resource.xml 
+java -jar target/stepmod2mn-1.12.jar data/resource_docs/draughting_elements/resource.xml 
 ----
 
 NOTE: resulted ADOC found in data/resource_docs/draughting_elements/document.adoc
 
 [source,sh]
 ----
-java -jar target/stepmod2mn-1.11.jar data/ --svg
+java -jar target/stepmod2mn-1.12.jar data/ --svg
 ----
 
 [source,sh]
 ----
-java -jar stepmod2mn-1.11.jar --xml data\resource_docs\fundamentals_of_product_description_and_support\schema_diagexpg1.xml --image schema_diagexpg1.gif --svg schema_diagexpg1.svg
+java -jar stepmod2mn-1.12.jar --xml data\resource_docs\fundamentals_of_product_description_and_support\schema_diagexpg1.xml --image schema_diagexpg1.gif --svg schema_diagexpg1.svg
 ----
 
 
@@ -84,7 +84,7 @@ Update version in `pom.xml`, e.g.:
 ----
 <groupId>org.metanorma</groupId>
 <artifactId>stepmod2mn</artifactId>
-<version>1.11</version>
+<version>1.12</version>
 <name>STEPmod XML to Metanorma AsciiDoc converter</name>
 ----
 
@@ -95,8 +95,8 @@ Tag the same version in Git:
 
 [source,xml]
 ----
-git tag v1.11
-git push origin v1.11
+git tag v1.12
+git push origin v1.12
 ----
 
 Then the corresponding GitHub release will be automatically created at:
