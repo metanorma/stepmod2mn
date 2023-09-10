@@ -1758,7 +1758,10 @@ Purpose:
 					<!-- <xsl:value-of select="concat('image::', '../../../../resources/', $schema, '/', $filename_no_ext, '.svg[]')"/> -->
 					<xsl:call-template name="insertImage">
 						<xsl:with-param name="title" select="concat('.EXPRESS-G diagram of the ', $schema, ' (', $rel_clauseno,' of ', $img_count, ')' )" />
+						<!-- <xsl:with-param name="path" select="concat('../../../resources/', $schema, '/', $filename_no_ext, '.svg')"/> -->
 						<xsl:with-param name="path" select="concat('../../../../resources/', $schema, '/', $filename_no_ext, '.svg')"/>
+						<!-- changed for https://github.com/metanorma/stepmod2mn/issues/45 -->
+						<xsl:with-param name="path" select="concat('../../../resources/', $schema, '/', $filename_no_ext, '.svg')"/>
 					</xsl:call-template>
 					
 					<!-- </li> -->
@@ -4412,7 +4415,9 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 		<!-- <xsl:text>image::../</xsl:text><xsl:value-of select="$svg_filename"/><xsl:text>[]</xsl:text> -->
 		<!-- <xsl:text>&#xa;&#xa;</xsl:text> -->
 		<xsl:call-template name="insertImage">
-			<xsl:with-param name="path" select="concat('../', $svg_filename)"/>
+			<!-- <xsl:with-param name="path" select="concat('../', $svg_filename)"/> -->
+			<!-- changed for https://github.com/metanorma/stepmod2mn/issues/45 -->
+			<xsl:with-param name="path" select="$svg_filename"/>
 		</xsl:call-template>
 
 		

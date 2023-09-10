@@ -25,7 +25,7 @@ deploy:
 	mvn --settings settings.xml -Dmaven.test.skip=true clean deploy shade:shade
 
 documents.adoc: target/$(JAR_FILE) documents
-	java -jar $< ${SRCFILE} --output ${DESTMNADOC}
+	java -Xss5m -jar $< ${SRCFILE} --output ${DESTMNADOC}
 
 documents:
 	mkdir -p $@
