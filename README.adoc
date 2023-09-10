@@ -17,21 +17,21 @@ convert specified xml file into adoc format and save it to document.adoc:
 
 [source,sh]
 ----
-java -jar target/stepmod2mn-1.13.jar <XML-FileName>
+java -Xss5m -jar target/stepmod2mn-1.13.jar <XML-FileName>
 ----
 
 or save it to specified path:
 
 [source,sh]
 ----
-java -jar target/stepmod2mn-1.13.jar <XML-FileName> --output <ADOC-FileName>
+java -Xss5m -jar target/stepmod2mn-1.13.jar <XML-FileName> --output <ADOC-FileName>
 ----
 
 convert all resource.xml and module.xml in the specified folder and sub-folders:
 
 [source,sh]
 ----
-java -jar target/stepmod2mn-1.13.jar <Input-folder>
+java -Xss5m -jar target/stepmod2mn-1.13.jar <Input-folder>
 ----
 
 generate SVG images in the tree data/:
@@ -52,7 +52,7 @@ e.g.
 
 [source,sh]
 ----
-java -jar target/stepmod2mn-1.13.jar data/resource_docs/draughting_elements/resource.xml 
+java -Xss5m -jar target/stepmod2mn-1.13.jar data/resource_docs/draughting_elements/resource.xml 
 ----
 
 NOTE: resulted ADOC found in data/resource_docs/draughting_elements/document.adoc

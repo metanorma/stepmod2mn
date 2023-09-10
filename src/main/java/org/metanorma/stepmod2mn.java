@@ -43,7 +43,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
  */
 public class stepmod2mn {
 
-    static final String CMD = "java -jar stepmod2mn.jar <resource_xml_file> [options -o, -v, -b <path>]";
+    static final String CMD = "java -Xss5m -jar stepmod2mn.jar <resource_xml_file> [options -o, -v, -b <path>]";
     static final String CMD_SVGscope = "java -jar stepmod2mn.jar <start folder to process xml maps files> --svg";
     static final String CMD_SVG = "java -jar stepmod2mn.jar --xml <Express Imagemap XML file path> --image <Image file name> [--svg <resulted SVG map file or folder>] [-v]";
     

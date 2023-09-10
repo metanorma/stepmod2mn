@@ -116,6 +116,8 @@
         <xsl:param name="interfaces_param"/>
         <!-- list of schema names intialized with name of schema providing initial set of interface nodes -->
         <xsl:param name="list_of_schema_names_param"/>
+        <xsl:param name="call_num">1</xsl:param>
+        <!-- <xsl:message>DEBUG: build_complete_set_of_interface_nodes_and_get_objects call <xsl:value-of select="$call_num"/></xsl:message> -->
         
         <xsl:choose>
             <xsl:when test="$interfaces_param">
@@ -167,12 +169,14 @@
                         <xsl:call-template name="build_complete_set_of_interface_nodes_and_get_objects">
                             <xsl:with-param name="interfaces_param" select="$remaining_interface_nodes"/>
                             <xsl:with-param name="list_of_schema_names_param" select="concat($list_of_schema_names_param, $if_schema_name_list_item)"/>
+                            <xsl:with-param name="call_num" select="$call_num + 1"/>
                         </xsl:call-template>
                     </xsl:when>
                     <xsl:otherwise>
                         <xsl:call-template name="build_complete_set_of_interface_nodes_and_get_objects">
                             <xsl:with-param name="interfaces_param" select="$remaining_interface_nodes|$if_schema_node/interface"/>
                             <xsl:with-param name="list_of_schema_names_param" select="concat($list_of_schema_names_param, $if_schema_name_list_item)"/>
+                            <xsl:with-param name="call_num" select="$call_num + 1"/>
                         </xsl:call-template>
                     </xsl:otherwise>
                 </xsl:choose>
