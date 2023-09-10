@@ -1179,7 +1179,7 @@
 		<xsl:param name="partnumber"/>
 		<xsl:message>[INFO] Generation collection.sh ...</xsl:message>
 		<redirect:write file="{$outpath}/collection.sh">
-			<xsl:text>./html_attachments.sh</xsl:text>
+			<xsl:text>sh ./html_attachments.sh</xsl:text>
 			<xsl:text>&#xa;</xsl:text>
 			<xsl:text>bundle exec metanorma -x xml document.adoc</xsl:text>
 			<xsl:text>&#xa;</xsl:text>
