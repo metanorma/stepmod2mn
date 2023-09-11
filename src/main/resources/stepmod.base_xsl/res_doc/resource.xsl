@@ -1761,7 +1761,9 @@ Purpose:
 						<!-- <xsl:with-param name="path" select="concat('../../../resources/', $schema, '/', $filename_no_ext, '.svg')"/> -->
 						<xsl:with-param name="path" select="concat('../../../../resources/', $schema, '/', $filename_no_ext, '.svg')"/>
 						<!-- changed for https://github.com/metanorma/stepmod2mn/issues/45 -->
-						<xsl:with-param name="path" select="concat('../../../resources/', $schema, '/', $filename_no_ext, '.svg')"/>
+						<!-- <xsl:with-param name="path" select="concat('../../../resources/', $schema, '/', $filename_no_ext, '.svg')"/> -->
+						<!-- changed for https://github.com/metanorma/stepmod2mn/issues/49 -->
+						<xsl:with-param name="path" select="concat('../../resources/', $schema, '/', $filename_no_ext, '.svg')"/>
 					</xsl:call-template>
 					
 					<!-- </li> -->

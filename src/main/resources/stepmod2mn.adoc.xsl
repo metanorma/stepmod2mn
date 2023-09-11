@@ -994,7 +994,7 @@
 				- level: attachments
 					title: Attachments
 					docref:
-						- fileref: ../../../resources/action_schema/action_schema.exp
+						- fileref: ../../resources/action_schema/action_schema.exp
 							identifier: action_schema.exp
 							attachment: true
 							...
@@ -1065,7 +1065,7 @@
 			<xsl:text>      docref:</xsl:text>
 			<xsl:text>&#xa;</xsl:text>
 			<xsl:for-each select="resource/schema">
-				<xsl:text>        - fileref: </xsl:text><xsl:value-of select="concat('../../../resources/',@name,'/',@name,'.exp')"/>
+				<xsl:text>        - fileref: </xsl:text><xsl:value-of select="concat('../../resources/',@name,'/',@name,'.exp')"/> <!-- updated for https://github.com/metanorma/stepmod2mn/issues/49, was ../../../resources/ -->
 				<xsl:text>&#xa;</xsl:text>
 				<xsl:text>          identifier: </xsl:text><xsl:value-of select="@name"/><xsl:text>.exp</xsl:text>
 				<xsl:text>&#xa;</xsl:text>
