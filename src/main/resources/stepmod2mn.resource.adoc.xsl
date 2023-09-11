@@ -238,8 +238,9 @@
 		<xsl:text>:library-ics: 25.040.40</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
 		
-		<xsl:text>:imagesdir: images</xsl:text>
-		<xsl:text>&#xa;</xsl:text>
+		<!-- commented: https://github.com/metanorma/stepmod2mn/issues/49 -->
+		<!-- <xsl:text>:imagesdir: images</xsl:text>
+		<xsl:text>&#xa;</xsl:text> -->
 		<xsl:text>:mn-document-class: iso</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
 		<xsl:text>:mn-output-extensions: xml,html,doc,pdf,html_alt,rxl</xsl:text>
