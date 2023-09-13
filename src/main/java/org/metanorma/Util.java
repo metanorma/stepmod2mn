@@ -160,4 +160,13 @@ public class Util {
         }
         return fileContent;
     }
+
+    public static String changeFileExtension(String filename, String extension) {
+        int startPosExtension = filename.lastIndexOf(".");
+        if (startPosExtension != -1) {
+            String currentExtension = filename.substring(startPosExtension);
+            return filename.substring(0, filename.length() - currentExtension.length()) + extension;
+        }
+        return filename.concat(extension);
+    }
 }
