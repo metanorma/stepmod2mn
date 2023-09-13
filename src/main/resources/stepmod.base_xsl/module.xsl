@@ -4167,7 +4167,8 @@ $module_ok,' Check the normatives references')"/>
     </xsl:call-template> -->
       <xsl:value-of select="substring-before(@file,'.')"/>
     </xsl:variable>
-    <xsl:variable name="href" select="concat('../',$file,'.svg')"/>
+    <!-- <xsl:variable name="href" select="concat('../',$file,'.svg')"/> -->
+    <xsl:variable name="href" select="concat($file,'.svg')"/>
     <!-- <p>
     <a href="{$href}">
       <xsl:apply-templates select="." mode="title"/>
@@ -4228,6 +4229,8 @@ $module_ok,' Check the normatives references')"/>
       <xsl:text>)))</xsl:text>
     </xsl:for-each>
   </xsl:variable>
+  
+    <xsl:variable name="generateSVG" select="java:generateSVG(java:org.metanorma.stepmod2mn.new(),concat($path,'/',@file),'',$outpath)"/>
   
     <xsl:call-template name="insertImage">
       <xsl:with-param name="id" select="$file"/>

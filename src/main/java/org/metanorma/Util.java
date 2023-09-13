@@ -19,6 +19,7 @@ import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -54,7 +55,20 @@ public class Util {
         }
         return stream;
     }
-    
+
+    public static String getFileContentFromResources(String fileName) throws Exception {
+        ClassLoader classLoader = ClassLoader.getSystemClassLoader();
+        try (InputStream is = classLoader.getResourceAsStream(fileName)) {
+            if (is == null) {
+                System.out.println("Cannot get resource \"" + fileName + "\" from Jar file.");
+                return null;
+            }
+            try (InputStreamReader isr = new InputStreamReader(is);
+                 BufferedReader reader = new BufferedReader(isr)) {
+                return reader.lines().collect(Collectors.joining("\n"));
+            }
+        }
+    }
     public static void FlushTempFolder(Path tmpfilepath) {
         if (Files.exists(tmpfilepath)) {
             //Files.deleteIfExists(tmpfilepath);
