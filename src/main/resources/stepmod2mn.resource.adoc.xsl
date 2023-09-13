@@ -338,13 +338,17 @@
 			<!-- 4.3 Draughting elements entity definitions -->		
 			<xsl:if test="resource/schema">
 				<file path="sections/04-schemas.adoc">
-					<xsl:for-each select="resource/schema">
+					<!-- Commented -->
+					<!-- See https://github.com/metanorma/stepmod2mn/issues/52 -->
+					<!-- <xsl:for-each select="resource/schema">
 						<xsl:variable name="schema_pos" select="position()"/>
 						<xsl:message>[INFO] Processing Section <xsl:value-of select="$schema_pos + 3"/> ...</xsl:message>
-						<xsl:apply-templates select="../../resource" mode="schema_resource"> <!-- res_doc/sect_schema.xsl -->
-							 <xsl:with-param name="pos" select="$schema_pos"/>
+						<xsl:apply-templates select="../../resource" mode="schema_resource"> --> <!-- res_doc/sect_schema.xsl -->
+							<!--  <xsl:with-param name="pos" select="$schema_pos"/>
 						 </xsl:apply-templates>		
-					</xsl:for-each>
+					</xsl:for-each> -->
+					<!-- output template as 04-schemas.adoc -->
+					<xsl:call-template name="insert_04-schemas_adoc"/>
 				</file>
 			</xsl:if>
 			

@@ -9,6 +9,7 @@ $Id: sect_schema.xsl,v 1.3 2003/08/24 22:10:35 thendrix Exp $
 -->
 <!-- Updated: Alexander Dyuzhev, for stepmod2mn tool-->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:java="http://xml.apache.org/xalan/java" 
                 version="1.0">
 
 <!--   <xsl:import href="resource.xsl"/> -->
@@ -35,6 +36,13 @@ $Id: sect_schema.xsl,v 1.3 2003/08/24 22:10:35 thendrix Exp $
     <xsl:with-param name="pos" select="$pos"/>
   </xsl:apply-templates>
 </xsl:template>
-  
+
+<!-- https://github.com/metanorma/stepmod2mn/issues/52 -->
+<!-- The source: https://github.com/metanorma/annotated-express/blob/main/data/documents/resources/fundamentals_of_product_description_and_support/sections/04-schemas.adoc -->
+  <xsl:template name="insert_04-schemas_adoc">
+    <xsl:variable name="content" select="java:org.metanorma.Util.getFileContentFromResources('04-schemas.adoc')"/>
+    <xsl:value-of select="$content"/>
+  </xsl:template>
+
 </xsl:stylesheet>
 
