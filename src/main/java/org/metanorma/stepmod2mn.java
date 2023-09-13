@@ -616,14 +616,18 @@ public class stepmod2mn {
         return "";
     }
 
-    private void generateSVG(String xmlFilePath, String image, String outPath) throws IOException, TransformerException, SAXParseException {
-        List<String> xmlFiles;
+    public void generateSVG(String xmlFilePath, String image, String outPath) throws IOException, TransformerException, SAXParseException {
+        List<String> xmlFiles = new ArrayList<>();
         try (Stream<Path> walk = Files.walk(Paths.get(xmlFilePath))) {
             xmlFiles = walk
                 .filter(p -> !Files.isDirectory(p))   
                 .map(p -> p.toString())
                 .filter(f -> f.toLowerCase().endsWith(XML_EXTENSION))
                 .collect(Collectors.toList());
+        } catch (Exception e)
+        {
+            System.out.println("Can't generate SVG file(s) for " + xmlFilePath + "...");
+            e.printStackTrace();
         }
         for(String xmlFile: xmlFiles) {
             try

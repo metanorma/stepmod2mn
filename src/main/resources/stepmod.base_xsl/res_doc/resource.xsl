@@ -1748,6 +1748,11 @@ Purpose:
 						</xsl:if>
 					</xsl:for-each> -->
 					
+					<!-- generate SVG from .xml -->
+					<!-- Note: the variable generateSVG is using just for call the function 'generateSVG' -->
+					<!-- <xsl:message>Generate SVG for <xsl:value-of select="concat($path,'/','../../resources/', $schema,'/',@file)"/></xsl:message> -->
+					<xsl:variable name="generateSVG" select="java:generateSVG(java:org.metanorma.stepmod2mn.new(),concat($path,'/','../../resources/', $schema,'/',@file),'','')"/>
+					
 					<xsl:variable name="filename_no_ext">
 						<xsl:value-of select="substring-before(@file,'.xml')"/>
 					</xsl:variable>
@@ -1759,7 +1764,7 @@ Purpose:
 					<xsl:call-template name="insertImage">
 						<xsl:with-param name="title" select="concat('.EXPRESS-G diagram of the ', $schema, ' (', $rel_clauseno,' of ', $img_count, ')' )" />
 						<!-- <xsl:with-param name="path" select="concat('../../../resources/', $schema, '/', $filename_no_ext, '.svg')"/> -->
-						<xsl:with-param name="path" select="concat('../../../../resources/', $schema, '/', $filename_no_ext, '.svg')"/>
+						<!-- <xsl:with-param name="path" select="concat('../../../../resources/', $schema, '/', $filename_no_ext, '.svg')"/> -->
 						<!-- changed for https://github.com/metanorma/stepmod2mn/issues/45 -->
 						<!-- <xsl:with-param name="path" select="concat('../../../resources/', $schema, '/', $filename_no_ext, '.svg')"/> -->
 						<!-- changed for https://github.com/metanorma/stepmod2mn/issues/49 -->
@@ -4411,6 +4416,10 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 		<xsl:text>&#xa;</xsl:text>
 		<xsl:text>====</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
+		
+		<!-- generate SVG from .xml -->
+		<!-- Note: the variable generateSVG is using just for call the function 'generateSVG' -->
+		<xsl:variable name="generateSVG" select="java:generateSVG(java:org.metanorma.stepmod2mn.new(),concat($path,'/',@file),'',$outpath)"/>
 		
 		<xsl:variable name="svg_filename" select="concat(substring-before(@file, '.xml'), '.svg')"/>
 		<!-- image::basic_attribute_schemaexpg1.svg[] -->
