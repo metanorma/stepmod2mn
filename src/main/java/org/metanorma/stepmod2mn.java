@@ -54,6 +54,8 @@ public class stepmod2mn {
     static final String OUTPUT_LOG = "Output: %s (%s)";
 
     static final String FORMAT = "adoc";
+    static final String SVG_EXTENSION = ".svg";
+    static final String XML_EXTENSION = ".xml";
     static boolean DEBUG = false;
 
     static String VER = Util.getAppVersion();
@@ -614,15 +616,18 @@ public class stepmod2mn {
         return "";
     }
 
-    private void generateSVG(String xmlFilePath, String image, String outPath) throws IOException, TransformerException, SAXParseException {
-        List<String> xmlFiles;
-        String extension = ".xml";
+    public void generateSVG(String xmlFilePath, String image, String outPath) throws IOException, TransformerException, SAXParseException {
+        List<String> xmlFiles = new ArrayList<>();
         try (Stream<Path> walk = Files.walk(Paths.get(xmlFilePath))) {
             xmlFiles = walk
                 .filter(p -> !Files.isDirectory(p))   
                 .map(p -> p.toString())
-                .filter(f -> f.toLowerCase().endsWith(extension))
+                .filter(f -> f.toLowerCase().endsWith(XML_EXTENSION))
                 .collect(Collectors.toList());
+        } catch (Exception e)
+        {
+            System.out.println("Can't generate SVG file(s) for " + xmlFilePath + "...");
+            e.printStackTrace();
         }
         for(String xmlFile: xmlFiles) {
             try
@@ -630,12 +635,14 @@ public class stepmod2mn {
                 String content = new String(Files.readAllBytes(Paths.get(xmlFile)));
                 if (content.contains("img.area"))  {
                     String folder = new File(xmlFile).getParent() + File.separator;
-                    String svgFilename = xmlFile.substring(0, xmlFile.length() - extension.length()) + ".svg";
+                    //String svgFilename = xmlFile.substring(0, xmlFile.length() - XML_EXTENSION.length()) + SVG_EXTENSION;
+                    String svgFilename = Util.changeFileExtension(xmlFile, SVG_EXTENSION);
                     if (outPath != null && !outPath.isEmpty()) {
-                        if (!(outPath.toLowerCase().endsWith(".svg") || outPath.toLowerCase().endsWith(".xml"))) { // if folder
+                        if (!(outPath.toLowerCase().endsWith(SVG_EXTENSION) || outPath.toLowerCase().endsWith(XML_EXTENSION))) { // if folder
                             Files.createDirectories(Paths.get(outPath));
-                            svgFilename = Paths.get(xmlFile).getFileName().toString();
-                            svgFilename = svgFilename.substring(0, svgFilename.length() - extension.length()) + ".svg";
+                            String xmlFilename = Paths.get(xmlFile).getFileName().toString();
+                            //svgFilename = svgFilename.substring(0, svgFilename.length() - XML_EXTENSION.length()) + SVG_EXTENSION;
+                            svgFilename = Util.changeFileExtension(xmlFilename,SVG_EXTENSION);
                             svgFilename = Paths.get(outPath, svgFilename).toString();
                         } else {
                             svgFilename = outPath;
