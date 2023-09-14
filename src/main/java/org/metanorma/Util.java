@@ -10,6 +10,7 @@ import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.FileSystemException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -69,6 +70,23 @@ public class Util {
             }
         }
     }
+
+    public static void createSymbolicLink(String targetFilename, String symbolicLink) {
+        Path target = Paths.get(targetFilename);
+        Path link = Paths.get(symbolicLink);
+        try {
+            if (Files.exists(link)) {
+                Files.delete(link);
+            }
+            Files.createSymbolicLink(link, target);
+        } catch (IOException ex) {
+            System.out.println("Cannot create the symbolic link \"" + symbolicLink + "\" for the file " + targetFilename + ".");
+            if (ex instanceof FileSystemException) {
+                System.out.println(((FileSystemException) ex).getReason());
+            }
+        }
+    }
+
     public static void FlushTempFolder(Path tmpfilepath) {
         if (Files.exists(tmpfilepath)) {
             //Files.deleteIfExists(tmpfilepath);

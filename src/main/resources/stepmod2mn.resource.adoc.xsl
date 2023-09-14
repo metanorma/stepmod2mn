@@ -337,7 +337,7 @@
 			<!-- 4.2 Fundamental concepts and assumptions -->
 			<!-- 4.3 Draughting elements entity definitions -->		
 			<xsl:if test="resource/schema">
-				<file path="sections/04-schemas.adoc">
+				<file path="sections/04-schemas.adoc" target="../../../04-schemas.adoc">
 					<!-- Commented -->
 					<!-- See https://github.com/metanorma/stepmod2mn/issues/52 -->
 					<!-- <xsl:for-each select="resource/schema">
@@ -348,7 +348,7 @@
 						 </xsl:apply-templates>		
 					</xsl:for-each> -->
 					<!-- output template as 04-schemas.adoc -->
-					<xsl:call-template name="insert_04-schemas_adoc"/>
+					<!-- <xsl:call-template name="insert_04-schemas_adoc"/> -->
 				</file>
 			</xsl:if>
 			
