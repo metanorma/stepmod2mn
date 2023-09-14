@@ -1954,7 +1954,7 @@ the types, entity specializations, and functions that are specific to this part 
 		<xsl:call-template name="insertParagraph">
 			<xsl:with-param name="text">
 			<!-- Short names of entities defined in this schema are described in Annex A. Unambiguous identification of this schema is defined in Annex B. -->
-			Short names of entities defined in this schema are described in &lt;&lt;AnnexA&gt;&gt;. Unambiguous identification of this schema is defined in &lt;&lt;AnnexB&gt;&gt;.
+			Short names of entities defined in this schema are described in &lt;&lt;short_entity_names&gt;&gt;. Unambiguous identification of this schema is defined in &lt;&lt;info_object_reg&gt;&gt;.
 			</xsl:with-param>
 		</xsl:call-template>
 		<!-- </p> -->

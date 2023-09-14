@@ -25,6 +25,7 @@ $Id: sect_b_obj_reg.xsl,v 1.9 2012/11/14 23:16:12 lothartklein Exp $
 	<xsl:template match="resource" mode="annex_b">
 		<xsl:call-template name="annex_header">
 			<xsl:with-param name="annex_no" select="'B'"/>
+			<xsl:with-param name="annex_id" select="'info_object_reg'"/>
 			<xsl:with-param name="heading" select="'Information object registration'"/>
 			<xsl:with-param name="aname" select="'annexb'"/>
 			<xsl:with-param name="informative" select="'normative'"/>

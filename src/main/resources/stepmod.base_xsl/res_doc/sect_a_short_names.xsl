@@ -26,6 +26,7 @@ $Id: sect_a_short_names.xsl,v 1.10 2018/01/18 20:20:21 mike Exp $
 	<xsl:template match="resource" mode="annex_a">
 		<xsl:call-template name="annex_header">
 			<xsl:with-param name="annex_no" select="'A'"/>
+			<xsl:with-param name="annex_id" select="'short_entity_names'"/>
 			<xsl:with-param name="heading" select="'Short names of entities'"/>
 			<xsl:with-param name="aname" select="'annexa'"/>
 			<xsl:with-param name="informative" select="'normative'"/>
