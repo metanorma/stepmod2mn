@@ -10,10 +10,7 @@ import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.file.FileSystemException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
 import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.jar.Attributes;
@@ -84,6 +81,16 @@ public class Util {
             if (ex instanceof FileSystemException) {
                 System.out.println(((FileSystemException) ex).getReason());
             }
+        }
+    }
+
+    public static void copyFile(String sourceFilename, String targetFilename) {
+        try {
+            Path source = Paths.get(sourceFilename);
+            Path target = Paths.get(targetFilename);
+            Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException ex) {
+            System.out.println("Cannot copy the file \"" + sourceFilename + "\" to the file " + targetFilename + ": " + ex);
         }
     }
 
