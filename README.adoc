@@ -34,6 +34,20 @@ convert all resource.xml and module.xml in the specified folder and sub-folders:
 java -Xss5m -jar target/stepmod2mn-1.16.jar <Input-folder>
 ----
 
+convert resource_docs and modules specified in the publication index xml file:
+
+[source,sh]
+----
+java -Xss5m -jar target/stepmod2mn-1.16.jar <Publication-Index-XML-FileName>
+----
+
+convert the specified type of the document (resource_docs or modules) from the publication index xml file:
+
+[source,sh]
+----
+java -Xss5m -jar target/stepmod2mn-1.16.jar <Publication-Index-XML-FileName> --type <resource or module>
+----
+
 generate SVG images in the tree data/:
 
 [source,sh]
@@ -56,6 +70,13 @@ java -Xss5m -jar target/stepmod2mn-1.16.jar data/resource_docs/draughting_elemen
 ----
 
 NOTE: resulted ADOC found in data/resource_docs/draughting_elements/document.adoc
+
+
+[source,sh]
+----
+java -Xss5m -jar target/stepmod2mn-1.16.jar publication/part1000/CR_PMI_5/publication_index.xml --type resource
+----
+
 
 [source,sh]
 ----

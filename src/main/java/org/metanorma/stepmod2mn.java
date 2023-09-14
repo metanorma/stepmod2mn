@@ -22,6 +22,9 @@ import javax.xml.transform.URIResolver;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -32,6 +35,8 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
@@ -43,7 +48,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
  */
 public class stepmod2mn {
 
-    static final String CMD = "java -Xss5m -jar stepmod2mn.jar <resource_xml_file> [options -o, -v, -b <path>]";
+    static final String CMD = "java -Xss5m -jar stepmod2mn.jar <resource or module or publication index xml file> [options -o, -v, -b <path> -t <type>]";
     static final String CMD_SVGscope = "java -jar stepmod2mn.jar <start folder to process xml maps files> --svg";
     static final String CMD_SVG = "java -jar stepmod2mn.jar --xml <Express Imagemap XML file path> --image <Image file name> [--svg <resulted SVG map file or folder>] [-v]";
     
@@ -128,6 +133,12 @@ public class stepmod2mn {
                     .hasArg()
                     .required(false)
                     .build());
+            addOption(Option.builder("t")
+                    .longOpt("type")
+                    .desc("document type: resource or module (for publication index only)")
+                    .hasArg()
+                    .required(false)
+                    .build());
             addOption(Option.builder("v")
                     .longOpt("version")
                     .desc("display application version")
@@ -147,6 +158,8 @@ public class stepmod2mn {
     String resourcePath = "";
     
     String boilerplatePath = "";
+
+    String documentType = "";
     
     /**
      * Main method.
@@ -266,6 +279,11 @@ public class stepmod2mn {
                     boilerplatePath = cmd.getOptionValue("boilerplatepath") + File.separator;
                 }
 
+                String documentType = "";
+                if (cmd.hasOption("type")) {
+                    documentType = cmd.getOptionValue("type");
+                }
+
                 boolean isInputFolder = false;
                 String inputFolder = "";
 
@@ -332,7 +350,64 @@ public class stepmod2mn {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                    } else {
+                    } else if (argXMLin_normalized.endsWith("publication_index.xml")) {
+                        isInputFolder = true;
+                        try {
+                            File fpublication_index = new File(argXMLin_normalized);
+                            File rootFolder = fpublication_index.getParentFile().getParentFile().getParentFile().getParentFile();
+                            inputFolder = rootFolder.getAbsolutePath();
+
+                            InputStream xmlInputStream = new FileInputStream(fpublication_index);
+                            XMLReader rdr = XMLReaderFactory.createXMLReader();
+                            TransformerFactory factory = TransformerFactory.newInstance();
+                            factory.setURIResolver(new stepmod2mn().new ClasspathResourceURIResolver());
+                            Transformer transformer = factory.newTransformer();
+                            InputSource is = new InputSource(xmlInputStream);
+                            is.setSystemId(argXMLin_normalized);
+                            Source src = new SAXSource(rdr, is);
+
+
+                            //FileInputStream fileIS = new FileInputStream(argXMLin_normalized);
+
+                            DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+                            DocumentBuilder builder = builderFactory.newDocumentBuilder();
+                            Document xmlDocument = builder.parse(is); //fileIS
+                            XPath xPath = XPathFactory.newInstance().newXPath();
+                            String expression = "//resource_docs/resource_doc | //modules/module";
+                            if (documentType.equals("resource")) {
+                                expression = "//resource_docs/resource_doc";
+                            } else if (documentType.equals("module")) {
+                                expression = "//modules/module";
+                            }
+                            NodeList nodeList = (NodeList) xPath.compile(expression).evaluate(xmlDocument, XPathConstants.NODESET);
+
+                            List<Map.Entry<String,String>> documents = new ArrayList<>();
+
+                            for (int i = 0; i < nodeList.getLength(); i++) {
+                                Node node = nodeList.item(i);
+                                String name = node.getAttributes().getNamedItem("name").getNodeValue();
+                                documents.add(new AbstractMap.SimpleEntry<>(node.getNodeName(), name));
+
+                            }
+
+                            Path dataPath = Paths.get(rootFolder.getAbsolutePath(),"data");
+                            for (Map.Entry<String,String> document: documents) {
+                                String inputXmlFilename = document.getKey();
+                                if (inputXmlFilename.equals("resource_doc")) {
+                                    inputXmlFilename = "resource";
+                                }
+                                inputXmlFilename+=XML_EXTENSION;
+                                Path inputXmlFilePath = Paths.get(dataPath.toString(), document.getKey() + "s", document.getValue(), inputXmlFilename);
+                                Path outPath = Paths.get(inputXmlFilePath.getParent().toString(), "document." + FORMAT);
+                                String outAdocFile = outPath.toString();
+                                inputOutputFiles.add(new AbstractMap.SimpleEntry<>(inputXmlFilePath.toString(), outAdocFile));
+                            }
+
+                        } catch (Exception ex) {
+                            System.out.println("Can't process the publication index '" + argXMLin_normalized + "':" + ex);
+                        }
+                    }
+                    else {
                         inputOutputFiles.add(new AbstractMap.SimpleEntry<>(argXMLin, outFileName));
                     }
                 }
@@ -528,7 +603,10 @@ public class stepmod2mn {
     public void setBoilerplatePath(String boilerplatePath) {
         this.boilerplatePath = boilerplatePath;
     }
-    
+
+    public void setDocumentType(String documentType) {
+        this.documentType = documentType;
+    }
     private String processLinearizedXML(String xmlFilePath){
         try {
             InputStream xmlInputStream = null;
