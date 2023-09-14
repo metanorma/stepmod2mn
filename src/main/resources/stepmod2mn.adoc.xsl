@@ -535,7 +535,7 @@
 		
 		<xsl:variable name="schema_prefix_label" select="@anchor" />
 		
-		<xsl:variable name="label_">
+		<!-- <xsl:variable name="label_">
 			<xsl:if test="contains(@anchor, '.')">
 				<xsl:call-template name="substring-after-last">
 					<xsl:with-param name="value" select="@anchor"/>
@@ -543,7 +543,8 @@
 				</xsl:call-template>
 			</xsl:if>
 		</xsl:variable>
-		<xsl:variable name="label" select="normalize-space($label_)"/>
+		<xsl:variable name="label" select="normalize-space($label_)"/> -->
+		<xsl:variable name="label" select="normalize-space(@anchor)"/>
 		
 		<xsl:text>&lt;&lt;express:</xsl:text>
 		<!-- <xsl:if test="$schema != ''"><xsl:value-of select="$schema"/>:</xsl:if> -->

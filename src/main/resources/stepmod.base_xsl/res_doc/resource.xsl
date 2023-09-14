@@ -1523,7 +1523,7 @@ Purpose:
 					<xsl:call-template name="insertHyperlink">
 						<xsl:with-param name="a">
 							<a href="{$schema_url}">
-								<xsl:value-of select="concat($schema_file,$FILE_EXT)"/>								
+								<xsl:value-of select="concat($schema_file,$FILE_EXT)"/>
 							</a>
 						</xsl:with-param>
 					</xsl:call-template>					
