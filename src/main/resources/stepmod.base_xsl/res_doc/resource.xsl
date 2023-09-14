@@ -1659,7 +1659,7 @@ Purpose:
 		<!-- </p> -->
 
 		<!-- <ul> -->		
-					
+		<xsl:if test="1 = 2"> <!-- skip, replaced by macros, see below -->
 			<xsl:for-each select="./schema/express-g/imgfile | ./schema/express-g/img" >
 				<xsl:variable name="schema">
 					<xsl:value-of select="substring-before(@file,'expg')"/>
@@ -1779,8 +1779,60 @@ Purpose:
 					<xsl:call-template name="insertEXPRESSAnnotationEnd"/>
 				
 			</xsl:for-each>
+		
 		<!-- </ul> -->
 		<xsl:text>&#xa;&#xa;</xsl:text>
+		</xsl:if> <!-- skip -->
+
+		<xsl:text>&#xa;&#xa;</xsl:text>
+		<xsl:text>[lutaml_express, schemas, context, leveloffset=+1]</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>---</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>{% capture newLine %}</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>{% endcapture %}</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>{% for schema in context.schemas %}</xsl:text>
+		<xsl:text>&#xa;&#xa;</xsl:text>
+		<xsl:text>// schema level anchor for EXPRESS-G diagrams</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>[[expg.{{schema.id}}]]{blank}</xsl:text>
+		<xsl:text>&#xa;&#xa;</xsl:text>
+		<xsl:text>{% assign expg_remark = schema.remark_items | where: "id", "__expressg" | first %}</xsl:text>
+		<xsl:text>&#xa;&#xa;</xsl:text>
+		<xsl:text>{% for remark in expg_remark.remarks %}</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>// diagram level anchor for EXPRESS-G diagrams</xsl:text>
+		<xsl:text>&#xa;&#xa;</xsl:text>
+		<xsl:text>// index term</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>{% assign anchors = remark | remove: "&lt;" | remove: "&gt;" | remove: "=" | remove: "1" | remove: "2" | remove: "3" | remove: "4" | remove: "5" | remove: "6" | remove: "7" | remove: "8" | remove: "9" | remove: "0" | remove: "* " | remove: "express:" | replace: "[]", "; "| strip_newlines | split: "; " | uniq %}</xsl:text>
+		<xsl:text>&#xa;&#xa;</xsl:text>
+		<xsl:text>[[expg.{{schema.id}}.{{forloop.index}}]]</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>.EXPRESS-G diagram of the {{ schema.id }} ({{ forloop.index }} of {{ forloop.length }})</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>{%- for anchor in anchors -%}</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>{%- if forloop.index0 > 0 -%}</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>((({{ anchor | split: "." | last }},Object EXPRESS-G)))</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>{%- endif -%}</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>{%- endfor %}</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>{{ remark }}</xsl:text>
+		<xsl:text>&#xa;&#xa;</xsl:text>
+		<xsl:text>{% endfor %}</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>{% endfor %}</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>---</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		
 
 	</xsl:template>
 
