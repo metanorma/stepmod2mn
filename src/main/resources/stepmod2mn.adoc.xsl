@@ -476,7 +476,17 @@
 			<xsl:apply-templates mode="text" />
 		</redirect:write>
 	</xsl:template>
-  
+	
+	<!-- <xsl:template match="file[@target]" mode="text"> -->
+	<xsl:template match="file[@source]" mode="text">
+		<!-- <xsl:variable name="targetFile" select="concat($path, '/', @target)"/>
+		<xsl:variable name="symbolicLink" select="concat($outpath, '/', @path)"/>
+		<xsl:variable name="createLink" select="java:org.metanorma.Util.createSymbolicLink($targetFile, $symbolicLink)"/> -->
+		<xsl:variable name="sourceFile" select="concat($path, '/', @source)"/>
+		<xsl:variable name="targetFile" select="concat($outpath, '/', @path)"/>
+		<xsl:variable name="copyFile" select="java:org.metanorma.Util.copyFile($sourceFile, $targetFile)"/>
+	</xsl:template>
+	
 	<xsl:template match="ExternalDocumentReference" mode="text">
 		<!-- <xsl:text>&lt;&lt;</xsl:text>
 		

@@ -37,12 +37,12 @@ $Id: sect_schema.xsl,v 1.3 2003/08/24 22:10:35 thendrix Exp $
   </xsl:apply-templates>
 </xsl:template>
 
-<!-- https://github.com/metanorma/stepmod2mn/issues/52 -->
-<!-- The source: https://github.com/metanorma/annotated-express/blob/main/data/documents/resources/fundamentals_of_product_description_and_support/sections/04-schemas.adoc -->
-  <xsl:template name="insert_04-schemas_adoc">
+  <!-- https://github.com/metanorma/stepmod2mn/issues/52 -->
+  <!-- The source: https://github.com/metanorma/annotated-express/blob/main/data/documents/resources/fundamentals_of_product_description_and_support/sections/04-schemas.adoc -->
+  <!-- <xsl:template name="insert_04-schemas_adoc">
     <xsl:variable name="content" select="java:org.metanorma.Util.getFileContentFromResources('04-schemas.adoc')"/>
     <xsl:value-of select="$content"/>
-  </xsl:template>
+  </xsl:template> -->
 
 </xsl:stylesheet>
 
