@@ -284,7 +284,7 @@ public class stepmod2mn {
                     documentType = cmd.getOptionValue("type");
                 }
 
-                boolean isInputFolder = false;
+                //boolean isInputFolder = false;
                 String inputFolder = "";
 
                 List<Map.Entry<String,String>> inputOutputFiles = new ArrayList<>();
@@ -335,7 +335,7 @@ public class stepmod2mn {
                     }
 
                     if (fXMLin.isDirectory()) {
-                        isInputFolder = true;
+                        //isInputFolder = true;
                         inputFolder = fXMLin.getAbsolutePath();
 
                         try (Stream<Path> walk = Files.walk(Paths.get(fXMLin.getAbsolutePath()))) {
@@ -351,7 +351,7 @@ public class stepmod2mn {
                             e.printStackTrace();
                         }
                     } else if (argXMLin_normalized.toLowerCase().endsWith("publication_index.xml")) {
-                        isInputFolder = true;
+                        //isInputFolder = true;
 
                         try {
                             File fpublication_index = new File(argXMLin_normalized);
@@ -401,30 +401,10 @@ public class stepmod2mn {
                         app.convertstepmod2mn(filenameIn, fileOut);
                     }
 
-                    if (isInputFolder) {
-                        // Generate metanorma.yml in the root of pat
-                        StringBuilder metanormaYml = new StringBuilder();
-                        metanormaYml.append("---").append("\n")
-                                .append("metanorma:").append("\n")
-                                .append("  source:").append("\n")
-                                .append("    files:").append("\n");
-                        URI pathRootFolderURI = Paths.get(inputFolder).toUri();
-                        for (Map.Entry<String,String> entry: inputOutputFiles) {
-                            String resultAdoc = entry.getValue();
-                            URI resultAdocURI = Paths.get(resultAdoc).toUri();
-                            URI relativeURI = pathRootFolderURI.relativize(resultAdocURI);
-                            metanormaYml.append("      - " + relativeURI).append("\n");
-                        }
-                        metanormaYml.append("\n")
-                                .append("  collection:").append("\n")
-                                .append("    organization: \"ISO/TC 184/SC 4/WG 12\"").append("\n")
-                                .append("    name: \"ISO 10303 in Metanorma\"").append("\n");
-
-                        //append string buffer/builder to buffered writer
-                        BufferedWriter writer = new BufferedWriter(new FileWriter(Paths.get(inputFolder,"metanorma.yml").toFile()));
-                        writer.write(metanormaYml.toString());
-                        writer.close();
-                    }
+                    //if (isInputFolder) {
+                    // Generate metanorma.yml in the root of path
+                    new MetanormaCollection(inputOutputFiles).generate(inputFolder);
+                    //}
 
                     System.out.println("End!");
 
