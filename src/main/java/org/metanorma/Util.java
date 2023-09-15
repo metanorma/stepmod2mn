@@ -83,7 +83,8 @@ public class Util {
                 // therefore create 'kunction' (mklink /J ...)
                 // found here: https://github.com/Atry/scala-junction
                 try {
-                    com.dongxiguo.junction.Junction.createJunction(new File(link.toString()), new File(target.toString()));
+                    Path targetRealPath = target.toRealPath();
+                    com.dongxiguo.junction.Junction.createJunction(new File(link.toString()), new File(targetRealPath.toString()));
                 } catch (Exception e) {
                     e.printStackTrace();;
                 }
