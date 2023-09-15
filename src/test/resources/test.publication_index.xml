@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- <!DOCTYPE part1000.publication_index SYSTEM "../../dtd/p1000_publication_index.dtd"> -->
+
+<part1000.publication_index
+  name="Test1"
+  wg.number.publication_set="12345"
+  wg.number.publication_set_comments="Change request"
+  date.iso_submission="2021"
+  sc4.working_group="12"
+  date.iso_publication="2021">
+
+  <description>
+    The modules and/or resources ....
+  </description>
+
+	<resource_docs>
+	  <resource_doc number="123" version="7" name="resource_name_1" />
+	  <resource_doc number="124" version="7" name="resource_name_2" />
+	</resource_docs>
+
+
+    <modules>
+	  <module number="410" version="6" name="module_name_1" />
+    </modules>
+
+</part1000.publication_index>

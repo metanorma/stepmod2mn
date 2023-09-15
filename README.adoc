@@ -13,35 +13,107 @@ You will need the `maven` build tool and `make`.
 
 == Usage
 
-convert specified xml file into adoc format and save it to document.adoc:
+=== Convert specified single XML into the Metanorma AsciiDoc format and save it in the source XML folder:
 
 [source,sh]
 ----
 java -Xss5m -jar target/stepmod2mn-1.16.jar <XML-FileName>
 ----
 
-or save it to specified path:
+e.g. 
 
 [source,sh]
 ----
-java -Xss5m -jar target/stepmod2mn-1.16.jar <XML-FileName> --output <ADOC-FileName>
+java -Xss5m -jar target/stepmod2mn-1.16.jar data/resource_docs/draughting_elements/resource.xml 
 ----
 
-convert all resource.xml and module.xml in the specified folder and sub-folders:
+NOTE: resulted AsciiDoc found in data/resource_docs/draughting_elements/document.adoc
+
+
+=== Convert specified single XML into the Metanorma AsciiDoc format and save it to the specified folder:
+
+
+[source,sh]
+----
+java -Xss5m -jar target/stepmod2mn-1.16.jar <XML-FileName> --output <AsciiDoc-FileName>
+----
+
+e.g. 
+
+[source,sh]
+----
+java -Xss5m -jar target/stepmod2mn-1.16.jar data/resource_docs/draughting_elements/resource.xml --output result_dir/draughting_elements/document.adoc
+----
+
+=== Convert all resource.xml and module.xml in the specified folder and sub-folders into the Metanorma AsciiDoc format:
 
 [source,sh]
 ----
 java -Xss5m -jar target/stepmod2mn-1.16.jar <Input-folder>
 ----
 
-generate SVG images in the tree data/:
+e.g. 
+
+[source,sh]
+----
+java -Xss5m -jar target/stepmod2mn-1.16.jar data/
+----
+
+NOTE: the result AsciiDocs will be saved in the folder with the source resource.xml and module.xml files.
+
+
+=== Convert the documents specified in the publication index xml file in the tags 'resource_docs' and 'modules' into the Metanorma AsciiDoc format:
+
+[source,sh]
+----
+java -Xss5m -jar target/stepmod2mn-1.16.jar <Publication-Index-XML-FileName>
+----
+
+e.g.
+
+[source,sh]
+----
+java -Xss5m -jar target/stepmod2mn-1.16.jar publication/part1000/CR_PMI_5/publication_index.xml
+----
+
+NOTE: the resulted AsciiDocs will be saved in the folder with the source resource.xml and module.xml files.
+
+NOTE: the Metanorma collection file 'metanorma.yml' will be saved in the 3 level up folder (usually, source repository's root folder).
+
+=== Convert the specified type of the document (resource_docs or modules) in the publication index xml file into the Metanorma AsciiDoc format:
+
+[source,sh]
+----
+java -Xss5m -jar target/stepmod2mn-1.16.jar <Publication-Index-XML-FileName> --type <resource_docs or modules>
+----
+
+e.g.
+
+[source,sh]
+----
+java -Xss5m -jar target/stepmod2mn-1.16.jar publication/part1000/CR_PMI_5/publication_index.xml --type resource_docs
+----
+
+NOTE: the resulted AsciiDocs will be saved in the folder with the source resource.xml (or module.xml) files.
+
+NOTE: the Metanorma collection file 'metanorma.yml' will be saved in the 3 level up folder (usually, source repository's root folder).
+
+
+=== Generate SVG images in the specified folder and sub-folders:
 
 [source,sh]
 ----
 java -jar target/stepmod2mn-1.16.jar <start folder to process xml maps files> --svg
 ----
 
-generate SVG image for Express Imagemap XML and Image:
+e.g. 
+
+[source,sh]
+----
+java -jar target/stepmod2mn-1.16.jar data/ --svg
+----
+
+=== Generate SVG image for Express Imagemap XML and Image:
 
 [source,sh]
 ----
@@ -49,18 +121,6 @@ java -jar stepmod2mn-1.16.jar --xml <Express Imagemap XML file path> --image <Im
 ----
 
 e.g.
-
-[source,sh]
-----
-java -Xss5m -jar target/stepmod2mn-1.16.jar data/resource_docs/draughting_elements/resource.xml 
-----
-
-NOTE: resulted ADOC found in data/resource_docs/draughting_elements/document.adoc
-
-[source,sh]
-----
-java -jar target/stepmod2mn-1.16.jar data/ --svg
-----
 
 [source,sh]
 ----

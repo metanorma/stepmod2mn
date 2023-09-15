@@ -22,6 +22,9 @@ import javax.xml.transform.URIResolver;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -32,6 +35,8 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
@@ -43,7 +48,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
  */
 public class stepmod2mn {
 
-    static final String CMD = "java -Xss5m -jar stepmod2mn.jar <resource_xml_file> [options -o, -v, -b <path>]";
+    static final String CMD = "java -Xss5m -jar stepmod2mn.jar <resource or module or publication index xml file> [options -o, -v, -b <path> -t <type>]";
     static final String CMD_SVGscope = "java -jar stepmod2mn.jar <start folder to process xml maps files> --svg";
     static final String CMD_SVG = "java -jar stepmod2mn.jar --xml <Express Imagemap XML file path> --image <Image file name> [--svg <resulted SVG map file or folder>] [-v]";
     
@@ -128,6 +133,12 @@ public class stepmod2mn {
                     .hasArg()
                     .required(false)
                     .build());
+            addOption(Option.builder("t")
+                    .longOpt("type")
+                    .desc("documents types: resource_docs or modules (for publication index only)")
+                    .hasArg()
+                    .required(false)
+                    .build());
             addOption(Option.builder("v")
                     .longOpt("version")
                     .desc("display application version")
@@ -147,6 +158,8 @@ public class stepmod2mn {
     String resourcePath = "";
     
     String boilerplatePath = "";
+
+    String documentType = "";
     
     /**
      * Main method.
@@ -266,7 +279,12 @@ public class stepmod2mn {
                     boilerplatePath = cmd.getOptionValue("boilerplatepath") + File.separator;
                 }
 
-                boolean isInputFolder = false;
+                String documentType = "";
+                if (cmd.hasOption("type")) {
+                    documentType = cmd.getOptionValue("type");
+                }
+
+                //boolean isInputFolder = false;
                 String inputFolder = "";
 
                 List<Map.Entry<String,String>> inputOutputFiles = new ArrayList<>();
@@ -317,7 +335,7 @@ public class stepmod2mn {
                     }
 
                     if (fXMLin.isDirectory()) {
-                        isInputFolder = true;
+                        //isInputFolder = true;
                         inputFolder = fXMLin.getAbsolutePath();
 
                         try (Stream<Path> walk = Files.walk(Paths.get(fXMLin.getAbsolutePath()))) {
@@ -332,7 +350,32 @@ public class stepmod2mn {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                    } else {
+                    } else if (argXMLin_normalized.toLowerCase().endsWith("publication_index.xml")) {
+                        //isInputFolder = true;
+
+                        try {
+                            File fpublication_index = new File(argXMLin_normalized);
+                            File rootFolder = fpublication_index.getParentFile().getParentFile().getParentFile().getParentFile();
+                            // inputFolder is root of repository
+                            inputFolder = rootFolder.getAbsolutePath();
+
+                            PublicationIndex publicationIndex = new PublicationIndex(argXMLin_normalized);
+                            List<String> documentsPaths = publicationIndex.getDocumentsPaths(documentType);
+
+                            Path dataPath = Paths.get(rootFolder.getAbsolutePath(),"data");
+
+                            for (String documentFilename: documentsPaths) {
+                                Path inputXmlFilePath = Paths.get(dataPath.toString(), documentFilename);
+                                Path outPath = Paths.get(inputXmlFilePath.getParent().toString(), "document." + FORMAT);
+                                String outAdocFile = outPath.toString();
+                                inputOutputFiles.add(new AbstractMap.SimpleEntry<>(inputXmlFilePath.toString(), outAdocFile));
+                            }
+
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                    else {
                         inputOutputFiles.add(new AbstractMap.SimpleEntry<>(argXMLin, outFileName));
                     }
                 }
@@ -358,30 +401,10 @@ public class stepmod2mn {
                         app.convertstepmod2mn(filenameIn, fileOut);
                     }
 
-                    if (isInputFolder) {
-                        // Generate metanorma.yml in the root of pat
-                        StringBuilder metanormaYml = new StringBuilder();
-                        metanormaYml.append("---").append("\n")
-                                .append("metanorma:").append("\n")
-                                .append("  source:").append("\n")
-                                .append("    files:").append("\n");
-                        URI pathRootFolderURI = Paths.get(inputFolder).toUri();
-                        for (Map.Entry<String,String> entry: inputOutputFiles) {
-                            String resultAdoc = entry.getValue();
-                            URI resultAdocURI = Paths.get(resultAdoc).toUri();
-                            URI relativeURI = pathRootFolderURI.relativize(resultAdocURI);
-                            metanormaYml.append("      - " + relativeURI).append("\n");
-                        }
-                        metanormaYml.append("\n")
-                                .append("  collection:").append("\n")
-                                .append("    organization: \"ISO/TC 184/SC 4/WG 12\"").append("\n")
-                                .append("    name: \"ISO 10303 in Metanorma\"").append("\n");
-
-                        //append string buffer/builder to buffered writer
-                        BufferedWriter writer = new BufferedWriter(new FileWriter(Paths.get(inputFolder,"metanorma.yml").toFile()));
-                        writer.write(metanormaYml.toString());
-                        writer.close();
-                    }
+                    //if (isInputFolder) {
+                    // Generate metanorma.yml in the root of path
+                    new MetanormaCollection(inputOutputFiles).generate(inputFolder);
+                    //}
 
                     System.out.println("End!");
 
@@ -528,7 +551,10 @@ public class stepmod2mn {
     public void setBoilerplatePath(String boilerplatePath) {
         this.boilerplatePath = boilerplatePath;
     }
-    
+
+    public void setDocumentType(String documentType) {
+        this.documentType = documentType;
+    }
     private String processLinearizedXML(String xmlFilePath){
         try {
             InputStream xmlInputStream = null;
