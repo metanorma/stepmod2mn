@@ -77,9 +77,22 @@ public class Util {
             }
             Files.createSymbolicLink(link, target);
         } catch (IOException ex) {
-            System.out.println("Cannot create the symbolic link \"" + symbolicLink + "\" for the file " + targetFilename + ".");
-            if (ex instanceof FileSystemException) {
-                System.out.println(((FileSystemException) ex).getReason());
+            String os = System.getProperty("os.name");
+            if (os.toLowerCase().contains("windows")) {
+                // need admin right to create symbolic link,
+                // therefore create 'kunction' (mklink /J ...)
+                // found here: https://github.com/Atry/scala-junction
+                try {
+                    com.dongxiguo.junction.Junction.createJunction(new File(link.toString()), new File(target.toString()));
+                } catch (Exception e) {
+                    e.printStackTrace();;
+                }
+            } else {
+
+                System.out.println("Cannot create the symbolic link \"" + symbolicLink + "\" for the file " + targetFilename + ".");
+                if (ex instanceof FileSystemException) {
+                    System.out.println(((FileSystemException) ex).getReason());
+                }
             }
         }
     }
