@@ -39,10 +39,12 @@ public class PublicationIndex {
     }
 
     public List<String> getDocumentsPaths(String documentType) {
+        if (documentType == null) {
+            documentType = "";
+        }
         List<String> documentsPaths = new ArrayList<>();
         try {
             InputStream xmlInputStream = new FileInputStream(filename);
-            // read XML without DTD checking
             XMLReader rdr = XMLReaderFactory.createXMLReader();
             TransformerFactory factory = TransformerFactory.newInstance();
             factory.setURIResolver(new stepmod2mn().new ClasspathResourceURIResolver());
@@ -54,9 +56,9 @@ public class PublicationIndex {
             Document xmlDocument = builder.parse(is);
             XPath xPath = XPathFactory.newInstance().newXPath();
             String expression = XPATH_ALL;
-            if (documentType.equals("resource")) {
+            if (documentType.equals("resource_docs")) {
                 expression = XPATH_RESOURCES;
-            } else if (documentType.equals("module")) {
+            } else if (documentType.equals("modules")) {
                 expression = XPATH_MODULES;
             }
             NodeList nodeList = (NodeList) xPath.compile(expression).evaluate(xmlDocument, XPathConstants.NODESET);

@@ -135,7 +135,7 @@ public class stepmod2mn {
                     .build());
             addOption(Option.builder("t")
                     .longOpt("type")
-                    .desc("document type: resource or module (for publication index only)")
+                    .desc("documents types: resource_docs or modules (for publication index only)")
                     .hasArg()
                     .required(false)
                     .build());
