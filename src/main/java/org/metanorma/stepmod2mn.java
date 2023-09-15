@@ -350,61 +350,29 @@ public class stepmod2mn {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                    } else if (argXMLin_normalized.endsWith("publication_index.xml")) {
+                    } else if (argXMLin_normalized.toLowerCase().endsWith("publication_index.xml")) {
                         isInputFolder = true;
+
                         try {
                             File fpublication_index = new File(argXMLin_normalized);
                             File rootFolder = fpublication_index.getParentFile().getParentFile().getParentFile().getParentFile();
+                            // inputFolder is root of repository
                             inputFolder = rootFolder.getAbsolutePath();
 
-                            InputStream xmlInputStream = new FileInputStream(fpublication_index);
-                            XMLReader rdr = XMLReaderFactory.createXMLReader();
-                            TransformerFactory factory = TransformerFactory.newInstance();
-                            factory.setURIResolver(new stepmod2mn().new ClasspathResourceURIResolver());
-                            Transformer transformer = factory.newTransformer();
-                            InputSource is = new InputSource(xmlInputStream);
-                            is.setSystemId(argXMLin_normalized);
-                            Source src = new SAXSource(rdr, is);
-
-
-                            //FileInputStream fileIS = new FileInputStream(argXMLin_normalized);
-
-                            DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
-                            DocumentBuilder builder = builderFactory.newDocumentBuilder();
-                            Document xmlDocument = builder.parse(is); //fileIS
-                            XPath xPath = XPathFactory.newInstance().newXPath();
-                            String expression = "//resource_docs/resource_doc | //modules/module";
-                            if (documentType.equals("resource")) {
-                                expression = "//resource_docs/resource_doc";
-                            } else if (documentType.equals("module")) {
-                                expression = "//modules/module";
-                            }
-                            NodeList nodeList = (NodeList) xPath.compile(expression).evaluate(xmlDocument, XPathConstants.NODESET);
-
-                            List<Map.Entry<String,String>> documents = new ArrayList<>();
-
-                            for (int i = 0; i < nodeList.getLength(); i++) {
-                                Node node = nodeList.item(i);
-                                String name = node.getAttributes().getNamedItem("name").getNodeValue();
-                                documents.add(new AbstractMap.SimpleEntry<>(node.getNodeName(), name));
-
-                            }
+                            PublicationIndex publicationIndex = new PublicationIndex(argXMLin_normalized);
+                            List<String> documentsPaths = publicationIndex.getDocumentsPaths(documentType);
 
                             Path dataPath = Paths.get(rootFolder.getAbsolutePath(),"data");
-                            for (Map.Entry<String,String> document: documents) {
-                                String inputXmlFilename = document.getKey();
-                                if (inputXmlFilename.equals("resource_doc")) {
-                                    inputXmlFilename = "resource";
-                                }
-                                inputXmlFilename+=XML_EXTENSION;
-                                Path inputXmlFilePath = Paths.get(dataPath.toString(), document.getKey() + "s", document.getValue(), inputXmlFilename);
+
+                            for (String documentFilename: documentsPaths) {
+                                Path inputXmlFilePath = Paths.get(dataPath.toString(), documentFilename);
                                 Path outPath = Paths.get(inputXmlFilePath.getParent().toString(), "document." + FORMAT);
                                 String outAdocFile = outPath.toString();
                                 inputOutputFiles.add(new AbstractMap.SimpleEntry<>(inputXmlFilePath.toString(), outAdocFile));
                             }
 
                         } catch (Exception ex) {
-                            System.out.println("Can't process the publication index '" + argXMLin_normalized + "':" + ex);
+                            ex.printStackTrace();
                         }
                     }
                     else {
