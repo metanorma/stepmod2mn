@@ -365,7 +365,13 @@ public class stepmod2mn {
                         }
                     }
                     else { // if input is concrete XML file
-                        String outAdocFile = XMLUtils.getOutputAdocPath(argOutputPath, argXMLin.toString());
+                        String outAdocFile = "";
+                        if (argOutputPath.toLowerCase().endsWith(".adoc")) {
+                            outAdocFile = argOutputPath;
+                        } else {
+                            outAdocFile = XMLUtils.getOutputAdocPath(argOutputPath, argXMLin.toString());
+                        }
+
                         inputOutputFiles.add(new AbstractMap.SimpleEntry<>(argXMLin, outAdocFile));
                     }
                 }
