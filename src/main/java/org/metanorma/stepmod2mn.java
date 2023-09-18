@@ -58,7 +58,6 @@ public class stepmod2mn {
     static final String INPUT_LOG = "Input: %s (%s)";    
     static final String OUTPUT_LOG = "Output: %s (%s)";
 
-    static final String FORMAT = "adoc";
     static final String SVG_EXTENSION = ".svg";
     static final String XML_EXTENSION = ".xml";
     static boolean DEBUG = false;
@@ -123,7 +122,7 @@ public class stepmod2mn {
         {
             addOption(Option.builder("o")
                     .longOpt("output")
-                    .desc("output file name")
+                    .desc("output file name (for one .xml input file) or directory")
                     .hasArg()
                     .required(false)
                     .build());
@@ -149,8 +148,6 @@ public class stepmod2mn {
 
     static final String USAGE = getUsage();
 
-    static final int ERROR_EXIT_CODE = -1;
-
     static final String TMPDIR = System.getProperty("java.io.tmpdir");
     
     static final Path tmpfilepath  = Paths.get(TMPDIR, UUID.randomUUID().toString());
@@ -159,8 +156,6 @@ public class stepmod2mn {
     
     String boilerplatePath = "";
 
-    String documentType = "";
-    
     /**
      * Main method.
      *
@@ -200,7 +195,7 @@ public class stepmod2mn {
 
                 } catch (Exception e) {
                     e.printStackTrace(System.err);
-                    System.exit(ERROR_EXIT_CODE);
+                    System.exit(Constants.ERROR_EXIT_CODE);
                 }
                 cmdFail = false;
             } catch (ParseException exp) {
@@ -221,7 +216,7 @@ public class stepmod2mn {
                 
                 if (!Files.exists(Paths.get(argPathIn))) {                   
                     System.out.println(String.format(INPUT_PATH_NOT_FOUND, XML_INPUT, argPathIn));
-                    System.exit(ERROR_EXIT_CODE);
+                    System.exit(Constants.ERROR_EXIT_CODE);
                 }
 
                 try {
@@ -231,7 +226,7 @@ public class stepmod2mn {
 
                 } catch (Exception e) {
                     e.printStackTrace(System.err);
-                    System.exit(ERROR_EXIT_CODE);
+                    System.exit(Constants.ERROR_EXIT_CODE);
                 }
                 cmdFail = false;
                 
@@ -246,11 +241,6 @@ public class stepmod2mn {
                 CommandLine cmd = parser.parse(options, args);
                 
                 System.out.print("stepmod2mn ");
-                /*if(cmd.hasOption("version")) {                    
-                    System.out.print(VER);
-                }                
-                System.out.println("\n");*/
-
                 printVersion(cmd.hasOption("version"));
                 
                 List<String> arglist = cmd.getArgList();
@@ -262,16 +252,16 @@ public class stepmod2mn {
                 
                 String resourcePath = "";
 
-                String outFileName = "";
+                String argOutputPath = "";
                 if (cmd.hasOption("output")) {
-                    outFileName = cmd.getOptionValue("output");
-                    String outPath_normalized = outFileName;
+                    argOutputPath = cmd.getOptionValue("output");
+                    String outPath_normalized = argOutputPath;
                     if (outPath_normalized.startsWith("./") || outPath_normalized.startsWith(".\\")) {
                         outPath_normalized = outPath_normalized.substring(2);
                     }
                     File fXMLout = new File(outPath_normalized);
-                    outFileName = fXMLout.getAbsoluteFile().toString();
-                    new File(fXMLout.getParent()).mkdirs();
+                    argOutputPath = fXMLout.getAbsoluteFile().toString();
+                    //new File(fXMLout.getParent()).mkdirs();
                 }
 
                 String boilerplatePath = "";
@@ -279,12 +269,6 @@ public class stepmod2mn {
                     boilerplatePath = cmd.getOptionValue("boilerplatepath") + File.separator;
                 }
 
-                String documentType = "";
-                if (cmd.hasOption("type")) {
-                    documentType = cmd.getOptionValue("type");
-                }
-
-                //boolean isInputFolder = false;
                 String inputFolder = "";
 
                 List<Map.Entry<String,String>> inputOutputFiles = new ArrayList<>();
@@ -294,16 +278,18 @@ public class stepmod2mn {
 
                     if (!Util.isUrlExists(argXMLin)) {
                         System.out.println(String.format(INPUT_NOT_FOUND, XML_INPUT, argXMLin));
-                        System.exit(ERROR_EXIT_CODE);
+                        System.exit(Constants.ERROR_EXIT_CODE);
                     }
 
-                    if (!cmd.hasOption("output")) {
-                        outFileName = Paths.get(System.getProperty("user.dir"), Util.getFilenameFromURL(argXMLin)).toString();
-                        outFileName = outFileName.substring(0, outFileName.lastIndexOf('.') + 1);
-                        outFileName = outFileName + FORMAT;
+                    if (argOutputPath.isEmpty()) {
+                        // if the parameter '--output' is missing,
+                        // then save resulted adoc in the current folder (program dir)
+                        argOutputPath = Paths.get(System.getProperty("user.dir"), Util.getFilenameFromURL(argXMLin)).toString();
+                        argOutputPath = argOutputPath.substring(0, argOutputPath.lastIndexOf('.') + 1);
+                        argOutputPath = argOutputPath + Constants.FORMAT;
                     }
 
-                    inputOutputFiles.add(new AbstractMap.SimpleEntry<>(argXMLin, outFileName));
+                    inputOutputFiles.add(new AbstractMap.SimpleEntry<>(argXMLin, argOutputPath));
 
                     /*
                     //download to temp folder
@@ -315,6 +301,7 @@ public class stepmod2mn {
                     Files.copy(in, localPath, StandardCopyOption.REPLACE_EXISTING);
                     //argXMLin = localPath.toString();
                     System.out.println("Done!");*/
+
                 } else { // in case of local file
                     String argXMLin_normalized = argXMLin;
                     if (argXMLin_normalized.startsWith("./") || argXMLin_normalized.startsWith(".\\")) {
@@ -325,17 +312,17 @@ public class stepmod2mn {
                     //System.out.println("fXMLin=" + fXMLin.toString());
                     if (!fXMLin.exists()) {
                         System.out.println(String.format(INPUT_NOT_FOUND, XML_INPUT, fXMLin));
-                        System.exit(ERROR_EXIT_CODE);
+                        System.exit(Constants.ERROR_EXIT_CODE);
                     }
 
-                    if (!cmd.hasOption("output")) { // if local file, then save result in input folder
+                    /*if (argOutputPath.isEmpty()) { // is --output is empty, then save result in input folder
                         //outFileName = fXMLin.getAbsolutePath();
-                        Path outPath = Paths.get(fXMLin.getParent(), "document." + FORMAT);
-                        outFileName = outPath.toString();
-                    }
+                        Path outPath = Paths.get(fXMLin.getParent(), Constants.DOCUMENT_ADOC);
+                        argOutputPath = outPath.toString();
+                    }*/
 
+                    // if input path in the directory
                     if (fXMLin.isDirectory()) {
-                        //isInputFolder = true;
                         inputFolder = fXMLin.getAbsolutePath();
 
                         try (Stream<Path> walk = Files.walk(Paths.get(fXMLin.getAbsolutePath()))) {
@@ -343,16 +330,15 @@ public class stepmod2mn {
                                     .filter(f -> f.endsWith("resource.xml") || f.endsWith("module.xml")).collect(Collectors.toList());
 
                             for (String inputXmlFile: inputXMLfiles) {
-                                Path outPath = Paths.get((new File(inputXmlFile)).getParent(), "document." + FORMAT);
-                                String outAdocFile = outPath.toString();
+                                String outAdocFile = XMLUtils.getOutputAdocPath(argOutputPath, inputXmlFile);
                                 inputOutputFiles.add(new AbstractMap.SimpleEntry<>(inputXmlFile, outAdocFile));
                             }
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                    } else if (argXMLin_normalized.toLowerCase().endsWith("publication_index.xml")) {
-                        //isInputFolder = true;
 
+                        // if input is Publication Index XML file
+                    } else if (argXMLin_normalized.toLowerCase().endsWith("publication_index.xml")) {
                         try {
                             File fpublication_index = new File(argXMLin_normalized);
                             File rootFolder = fpublication_index.getParentFile().getParentFile().getParentFile().getParentFile();
@@ -360,14 +346,17 @@ public class stepmod2mn {
                             inputFolder = rootFolder.getAbsolutePath();
 
                             PublicationIndex publicationIndex = new PublicationIndex(argXMLin_normalized);
+                            String documentType = "";
+                            if (cmd.hasOption("type")) {
+                                documentType = cmd.getOptionValue("type");
+                            }
                             List<String> documentsPaths = publicationIndex.getDocumentsPaths(documentType);
 
                             Path dataPath = Paths.get(rootFolder.getAbsolutePath(),"data");
 
                             for (String documentFilename: documentsPaths) {
                                 Path inputXmlFilePath = Paths.get(dataPath.toString(), documentFilename);
-                                Path outPath = Paths.get(inputXmlFilePath.getParent().toString(), "document." + FORMAT);
-                                String outAdocFile = outPath.toString();
+                                String outAdocFile = XMLUtils.getOutputAdocPath(argOutputPath, inputXmlFilePath.toString());
                                 inputOutputFiles.add(new AbstractMap.SimpleEntry<>(inputXmlFilePath.toString(), outAdocFile));
                             }
 
@@ -375,8 +364,9 @@ public class stepmod2mn {
                             ex.printStackTrace();
                         }
                     }
-                    else {
-                        inputOutputFiles.add(new AbstractMap.SimpleEntry<>(argXMLin, outFileName));
+                    else { // if input is concrete XML file
+                        String outAdocFile = XMLUtils.getOutputAdocPath(argOutputPath, argXMLin.toString());
+                        inputOutputFiles.add(new AbstractMap.SimpleEntry<>(argXMLin, outAdocFile));
                     }
                 }
 
@@ -388,7 +378,7 @@ public class stepmod2mn {
                         File fileOut = new File(filenameOut);
                         stepmod2mn app = new stepmod2mn();
                         System.out.println(String.format(INPUT_LOG, XML_INPUT, filenameIn));
-                        System.out.println(String.format(OUTPUT_LOG, FORMAT.toUpperCase(), filenameOut));
+                        System.out.println(String.format(OUTPUT_LOG, Constants.FORMAT.toUpperCase(), filenameOut));
                         System.out.println();
                         app.setBoilerplatePath(boilerplatePath);
                         if (Util.isUrl(filenameIn)) {
@@ -410,7 +400,7 @@ public class stepmod2mn {
 
                 } catch (Exception e) {
                     e.printStackTrace(System.err);
-                    System.exit(ERROR_EXIT_CODE);
+                    System.exit(Constants.ERROR_EXIT_CODE);
                 }
                 cmdFail = false;
             } catch (ParseException exp) {
@@ -425,23 +415,20 @@ public class stepmod2mn {
         
         if (cmdFail) {
             System.out.println(USAGE);
-            System.exit(ERROR_EXIT_CODE);
+            System.exit(Constants.ERROR_EXIT_CODE);
         }
     }
 
     //private void convertstepmod2mn(File fXMLin, File fileOut) throws IOException, TransformerException, SAXParseException {
     private void convertstepmod2mn(String xmlFilePath, File fileOut) throws IOException, TransformerException, SAXParseException {
-        
         System.out.println("Transforming...");
-        
         try {
-            
             Source srcXSL = null;
             
             String bibdataFileName = fileOut.getName();
             
             // get linearized XML with default attributes substitution from DTD
-            String linearizedXML = processLinearizedXML(xmlFilePath);
+            String linearizedXML = XMLUtils.processLinearizedXML(xmlFilePath);
             
             // load linearized xml
             Source src = new StreamSource(new StringReader(linearizedXML));
@@ -449,7 +436,7 @@ public class stepmod2mn {
 
             String xslKind = "resource";
 
-            String rootElement = getRootElement(linearizedXML);
+            String rootElement = XMLUtils.getRootElement(linearizedXML);
             switch (rootElement) {
                 case "resource":
                 case "module":
@@ -492,7 +479,7 @@ public class stepmod2mn {
             String adoc = resultWriter.toString();
 
             File adocFileOut = fileOut;
-            
+
             try (Scanner scanner = new Scanner(adoc)) {
                 String outputFile = adocFileOut.getAbsolutePath();
                 StringBuilder sbBuffer = new StringBuilder();
@@ -509,15 +496,15 @@ public class stepmod2mn {
             throw (e);
         } catch (Exception e) {
             e.printStackTrace(System.err);
-            System.exit(ERROR_EXIT_CODE);
+            System.exit(Constants.ERROR_EXIT_CODE);
         }
     }
     
-    class ClasspathResourceURIResolver implements URIResolver {
-        public Source resolve(String href, String base) throws TransformerException {
-          return new StreamSource(getClass().getClassLoader().getResourceAsStream(href));
-        }
-    }
+        /*class ClasspathResourceURIResolver implements URIResolver {
+            public Source resolve(String href, String base) throws TransformerException {
+              return new StreamSource(getClass().getClassLoader().getResourceAsStream(href));
+            }
+        }*/
     
     private void writeBuffer(StringBuilder sbBuffer, String outputFile) throws IOException {
         try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(outputFile))) {
@@ -550,96 +537,6 @@ public class stepmod2mn {
     
     public void setBoilerplatePath(String boilerplatePath) {
         this.boilerplatePath = boilerplatePath;
-    }
-
-    public void setDocumentType(String documentType) {
-        this.documentType = documentType;
-    }
-    private String processLinearizedXML(String xmlFilePath){
-        try {
-            InputStream xmlInputStream = null;
-
-            File fXMLin = new File(xmlFilePath);
-
-            if (Util.isUrl(xmlFilePath)) {
-                try {
-                    URL url = new URL(xmlFilePath);
-                    xmlInputStream = url.openStream();
-                } catch (IOException ex) {} //checked above
-
-
-            } else { try {
-                // in case of local file
-                xmlInputStream = new FileInputStream(fXMLin);
-                } catch (FileNotFoundException ex) { }//checked above
-            }
-
-            // to skip validating 
-            //found here: https://moleshole.wordpress.com/2009/10/08/ignore-a-dtd-when-using-a-transformer/
-            XMLReader rdr = XMLReaderFactory.createXMLReader();
-
-            /*rdr.setEntityResolver(new EntityResolver() {
-                @Override
-                public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
-                    if (systemId.endsWith(".dtd")) {
-                            //StringReader stringInput = new StringReader(" ");
-                            StringReader stringInput = new StringReader(systemId);
-                            //StringReader stringInput = new StringReader("file:///C:/Delete/test.dtd");
-                            //return new InputSource(stringInput);
-                            String dtd = "C:/Delete/test.dtd";
-                            return new InputSource(new FileInputStream(dtd));
-                    }
-                    else {
-                            return null; // use default behavior
-                    }
-                }
-            });*/
-
-            TransformerFactory factory = TransformerFactory.newInstance();
-            factory.setURIResolver(new ClasspathResourceURIResolver());            
-            Transformer transformer = factory.newTransformer();
-            //Source src = new StreamSource(fXMLin);
-            //Source src = new SAXSource(rdr, new InputSource(new FileInputStream(fXMLin)));
-            InputSource is = new InputSource(xmlInputStream);
-            is.setSystemId(xmlFilePath);
-            Source src = new SAXSource(rdr, is);
-            //Source src = new StreamSource(is);
-
-            // linearize XML
-            Source srcXSLidentity = new StreamSource(Util.getStreamFromResources(getClass().getClassLoader(), "linearize.xsl"));
-
-            transformer = factory.newTransformer(srcXSLidentity);
-
-            StringWriter resultWriteridentity = new StringWriter();
-            StreamResult sridentity = new StreamResult(resultWriteridentity);
-            transformer.transform(src, sridentity);
-            String xmlidentity = resultWriteridentity.toString();
-            return xmlidentity;
-        } catch (Exception e) {
-            e.printStackTrace(System.err);
-            System.exit(ERROR_EXIT_CODE);
-        }
-        return "";
-    }
-
-    private String getRootElement (String xml) {
-        try {
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            DocumentBuilder db = null;
-            db = dbf.newDocumentBuilder();
-
-            InputSource is = new InputSource();
-            is.setCharacterStream(new StringReader(xml));
-
-            Document doc = db.parse(is);
-            Element root = doc.getDocumentElement();
-            String rootName = root.getNodeName();
-            return rootName;
-        } catch (SAXException | IOException | ParserConfigurationException e) {
-            e.printStackTrace(System.err);
-            System.exit(ERROR_EXIT_CODE);
-        }
-        return "";
     }
 
     public void generateSVG(String xmlFilePath, String image, String outPath) throws IOException, TransformerException, SAXParseException {
@@ -682,7 +579,7 @@ public class stepmod2mn {
                     
                     
                     // get linearized XML with default attributes substitution from DTD
-                    String linearizedXML = processLinearizedXML(xmlFile);
+                    String linearizedXML = XMLUtils.processLinearizedXML(xmlFile);
                     // load linearized xml
                     Source src = new StreamSource(new StringReader(linearizedXML));
                     
