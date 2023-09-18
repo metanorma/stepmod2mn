@@ -1751,7 +1751,7 @@ Purpose:
 					<!-- generate SVG from .xml -->
 					<!-- Note: the variable generateSVG is using just for call the function 'generateSVG' -->
 					<!-- <xsl:message>Generate SVG for <xsl:value-of select="concat($path,'/','../../resources/', $schema,'/',@file)"/></xsl:message> -->
-					<xsl:variable name="generateSVG" select="java:generateSVG(java:org.metanorma.stepmod2mn.new(),concat($path,'/','../../resources/', $schema,'/',@file),'','')"/>
+					<xsl:variable name="generateSVG" select="java:generateSVG(java:org.metanorma.stepmod2mn.new(),concat($path,'/','../../resources/', $schema,'/',@file),'','',false())"/>
 					
 					<xsl:variable name="filename_no_ext">
 						<xsl:value-of select="substring-before(@file,'.xml')"/>
@@ -4471,7 +4471,7 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 		
 		<!-- generate SVG from .xml -->
 		<!-- Note: the variable generateSVG is using just for call the function 'generateSVG' -->
-		<xsl:variable name="generateSVG" select="java:generateSVG(java:org.metanorma.stepmod2mn.new(),concat($path,'/',@file),'',$outpath)"/>
+		<xsl:variable name="generateSVG" select="java:generateSVG(java:org.metanorma.stepmod2mn.new(),concat($path,'/',@file),'',$outpath, true())"/>
 		
 		<xsl:variable name="svg_filename" select="concat(substring-before(@file, '.xml'), '.svg')"/>
 		<!-- image::basic_attribute_schemaexpg1.svg[] -->

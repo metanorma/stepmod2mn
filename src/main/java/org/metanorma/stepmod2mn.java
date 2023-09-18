@@ -196,7 +196,7 @@ public class stepmod2mn {
 
                 try {
                     stepmod2mn app = new stepmod2mn();
-                    app.generateSVG(xmlIn, imageIn, cmd.getOptionValue("svg"));
+                    app.generateSVG(xmlIn, imageIn, cmd.getOptionValue("svg"), false);
                     System.out.println("End!");
 
                 } catch (Exception e) {
@@ -227,7 +227,7 @@ public class stepmod2mn {
 
                 try {
                     stepmod2mn app = new stepmod2mn();
-                    app.generateSVG(argPathIn, null, cmd.getOptionValue("output"));
+                    app.generateSVG(argPathIn, null, cmd.getOptionValue("output"),false);
                     System.out.println("End!");
 
                 } catch (Exception e) {
@@ -528,7 +528,7 @@ public class stepmod2mn {
         this.boilerplatePath = boilerplatePath;
     }
 
-    public void generateSVG(String xmlFilePath, String image, String outPath) throws IOException, TransformerException, SAXParseException {
+    public void generateSVG(String xmlFilePath, String image, String outPath, boolean isSVGmap) throws IOException, TransformerException, SAXParseException {
         List<String> xmlFiles = new ArrayList<>();
         try (Stream<Path> walk = Files.walk(Paths.get(xmlFilePath))) {
             xmlFiles = walk
@@ -553,11 +553,14 @@ public class stepmod2mn {
                         if (!(outPath.toLowerCase().endsWith(SVG_EXTENSION) || outPath.toLowerCase().endsWith(XML_EXTENSION))) { // if folder
 
                             String xmlFilename = Paths.get(xmlFile).getFileName().toString();
-                            String schemaName = new File(xmlFile).getParentFile().getName();
-
-                            Files.createDirectories(Paths.get(outPath,schemaName));
-
                             svgFilename = Util.changeFileExtension(xmlFilename,SVG_EXTENSION);
+
+                            String schemaName = "";
+                            if (!isSVGmap) { //no need to add schamaName for [.svgmap] SVG
+                                schemaName = new File(xmlFile).getParentFile().getName();
+                                Files.createDirectories(Paths.get(outPath, schemaName));
+                            }
+
                             svgFilename = Paths.get(outPath, schemaName, svgFilename).toString();
                         } else {
                             svgFilename = outPath;
