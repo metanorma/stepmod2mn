@@ -490,20 +490,8 @@ public class stepmod2mn {
             transformer.transform(src, sr);
             String adoc = resultWriter.toString();
 
-            File adocFileOut = fileOut;
+            Util.writeStringToFile(adoc, fileOut);
 
-            try (Scanner scanner = new Scanner(adoc)) {
-                String outputFile = adocFileOut.getAbsolutePath();
-                StringBuilder sbBuffer = new StringBuilder();
-                while (scanner.hasNextLine()) {
-                    String line = scanner.nextLine();                    
-                    sbBuffer.append(line);
-                    sbBuffer.append(System.getProperty("line.separator"));
-                }
-                writeBuffer(sbBuffer, outputFile);
-            }
-            System.out.println("Saved (" + adocFileOut.getName() + ") " + Util.getFileSize(adocFileOut) + " bytes.");
-            
         } catch (SAXParseException e) {            
             throw (e);
         } catch (Exception e) {
@@ -512,12 +500,7 @@ public class stepmod2mn {
         }
     }
 
-    private void writeBuffer(StringBuilder sbBuffer, String outputFile) throws IOException {
-        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(outputFile))) {
-            writer.write(sbBuffer.toString());
-        }
-        sbBuffer.setLength(0);
-    }
+
     private static String getUsage() {
         StringWriter stringWriter = new StringWriter();
         PrintWriter pw = new PrintWriter(stringWriter);
