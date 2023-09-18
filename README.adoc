@@ -35,7 +35,7 @@ NOTE: resulted AsciiDoc found in data/resource_docs/draughting_elements/document
 
 [source,sh]
 ----
-java -Xss5m -jar target/stepmod2mn-1.17.jar <XML-FileName> --output <AsciiDoc-FileName>
+java -Xss5m -jar target/stepmod2mn-1.17.jar <XML-FileName> [--output <AsciiDoc-FileName>]
 ----
 
 e.g. 
@@ -62,6 +62,21 @@ java -Xss5m -jar target/stepmod2mn-1.17.jar data/
 NOTE: the result AsciiDocs will be saved in the folder with the source resource.xml and module.xml files.
 
 
+=== Convert all resource.xml and module.xml in the specified folder and sub-folders into the Metanorma AsciiDoc format and save them into the output folder:
+
+[source,sh]
+----
+java -Xss5m -jar target/stepmod2mn-1.17.jar <Input-folder> [--output <Output-folder>]
+----
+
+e.g. 
+
+[source,sh]
+----
+java -Xss5m -jar target/stepmod2mn-1.17.jar data/ --output documents/
+----
+
+
 === Convert the documents specified in the publication index xml file in the tags 'resource_docs' and 'modules' into the Metanorma AsciiDoc format:
 
 [source,sh]
@@ -80,11 +95,27 @@ NOTE: the resulted AsciiDocs will be saved in the folder with the source resourc
 
 NOTE: the Metanorma collection file 'metanorma.yml' will be saved in the 3 level up folder (usually, source repository's root folder).
 
+=== Convert the documents specified in the publication index xml file in the tags 'resource_docs' and 'modules' into the Metanorma AsciiDoc format,
+and save them into the output folder:
+
+[source,sh]
+----
+java -Xss5m -jar target/stepmod2mn-1.17.jar <Publication-Index-XML-FileName> [--output <Output-folder>]
+----
+
+e.g.
+
+[source,sh]
+----
+java -Xss5m -jar target/stepmod2mn-1.17.jar publication/part1000/CR_PMI_5/publication_index.xml documents/
+----
+
+
 === Convert the specified type of the document (resource_docs or modules) in the publication index xml file into the Metanorma AsciiDoc format:
 
 [source,sh]
 ----
-java -Xss5m -jar target/stepmod2mn-1.17.jar <Publication-Index-XML-FileName> --type <resource_docs or modules>
+java -Xss5m -jar target/stepmod2mn-1.17.jar <Publication-Index-XML-FileName> [--type <resource_docs or modules>]
 ----
 
 e.g.
@@ -110,7 +141,21 @@ e.g.
 
 [source,sh]
 ----
-java -jar target/stepmod2mn-1.17.jar data/ --svg
+java -jar target/stepmod2mn-1.17.jar data/resources --svg
+----
+
+=== Generate SVG images for the XML in the specified folder and sub-folders, and save them in the output folder:
+
+[source,sh]
+----
+java -jar target/stepmod2mn-1.17.jar <start folder to process xml maps files> --svg [--output <Output-folder>]
+----
+
+e.g. 
+
+[source,sh]
+----
+java -jar target/stepmod2mn-1.17.jar data/resources --svg --output schemas/
 ----
 
 === Generate SVG image for Express Imagemap XML and Image:

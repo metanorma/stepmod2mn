@@ -114,7 +114,13 @@ public class stepmod2mn {
                     .longOpt("version")
                     .desc("display application version")
                     .required(false)
-                    .build());            
+                    .build());
+            addOption(Option.builder("o")
+                    .longOpt("output")
+                    .desc("output directory")
+                    .hasArg()
+                    .required(false)
+                    .build());
         }
     };
 
@@ -221,7 +227,7 @@ public class stepmod2mn {
 
                 try {
                     stepmod2mn app = new stepmod2mn();
-                    app.generateSVG(argPathIn, null, null);
+                    app.generateSVG(argPathIn, null, cmd.getOptionValue("output"));
                     System.out.println("End!");
 
                 } catch (Exception e) {
@@ -505,13 +511,7 @@ public class stepmod2mn {
             System.exit(Constants.ERROR_EXIT_CODE);
         }
     }
-    
-        /*class ClasspathResourceURIResolver implements URIResolver {
-            public Source resolve(String href, String base) throws TransformerException {
-              return new StreamSource(getClass().getClassLoader().getResourceAsStream(href));
-            }
-        }*/
-    
+
     private void writeBuffer(StringBuilder sbBuffer, String outputFile) throws IOException {
         try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(outputFile))) {
             writer.write(sbBuffer.toString());
@@ -568,11 +568,14 @@ public class stepmod2mn {
                     String svgFilename = Util.changeFileExtension(xmlFile, SVG_EXTENSION);
                     if (outPath != null && !outPath.isEmpty()) {
                         if (!(outPath.toLowerCase().endsWith(SVG_EXTENSION) || outPath.toLowerCase().endsWith(XML_EXTENSION))) { // if folder
-                            Files.createDirectories(Paths.get(outPath));
+
                             String xmlFilename = Paths.get(xmlFile).getFileName().toString();
-                            //svgFilename = svgFilename.substring(0, svgFilename.length() - XML_EXTENSION.length()) + SVG_EXTENSION;
+                            String schemaName = new File(xmlFile).getParentFile().getName();
+
+                            Files.createDirectories(Paths.get(outPath,schemaName));
+
                             svgFilename = Util.changeFileExtension(xmlFilename,SVG_EXTENSION);
-                            svgFilename = Paths.get(outPath, svgFilename).toString();
+                            svgFilename = Paths.get(outPath, schemaName, svgFilename).toString();
                         } else {
                             svgFilename = outPath;
                             String parentFolder = new File(svgFilename).getParent();
@@ -609,6 +612,7 @@ public class stepmod2mn {
                         BufferedWriter writer = Files.newBufferedWriter(Paths.get(svgFilename))) {
                             writer.write(xmlSVG);                    
                     }
+                    System.out.println("SVG saved in " + svgFilename + ".");
                 }
             } 
             catch (Exception e) 
