@@ -106,7 +106,7 @@ e.g.
 
 [source,sh]
 ----
-java -Xss5m -jar target/stepmod2mn-1.17.jar publication/part1000/CR_PMI_5/publication_index.xml documents/
+java -Xss5m -jar target/stepmod2mn-1.17.jar publication/part1000/CR_PMI_5/publication_index.xml --output documents/
 ----
 
 
