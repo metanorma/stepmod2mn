@@ -1784,6 +1784,16 @@ Purpose:
 		<xsl:text>&#xa;&#xa;</xsl:text>
 		</xsl:if> <!-- skip -->
 
+		<!-- generate SVG images -->
+		<xsl:for-each select="./schema/express-g/imgfile | ./schema/express-g/img">
+			<xsl:variable name="schema">
+				<xsl:value-of select="substring-before(@file,'expg')"/>
+			</xsl:variable>
+			<!-- generate SVG from .xml -->
+			<!-- Note: the variable generateSVG is using just for call the function 'generateSVG' -->
+			<xsl:variable name="generateSVG" select="java:generateSVG(java:org.metanorma.stepmod2mn.new(),concat($path,'/','../../resources/', $schema,'/',@file),'',$outpath_schemas,false())"/>
+		</xsl:for-each>
+
 		<xsl:text>&#xa;&#xa;</xsl:text>
 		<xsl:text>[lutaml_express, schemas, context, leveloffset=+1]</xsl:text>
 		<xsl:text>&#xa;</xsl:text>

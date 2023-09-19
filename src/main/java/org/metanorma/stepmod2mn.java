@@ -162,6 +162,8 @@ public class stepmod2mn {
     
     String boilerplatePath = "";
 
+    String outputPathSchemas = "";
+
     /**
      * Main method.
      *
@@ -259,6 +261,7 @@ public class stepmod2mn {
                 String resourcePath = "";
 
                 String argOutputPath = "";
+                String outputPathSchemas = "";
                 if (cmd.hasOption("output")) {
                     argOutputPath = cmd.getOptionValue("output");
                     String outPath_normalized = argOutputPath;
@@ -268,6 +271,11 @@ public class stepmod2mn {
                     File fXMLout = new File(outPath_normalized);
                     argOutputPath = fXMLout.getAbsoluteFile().toString();
                     //new File(fXMLout.getParent()).mkdirs();
+
+                    Path schemasPath = Paths.get(new File(argOutputPath).getParent(), "schemas");
+                    // create 'schemas' folder at the same level as output folder (for instance 'documents')
+                    outputPathSchemas = schemasPath.toString();
+                    new File(outputPathSchemas).mkdirs();
                 }
 
                 String boilerplatePath = "";
@@ -400,6 +408,7 @@ public class stepmod2mn {
                             resourcePath = fileIn.getParent() + File.separator;
                         }
                         app.setResourcePath(resourcePath);
+                        app.setOutputPathSchemas(outputPathSchemas);
                         app.convertstepmod2mn(filenameIn, fileOut);
                     }
 
@@ -485,6 +494,7 @@ public class stepmod2mn {
                 outputPath = System.getProperty("user.dir");
             }
             transformer.setParameter("outpath", outputPath);
+            transformer.setParameter("outpath_schemas", outputPathSchemas);
             transformer.setParameter("boilerplate_path", boilerplatePath);
 
             transformer.setParameter("debug", DEBUG);
@@ -528,7 +538,11 @@ public class stepmod2mn {
     public void setResourcePath(String resourcePath) {
         this.resourcePath = resourcePath;
     }
-    
+
+    public void setOutputPathSchemas(String outputPathSchemas) {
+        this.outputPathSchemas = outputPathSchemas;
+    }
+
     public void setBoilerplatePath(String boilerplatePath) {
         this.boilerplatePath = boilerplatePath;
     }

@@ -48,6 +48,7 @@
 			
 	<xsl:param name="path"/>
 	<xsl:param name="outpath"/>
+	<xsl:param name="outpath_schemas"/>
   
 	<xsl:param name="boilerplate_path"/>
 	
