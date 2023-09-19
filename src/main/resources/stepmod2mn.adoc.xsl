@@ -550,7 +550,9 @@
 		<xsl:variable name="label" select="normalize-space($label_)"/> -->
 		<xsl:variable name="label" select="normalize-space(@anchor)"/>
 		
-		<xsl:text>&lt;&lt;express:</xsl:text>
+		<!-- 'express:' commented, see https://github.com/metanorma/stepmod2mn/issues/57 -->
+		<!-- <xsl:text>&lt;&lt;express:</xsl:text> -->
+		<xsl:text>&lt;&lt;</xsl:text>
 		<!-- <xsl:if test="$schema != ''"><xsl:value-of select="$schema"/>:</xsl:if> -->
 		<xsl:value-of select="$schema_prefix_label"/>
 		<xsl:if test="$label != ''">, <xsl:value-of select="$label"/></xsl:if>
