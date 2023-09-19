@@ -650,7 +650,9 @@
       </xsl:choose>
 	</xsl:template>
 	<xsl:template match="sub2" mode="text">
-		<xsl:text>~~</xsl:text><xsl:apply-templates mode="text"/><xsl:text>~~</xsl:text>
+		<!-- <xsl:text>~~</xsl:text><xsl:apply-templates mode="text"/><xsl:text>~~</xsl:text> -->
+		<!-- https://github.com/metanorma/stepmod2mn/issues/67 -->
+		<xsl:text>~</xsl:text><xsl:apply-templates mode="text"/><xsl:text>~</xsl:text>
 	</xsl:template>
 	
 	<xsl:template match="sup" mode="text">
@@ -667,7 +669,9 @@
       </xsl:choose>
 	</xsl:template>
 	<xsl:template match="sup2" mode="text">
-		<xsl:text>^^</xsl:text><xsl:apply-templates mode="text"/><xsl:text>^^</xsl:text>
+		<!-- https://github.com/metanorma/stepmod2mn/issues/67 -->
+		<!-- <xsl:text>^^</xsl:text><xsl:apply-templates mode="text"/><xsl:text>^^</xsl:text> -->
+		<xsl:text>^</xsl:text><xsl:apply-templates mode="text"/><xsl:text>^</xsl:text>
 	</xsl:template>
 	
 	<xsl:template match="br" mode="text">
