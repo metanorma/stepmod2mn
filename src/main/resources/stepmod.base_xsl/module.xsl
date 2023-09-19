@@ -1404,7 +1404,9 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
     <xsl:text>ARM short form EXPRESS</xsl:text>
     <xsl:text>| </xsl:text>
       
-    <xsl:text>&lt;&lt;express:</xsl:text><xsl:value-of select="$arm"/><xsl:text>.htm, htm&gt;&gt;</xsl:text>
+		<!-- 'express:' commented, see https://github.com/metanorma/stepmod2mn/issues/57 -->
+		<!-- <xsl:text>&lt;&lt;express:</xsl:text> -->
+    <xsl:text>&lt;&lt;</xsl:text><xsl:value-of select="$arm"/><xsl:text>.htm, </xsl:text><xsl:value-of select="$arm"/><xsl:text>.htm&gt;&gt;</xsl:text>
     
     <xsl:call-template name="output_express_links">
       <xsl:with-param name="module" select="/module/@name"/>
@@ -1458,7 +1460,9 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
         </a>
       </xsl:with-param>
     </xsl:call-template> -->
-    <xsl:text>&lt;&lt;express:</xsl:text><xsl:value-of select="$mim"/><xsl:text>.htm, htm&gt;&gt;</xsl:text>
+		<!-- 'express:' commented, see https://github.com/metanorma/stepmod2mn/issues/57 -->
+    <!-- <xsl:text>&lt;&lt;express:</xsl:text> -->
+    <xsl:text>&lt;&lt;</xsl:text><xsl:value-of select="$mim"/><xsl:text>.htm, </xsl:text><xsl:value-of select="$mim"/><xsl:text>.htm&gt;&gt;</xsl:text>
     
     <xsl:call-template name="output_express_links">
       <xsl:with-param name="module" select="/module/@name"/>
@@ -1512,9 +1516,11 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
       </a>
       </xsl:with-param>
     </xsl:call-template> -->
-    <xsl:text>&lt;&lt;express:</xsl:text>
+		<!-- 'express:' commented, see https://github.com/metanorma/stepmod2mn/issues/57 -->
+    <!-- <xsl:text>&lt;&lt;express:</xsl:text> -->
+    <xsl:text>&lt;&lt;</xsl:text>
     <xsl:value-of select="$file"/>
-    <xsl:text>, exp&gt;&gt;</xsl:text>
+    <xsl:text>, </xsl:text><xsl:value-of select="$file"/><xsl:text>.exp&gt;&gt;</xsl:text>
     <xsl:text>| </xsl:text>
     <!-- <td align="left"> -->
     <xsl:variable name="test_wg_number">
@@ -1595,7 +1601,9 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
       </xsl:with-param>
     </xsl:call-template> -->
     
-    <xsl:text>&lt;&lt;express:</xsl:text><xsl:value-of select="$arm_lf"/><xsl:text>.htm, htm&gt;&gt;</xsl:text>
+		<!-- 'express:' commented, see https://github.com/metanorma/stepmod2mn/issues/57 -->
+		<!-- <xsl:text>&lt;&lt;express:</xsl:text> -->
+    <xsl:text>&lt;&lt;</xsl:text><xsl:value-of select="$arm_lf"/><xsl:text>.htm, </xsl:text><xsl:value-of select="$arm_lf"/><xsl:text>.htm&gt;&gt;</xsl:text>
     
     <xsl:call-template name="output_express_links">
       <xsl:with-param name="module" select="/module/@name"/>
@@ -1647,8 +1655,9 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
         </a>
       </xsl:with-param>
     </xsl:call-template> -->
-    
-    <xsl:text>&lt;&lt;express:</xsl:text><xsl:value-of select="$mim_lf"/><xsl:text>.htm, htm&gt;&gt;</xsl:text>
+    <!-- 'express:' commented, see https://github.com/metanorma/stepmod2mn/issues/57 -->
+		<!-- <xsl:text>&lt;&lt;express:</xsl:text> -->
+    <xsl:text>&lt;&lt;</xsl:text><xsl:value-of select="$mim_lf"/><xsl:text>.htm, </xsl:text><xsl:value-of select="$mim_lf"/><xsl:text>.htm&gt;&gt;</xsl:text>
     
     <xsl:call-template name="output_express_links">
       <xsl:with-param name="module" select="/module/@name"/>
