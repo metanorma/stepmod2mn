@@ -445,16 +445,16 @@
 		<xsl:param name="path"/>
 		<xsl:param name="alttext"/>
 		<xsl:text>&#xa;</xsl:text>
-    <xsl:if test="normalize-space($id) != ''">
+		<xsl:if test="normalize-space($id) != ''">
 		<xsl:text>[[</xsl:text>
-      <xsl:value-of select="$id"/>
-      <xsl:text>]]</xsl:text>
-      <xsl:text>&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:if test="normalize-space($title) != ''">
-      <xsl:text>.</xsl:text><xsl:value-of select="$title"/>
-      <xsl:text>&#xa;</xsl:text>
-    </xsl:if>
+			<xsl:value-of select="$id"/>
+			<xsl:text>]]</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+		</xsl:if>
+		<xsl:if test="normalize-space($title) != ''">
+			<xsl:text>.</xsl:text><xsl:value-of select="$title"/>
+			<xsl:text>&#xa;</xsl:text>
+		</xsl:if>
 		<xsl:text>image::</xsl:text>
 		<xsl:value-of select="$path"/>
 		<xsl:text>[</xsl:text>
