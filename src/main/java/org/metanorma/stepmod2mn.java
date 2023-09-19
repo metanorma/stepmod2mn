@@ -287,6 +287,7 @@ public class stepmod2mn {
 
                 List<Map.Entry<String,String>> inputOutputFiles = new ArrayList<>();
 
+                boolean isStandaloneXML = false;
                 // if remote file (http or https)
                 if (Util.isUrl(argXMLin)) {
 
@@ -303,6 +304,7 @@ public class stepmod2mn {
                         argOutputPath = argOutputPath + Constants.FORMAT;
                     }
 
+                    isStandaloneXML = true;
                     inputOutputFiles.add(new AbstractMap.SimpleEntry<>(argXMLin, argOutputPath));
 
                     /*
@@ -379,6 +381,7 @@ public class stepmod2mn {
                         }
                     }
                     else { // if input is concrete XML file
+                        isStandaloneXML = true;
                         String outAdocFile = "";
                         if (argOutputPath.toLowerCase().endsWith(".adoc")) {
                             outAdocFile = argOutputPath;
@@ -416,6 +419,9 @@ public class stepmod2mn {
                     // Generate metanorma.yml in the root of path
                     //new MetanormaCollection(inputOutputFiles).generate(inputFolder);
                     String metanormaCollectionPath = argOutputPath;
+                    if (isStandaloneXML) {
+                        metanormaCollectionPath = new File(metanormaCollectionPath).getParent();
+                    }
                     if (metanormaCollectionPath == null || metanormaCollectionPath.isEmpty()) {
                         metanormaCollectionPath = inputFolder;
                     }
