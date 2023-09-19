@@ -405,7 +405,12 @@ public class stepmod2mn {
 
                     //if (isInputFolder) {
                     // Generate metanorma.yml in the root of path
-                    new MetanormaCollection(inputOutputFiles).generate(inputFolder);
+                    //new MetanormaCollection(inputOutputFiles).generate(inputFolder);
+                    String metanormaCollectionPath = argOutputPath;
+                    if (metanormaCollectionPath == null || metanormaCollectionPath.isEmpty()) {
+                        metanormaCollectionPath = inputFolder;
+                    }
+                    new MetanormaCollection(inputOutputFiles).generate(metanormaCollectionPath);
                     //}
 
                     System.out.println("End!");
