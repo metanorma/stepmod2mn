@@ -239,4 +239,16 @@ public class Util {
         }
         sbBuffer.setLength(0);
     }
+    
+    public static String getRelativePath(String filePath, String outputPath) {
+        Path fullPath = Paths.get(filePath);
+        try {
+            fullPath = fullPath.toRealPath();
+        } catch (IOException e) {
+            e.printStackTrace();;
+        }
+        Path relativePath = Paths.get(outputPath).relativize(fullPath);
+        String strRelativePath = relativePath.toString().replace("\\","/");
+        return strRelativePath;
+    }
 }
