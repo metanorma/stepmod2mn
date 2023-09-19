@@ -239,11 +239,13 @@ public class Util {
         }
         sbBuffer.setLength(0);
     }
-    
+
     public static String getRelativePath(String filePath, String outputPath) {
         Path fullPath = Paths.get(filePath);
         try {
             fullPath = fullPath.toRealPath();
+        } catch (java.nio.file.NoSuchFileException e) {
+          // to prevent exception for non-existing .exp (generates by stepmod-utils)
         } catch (IOException e) {
             e.printStackTrace();;
         }

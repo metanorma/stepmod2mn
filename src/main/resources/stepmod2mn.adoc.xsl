@@ -987,10 +987,7 @@
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:variable>
-				
-				<!-- <xsl:variable name="schema_annotated_exp_relative_path_new" select="java:org.metanorma.Util.getRelativePath($path, $schema_annotated_exp_relative_path, $outpath)"/> -->
 				<xsl:variable name="schema_annotated_exp_relative_path_new" select="java:org.metanorma.Util.getRelativePath($schema_annotated_exp_path, $outpath)"/>
-				
 				<xsl:value-of select="$schema_annotated_exp_relative_path_new"/>
 				<xsl:text>&#xa;</xsl:text>
 				
@@ -1104,7 +1101,23 @@
 			<xsl:text>      docref:</xsl:text>
 			<xsl:text>&#xa;</xsl:text>
 			<xsl:for-each select="resource/schema">
-				<xsl:text>        - fileref: </xsl:text><xsl:value-of select="concat('../../resources/',@name,'/',@name,'.exp')"/> <!-- updated for https://github.com/metanorma/stepmod2mn/issues/49, was ../../../resources/ -->
+				<xsl:text>        - fileref: </xsl:text>
+				<!-- <xsl:value-of select="concat('../../resources/',@name,'/',@name,'.exp')"/> --> <!-- updated for https://github.com/metanorma/stepmod2mn/issues/49, was ../../../resources/ -->
+				
+				<xsl:variable name="schema_exp_relative_path" select="concat('../../resources/',@name,'/',@name,'.exp')"/>
+				<xsl:variable name="schema_exp_path">
+					<xsl:choose>
+						<xsl:when test="$outpath_schemas != ''">
+							<xsl:value-of select="concat($outpath_schemas,'/',@name,'/',@name,'.exp')"/>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:value-of select="concat($path, '/', $schema_exp_relative_path)"/>
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:variable>
+				<xsl:variable name="schema_exp_relative_path_new" select="java:org.metanorma.Util.getRelativePath($schema_exp_path, $outpath)"/>
+				<xsl:value-of select="$schema_exp_relative_path_new"/>
+				
 				<xsl:text>&#xa;</xsl:text>
 				<xsl:text>          identifier: </xsl:text><xsl:value-of select="@name"/><xsl:text>.exp</xsl:text>
 				<xsl:text>&#xa;</xsl:text>
