@@ -613,6 +613,7 @@ public class stepmod2mn {
 
                     transformer.transform(src, sr);
                     String xmlSVG = resultWriter.toString();
+                    new File(svgFilename).getParentFile().mkdirs();
                     try ( 
                         BufferedWriter writer = Files.newBufferedWriter(Paths.get(svgFilename))) {
                             writer.write(xmlSVG);                    

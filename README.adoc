@@ -30,8 +30,7 @@ java -Xss5m -jar target/stepmod2mn-1.17.jar data/resource_docs/draughting_elemen
 NOTE: resulted AsciiDoc found in data/resource_docs/draughting_elements/document.adoc
 
 
-=== Convert specified single XML into the Metanorma AsciiDoc format and save it to the specified folder:
-
+=== Convert specified single XML into the Metanorma AsciiDoc format and save it to the specified file/folder:
 
 [source,sh]
 ----
