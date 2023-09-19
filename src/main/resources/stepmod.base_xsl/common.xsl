@@ -492,9 +492,14 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 			<xsl:with-param name="id" select="concat('figure', $number, $letter)"/>
 			<xsl:with-param name="title" select="./title"/>
 			<xsl:with-param name="path">
-				<xsl:apply-templates select="./img">
-					<xsl:with-param name="alt" select="$title"/>
-				</xsl:apply-templates>
+				<xsl:variable name="img_path">
+					<xsl:apply-templates select="./img">
+						<xsl:with-param name="alt" select="$title"/>
+					</xsl:apply-templates>
+				</xsl:variable>
+				<xsl:variable name="img_path_full" select="concat($path,'/',$img_path)"/>
+				<xsl:variable name="img_path_relative" select="java:org.metanorma.Util.getRelativePath($img_path_full, $outpath)"/>
+				<xsl:value-of select="$img_path_relative"/>
 			</xsl:with-param>
 			<xsl:with-param name="alttext" select="./title"/>
 		</xsl:call-template>

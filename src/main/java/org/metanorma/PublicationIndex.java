@@ -47,7 +47,7 @@ public class PublicationIndex {
             InputStream xmlInputStream = new FileInputStream(filename);
             XMLReader rdr = XMLReaderFactory.createXMLReader();
             TransformerFactory factory = TransformerFactory.newInstance();
-            factory.setURIResolver(new stepmod2mn().new ClasspathResourceURIResolver());
+            factory.setURIResolver(new ClasspathResourceURIResolver());
             InputSource is = new InputSource(xmlInputStream);
             is.setSystemId(filename);
 

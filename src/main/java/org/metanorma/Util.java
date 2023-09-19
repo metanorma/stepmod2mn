@@ -1,11 +1,6 @@
 package org.metanorma;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -13,6 +8,7 @@ import java.net.URL;
 import java.nio.file.*;
 import java.util.Comparator;
 import java.util.Enumeration;
+import java.util.Scanner;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 import java.util.logging.Level;
@@ -221,5 +217,40 @@ public class Util {
             return filename.substring(0, filename.length() - currentExtension.length()) + extension;
         }
         return filename.concat(extension);
+    }
+
+    public static void writeStringToFile(String adoc, File fileOut) throws IOException {
+        try (Scanner scanner = new Scanner(adoc)) {
+            String outputFile = fileOut.getAbsolutePath();
+            StringBuilder sbBuffer = new StringBuilder();
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                sbBuffer.append(line);
+                sbBuffer.append(System.getProperty("line.separator"));
+            }
+            writeBuffer(sbBuffer, outputFile);
+        }
+        System.out.println("Saved (" + fileOut.getName() + ") " + Util.getFileSize(fileOut) + " bytes.");
+    }
+
+    private static void writeBuffer(StringBuilder sbBuffer, String outputFile) throws IOException {
+        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(outputFile))) {
+            writer.write(sbBuffer.toString());
+        }
+        sbBuffer.setLength(0);
+    }
+
+    public static String getRelativePath(String filePath, String outputPath) {
+        Path fullPath = Paths.get(filePath);
+        try {
+            fullPath = fullPath.toRealPath();
+        } catch (java.nio.file.NoSuchFileException e) {
+          // to prevent exception for non-existing .exp (generates by stepmod-utils)
+        } catch (IOException e) {
+            e.printStackTrace();;
+        }
+        Path relativePath = Paths.get(outputPath).relativize(fullPath);
+        String strRelativePath = relativePath.toString().replace("\\","/");
+        return strRelativePath;
     }
 }

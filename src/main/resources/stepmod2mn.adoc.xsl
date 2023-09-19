@@ -445,16 +445,16 @@
 		<xsl:param name="path"/>
 		<xsl:param name="alttext"/>
 		<xsl:text>&#xa;</xsl:text>
-    <xsl:if test="normalize-space($id) != ''">
+		<xsl:if test="normalize-space($id) != ''">
 		<xsl:text>[[</xsl:text>
-      <xsl:value-of select="$id"/>
-      <xsl:text>]]</xsl:text>
-      <xsl:text>&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:if test="normalize-space($title) != ''">
-      <xsl:text>.</xsl:text><xsl:value-of select="$title"/>
-      <xsl:text>&#xa;</xsl:text>
-    </xsl:if>
+			<xsl:value-of select="$id"/>
+			<xsl:text>]]</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+		</xsl:if>
+		<xsl:if test="normalize-space($title) != ''">
+			<xsl:text>.</xsl:text><xsl:value-of select="$title"/>
+			<xsl:text>&#xa;</xsl:text>
+		</xsl:if>
 		<xsl:text>image::</xsl:text>
 		<xsl:value-of select="$path"/>
 		<xsl:text>[</xsl:text>
@@ -973,8 +973,29 @@
 				<xsl:text>  </xsl:text><xsl:value-of select="@name"/><xsl:text>:</xsl:text>
 				<xsl:text>&#xa;</xsl:text>
 				<xsl:text>    path: </xsl:text>
-				<xsl:value-of select="concat('../../resources/',@name,'/',@name,'_annotated.exp')"/>
+				<!-- generate relative path to the schema's annotated.exp -->
+				<!-- current input path: $path -->
+				<!-- Step1: calculate full path to '../../resources/',@name,'/',@name,'_annotated.exp' -->
+				<!-- Step2: calculate relative path to '../../resources/',@name,'/',@name,'_annotated.exp' from output path -->
+				
+				<xsl:variable name="schema_annotated_exp_relative_path" select="concat('../../resources/',@name,'/',@name,'_annotated.exp')"/>
+				<xsl:variable name="schema_annotated_exp_path">
+					<xsl:choose>
+						<xsl:when test="$outpath_schemas != ''">
+							<xsl:value-of select="concat($outpath_schemas,'/',@name,'/',@name,'_annotated.exp')"/>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:value-of select="concat($path, '/', $schema_annotated_exp_relative_path)"/>
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:variable>
+				<xsl:variable name="schema_annotated_exp_relative_path_new" select="java:org.metanorma.Util.getRelativePath($schema_annotated_exp_path, $outpath)"/>
+				<xsl:value-of select="$schema_annotated_exp_relative_path_new"/>
 				<xsl:text>&#xa;</xsl:text>
+				
+				<!-- <xsl:text>    path: </xsl:text>
+				<xsl:value-of select="$schema_annotated_exp_relative_path"/>
+				<xsl:text>&#xa;</xsl:text> -->
 			</xsl:for-each>
 		</redirect:write>
 	</xsl:template>
@@ -1082,7 +1103,23 @@
 			<xsl:text>      docref:</xsl:text>
 			<xsl:text>&#xa;</xsl:text>
 			<xsl:for-each select="resource/schema">
-				<xsl:text>        - fileref: </xsl:text><xsl:value-of select="concat('../../resources/',@name,'/',@name,'.exp')"/> <!-- updated for https://github.com/metanorma/stepmod2mn/issues/49, was ../../../resources/ -->
+				<xsl:text>        - fileref: </xsl:text>
+				<!-- <xsl:value-of select="concat('../../resources/',@name,'/',@name,'.exp')"/> --> <!-- updated for https://github.com/metanorma/stepmod2mn/issues/49, was ../../../resources/ -->
+				
+				<xsl:variable name="schema_exp_relative_path" select="concat('../../resources/',@name,'/',@name,'.exp')"/>
+				<xsl:variable name="schema_exp_path">
+					<xsl:choose>
+						<xsl:when test="$outpath_schemas != ''">
+							<xsl:value-of select="concat($outpath_schemas,'/',@name,'/',@name,'.exp')"/>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:value-of select="concat($path, '/', $schema_exp_relative_path)"/>
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:variable>
+				<xsl:variable name="schema_exp_relative_path_new" select="java:org.metanorma.Util.getRelativePath($schema_exp_path, $outpath)"/>
+				<xsl:value-of select="$schema_exp_relative_path_new"/>
+				
 				<xsl:text>&#xa;</xsl:text>
 				<xsl:text>          identifier: </xsl:text><xsl:value-of select="@name"/><xsl:text>.exp</xsl:text>
 				<xsl:text>&#xa;</xsl:text>

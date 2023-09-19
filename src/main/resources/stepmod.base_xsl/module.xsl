@@ -4239,7 +4239,7 @@ $module_ok,' Check the normatives references')"/>
     </xsl:for-each>
   </xsl:variable>
   
-    <xsl:variable name="generateSVG" select="java:generateSVG(java:org.metanorma.stepmod2mn.new(),concat($path,'/',@file),'',$outpath)"/>
+    <xsl:variable name="generateSVG" select="java:generateSVG(java:org.metanorma.stepmod2mn.new(),concat($path,'/',@file),'',$outpath,true())"/>
   
     <xsl:call-template name="insertImage">
       <xsl:with-param name="id" select="$file"/>
