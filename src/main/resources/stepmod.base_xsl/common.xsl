@@ -751,8 +751,15 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 				<xsl:apply-templates/>
 			</xsl:variable>
 			<xsl:copy-of select="$text"/>
-			
-			<xsl:text>&#xa;&#xa;</xsl:text>
+			<xsl:choose>
+				<xsl:when test="following-sibling::*[1][self::li]">
+					<xsl:text>&#xa;</xsl:text>
+				</xsl:when>
+				<xsl:when test="not(following-sibling::*) and not(../following-sibling::*) and local-name(../..) = 'note'"/>
+				<xsl:otherwise>
+					<xsl:text>&#xa;&#xa;</xsl:text>
+				</xsl:otherwise>
+			</xsl:choose>
 		</xsl:when>
 		<xsl:otherwise>
 			<!-- get the text or the text of the last paragraph. Ignore examples and

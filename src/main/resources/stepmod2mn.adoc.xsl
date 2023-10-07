@@ -323,7 +323,7 @@
 				<xsl:otherwise>*</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
-		
+		<xsl:text>&#xa;</xsl:text>
 		<xsl:call-template name="repeat">
 			<xsl:with-param name="char" select="$list-label_"/>
 			<xsl:with-param name="count" select="$level"/>
