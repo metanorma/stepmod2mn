@@ -1310,8 +1310,7 @@ Purpose:
 			<xsl:text>&#xa;</xsl:text>
 			<xsl:call-template name="insertParagraph">
 			<xsl:with-param name="text">
-				The following are within the scope of this part of ISO 10303:
-			</xsl:with-param>
+				The following are within the scope of this part of ISO 10303:</xsl:with-param>
 		</xsl:call-template>
 		<!-- </p> -->
 		<!--  output any issues -->
@@ -1320,7 +1319,7 @@ Purpose:
 		</xsl:apply-templates>
 
 		<!-- <ul> -->
-		<xsl:text>&#xa;</xsl:text>
+		<!-- <xsl:text>&#xa;</xsl:text> -->
 			<xsl:apply-templates/>
 		<!-- </ul> -->
 		<xsl:text>&#xa;&#xa;</xsl:text>
@@ -1335,8 +1334,7 @@ Purpose:
 			<xsl:text>&#xa;</xsl:text>
 			<xsl:call-template name="insertParagraph">
 				<xsl:with-param name="text">
-					The following are outside the scope of this part of ISO 10303:
-				</xsl:with-param>
+					The following are outside the scope of this part of ISO 10303:</xsl:with-param>
 			</xsl:call-template>
 		<!-- </p> -->
 		<!-- output any issues -->
@@ -1345,7 +1343,7 @@ Purpose:
 		</xsl:apply-templates>
 
 		<!-- <ul> -->
-		<xsl:text>&#xa;</xsl:text>
+		<!-- <xsl:text>&#xa;</xsl:text> -->
 			<xsl:apply-templates/>
 		<!-- </ul> -->
 		<xsl:text>&#xa;&#xa;</xsl:text>

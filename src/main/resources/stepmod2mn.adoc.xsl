@@ -323,7 +323,7 @@
 				<xsl:otherwise>*</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
-		
+		<xsl:text>&#xa;</xsl:text>
 		<xsl:call-template name="repeat">
 			<xsl:with-param name="char" select="$list-label_"/>
 			<xsl:with-param name="count" select="$level"/>
@@ -883,7 +883,9 @@
 			parent::i or parent::i2 or 
 			parent::tt or parent::tt2 or 
 			parent::sup or parent::sup2 or 
-			parent::sub or parent::sub2)]" mode="linearize">
+			parent::sub or parent::sub2 or 
+			parent::li_label or 
+			preceding-sibling::node()[1][self::li_label])]" mode="linearize">
 		<xsl:variable name="text_1" select="translate(., '&#xa;&#x9;', '  ')"/>
 		<xsl:variable name="text_2" select="java:replaceAll(java:java.lang.String.new($text_1),'\s+',' ')"/>
 		<xsl:call-template name="trimSpaces">
