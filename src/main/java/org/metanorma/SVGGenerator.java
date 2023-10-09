@@ -16,7 +16,8 @@ public class SVGGenerator {
     public void generateSVG(String xmlFile, String image, String outPath, boolean isSVGmap) {
         try {
             String content = new String(Files.readAllBytes(Paths.get(xmlFile)));
-            if (content.contains("img.area")) {
+            //if (content.contains("img.area")) {
+            if (content.contains("imgfile.content")) {
                 String folder = new File(xmlFile).getParent() + File.separator;
                 //String svgFilename = xmlFile.substring(0, xmlFile.length() - XML_EXTENSION.length()) + SVG_EXTENSION;
                 String svgFilename = Util.changeFileExtension(xmlFile, SVG_EXTENSION);
