@@ -2,6 +2,8 @@ package org.metanorma;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -16,6 +18,9 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathFactory;
 import java.io.*;
 import java.net.URL;
 import java.nio.file.Path;
@@ -128,6 +133,29 @@ public class XMLUtils {
         } catch (SAXException | IOException | ParserConfigurationException e) {
             e.printStackTrace(System.err);
             System.exit(Constants.ERROR_EXIT_CODE);
+        }
+        return "";
+    }
+
+    public static String getTextByXPath(String xml, String expression) {
+        try {
+            InputSource is = new InputSource();
+            is.setCharacterStream(new StringReader(xml));
+
+            DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = builderFactory.newDocumentBuilder();
+            Document xmlDocument = builder.parse(is);
+            XPath xPath = XPathFactory.newInstance().newXPath();
+
+            NodeList nodeList = (NodeList) xPath.compile(expression).evaluate(xmlDocument, XPathConstants.NODESET);
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < nodeList.getLength(); i++) {
+                Node node = nodeList.item(i);
+                sb.append(node.getNodeValue());
+            }
+            return sb.toString();
+        } catch (Exception ex) {
+            System.err.println("Can't retrieve the text by XPath '" + expression + "':" + ex);
         }
         return "";
     }

@@ -1,7 +1,6 @@
 package org.metanorma;
 
 import java.io.*;
-import java.net.URI;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -10,21 +9,15 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
+
 import javax.xml.transform.Source;
 import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.URIResolver;
-import javax.xml.transform.sax.SAXSource;
+
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -33,15 +26,9 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
+
 import org.xml.sax.SAXParseException;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
+
 
 /**
  * This class for the conversion of an NISO/ISO XML file to Metanorma XML or AsciiDoc
@@ -292,7 +279,7 @@ public class stepmod2mn {
                 if (Util.isUrl(argXMLin)) {
 
                     if (!Util.isUrlExists(argXMLin)) {
-                        System.out.println(String.format(INPUT_NOT_FOUND, XML_INPUT, argXMLin));
+                        System.err.println(String.format(INPUT_NOT_FOUND, XML_INPUT, argXMLin));
                         System.exit(Constants.ERROR_EXIT_CODE);
                     }
 
@@ -327,7 +314,7 @@ public class stepmod2mn {
                     fXMLin = fXMLin.getAbsoluteFile();
                     //System.out.println("fXMLin=" + fXMLin.toString());
                     if (!fXMLin.exists()) {
-                        System.out.println(String.format(INPUT_NOT_FOUND, XML_INPUT, fXMLin));
+                        System.err.println(String.format(INPUT_NOT_FOUND, XML_INPUT, fXMLin));
                         System.exit(Constants.ERROR_EXIT_CODE);
                     }
 
@@ -394,6 +381,9 @@ public class stepmod2mn {
                 }
 
                 try {
+
+                    List<Map.Entry<String,String>> badInputOutputFiles = new ArrayList<>();
+
                     for (Map.Entry<String,String> entry: inputOutputFiles) {
                         String filenameIn = entry.getKey();
                         String filenameOut = entry.getValue();
@@ -412,8 +402,13 @@ public class stepmod2mn {
                         }
                         app.setResourcePath(resourcePath);
                         app.setOutputPathSchemas(outputPathSchemas);
-                        app.convertstepmod2mn(filenameIn, fileOut);
+                        boolean res = app.convertstepmod2mn(filenameIn, fileOut);
+                        if (!res) {
+                            badInputOutputFiles.add(entry);
+                        }
                     }
+
+                    inputOutputFiles.removeAll(badInputOutputFiles);
 
                     //if (isInputFolder) {
                     // Generate metanorma.yml in the root of path
@@ -452,7 +447,7 @@ public class stepmod2mn {
     }
 
     //private void convertstepmod2mn(File fXMLin, File fileOut) throws IOException, TransformerException, SAXParseException {
-    private void convertstepmod2mn(String xmlFilePath, File fileOut) throws IOException, TransformerException, SAXParseException {
+    private boolean convertstepmod2mn(String xmlFilePath, File fileOut) throws IOException, TransformerException, SAXParseException {
         System.out.println("Transforming...");
         try {
             Source srcXSL = null;
@@ -461,7 +456,15 @@ public class stepmod2mn {
             
             // get linearized XML with default attributes substitution from DTD
             String linearizedXML = XMLUtils.processLinearizedXML(xmlFilePath);
-            
+
+            // Issue: https://github.com/metanorma/stepmod2mn/issues/75
+            // check @part
+            String part = XMLUtils.getTextByXPath(linearizedXML, "*/@part");
+            if (part.isEmpty() || !Util.isNumeric(part)) {
+                System.err.println("Ignore document processing due the wrong attribute 'part' value: '" + part + "'");
+                return false;
+            }
+
             // load linearized xml
             Source src = new StreamSource(new StringReader(linearizedXML));
             ClassLoader cl = this.getClass().getClassLoader();
@@ -519,6 +522,7 @@ public class stepmod2mn {
             e.printStackTrace(System.err);
             System.exit(Constants.ERROR_EXIT_CODE);
         }
+        return true;
     }
 
 
@@ -562,7 +566,7 @@ public class stepmod2mn {
                 .filter(f -> f.toLowerCase().endsWith(Constants.XML_EXTENSION))
                 .collect(Collectors.toList());
         } catch (Exception e) {
-            System.out.println("Can't generate SVG file(s) for " + xmlFilePath + "...");
+            System.err.println("Can't generate SVG file(s) for " + xmlFilePath + "...");
             e.printStackTrace();
         }
         for(String xmlFile: xmlFiles) {

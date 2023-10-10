@@ -54,7 +54,7 @@ public class Util {
         ClassLoader classLoader = ClassLoader.getSystemClassLoader();
         try (InputStream is = classLoader.getResourceAsStream(fileName)) {
             if (is == null) {
-                System.out.println("Cannot get resource \"" + fileName + "\" from Jar file.");
+                System.err.println("Cannot get resource \"" + fileName + "\" from Jar file.");
                 return null;
             }
             try (InputStreamReader isr = new InputStreamReader(is);
@@ -86,9 +86,9 @@ public class Util {
                 }
             } else {
 
-                System.out.println("Cannot create the symbolic link \"" + symbolicLink + "\" for the file " + targetFilename + ".");
+                System.err.println("Cannot create the symbolic link \"" + symbolicLink + "\" for the file " + targetFilename + ".");
                 if (ex instanceof FileSystemException) {
-                    System.out.println(((FileSystemException) ex).getReason());
+                    System.err.println(((FileSystemException) ex).getReason());
                 }
             }
         }
@@ -100,7 +100,7 @@ public class Util {
             Path target = Paths.get(targetFilename);
             Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException ex) {
-            System.out.println("Cannot copy the file \"" + sourceFilename + "\" to the file " + targetFilename + ": " + ex);
+            System.err.println("Cannot copy the file \"" + sourceFilename + "\" to the file " + targetFilename + ": " + ex);
         }
     }
 
@@ -252,5 +252,17 @@ public class Util {
         Path relativePath = Paths.get(outputPath).relativize(fullPath);
         String strRelativePath = relativePath.toString().replace("\\","/");
         return strRelativePath;
+    }
+
+    public static boolean isNumeric(String strNum) {
+        if (strNum == null) {
+            return false;
+        }
+        try {
+            int d = Integer.parseInt(strNum);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+        return true;
     }
 }
