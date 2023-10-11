@@ -45,6 +45,8 @@ public class stepmod2mn {
     static final String INPUT_LOG = "Input: %s (%s)";    
     static final String OUTPUT_LOG = "Output: %s (%s)";
 
+    static final String ERRORS_FATAL_LOG = "errors.fatal.log.txt";
+
     static final String SVG_EXTENSION = ".svg";
 
     static boolean DEBUG = false;
@@ -515,10 +517,18 @@ public class stepmod2mn {
             if (outputPath == null) {
                 outputPath = System.getProperty("user.dir");
             }
+
+            Path pathFileErrorsFatalLog = Paths.get(outputPath, ERRORS_FATAL_LOG);
+            File fileErrorsFatalLog = new File(pathFileErrorsFatalLog.toString());
+            if (fileErrorsFatalLog.exists()) {
+                Files.delete(pathFileErrorsFatalLog);
+            }
+
             transformer.setParameter("outpath", outputPath);
             transformer.setParameter("outpath_schemas", outputPathSchemas);
             transformer.setParameter("boilerplate_path", boilerplatePath);
             transformer.setParameter("repositoryIndex_path", repositoryIndexPath);
+            transformer.setParameter("errors_fatal_log", ERRORS_FATAL_LOG);
 
             transformer.setParameter("debug", DEBUG);
 
@@ -529,6 +539,15 @@ public class stepmod2mn {
             String adoc = resultWriter.toString();
 
             Util.writeStringToFile(adoc, fileOut);
+
+            if (fileErrorsFatalLog.length() != 0) {
+                // delete current file from list
+            } else {
+                // delete empty
+                if (Files.exists(fileErrorsFatalLog.toPath())) {
+                    Files.delete(pathFileErrorsFatalLog);
+                }
+            }
 
         } catch (SAXParseException e) {            
             throw (e);

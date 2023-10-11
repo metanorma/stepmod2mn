@@ -265,4 +265,9 @@ public class Util {
         }
         return true;
     }
+
+    public static boolean fileExists(String filename) {
+        Path path = Paths.get(filename);
+        return Files.exists(path);
+    }
 }
