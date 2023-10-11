@@ -149,6 +149,8 @@ public class stepmod2mn {
     
     String boilerplatePath = "";
 
+    String repositoryIndexPath = "";
+
     String outputPathSchemas = "";
 
     /**
@@ -275,6 +277,7 @@ public class stepmod2mn {
                 List<Map.Entry<String,String>> inputOutputFiles = new ArrayList<>();
 
                 boolean isStandaloneXML = false;
+                String repositoryIndexPath = "";
                 // if remote file (http or https)
                 if (Util.isUrl(argXMLin)) {
 
@@ -328,6 +331,9 @@ public class stepmod2mn {
                     if (fXMLin.isDirectory()) {
                         inputFolder = fXMLin.getAbsolutePath();
 
+                        RepositoryIndex repositoryIndex = new RepositoryIndex(inputFolder);
+                        repositoryIndexPath = repositoryIndex.getPath();
+
                         try (Stream<Path> walk = Files.walk(Paths.get(fXMLin.getAbsolutePath()))) {
                             List<String> inputXMLfiles = walk.map(x -> x.toString())
                                     .filter(f -> f.endsWith("resource.xml") || f.endsWith("module.xml")).collect(Collectors.toList());
@@ -347,6 +353,9 @@ public class stepmod2mn {
                             File rootFolder = fpublication_index.getParentFile().getParentFile().getParentFile().getParentFile();
                             // inputFolder is root of repository
                             inputFolder = rootFolder.getAbsolutePath();
+
+                            RepositoryIndex repositoryIndex = new RepositoryIndex(argXMLin_normalized);
+                            repositoryIndexPath = repositoryIndex.getPath();
 
                             PublicationIndex publicationIndex = new PublicationIndex(argXMLin_normalized);
                             String documentType = "";
@@ -376,6 +385,9 @@ public class stepmod2mn {
                             outAdocFile = XMLUtils.getOutputAdocPath(argOutputPath, argXMLin.toString());
                         }
 
+                        RepositoryIndex repositoryIndex = new RepositoryIndex(argXMLin);
+                        repositoryIndexPath = repositoryIndex.getPath();
+
                         inputOutputFiles.add(new AbstractMap.SimpleEntry<>(argXMLin, outAdocFile));
                     }
                 }
@@ -401,6 +413,7 @@ public class stepmod2mn {
                             resourcePath = fileIn.getParent() + File.separator;
                         }
                         app.setResourcePath(resourcePath);
+                        app.setRepositoryIndexPath(repositoryIndexPath);
                         app.setOutputPathSchemas(outputPathSchemas);
                         boolean res = app.convertstepmod2mn(filenameIn, fileOut);
                         if (!res) {
@@ -505,6 +518,7 @@ public class stepmod2mn {
             transformer.setParameter("outpath", outputPath);
             transformer.setParameter("outpath_schemas", outputPathSchemas);
             transformer.setParameter("boilerplate_path", boilerplatePath);
+            transformer.setParameter("repositoryIndex_path", repositoryIndexPath);
 
             transformer.setParameter("debug", DEBUG);
 
@@ -555,6 +569,10 @@ public class stepmod2mn {
 
     public void setBoilerplatePath(String boilerplatePath) {
         this.boilerplatePath = boilerplatePath;
+    }
+
+    public void setRepositoryIndexPath(String repositoryIndexPath) {
+        this.repositoryIndexPath = repositoryIndexPath;
     }
 
     public void generateSVG(String xmlFilePath, String image, String outPath, boolean isSVGmap) throws IOException, TransformerException, SAXParseException {

@@ -57,6 +57,7 @@
 	<xsl:param name="outpath_schemas"/>
   
 	<xsl:param name="boilerplate_path"/>
+	<xsl:param name="repositoryIndex_path"/>
 	
 	<!-- placeholders, global variables -->
 	<xsl:variable name="FILE_EXT" select="'.xml'"/>
