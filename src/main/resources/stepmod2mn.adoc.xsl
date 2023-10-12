@@ -1108,17 +1108,24 @@
 			<xsl:text>&#xa;</xsl:text>
 			<xsl:text>      docref:</xsl:text>
 			<xsl:text>&#xa;</xsl:text>
+			<xsl:variable name="current_resource_name" select="resource/@name"/>
 			<xsl:for-each select="resource/schema">
 				<xsl:text>        - fileref: </xsl:text>
 				<!-- <xsl:value-of select="concat('../../resources/',@name,'/',@name,'.exp')"/> --> <!-- updated for https://github.com/metanorma/stepmod2mn/issues/49, was ../../../resources/ -->
 				
 				<xsl:variable name="schema_exp_relative_path" select="concat('../../resources/',@name,'/',@name,'.exp')"/>
-				
 				<xsl:variable name="schema_exp_exists" select="java:org.metanorma.Util.fileExists(concat($path, '/', $schema_exp_relative_path))"/>
 				<xsl:if test="normalize-space($schema_exp_exists) = 'false'">
-					<redirect:write file="{$errors_fatal_log_filename}">
-						<xsl:text>Error: the file '</xsl:text><xsl:value-of select="$schema_exp_relative_path"/><xsl:text>' does not exist.&#xa;</xsl:text>
-					</redirect:write>
+					<xsl:variable name="msg">Error: the file '<xsl:value-of select="$schema_exp_relative_path"/>' does not exist.</xsl:variable>
+					<xsl:message><xsl:value-of select="$msg"/></xsl:message>
+					<xsl:message><xsl:value-of select="$repositoryIndex_path"/></xsl:message>
+					<xsl:if test="$repositoryIndex_path != ''">
+						<xsl:if test="count(document($repositoryIndex_path)//resource_doc[@name = $current_resource_name]) = 0">
+							<redirect:write file="{$errors_fatal_log_filename}">
+								<xsl:value-of select="$msg"/><xsl:text>&#xa;</xsl:text>
+							</redirect:write>
+						</xsl:if>
+					</xsl:if>
 				</xsl:if>
         
 				<xsl:variable name="schema_exp_path">

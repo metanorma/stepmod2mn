@@ -541,7 +541,9 @@ public class stepmod2mn {
             Util.writeStringToFile(adoc, fileOut);
 
             if (fileErrorsFatalLog.length() != 0) {
-                // delete current file from list
+                // if current document doesn't exist in the repository index, then
+                // then delete it from list
+                return false;
             } else {
                 // delete empty
                 if (Files.exists(fileErrorsFatalLog.toPath())) {
