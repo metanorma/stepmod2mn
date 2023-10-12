@@ -51,6 +51,10 @@
 	<xsl:param name="outpath_schemas"/>
   
 	<xsl:param name="boilerplate_path"/>
+	<xsl:param name="repositoryIndex_path"/>
+	<xsl:param name="errors_fatal_log"/>
+	<xsl:param name="errors_fatal_log_filename" select="concat($outpath, '/', $errors_fatal_log)"/>
+  
 	
 	<!-- placeholders, global variables -->
 	<xsl:variable name="FILE_EXT" select="'.xml'"/>
@@ -257,6 +261,8 @@
 		<!-- Generation schemas.yaml -->
 		<xsl:call-template name="generateSchemasYaml"/>
 		
+		<redirect:open file="{$errors_fatal_log_filename}"/>
+		
 		<!-- Generation collection.yml -->
 		<xsl:call-template name="generateCollectionYaml">
 			<xsl:with-param name="data_element">
@@ -270,6 +276,8 @@
 				</data>
 			</xsl:with-param>
 		</xsl:call-template>
+		
+		<redirect:close file="{$errors_fatal_log_filename}"/>
 		
 		<xsl:call-template name="generateHtmlAttachmentsSH"/>
 		

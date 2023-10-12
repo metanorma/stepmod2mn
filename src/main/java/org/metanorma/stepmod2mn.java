@@ -1,7 +1,6 @@
 package org.metanorma;
 
 import java.io.*;
-import java.net.URI;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -10,21 +9,15 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
+
 import javax.xml.transform.Source;
 import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.URIResolver;
-import javax.xml.transform.sax.SAXSource;
+
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -33,15 +26,9 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
+
 import org.xml.sax.SAXParseException;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
+
 
 /**
  * This class for the conversion of an NISO/ISO XML file to Metanorma XML or AsciiDoc
@@ -57,6 +44,8 @@ public class stepmod2mn {
     static final String XML_INPUT = "XML";    
     static final String INPUT_LOG = "Input: %s (%s)";    
     static final String OUTPUT_LOG = "Output: %s (%s)";
+
+    static final String ERRORS_FATAL_LOG = "errors.fatal.log.txt";
 
     static final String SVG_EXTENSION = ".svg";
 
@@ -161,6 +150,8 @@ public class stepmod2mn {
     String resourcePath = "";
     
     String boilerplatePath = "";
+
+    String repositoryIndexPath = "";
 
     String outputPathSchemas = "";
 
@@ -288,11 +279,12 @@ public class stepmod2mn {
                 List<Map.Entry<String,String>> inputOutputFiles = new ArrayList<>();
 
                 boolean isStandaloneXML = false;
+                String repositoryIndexPath = "";
                 // if remote file (http or https)
                 if (Util.isUrl(argXMLin)) {
 
                     if (!Util.isUrlExists(argXMLin)) {
-                        System.out.println(String.format(INPUT_NOT_FOUND, XML_INPUT, argXMLin));
+                        System.err.println(String.format(INPUT_NOT_FOUND, XML_INPUT, argXMLin));
                         System.exit(Constants.ERROR_EXIT_CODE);
                     }
 
@@ -327,7 +319,7 @@ public class stepmod2mn {
                     fXMLin = fXMLin.getAbsoluteFile();
                     //System.out.println("fXMLin=" + fXMLin.toString());
                     if (!fXMLin.exists()) {
-                        System.out.println(String.format(INPUT_NOT_FOUND, XML_INPUT, fXMLin));
+                        System.err.println(String.format(INPUT_NOT_FOUND, XML_INPUT, fXMLin));
                         System.exit(Constants.ERROR_EXIT_CODE);
                     }
 
@@ -340,6 +332,9 @@ public class stepmod2mn {
                     // if input path in the directory
                     if (fXMLin.isDirectory()) {
                         inputFolder = fXMLin.getAbsolutePath();
+
+                        RepositoryIndex repositoryIndex = new RepositoryIndex(inputFolder);
+                        repositoryIndexPath = repositoryIndex.getPath();
 
                         try (Stream<Path> walk = Files.walk(Paths.get(fXMLin.getAbsolutePath()))) {
                             List<String> inputXMLfiles = walk.map(x -> x.toString())
@@ -360,6 +355,9 @@ public class stepmod2mn {
                             File rootFolder = fpublication_index.getParentFile().getParentFile().getParentFile().getParentFile();
                             // inputFolder is root of repository
                             inputFolder = rootFolder.getAbsolutePath();
+
+                            RepositoryIndex repositoryIndex = new RepositoryIndex(argXMLin_normalized);
+                            repositoryIndexPath = repositoryIndex.getPath();
 
                             PublicationIndex publicationIndex = new PublicationIndex(argXMLin_normalized);
                             String documentType = "";
@@ -389,11 +387,17 @@ public class stepmod2mn {
                             outAdocFile = XMLUtils.getOutputAdocPath(argOutputPath, argXMLin.toString());
                         }
 
+                        RepositoryIndex repositoryIndex = new RepositoryIndex(argXMLin);
+                        repositoryIndexPath = repositoryIndex.getPath();
+
                         inputOutputFiles.add(new AbstractMap.SimpleEntry<>(argXMLin, outAdocFile));
                     }
                 }
 
                 try {
+
+                    List<Map.Entry<String,String>> badInputOutputFiles = new ArrayList<>();
+
                     for (Map.Entry<String,String> entry: inputOutputFiles) {
                         String filenameIn = entry.getKey();
                         String filenameOut = entry.getValue();
@@ -411,9 +415,15 @@ public class stepmod2mn {
                             resourcePath = fileIn.getParent() + File.separator;
                         }
                         app.setResourcePath(resourcePath);
+                        app.setRepositoryIndexPath(repositoryIndexPath);
                         app.setOutputPathSchemas(outputPathSchemas);
-                        app.convertstepmod2mn(filenameIn, fileOut);
+                        boolean res = app.convertstepmod2mn(filenameIn, fileOut);
+                        if (!res) {
+                            badInputOutputFiles.add(entry);
+                        }
                     }
+
+                    inputOutputFiles.removeAll(badInputOutputFiles);
 
                     //if (isInputFolder) {
                     // Generate metanorma.yml in the root of path
@@ -452,7 +462,7 @@ public class stepmod2mn {
     }
 
     //private void convertstepmod2mn(File fXMLin, File fileOut) throws IOException, TransformerException, SAXParseException {
-    private void convertstepmod2mn(String xmlFilePath, File fileOut) throws IOException, TransformerException, SAXParseException {
+    private boolean convertstepmod2mn(String xmlFilePath, File fileOut) throws IOException, TransformerException, SAXParseException {
         System.out.println("Transforming...");
         try {
             Source srcXSL = null;
@@ -461,7 +471,15 @@ public class stepmod2mn {
             
             // get linearized XML with default attributes substitution from DTD
             String linearizedXML = XMLUtils.processLinearizedXML(xmlFilePath);
-            
+
+            // Issue: https://github.com/metanorma/stepmod2mn/issues/75
+            // check @part
+            String part = XMLUtils.getTextByXPath(linearizedXML, "*/@part");
+            if (part.isEmpty() || !Util.isNumeric(part)) {
+                System.err.println("Ignore document processing due the wrong attribute 'part' value: '" + part + "'");
+                return false;
+            }
+
             // load linearized xml
             Source src = new StreamSource(new StringReader(linearizedXML));
             ClassLoader cl = this.getClass().getClassLoader();
@@ -499,9 +517,18 @@ public class stepmod2mn {
             if (outputPath == null) {
                 outputPath = System.getProperty("user.dir");
             }
+
+            Path pathFileErrorsFatalLog = Paths.get(outputPath, ERRORS_FATAL_LOG);
+            File fileErrorsFatalLog = new File(pathFileErrorsFatalLog.toString());
+            if (fileErrorsFatalLog.exists()) {
+                Files.delete(pathFileErrorsFatalLog);
+            }
+
             transformer.setParameter("outpath", outputPath);
             transformer.setParameter("outpath_schemas", outputPathSchemas);
             transformer.setParameter("boilerplate_path", boilerplatePath);
+            transformer.setParameter("repositoryIndex_path", repositoryIndexPath);
+            transformer.setParameter("errors_fatal_log", ERRORS_FATAL_LOG);
 
             transformer.setParameter("debug", DEBUG);
 
@@ -513,12 +540,24 @@ public class stepmod2mn {
 
             Util.writeStringToFile(adoc, fileOut);
 
+            if (fileErrorsFatalLog.length() != 0) {
+                // if current document doesn't exist in the repository index, then
+                // then delete it from list
+                return false;
+            } else {
+                // delete empty
+                if (Files.exists(fileErrorsFatalLog.toPath())) {
+                    Files.delete(pathFileErrorsFatalLog);
+                }
+            }
+
         } catch (SAXParseException e) {            
             throw (e);
         } catch (Exception e) {
             e.printStackTrace(System.err);
             System.exit(Constants.ERROR_EXIT_CODE);
         }
+        return true;
     }
 
 
@@ -553,6 +592,10 @@ public class stepmod2mn {
         this.boilerplatePath = boilerplatePath;
     }
 
+    public void setRepositoryIndexPath(String repositoryIndexPath) {
+        this.repositoryIndexPath = repositoryIndexPath;
+    }
+
     public void generateSVG(String xmlFilePath, String image, String outPath, boolean isSVGmap) throws IOException, TransformerException, SAXParseException {
         List<String> xmlFiles = new ArrayList<>();
         try (Stream<Path> walk = Files.walk(Paths.get(xmlFilePath))) {
@@ -562,7 +605,7 @@ public class stepmod2mn {
                 .filter(f -> f.toLowerCase().endsWith(Constants.XML_EXTENSION))
                 .collect(Collectors.toList());
         } catch (Exception e) {
-            System.out.println("Can't generate SVG file(s) for " + xmlFilePath + "...");
+            System.err.println("Can't generate SVG file(s) for " + xmlFilePath + "...");
             e.printStackTrace();
         }
         for(String xmlFile: xmlFiles) {

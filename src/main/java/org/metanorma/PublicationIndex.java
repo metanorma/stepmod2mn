@@ -79,7 +79,7 @@ public class PublicationIndex {
                 documentsPaths.add(inputXmlFilePath.toString());
             }
         } catch (Exception ex) {
-            System.out.println("Can't process the publication index '" + filename + "':" + ex);
+            System.err.println("Can't process the publication index '" + filename + "':" + ex);
         }
         return documentsPaths;
     }
