@@ -1241,7 +1241,7 @@
 			<xsl:text>&#xa;</xsl:text>
 			<xsl:text>  mv "${local%%.adoc}.html" "sections/schemadocs/${local%%.adoc}.htm"</xsl:text>
 			<xsl:text>&#xa;</xsl:text>
-			<xsl:text>  mv "${local%%.adoc}.err" sections/schemadocs</xsl:text>
+			<xsl:text>  mv "${local%%.adoc}.err.html" sections/schemadocs</xsl:text>
 			<xsl:text>&#xa;</xsl:text>
 			<xsl:text>  mv "${local%%.adoc}.presentation.xml" sections/schemadocs</xsl:text>
 			<xsl:text>&#xa;</xsl:text>
