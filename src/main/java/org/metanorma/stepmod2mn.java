@@ -35,7 +35,7 @@ import org.xml.sax.SAXParseException;
  */
 public class stepmod2mn {
 
-    static final String CMD = "java -Xss5m -jar stepmod2mn.jar <resource or module or publication index xml file> [options -o, -v, -b <path> -t <type>]";
+    static final String CMD = "java -Xss5m -jar stepmod2mn.jar <resource or module or publication index xml file> [options -o, -v, -b <path> -t <type> -e <documents list>]";
     static final String CMD_SVGscope = "java -jar stepmod2mn.jar <start folder to process xml maps files> --svg";
     static final String CMD_SVG = "java -jar stepmod2mn.jar --xml <Express Imagemap XML file path> --image <Image file name> [--svg <resulted SVG map file or folder>] [-v]";
     
@@ -133,6 +133,12 @@ public class stepmod2mn {
                     .hasArg()
                     .required(false)
                     .build());
+            addOption(Option.builder("e")
+                    .longOpt("exclude")
+                    .desc("exclude specified documents (list in the quotes, spaces separated)")
+                    .hasArg()
+                    .required(false)
+                    .build());
             addOption(Option.builder("v")
                     .longOpt("version")
                     .desc("display application version")
@@ -155,6 +161,7 @@ public class stepmod2mn {
 
     String outputPathSchemas = "";
 
+    List<String> excludeList = new ArrayList<>();
     /**
      * Main method.
      *
@@ -272,6 +279,11 @@ public class stepmod2mn {
                 String boilerplatePath = "";
                 if (cmd.hasOption("boilerplatepath")) {
                     boilerplatePath = cmd.getOptionValue("boilerplatepath") + File.separator;
+                }
+
+                List<String> excludeList = new ArrayList<>();
+                if (cmd.hasOption("exclude")) {
+                    excludeList = Arrays.asList(cmd.getOptionValue("exclude").split(" "));
                 }
 
                 String inputFolder = "";
@@ -417,6 +429,7 @@ public class stepmod2mn {
                         app.setResourcePath(resourcePath);
                         app.setRepositoryIndexPath(repositoryIndexPath);
                         app.setOutputPathSchemas(outputPathSchemas);
+                        app.setExcludeList(excludeList);
                         boolean res = app.convertstepmod2mn(filenameIn, fileOut);
                         if (!res) {
                             badInputOutputFiles.add(entry);
@@ -463,7 +476,6 @@ public class stepmod2mn {
 
     //private void convertstepmod2mn(File fXMLin, File fileOut) throws IOException, TransformerException, SAXParseException {
     private boolean convertstepmod2mn(String xmlFilePath, File fileOut) throws IOException, TransformerException, SAXParseException {
-        System.out.println("Transforming...");
         try {
             Source srcXSL = null;
             
@@ -479,6 +491,14 @@ public class stepmod2mn {
                 System.err.println("Ignore document processing due the wrong attribute 'part' value: '" + part + "'");
                 return false;
             }
+
+            String documentName = XMLUtils.getTextByXPath(linearizedXML, "*/@name");
+            if (excludeList.contains(documentName)) {
+                System.out.println(" '" + documentName + "' excluded from the processing.");
+                return false;
+            }
+
+            System.out.println("Transforming...");
 
             // load linearized xml
             Source src = new StreamSource(new StringReader(linearizedXML));
@@ -590,6 +610,10 @@ public class stepmod2mn {
 
     public void setBoilerplatePath(String boilerplatePath) {
         this.boilerplatePath = boilerplatePath;
+    }
+
+    public void setExcludeList(List<String> excludeList) {
+        this.excludeList = excludeList;
     }
 
     public void setRepositoryIndexPath(String repositoryIndexPath) {
