@@ -281,9 +281,10 @@
 		
 		<xsl:call-template name="generateHtmlAttachmentsSH"/>
 		
-		<xsl:call-template name="generateCollectionSH">
+		<!-- commented: https://github.com/metanorma/annotated-express/issues/134 -->
+		<!-- <xsl:call-template name="generateCollectionSH">
 			<xsl:with-param name="partnumber" select="resource/@part"/>
-		</xsl:call-template>
+		</xsl:call-template> -->
 		
 		<xsl:variable name="adoc">
 	
