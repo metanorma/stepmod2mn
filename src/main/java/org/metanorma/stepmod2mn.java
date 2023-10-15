@@ -438,27 +438,29 @@ public class stepmod2mn {
 
                     inputOutputFiles.removeAll(badInputOutputFiles);
 
-                    // Generate collection.sh
-                    new ScriptCollection(inputOutputFiles).generate();
+                    if (!inputOutputFiles.isEmpty()) {
+                        // Generate collection.sh
+                        new ScriptCollection(inputOutputFiles).generate();
 
-                    // Generate collection manifest collection.yml
-                    new MetanormaCollectionManifest(inputOutputFiles).generate();
+                        // Generate collection manifest collection.yml
+                        new MetanormaCollectionManifest(inputOutputFiles).generate();
 
-                    // Generate cover.html
-                    new MetanormaCover(inputOutputFiles).generate();
+                        // Generate cover.html
+                        new MetanormaCover(inputOutputFiles).generate();
 
-                    //if (isInputFolder) {
-                    // Generate metanorma.yml in the root of path
-                    //new MetanormaCollection(inputOutputFiles).generate(inputFolder);
-                    String metanormaCollectionPath = argOutputPath;
-                    if (isStandaloneXML) {
-                        metanormaCollectionPath = new File(metanormaCollectionPath).getParent();
+                        //if (isInputFolder) {
+                        // Generate metanorma.yml in the root of path
+                        //new MetanormaCollection(inputOutputFiles).generate(inputFolder);
+                        String metanormaCollectionPath = argOutputPath;
+                        if (isStandaloneXML) {
+                            metanormaCollectionPath = new File(metanormaCollectionPath).getParent();
+                        }
+                        if (metanormaCollectionPath == null || metanormaCollectionPath.isEmpty()) {
+                            metanormaCollectionPath = inputFolder;
+                        }
+                        new MetanormaCollection(inputOutputFiles).generate(metanormaCollectionPath);
+                        //}
                     }
-                    if (metanormaCollectionPath == null || metanormaCollectionPath.isEmpty()) {
-                        metanormaCollectionPath = inputFolder;
-                    }
-                    new MetanormaCollection(inputOutputFiles).generate(metanormaCollectionPath);
-                    //}
 
                     System.out.println("End!");
 

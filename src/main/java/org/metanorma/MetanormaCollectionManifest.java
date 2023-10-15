@@ -30,6 +30,8 @@ public class MetanormaCollectionManifest {
     public void generate() throws IOException {
         // get repository root folder from 1st file
         String repositoryRootFolder = Util.getRepositoryRootFolder(inputOutputFiles.get(0).getValue());
+
+        int counter = 0;
         for (Map.Entry<String, String> entry : inputOutputFiles) {
             String resultAdoc = entry.getValue();
             String documentFolder = new File(resultAdoc).getParent();
@@ -46,6 +48,8 @@ public class MetanormaCollectionManifest {
             // manifest:
             //  - level: attachments
             update_docref(yamlDocumentObj,1, documentFolder);
+
+            counter++;
         }
 
         DumperOptions options = new DumperOptions();
@@ -62,7 +66,9 @@ public class MetanormaCollectionManifest {
                                 ((ArrayList<Object>)
                                         ((LinkedHashMap <String, Object>)
                                                 yamlDocumentObj.get("manifest"))
-                                                .get("manifest")).get(num)).get("docref"));
+                                                .get("manifest"))
+                                        .get(num))
+                                .get("docref"));
         for (int i = 0; i < docref.size(); i++) {
             Map <String, Object> items = (LinkedHashMap <String, Object>)docref.get(i);
             String fileref = (String)items.get("fileref");
@@ -77,7 +83,9 @@ public class MetanormaCollectionManifest {
                                     ((ArrayList<Object>)
                                             ((LinkedHashMap <String, Object>)
                                                     yamlObj.get("manifest"))
-                                                    .get("manifest")).get(num)).get("docref"));
+                                                    .get("manifest"))
+                                            .get(num))
+                                    .get("docref"));
             if (template_docref == null) {
                 template_docref = new ArrayList<>();
             }
@@ -86,7 +94,9 @@ public class MetanormaCollectionManifest {
                     ((ArrayList<Object>)
                             ((LinkedHashMap <String, Object>)
                                     yamlObj.get("manifest"))
-                                    .get("manifest")).get(num)).put("docref",template_docref);
+                                    .get("manifest"))
+                            .get(num))
+                    .put("docref",template_docref);
         }
     }
 }
