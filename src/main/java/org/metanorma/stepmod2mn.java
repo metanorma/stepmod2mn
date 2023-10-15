@@ -439,8 +439,10 @@ public class stepmod2mn {
                     inputOutputFiles.removeAll(badInputOutputFiles);
 
                     // Generate collection.sh
-                    ScriptCollection scriptCollection = new ScriptCollection(inputOutputFiles);
-                    scriptCollection.generate();
+                    new ScriptCollection(inputOutputFiles).generate();
+
+                    // Generate cover.html
+                    new MetanormaCover(inputOutputFiles).generate();
 
                     //if (isInputFolder) {
                     // Generate metanorma.yml in the root of path
