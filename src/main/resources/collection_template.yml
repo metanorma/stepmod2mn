@@ -1,0 +1,28 @@
+---
+directives:
+- documents-inline
+bibdata:
+  title:
+  - language: en
+    content: Industrial automation systems and integration -- Product data representation
+      and exchange -- Integrated generic resource
+  docid:
+    type: iso
+    id: '10303'
+  edition: '7'
+  copyright:
+    owner:
+      name: International Standards Organization
+      abbreviation: ISO
+    from: '2021'
+manifest:
+  level: collection
+  title: ISO collection
+  manifest:
+  - level: document
+    title: Document
+    docref:
+  - level: attachments
+    title: Attachments
+    docref:
+

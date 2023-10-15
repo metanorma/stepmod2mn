@@ -270,4 +270,36 @@ public class Util {
         Path path = Paths.get(filename);
         return Files.exists(path);
     }
+
+    public static String getRepositoryRootFolder(String startFolder) {
+        // find repository_index.xml
+        RepositoryIndex repositoryIndex = new RepositoryIndex(startFolder);
+        String repositoryIndexPath = repositoryIndex.getPath();
+        if (!repositoryIndexPath.isEmpty()) {
+            return new File(repositoryIndexPath).getParent();
+        } else {
+            // if repository_index.xml isn't found, then find folder that
+            // contains data/resource_docs
+
+            boolean endFoldersTree = false;
+
+            Path repositoryRootPath = Paths.get(startFolder, "data","resource_docs");
+
+            while (!Files.exists(repositoryRootPath) && !endFoldersTree) {
+                try {
+                    startFolder = Paths.get(startFolder).getParent().toString();
+                    repositoryRootPath = Paths.get(startFolder,"data","resource_docs");
+                } catch (Exception ex) {
+                    System.err.println("Can't find the repository root folder.");
+                    endFoldersTree = true;
+                }
+            }
+            if (endFoldersTree) {
+                return "";
+            } else {
+                return repositoryRootPath.toString();
+            }
+        }
+
+    }
 }
