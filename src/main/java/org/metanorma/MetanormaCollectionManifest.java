@@ -30,33 +30,34 @@ public class MetanormaCollectionManifest {
     public void generate() throws IOException {
         // get repository root folder from 1st file
         String repositoryRootFolder = Util.getRepositoryRootFolder(inputOutputFiles.get(0).getValue());
+        if (!repositoryRootFolder.isEmpty()) {
+            int counter = 0;
+            for (Map.Entry<String, String> entry : inputOutputFiles) {
+                String resultAdoc = entry.getValue();
+                String documentFolder = new File(resultAdoc).getParent();
+                File fileResultCollectionYml = Paths.get(documentFolder, "collection.yml").toFile();
+                InputStream is = new FileInputStream(fileResultCollectionYml);
+                Yaml yaml = new Yaml();
+                Map<String, Object> yamlDocumentObj = yaml.load(is);
+                //System.out.println(yamlDocumentObj);
 
-        int counter = 0;
-        for (Map.Entry<String, String> entry : inputOutputFiles) {
-            String resultAdoc = entry.getValue();
-            String documentFolder = new File(resultAdoc).getParent();
-            File fileResultCollectionYml = Paths.get(documentFolder, "collection.yml").toFile();
-            InputStream is = new FileInputStream(fileResultCollectionYml);
-            Yaml yaml = new Yaml();
-            Map<String, Object> yamlDocumentObj = yaml.load(is);
-            //System.out.println(yamlDocumentObj);
+                // manifest:
+                //  - level: document
+                update_docref(yamlDocumentObj,0, documentFolder);
 
-            // manifest:
-            //  - level: document
-            update_docref(yamlDocumentObj,0, documentFolder);
+                // manifest:
+                //  - level: attachments
+                update_docref(yamlDocumentObj,1, documentFolder);
 
-            // manifest:
-            //  - level: attachments
-            update_docref(yamlDocumentObj,1, documentFolder);
+                counter++;
+            }
 
-            counter++;
+            DumperOptions options = new DumperOptions();
+            options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+            Yaml yaml = new Yaml(options);
+            PrintWriter writer = new PrintWriter(Paths.get(repositoryRootFolder, "collection.yml").toFile());
+            yaml.dump(yamlObj, writer);
         }
-
-        DumperOptions options = new DumperOptions();
-        options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
-        Yaml yaml = new Yaml(options);
-        PrintWriter writer = new PrintWriter(Paths.get(repositoryRootFolder, "collection.yml").toFile());
-        yaml.dump(yamlObj, writer);
     }
 
     private void update_docref(Map<String, Object> yamlDocumentObj, int num, String documentFolder) {
