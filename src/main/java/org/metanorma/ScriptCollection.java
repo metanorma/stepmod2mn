@@ -20,8 +20,14 @@ public class ScriptCollection {
         this.inputOutputFiles = inputOutputFiles;
     }
 
-    public void generate(String outputFolder) throws IOException {
-        String repositoryRootFolder = Util.getRepositoryRootFolder(outputFolder);
+    public void generate() throws IOException {
+        // get repository root folder from 1st file
+        String repositoryRootFolder = Util.getRepositoryRootFolder(inputOutputFiles.get(0).getValue());
+
+        String documentFolder = new File(inputOutputFiles.get(0).getValue()).getParent();
+        String documentRelativeFolder = Util.getRelativePath(repositoryRootFolder, documentFolder);
+        String documentsFolder = new File(documentFolder).getParent();
+        String documentsRelativeFolder = Util.getRelativePath(documentsFolder, repositoryRootFolder);
 
         StringBuilder sbScript = new StringBuilder();
         sbScript.append("INPUT_REPOS=\"");
@@ -39,10 +45,12 @@ public class ScriptCollection {
         sbScript.append("for name in $INPUT_REPOS").append("\n")
         .append("do").append("\n")
         .append("  echo $name").append("\n")
-        .append("  cd data/resource_docs/$name").append("\n")
+                //  cd data/resource_docs/$name
+        .append("  cd ").append(documentsRelativeFolder).append("/$name").append("\n")
         .append("  sh ./html_attachments.sh").append("\n")
         .append("  bundle exec metanorma -x xml document.adoc").append("\n")
-        .append("  cd  ../../..").append("\n")
+        //  cd  ../../.."
+        .append("  cd  ").append(documentRelativeFolder).append("\n")
         .append("done").append("\n")
         .append("bundle exec metanorma collection collection.yml -x xml,html,presentation -w iso10303-output -c cover.html").append("\n");
 

@@ -440,7 +440,7 @@ public class stepmod2mn {
 
                     // Generate collection.sh
                     ScriptCollection scriptCollection = new ScriptCollection(inputOutputFiles);
-                    scriptCollection.generate(argOutputPath);
+                    scriptCollection.generate();
 
                     //if (isInputFolder) {
                     // Generate metanorma.yml in the root of path
