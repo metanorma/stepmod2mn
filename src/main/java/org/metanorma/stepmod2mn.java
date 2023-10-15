@@ -441,6 +441,9 @@ public class stepmod2mn {
                     // Generate collection.sh
                     new ScriptCollection(inputOutputFiles).generate();
 
+                    // Generate collection manifest collection.yml
+                    new MetanormaCollectionManifest(inputOutputFiles).generate();
+
                     // Generate cover.html
                     new MetanormaCover(inputOutputFiles).generate();
 
