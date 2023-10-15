@@ -287,7 +287,8 @@ public class Util {
 
             while (!Files.exists(repositoryRootPath) && !endFoldersTree) {
                 try {
-                    repositoryRootPath = Paths.get(Paths.get(startFolder).getParent().toString(),"data","resource_docs");
+                    startFolder = Paths.get(startFolder).getParent().toString();
+                    repositoryRootPath = Paths.get(startFolder,"data","resource_docs");
                 } catch (Exception ex) {
                     System.err.println("Can't find the repository root folder.");
                     endFoldersTree = true;

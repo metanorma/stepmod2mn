@@ -23,39 +23,40 @@ public class ScriptCollection {
     public void generate() throws IOException {
         // get repository root folder from 1st file
         String repositoryRootFolder = Util.getRepositoryRootFolder(inputOutputFiles.get(0).getValue());
+        if(!repositoryRootFolder.isEmpty()) {
+            String documentFolder = new File(inputOutputFiles.get(0).getValue()).getParent();
+            String documentRelativeFolder = Util.getRelativePath(repositoryRootFolder, documentFolder);
+            String documentsFolder = new File(documentFolder).getParent();
+            String documentsRelativeFolder = Util.getRelativePath(documentsFolder, repositoryRootFolder);
 
-        String documentFolder = new File(inputOutputFiles.get(0).getValue()).getParent();
-        String documentRelativeFolder = Util.getRelativePath(repositoryRootFolder, documentFolder);
-        String documentsFolder = new File(documentFolder).getParent();
-        String documentsRelativeFolder = Util.getRelativePath(documentsFolder, repositoryRootFolder);
+            StringBuilder sbScript = new StringBuilder();
+            sbScript.append("INPUT_REPOS=\"");
+            List<String> repos = new ArrayList<>();
+            for (Map.Entry<String,String> entry: inputOutputFiles) {
+                File f = new File(entry.getKey());
+                repos.add(f.getParentFile().getName());
+            }
+            sbScript.append(repos.toString()
+                    .replace("[", "")
+                    .replace("]", "")
+                    .replace(" ", "")
+                    .replace(","," ")).append("\"\n\n");
 
-        StringBuilder sbScript = new StringBuilder();
-        sbScript.append("INPUT_REPOS=\"");
-        List<String> repos = new ArrayList<>();
-        for (Map.Entry<String,String> entry: inputOutputFiles) {
-            File f = new File(entry.getKey());
-            repos.add(f.getParentFile().getName());
+            sbScript.append("for name in $INPUT_REPOS").append("\n")
+            .append("do").append("\n")
+            .append("  echo $name").append("\n")
+                    //  cd data/resource_docs/$name
+            .append("  cd ").append(documentsRelativeFolder).append("/$name").append("\n")
+            .append("  sh ./html_attachments.sh").append("\n")
+            .append("  bundle exec metanorma -x xml document.adoc").append("\n")
+            //  cd  ../../.."
+            .append("  cd  ").append(documentRelativeFolder).append("\n")
+            .append("done").append("\n")
+            .append("bundle exec metanorma collection collection.yml -x xml,html,presentation -w iso10303-output -c cover.html").append("\n");
+
+            BufferedWriter writer = new BufferedWriter(new FileWriter(Paths.get(repositoryRootFolder, "collection.sh").toFile()));
+            writer.write(sbScript.toString());
+            writer.close();
         }
-        sbScript.append(repos.toString()
-                .replace("[", "")
-                .replace("]", "")
-                .replace(" ", "")
-                .replace(","," ")).append("\"\n\n");
-
-        sbScript.append("for name in $INPUT_REPOS").append("\n")
-        .append("do").append("\n")
-        .append("  echo $name").append("\n")
-                //  cd data/resource_docs/$name
-        .append("  cd ").append(documentsRelativeFolder).append("/$name").append("\n")
-        .append("  sh ./html_attachments.sh").append("\n")
-        .append("  bundle exec metanorma -x xml document.adoc").append("\n")
-        //  cd  ../../.."
-        .append("  cd  ").append(documentRelativeFolder).append("\n")
-        .append("done").append("\n")
-        .append("bundle exec metanorma collection collection.yml -x xml,html,presentation -w iso10303-output -c cover.html").append("\n");
-
-        BufferedWriter writer = new BufferedWriter(new FileWriter(Paths.get(repositoryRootFolder, "collection.sh").toFile()));
-        writer.write(sbScript.toString());
-        writer.close();
     }
 }
