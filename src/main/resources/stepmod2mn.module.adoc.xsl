@@ -59,6 +59,7 @@
 	<xsl:param name="boilerplate_path"/>
 	<xsl:param name="repositoryIndex_path"/>
 	<xsl:param name="errors_fatal_log"/>
+	<xsl:param name="errors_fatal_log_filename" select="concat($outpath, '/', $errors_fatal_log)"/>
 	
 	<!-- placeholders, global variables -->
 	<xsl:variable name="FILE_EXT" select="'.xml'"/>
