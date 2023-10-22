@@ -35,7 +35,7 @@ import org.xml.sax.SAXParseException;
  */
 public class stepmod2mn {
 
-    static final String CMD = "java -Xss5m -jar stepmod2mn.jar <resource or module or publication index xml file> [options -o, -v, -b <path> -t <type> -e <documents list>]";
+    static final String CMD = "java -Xss5m -jar stepmod2mn.jar <resource or module or publication index xml file> [options -o, -v, -b <path> -t <type> -e <documents list> -inc <documents list>]";
     static final String CMD_SVGscope = "java -jar stepmod2mn.jar <start folder to process xml maps files> --svg";
     static final String CMD_SVG = "java -jar stepmod2mn.jar --xml <Express Imagemap XML file path> --image <Image file name> [--svg <resulted SVG map file or folder>] [-v]";
     
@@ -139,6 +139,12 @@ public class stepmod2mn {
                     .hasArg()
                     .required(false)
                     .build());
+            addOption(Option.builder("inc")
+                    .longOpt("include-only")
+                    .desc("process specified documents only (list in the quotes, spaces separated)")
+                    .hasArg()
+                    .required(false)
+                    .build());
             addOption(Option.builder("v")
                     .longOpt("version")
                     .desc("display application version")
@@ -162,6 +168,7 @@ public class stepmod2mn {
     String outputPathSchemas = "";
 
     List<String> excludeList = new ArrayList<>();
+    List<String> includeOnlyList = new ArrayList<>();
     /**
      * Main method.
      *
@@ -284,6 +291,11 @@ public class stepmod2mn {
                 List<String> excludeList = new ArrayList<>();
                 if (cmd.hasOption("exclude")) {
                     excludeList = Arrays.asList(cmd.getOptionValue("exclude").split(" "));
+                }
+
+                List<String> includeOnlyList = new ArrayList<>();
+                if (cmd.hasOption("include-only")) {
+                    includeOnlyList = Arrays.asList(cmd.getOptionValue("include-only").split(" "));
                 }
 
                 String inputFolder = "";
@@ -416,9 +428,6 @@ public class stepmod2mn {
                         File fileIn = new File(filenameIn);
                         File fileOut = new File(filenameOut);
                         stepmod2mn app = new stepmod2mn();
-                        System.out.println(String.format(INPUT_LOG, XML_INPUT, filenameIn));
-                        System.out.println(String.format(OUTPUT_LOG, Constants.FORMAT.toUpperCase(), filenameOut));
-                        System.out.println();
                         app.setBoilerplatePath(boilerplatePath);
                         if (Util.isUrl(filenameIn)) {
                             resourcePath = Util.getParentUrl(filenameIn);
@@ -430,6 +439,7 @@ public class stepmod2mn {
                         app.setRepositoryIndexPath(repositoryIndexPath);
                         app.setOutputPathSchemas(outputPathSchemas);
                         app.setExcludeList(excludeList);
+                        app.setIncludeOnlyList(includeOnlyList);
                         boolean res = app.convertstepmod2mn(filenameIn, fileOut);
                         if (!res) {
                             badInputOutputFiles.add(entry);
@@ -488,8 +498,11 @@ public class stepmod2mn {
     //private void convertstepmod2mn(File fXMLin, File fileOut) throws IOException, TransformerException, SAXParseException {
     private boolean convertstepmod2mn(String xmlFilePath, File fileOut) throws IOException, TransformerException, SAXParseException {
         try {
+
+            System.out.println(String.format(INPUT_LOG, XML_INPUT, xmlFilePath));
+
             Source srcXSL = null;
-            
+
             String bibdataFileName = fileOut.getName();
             
             // get linearized XML with default attributes substitution from DTD
@@ -505,9 +518,17 @@ public class stepmod2mn {
 
             String documentName = XMLUtils.getTextByXPath(linearizedXML, "*/@name");
             if (excludeList.contains(documentName)) {
-                System.out.println(" '" + documentName + "' excluded from the processing.");
+                System.out.println("The document '" + documentName + "' excluded from the processing.");
                 return false;
             }
+
+            if (!includeOnlyList.isEmpty() && !includeOnlyList.contains(documentName)) {
+                System.out.println("The document '" + documentName + "' skipped from the processing.");
+                return false;
+            }
+
+            System.out.println(String.format(OUTPUT_LOG, Constants.FORMAT.toUpperCase(), fileOut.toString()));
+            System.out.println();
 
             System.out.println("Transforming...");
 
@@ -625,6 +646,10 @@ public class stepmod2mn {
 
     public void setExcludeList(List<String> excludeList) {
         this.excludeList = excludeList;
+    }
+
+    public void setIncludeOnlyList(List<String> includeOnlyList) {
+        this.includeOnlyList = includeOnlyList;
     }
 
     public void setRepositoryIndexPath(String repositoryIndexPath) {
