@@ -90,6 +90,19 @@ e.g.
 java -Xss5m -jar target/stepmod2mn-1.20.jar data/ --exclude "machining_features"
 ----
 
+=== Convert only specified documents resource.xml and module.xml in the specified folder and sub-folders into the Metanorma AsciiDoc format:
+
+[source,sh]
+----
+java -Xss5m -jar target/stepmod2mn-1.20.jar <Input-folder> [--include-only <documents list>]
+----
+
+e.g. 
+
+[source,sh]
+----
+java -Xss5m -jar target/stepmod2mn-1.20.jar data/ --include-only "fundamentals_of_product_description_and_support kinematics"
+----
 
 === Convert the documents specified in the publication index xml file in the tags 'resource_docs' and 'modules' into the Metanorma AsciiDoc format:
 
