@@ -36,19 +36,20 @@ public class MetanormaCollectionManifest {
                 String resultAdoc = entry.getValue();
                 String documentFolder = new File(resultAdoc).getParent();
                 File fileResultCollectionYml = Paths.get(documentFolder, "collection.yml").toFile();
-                InputStream is = new FileInputStream(fileResultCollectionYml);
-                Yaml yaml = new Yaml();
-                Map<String, Object> yamlDocumentObj = yaml.load(is);
-                //System.out.println(yamlDocumentObj);
+                if (fileResultCollectionYml.exists()) {
+                    InputStream is = new FileInputStream(fileResultCollectionYml);
+                    Yaml yaml = new Yaml();
+                    Map<String, Object> yamlDocumentObj = yaml.load(is);
+                    //System.out.println(yamlDocumentObj);
 
-                // manifest:
-                //  - level: document
-                update_docref(yamlDocumentObj,0, documentFolder);
+                    // manifest:
+                    //  - level: document
+                    update_docref(yamlDocumentObj, 0, documentFolder);
 
-                // manifest:
-                //  - level: attachments
-                update_docref(yamlDocumentObj,1, documentFolder);
-
+                    // manifest:
+                    //  - level: attachments
+                    update_docref(yamlDocumentObj, 1, documentFolder);
+                }
                 counter++;
             }
 
