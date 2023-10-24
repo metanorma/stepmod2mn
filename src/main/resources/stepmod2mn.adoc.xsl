@@ -1128,7 +1128,7 @@
 					</xsl:if>
 				</xsl:if>
         
-				<xsl:variable name="schema_exp_path">
+				<!-- <xsl:variable name="schema_exp_path">
 					<xsl:choose>
 						<xsl:when test="$outpath_schemas != ''">
 							<xsl:value-of select="concat($outpath_schemas,'/',@name,'/',@name,'.exp')"/>
@@ -1137,7 +1137,8 @@
 							<xsl:value-of select="concat($path, '/', $schema_exp_relative_path)"/>
 						</xsl:otherwise>
 					</xsl:choose>
-				</xsl:variable>
+				</xsl:variable> -->
+				<xsl:variable name="schema_exp_path" select="concat($path, '/', $schema_exp_relative_path)"/>
 				<xsl:variable name="schema_exp_relative_path_new" select="java:org.metanorma.Util.getRelativePath($schema_exp_path, $outpath)"/>
 				<xsl:value-of select="$schema_exp_relative_path_new"/>
 				
