@@ -267,7 +267,9 @@ public class stepmod2mn {
 
                 String argOutputPath = "";
                 String outputPathSchemas = "";
-                if (cmd.hasOption("output")) {
+
+                // commented, see https://github.com/metanorma/stepmod2mn/issues/88
+                /*if (cmd.hasOption("output")) {
                     argOutputPath = cmd.getOptionValue("output");
                     String outPath_normalized = argOutputPath;
                     if (outPath_normalized.startsWith("./") || outPath_normalized.startsWith(".\\")) {
@@ -281,6 +283,17 @@ public class stepmod2mn {
                     // create 'schemas' folder at the same level as output folder (for instance 'documents')
                     outputPathSchemas = schemasPath.toString();
                     new File(outputPathSchemas).mkdirs();
+                }*/
+
+                String argResultPath = "";
+                if (cmd.hasOption("output")) {
+                    argResultPath = cmd.getOptionValue("output");
+                    String outPath_normalized = argResultPath;
+                    if (outPath_normalized.startsWith("./") || outPath_normalized.startsWith(".\\")) {
+                        outPath_normalized = outPath_normalized.substring(2);
+                    }
+                    File fXMLout = new File(outPath_normalized);
+                    argResultPath = fXMLout.getAbsoluteFile().toString();
                 }
 
                 String boilerplatePath = "";
@@ -450,7 +463,7 @@ public class stepmod2mn {
 
                     if (!inputOutputFiles.isEmpty()) {
                         // Generate collection.sh
-                        new ScriptCollection(inputOutputFiles).generate();
+                        new ScriptCollection(inputOutputFiles, argResultPath).generate();
 
                         // Generate collection manifest collection.yml
                         new MetanormaCollectionManifest(inputOutputFiles).generate();

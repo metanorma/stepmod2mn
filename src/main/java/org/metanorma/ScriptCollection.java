@@ -15,9 +15,11 @@ import java.util.Map;
 public class ScriptCollection {
 
     List<Map.Entry<String,String>> inputOutputFiles;
+    String resultFolder;
 
-    public ScriptCollection(List<Map.Entry<String,String>> inputOutputFiles) {
+    public ScriptCollection(List<Map.Entry<String,String>> inputOutputFiles, String resultFolder) {
         this.inputOutputFiles = inputOutputFiles;
+        this.resultFolder = resultFolder;
     }
 
     public void generate() throws IOException {
@@ -46,12 +48,20 @@ public class ScriptCollection {
             .append("do").append("\n")
             .append("  echo $name").append("\n")
                     //  cd data/resource_docs/$name
-            .append("  cd ").append(documentsRelativeFolder).append("/$name").append("\n")
+            // .append("  cd ").append(documentsRelativeFolder).append("/$name").append("\n")
+            .append("  cd data/resource_docs/$name").append("\n")
             .append("  sh ./html_attachments.sh").append("\n")
             .append("  bundle exec metanorma -x xml document.adoc").append("\n")
             //  cd  ../../.."
-            .append("  cd  ").append(documentRelativeFolder).append("\n")
-            .append("done").append("\n")
+            .append("  cd  ").append(documentRelativeFolder).append("\n");
+
+            if (!resultFolder.isEmpty()) {
+                String resultRelativeFolder = Util.getRelativePath(resultFolder, repositoryRootFolder);
+                sbScript.append("  mkdir -p ").append(resultRelativeFolder).append("/resources").append("\n")
+                        .append("  cp -R data/resource_docs/$name ").append(resultRelativeFolder).append("/resources").append("\n");
+            }
+
+            sbScript.append("done").append("\n")
             .append("bundle exec metanorma collection collection.yml -x xml,html,presentation -w iso10303-output -c cover.html").append("\n");
 
             BufferedWriter writer = new BufferedWriter(new FileWriter(Paths.get(repositoryRootFolder, "collection.sh").toFile()));
