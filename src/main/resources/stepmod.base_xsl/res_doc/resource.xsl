@@ -4516,13 +4516,25 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 				<xsl:apply-templates select="$map_file_xml//img.area[@href]" mode="svg"/>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:value-of select="concat('ERROR: Image map file ', @file, '(', $map_file, ') does not exist or empty!')"/>
+				<!-- <xsl:value-of select="concat('ERROR: Image map file ', @file, '(', $map_file, ') does not exist or empty!')"/> -->
 			</xsl:otherwise>
 		</xsl:choose>
 		
 		<xsl:text>====</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
+    
+		<xsl:choose>
+			<xsl:when test="$map_file_node">
+				<!-- <xsl:apply-templates select="$map_file_xml//img.area[@href]" mode="svg"/> -->
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="concat('ERROR: Image map file ', @file, '(', $map_file, ') does not exist or empty!')"/>
+				<xsl:text>&#xa;</xsl:text>
+				<xsl:text>&#xa;</xsl:text>
+			</xsl:otherwise>
+		</xsl:choose>
+    
 	</xsl:template>
 
 	<xsl:template match="imgfile | img" mode="svg_start">
@@ -4580,12 +4592,23 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 				<xsl:apply-templates select="$map_file_xml//img.area[@href]" mode="svg"/>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:value-of select="concat('ERROR: Image map file ', @file, '(', $map_file, ') does not exist or empty!')"/>
+				<!-- <xsl:value-of select="concat('ERROR: Image map file ', @file, '(', $map_file, ') does not exist or empty!')"/> -->
 			</xsl:otherwise>
 		</xsl:choose>
 		
 		<xsl:text>====</xsl:text>
 		<!-- <xsl:text>&#xa;&#xa;</xsl:text> -->
+		
+		<xsl:choose>
+			<xsl:when test="$map_file_node">
+				<!-- <xsl:apply-templates select="$map_file_xml//img.area[@href]" mode="svg"/> -->
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="concat('ERROR: Image map file ', @file, '(', $map_file, ') does not exist or empty!')"/>
+				<xsl:text>&#xa;&#xa;</xsl:text>
+			</xsl:otherwise>
+		</xsl:choose>
+		
 	</xsl:template>
 
 	
