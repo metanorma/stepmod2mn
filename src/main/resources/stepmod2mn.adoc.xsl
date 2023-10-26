@@ -985,7 +985,7 @@
 				<!-- Step2: calculate relative path to '../../resources/',@name,'/',@name,'_annotated.exp' from output path -->
 				
 				<xsl:variable name="schema_annotated_exp_relative_path" select="concat('../../resources/',@name,'/',@name,'_annotated.exp')"/>
-				<xsl:variable name="schema_annotated_exp_path">
+				<!-- <xsl:variable name="schema_annotated_exp_path">
 					<xsl:choose>
 						<xsl:when test="$outpath_schemas != ''">
 							<xsl:value-of select="concat($outpath_schemas,'/',@name,'/',@name,'_annotated.exp')"/>
@@ -994,7 +994,9 @@
 							<xsl:value-of select="concat($path, '/', $schema_annotated_exp_relative_path)"/>
 						</xsl:otherwise>
 					</xsl:choose>
-				</xsl:variable>
+				</xsl:variable> -->
+				<xsl:variable name="schema_annotated_exp_path" select="concat($path, '/', $schema_annotated_exp_relative_path)"/>
+        
 				<xsl:variable name="schema_annotated_exp_relative_path_new" select="java:org.metanorma.Util.getRelativePath($schema_annotated_exp_path, $outpath)"/>
 				<xsl:value-of select="$schema_annotated_exp_relative_path_new"/>
 				<xsl:text>&#xa;</xsl:text>
