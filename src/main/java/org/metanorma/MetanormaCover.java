@@ -24,7 +24,7 @@ public class MetanormaCover {
 
         StringBuilder sbCover = new StringBuilder();
 
-        sbCover.append("<html><head/><body>\n" +
+        sbCover.append("<html><head><meta charset=\"UTF-8\"/></head><body>\n" +
                 "  <h1>{{ doctitle }}</h1>\n" +
                 "  <h2>{{ docnumber }}</h2>\n" +
                 "  <nav>{{ nav_object['children'][0]['docrefs'] }}</nav>\n" +
