@@ -347,7 +347,10 @@
 			<!-- 4.2 Fundamental concepts and assumptions -->
 			<!-- 4.3 Draughting elements entity definitions -->		
 			<xsl:if test="resource/schema">
-				<file path="sections_common/04-schemas.adoc" link="sections_common" target="../../../sections_common"> <!-- /04-schemas.adoc -->
+				<!-- https://github.com/metanorma/stepmod2mn/issues/58#issuecomment-1826282430 -->
+				<!-- <file path="sections_common/04-schemas.adoc" link="sections_common" target="../../../sections_common"> --> <!-- /04-schemas.adoc -->
+				<file path="sections/04-schemas.adoc" resource="04-schemas.adoc"> <!-- /04-schemas.adoc -->
+					
 					<!-- Commented -->
 					<!-- See https://github.com/metanorma/stepmod2mn/issues/52 -->
 					<!-- <xsl:for-each select="resource/schema">

@@ -104,6 +104,19 @@ public class Util {
         }
     }
 
+    public static void copyFileFromResource(String sourceFilename, String targetFilename) {
+        try {
+            InputStream stream = getStreamFromResources(stepmod2mn.class.getClassLoader(), sourceFilename);
+            if(stream == null) {
+                System.err.println("Cannot get resource \"" + sourceFilename + "\" from Jar file.");
+            }
+            Path target = Paths.get(targetFilename);
+            Files.copy(stream, target, StandardCopyOption.REPLACE_EXISTING);
+        } catch (Exception ex) {
+            System.err.println("Cannot copy the resource file \"" + sourceFilename + "\" to the file " + targetFilename + ": " + ex);
+        }
+    }
+
     public static void FlushTempFolder(Path tmpfilepath) {
         if (Files.exists(tmpfilepath)) {
             //Files.deleteIfExists(tmpfilepath);
