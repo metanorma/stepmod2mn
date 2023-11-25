@@ -484,6 +484,12 @@
 		<xsl:variable name="createLink" select="java:org.metanorma.Util.createSymbolicLink($targetFile, $symbolicLink)"/>
 	</xsl:template>
 	
+	<!-- copy file from stepmod2mn.jar -->
+	<xsl:template match="file[@resource]" mode="text">
+		<xsl:variable name="targetFile" select="concat($outpath, '/', @path)"/>
+		<xsl:variable name="createLink" select="java:org.metanorma.Util.copyFileFromResource(@resource, $targetFile)"/>
+	</xsl:template>
+	
 	<!-- copy file -->
 	<xsl:template match="file[@source]" mode="text">
 		<xsl:variable name="sourceFile" select="concat($path, '/', @source)"/>
