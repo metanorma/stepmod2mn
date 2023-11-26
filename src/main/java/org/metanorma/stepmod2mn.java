@@ -540,6 +540,11 @@ public class stepmod2mn {
                 return false;
             }
 
+            if (repositoryIndex.isWithdrawn(documentName, rootElement)) {
+                System.out.println("The document '" + documentName + "' skipped from the processing - it has status 'withdrawn' in the repository index.");
+                return false;
+            }
+
             System.out.println(String.format(OUTPUT_LOG, Constants.FORMAT.toUpperCase(), fileOut.toString()));
             System.out.println();
 

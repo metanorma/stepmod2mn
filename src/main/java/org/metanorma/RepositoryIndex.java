@@ -62,4 +62,16 @@ public class RepositoryIndex {
         return false;
     }
 
+    public boolean isWithdrawn(String documentName, String documentKind) {
+        if (!sRepositoryIndex.isEmpty()) {
+            if (documentKind.equals("resource")) {
+                documentKind = "resource_doc";
+            }
+            String xPath = "//" + documentKind + "[@name = '" + documentName + "' and @status = 'withdrawn']/@name";
+            String result = XMLUtils.getTextByXPath(sRepositoryIndex, xPath);
+            return !result.isEmpty();
+        }
+        return false;
+    }
+
 }
