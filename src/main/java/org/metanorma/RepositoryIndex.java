@@ -8,8 +8,9 @@ import java.nio.file.Paths;
 public class RepositoryIndex {
 
     private String filename;
-
     private final String REPOSITORY_INDEX_FILENAME = "repository_index.xml";
+
+    private String sRepositoryIndex;
 
     public RepositoryIndex(String startFolder) {
         init(startFolder);
@@ -40,10 +41,25 @@ public class RepositoryIndex {
             filename = "";
         } else {
             filename = repositoryIndexPath.toString();
+            sRepositoryIndex = XMLUtils.processLinearizedXML(filename);
         }
     }
 
     public String getPath() {
         return filename;
     }
+
+    public boolean contains(String documentName, String documentKind) {
+        if (!sRepositoryIndex.isEmpty()) {
+            if (documentKind.equals("resource")) {
+                documentKind = "resource_doc";
+            }
+            //DEBUG: documentName = "fundamentals_of_product_description_and_support";
+            String xPath = "//" + documentKind + "[@name = '" + documentName + "']/@name";
+            String result = XMLUtils.getTextByXPath(sRepositoryIndex, xPath);
+            return !result.isEmpty();
+        }
+        return false;
+    }
+
 }
