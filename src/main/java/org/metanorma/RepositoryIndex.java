@@ -10,7 +10,7 @@ public class RepositoryIndex {
     private String filename;
     private final String REPOSITORY_INDEX_FILENAME = "repository_index.xml";
 
-    private String sRepositoryIndex;
+    private String sRepositoryIndex = "";
 
     public RepositoryIndex(String startFolder) {
         init(startFolder);
@@ -59,7 +59,7 @@ public class RepositoryIndex {
             String result = XMLUtils.getTextByXPath(sRepositoryIndex, xPath);
             return !result.isEmpty();
         }
-        return false;
+        return true;
     }
 
     public boolean isWithdrawn(String documentName, String documentKind) {
