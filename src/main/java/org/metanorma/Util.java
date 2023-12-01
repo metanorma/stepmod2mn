@@ -286,7 +286,7 @@ public class Util {
 
     public static String getRepositoryRootFolder(String startFolder) {
         // find repository_index.xml
-        RepositoryIndex repositoryIndex = new RepositoryIndex(startFolder);
+        RepositoryIndex repositoryIndex = new RepositoryIndex(startFolder, false);
         String repositoryIndexPath = repositoryIndex.getPath();
         if (!repositoryIndexPath.isEmpty()) {
             return new File(repositoryIndexPath).getParent();
@@ -303,7 +303,7 @@ public class Util {
                     startFolder = Paths.get(startFolder).getParent().toString();
                     repositoryRootPath = Paths.get(startFolder,"data","resource_docs");
                 } catch (Exception ex) {
-                    System.err.println("Can't find the repository root folder.");
+                    //System.err.println("Can't find the repository root folder.");
                     endFoldersTree = true;
                 }
             }

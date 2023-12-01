@@ -13,9 +13,12 @@ public class MetanormaCollectionManifest {
 
     List<Map.Entry<String,String>> inputOutputFiles;
 
+    String outputPath;
+
     Map<String, Object> yamlObj = new LinkedHashMap<>();
 
-    public MetanormaCollectionManifest(List<Map.Entry<String,String>> inputOutputFiles) {
+    public MetanormaCollectionManifest(String outputPath, List<Map.Entry<String,String>> inputOutputFiles) {
+        this.outputPath = outputPath;
         this.inputOutputFiles = inputOutputFiles;
         try {
             Yaml yaml = new Yaml();
@@ -30,6 +33,10 @@ public class MetanormaCollectionManifest {
     public void generate() throws IOException {
         // get repository root folder from 1st file
         String repositoryRootFolder = Util.getRepositoryRootFolder(inputOutputFiles.get(0).getValue());
+        if (repositoryRootFolder.isEmpty() && outputPath != null && !outputPath.isEmpty()) {
+            String parentOutputPath = new File(outputPath).getParent();
+            repositoryRootFolder = parentOutputPath;
+        }
         if (!repositoryRootFolder.isEmpty()) {
             int counter = 0;
             for (Map.Entry<String, String> entry : inputOutputFiles) {
