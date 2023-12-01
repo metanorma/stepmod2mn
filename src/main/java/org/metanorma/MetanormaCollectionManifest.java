@@ -33,7 +33,7 @@ public class MetanormaCollectionManifest {
     public void generate() throws IOException {
         // get repository root folder from 1st file
         String repositoryRootFolder = Util.getRepositoryRootFolder(inputOutputFiles.get(0).getValue());
-        if (repositoryRootFolder.isEmpty() && outputPath != null) {
+        if (repositoryRootFolder.isEmpty() && outputPath != null && !outputPath.isEmpty()) {
             String parentOutputPath = new File(outputPath).getParent();
             repositoryRootFolder = parentOutputPath;
         }
