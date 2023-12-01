@@ -990,7 +990,9 @@
 				<!-- Step1: calculate full path to '../../resources/',@name,'/',@name,'_annotated.exp' -->
 				<!-- Step2: calculate relative path to '../../resources/',@name,'/',@name,'_annotated.exp' from output path -->
 				
-				<xsl:variable name="schema_annotated_exp_relative_path" select="concat('../../resources/',@name,'/',@name,'_annotated.exp')"/>
+				<!-- https://github.com/metanorma/stepmod2mn/issues/87 -->
+				<!-- <xsl:variable name="schema_annotated_exp_relative_path" select="concat('../../resources/',@name,'/',@name,'_annotated.exp')"/> -->
+				<xsl:variable name="schema_annotated_exp_relative_path" select="concat('../../resources/',@name,'/',@name,'.exp')"/>
 				<!-- <xsl:variable name="schema_annotated_exp_path">
 					<xsl:choose>
 						<xsl:when test="$outpath_schemas != ''">
