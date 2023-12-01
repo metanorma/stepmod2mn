@@ -1124,6 +1124,7 @@
 				<!-- <xsl:value-of select="concat('../../resources/',@name,'/',@name,'.exp')"/> --> <!-- updated for https://github.com/metanorma/stepmod2mn/issues/49, was ../../../resources/ -->
 				
 				<xsl:variable name="schema_exp_relative_path" select="concat('../../resources/',@name,'/',@name,'.exp')"/>
+				
 				<xsl:variable name="schema_exp_exists" select="java:org.metanorma.Util.fileExists(concat($path, '/', $schema_exp_relative_path))"/>
 				<xsl:if test="normalize-space($schema_exp_exists) = 'false'">
 					<xsl:variable name="msg">Error: the file '<xsl:value-of select="$schema_exp_relative_path"/>' does not exist.</xsl:variable>
@@ -1138,7 +1139,7 @@
 					</xsl:if>
 				</xsl:if>
         
-				<!-- <xsl:variable name="schema_exp_path">
+				<xsl:variable name="schema_exp_path">
 					<xsl:choose>
 						<xsl:when test="$outpath_schemas != ''">
 							<xsl:value-of select="concat($outpath_schemas,'/',@name,'/',@name,'.exp')"/>
@@ -1147,8 +1148,8 @@
 							<xsl:value-of select="concat($path, '/', $schema_exp_relative_path)"/>
 						</xsl:otherwise>
 					</xsl:choose>
-				</xsl:variable> -->
-				<xsl:variable name="schema_exp_path" select="concat($path, '/', $schema_exp_relative_path)"/>
+				</xsl:variable>
+				<!-- <xsl:variable name="schema_exp_path" select="concat($path, '/', $schema_exp_relative_path)"/> -->
 				<xsl:variable name="schema_exp_relative_path_new" select="java:org.metanorma.Util.getRelativePath($schema_exp_path, $outpath)"/>
 				<xsl:value-of select="$schema_exp_relative_path_new"/>
 				

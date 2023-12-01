@@ -20,7 +20,7 @@ public class MetanormaCover {
 
     public void generate() throws IOException {
         // get repository root folder from 1st file
-        String repositoryRootFolder = Util.getRepositoryRootFolder(inputOutputFiles.get(0).getValue());
+        String repositoryRootFolder = Util.getRepositoryRootFolder(inputOutputFiles.get(0).getKey());
 
         StringBuilder sbCover = new StringBuilder();
 

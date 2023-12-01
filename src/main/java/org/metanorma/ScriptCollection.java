@@ -22,7 +22,7 @@ public class ScriptCollection {
 
     public void generate() throws IOException {
         // get repository root folder from 1st file
-        String repositoryRootFolder = Util.getRepositoryRootFolder(inputOutputFiles.get(0).getValue());
+        String repositoryRootFolder = Util.getRepositoryRootFolder(inputOutputFiles.get(0).getKey());
         if(!repositoryRootFolder.isEmpty()) {
             String documentFolder = new File(inputOutputFiles.get(0).getValue()).getParent();
             String documentRelativeFolder = Util.getRelativePath(repositoryRootFolder, documentFolder);
