@@ -448,13 +448,13 @@ public class stepmod2mn {
 
                     if (!inputOutputFiles.isEmpty()) {
                         // Generate collection.sh
-                        new ScriptCollection(inputOutputFiles).generate();
+                        new ScriptCollection(argOutputPath, inputOutputFiles).generate();
 
                         // Generate collection manifest collection.yml
-                        new MetanormaCollectionManifest(inputOutputFiles).generate();
+                        new MetanormaCollectionManifest(argOutputPath, inputOutputFiles).generate();
 
                         // Generate cover.html
-                        new MetanormaCover(inputOutputFiles).generate();
+                        new MetanormaCover(argOutputPath, inputOutputFiles).generate();
 
                         //if (isInputFolder) {
                         // Generate metanorma.yml in the root of path

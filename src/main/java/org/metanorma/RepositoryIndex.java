@@ -10,9 +10,16 @@ public class RepositoryIndex {
     private String filename;
     private final String REPOSITORY_INDEX_FILENAME = "repository_index.xml";
 
+    private boolean isError = true;
+
     private String sRepositoryIndex = "";
 
     public RepositoryIndex(String startFolder) {
+        init(startFolder);
+    }
+
+    public RepositoryIndex(String startFolder, boolean strongChecking) {
+        isError = strongChecking;
         init(startFolder);
     }
 
@@ -33,7 +40,9 @@ public class RepositoryIndex {
                 repositoryIndexPath = Paths.get(repositoryIndexPath.getParent().getParent().toString(), REPOSITORY_INDEX_FILENAME);
 
             } catch (Exception ex) {
-                System.err.println("Can't find the repository index '" + REPOSITORY_INDEX_FILENAME + "'.");
+                if (isError) {
+                    System.err.println("Can't find the repository index '" + REPOSITORY_INDEX_FILENAME + "'.");
+                }
                 endFoldersTree = true;
             }
         }

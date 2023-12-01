@@ -16,13 +16,20 @@ public class ScriptCollection {
 
     List<Map.Entry<String,String>> inputOutputFiles;
 
-    public ScriptCollection(List<Map.Entry<String,String>> inputOutputFiles) {
+    String outputPath;
+
+    public ScriptCollection(String outputPath, List<Map.Entry<String,String>> inputOutputFiles) {
+        this.outputPath = outputPath;
         this.inputOutputFiles = inputOutputFiles;
     }
 
     public void generate() throws IOException {
         // get repository root folder from 1st file
-        String repositoryRootFolder = Util.getRepositoryRootFolder(inputOutputFiles.get(0).getKey());
+        String repositoryRootFolder = Util.getRepositoryRootFolder(inputOutputFiles.get(0).getValue());
+        if (repositoryRootFolder.isEmpty() && outputPath != null) {
+            String parentOutputPath = new File(outputPath).getParent();
+            repositoryRootFolder = parentOutputPath;
+        }
         if(!repositoryRootFolder.isEmpty()) {
             String documentFolder = new File(inputOutputFiles.get(0).getValue()).getParent();
             String documentRelativeFolder = Util.getRelativePath(repositoryRootFolder, documentFolder);
@@ -42,6 +49,11 @@ public class ScriptCollection {
                     .replace(" ", "")
                     .replace(","," ")).append("\"\n\n");
 
+            String paramW = "iso10303-output";
+            if (outputPath != null && !outputPath.isEmpty()) {
+                paramW = outputPath.replace("\\","/") + "/output";
+            }
+
             sbScript.append("for name in $INPUT_REPOS").append("\n")
             .append("do").append("\n")
             .append("  echo $name").append("\n")
@@ -52,7 +64,7 @@ public class ScriptCollection {
             //  cd  ../../.."
             .append("  cd  ").append(documentRelativeFolder).append("\n")
             .append("done").append("\n")
-            .append("bundle exec metanorma collection collection.yml -x xml,html,presentation -w iso10303-output -c cover.html").append("\n");
+            .append("bundle exec metanorma collection collection.yml -x xml,html,presentation -w ").append(paramW).append(" -c cover.html").append("\n");
 
             BufferedWriter writer = new BufferedWriter(new FileWriter(Paths.get(repositoryRootFolder, "collection.sh").toFile()));
             writer.write(sbScript.toString());
