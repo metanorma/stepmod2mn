@@ -2891,7 +2891,7 @@
 						<!-- There seems to be a bug in MXSL3. 
 								 Should not need to convert $xml_file to a string -->
 						<xsl:when
-							test="document(string($xml_file))/express/schema/interface">
+							test="$xml_file != '9999' and document(string($xml_file))/express/schema/interface">
 							<xsl:call-template name="express_clause_number">
 								<xsl:with-param name="main_clause" select="$main_clause"/>
 								<xsl:with-param name="clause" select="'interface'"/>
@@ -2907,7 +2907,7 @@
 						<!-- There seems to be a bug in MXSL3. 
 								 Should not need to convert $xml_file to a string -->
 						<xsl:when
-							test="document(string($xml_file))/express/schema/constant">
+							test="$xml_file != '9999' and document(string($xml_file))/express/schema/constant">
 							<xsl:call-template name="express_clause_number">
 								<xsl:with-param name="main_clause" select="$main_clause"/>
 								<xsl:with-param name="clause" select="'constant'"/>
@@ -2925,7 +2925,7 @@
 						<!-- There seems to be a bug in MXSL3. 
 								 Should not need to convert $xml_file to a string -->
 						<xsl:when
-							test="document(string($xml_file))/express/schema/type">
+							test="$xml_file != '9999' and document(string($xml_file))/express/schema/type">
 							<xsl:call-template name="express_clause_number">
 								<xsl:with-param name="main_clause" select="$main_clause"/>
 								<xsl:with-param name="clause" select="'type'"/>
@@ -2944,7 +2944,7 @@
 						<!-- There seems to be a bug in MXSL3. 
 								 Should not need to convert $xml_file to a string -->
 						<xsl:when
-							test="document(string($xml_file))/express/schema/entity">
+							test="$xml_file != '9999' and document(string($xml_file))/express/schema/entity">
 							<xsl:call-template name="express_clause_number">
 								<xsl:with-param name="main_clause" select="$main_clause"/>
 								<xsl:with-param name="clause" select="'entity'"/>
@@ -2962,7 +2962,7 @@
 						<!-- There seems to be a bug in MXSL3. 
 								 Should not need to convert $xml_file to a string -->
 						<xsl:when
-							test="document(string($xml_file))/express/schema/subtype.constraint">
+							test="$xml_file != '9999' and document(string($xml_file))/express/schema/subtype.constraint">
 							<xsl:call-template name="express_clause_number">
 								<xsl:with-param name="main_clause" select="$main_clause"/>
 								<xsl:with-param name="clause" select="'subtype.constraint'"/>
@@ -2981,7 +2981,7 @@
 						<!-- There seems to be a bug in MXSL3. 
 								 Should not need to convert $xml_file to a string -->
 						<xsl:when
-							test="document(string($xml_file))/express/schema/function">
+							test="$xml_file != '9999' and document(string($xml_file))/express/schema/function">
 							<xsl:call-template name="express_clause_number">
 								<xsl:with-param name="main_clause" select="$main_clause"/>
 								<xsl:with-param name="clause" select="'function'"/>
@@ -2999,7 +2999,7 @@
 						<!-- There seems to be a bug in MXSL3. 
 								 Should not need to convert $xml_file to a string -->
 						<xsl:when
-							test="document(string($xml_file))/express/schema/rule">
+							test="$xml_file != '9999' and document(string($xml_file))/express/schema/rule">
 							<xsl:call-template name="express_clause_number">
 								<xsl:with-param name="main_clause" select="$main_clause"/>
 
@@ -3018,7 +3018,7 @@
 						<!-- There seems to be a bug in MXSL3. 
 								 Should not need to convert $xml_file to a string -->
 						<xsl:when
-							test="document(string($xml_file))/express/schema/procedure">
+							test="$xml_file != '9999' and document(string($xml_file))/express/schema/procedure">
 							<xsl:call-template name="express_clause_number">
 								<xsl:with-param name="main_clause" select="$main_clause"/>
 
@@ -3037,7 +3037,7 @@
 					<!-- There seems to be a bug in MXSL3. 
 								 Should not need to convert $xml_file to a string --> 
 						<xsl:when
-							test="document(string($xml_file))/express/schema/interface/described.item[@kind='CONSTANT']">
+							test="$xml_file != '9999' and document(string($xml_file))/express/schema/interface/described.item[@kind='CONSTANT']">
 							<xsl:call-template name="express_clause_number">
 								<xsl:with-param name="main_clause" select="$main_clause"/>
 
@@ -3056,7 +3056,7 @@
 						<!-- There seems to be a bug in MXSL3. 
 								 Should not need to convert $xml_file to a string --> 
 						<xsl:when
-							test="document(string($xml_file))/express/schema/interface/described.item[@kind='TYPE']">
+							test="$xml_file != '9999' and document(string($xml_file))/express/schema/interface/described.item[@kind='TYPE']">
 							<xsl:call-template name="express_clause_number">
 								<xsl:with-param name="main_clause" select="$main_clause"/>
 
@@ -3075,7 +3075,7 @@
 						<!-- There seems to be a bug in MXSL3. 
 								 Should not need to convert $xml_file to a string --> 
 						<xsl:when
-							test="document(string($xml_file))/express/schema/interface/described.item[@kind='ENTITY']">
+							test="$xml_file != '9999' and document(string($xml_file))/express/schema/interface/described.item[@kind='ENTITY']">
 							<xsl:call-template name="express_clause_number">
 								<xsl:with-param name="main_clause" select="$main_clause"/>
 
@@ -3094,7 +3094,7 @@
 						<!-- There seems to be a bug in MXSL3. 
 								 Should not need to convert $xml_file to a string --> 
 						<xsl:when
-							test="document(string($xml_file))/express/schema/interface/described.item[@kind='FUNCTION']">
+							test="$xml_file != '9999' and document(string($xml_file))/express/schema/interface/described.item[@kind='FUNCTION']">
 							<xsl:call-template name="express_clause_number">
 								<xsl:with-param name="main_clause" select="$main_clause"/>
 
@@ -3113,7 +3113,7 @@
 						<!-- There seems to be a bug in MXSL3. 
 								 Should not need to convert $xml_file to a string --> 
 						<xsl:when
-							test="document(string($xml_file))/express/schema/interface/described.item[@kind='RULE']">
+							test="$xml_file != '9999' and document(string($xml_file))/express/schema/interface/described.item[@kind='RULE']">
 							<xsl:call-template name="express_clause_number">
 								<xsl:with-param name="main_clause" select="$main_clause"/>
 
@@ -3132,7 +3132,7 @@
 					<!-- There seems to be a bug in MXSL3. 
 							 Should not need to convert $xml_file to a string --> 
 					<xsl:when
-							test="document(string($xml_file))/express/schema/interface/described.item[@kind='PROCEDURE']"> 
+							test="$xml_file != '9999' and document(string($xml_file))/express/schema/interface/described.item[@kind='PROCEDURE']"> 
 							<xsl:call-template name="express_clause_number">
 								<xsl:with-param name="main_clause" select="$main_clause"/>
 								<xsl:with-param name="clause" select="'imported_procedure'"/>
@@ -3241,7 +3241,7 @@
 		<xsl:variable name="constant_clause">
 			<xsl:choose>
 				<xsl:when
-					test="document(string($xml_file))/express/schema/constant">
+					test="$xml_file != '1000' and document(string($xml_file))/express/schema/constant">
 					1
 				</xsl:when>
 				<xsl:otherwise>
@@ -3253,7 +3253,7 @@
 		<xsl:variable name="imported_constant_clause">
 			<xsl:choose>
 				<xsl:when
-					test="document(string($xml_file))/express/schema/interface/described.item[@kind='CONSTANT']">
+					test="$xml_file != '1000' and document(string($xml_file))/express/schema/interface/described.item[@kind='CONSTANT']">
 					1
 				</xsl:when>
 				<xsl:otherwise>
@@ -3265,7 +3265,7 @@
 		<xsl:variable name="type_clause">
 			<xsl:choose>
 				<xsl:when
-					test="document(string($xml_file))/express/schema/type">
+					test="$xml_file != '1000' and document(string($xml_file))/express/schema/type">
 					1
 				</xsl:when>
 				<xsl:otherwise>
@@ -3277,7 +3277,7 @@
 		<xsl:variable name="imported_type_clause">
 			<xsl:choose>
 				<xsl:when
-					test="document(string($xml_file))/express/schema/interface/described.item[@kind='TYPE']">
+					test="$xml_file != '1000' and document(string($xml_file))/express/schema/interface/described.item[@kind='TYPE']">
 					1
 				</xsl:when>
 				<xsl:otherwise>
@@ -3290,7 +3290,7 @@
 		<xsl:variable name="entity_clause">
 			<xsl:choose>
 				<xsl:when
-					test="document(string($xml_file))/express/schema/entity">
+					test="$xml_file != '1000' and document(string($xml_file))/express/schema/entity">
 					1
 				</xsl:when>
 				<xsl:otherwise>
@@ -3302,7 +3302,7 @@
 		<xsl:variable name="imported_entity_clause">
 			<xsl:choose>
 				<xsl:when
-					test="document(string($xml_file))/express/schema/interface/described.item[@kind='ENTITY' or @kind='ATTRIBUTE']">
+					test="$xml_file != '1000' and document(string($xml_file))/express/schema/interface/described.item[@kind='ENTITY' or @kind='ATTRIBUTE']">
 					1
 				</xsl:when>
 				<xsl:otherwise>
@@ -3314,7 +3314,7 @@
 		<xsl:variable name="subtype_constraint_clause">
 			<xsl:choose>
 				<xsl:when
-					test="document(string($xml_file))/express/schema/subtype.constraint">
+					test="$xml_file != '1000' and document(string($xml_file))/express/schema/subtype.constraint">
 					1
 				</xsl:when>
 				<xsl:otherwise>
@@ -3326,7 +3326,7 @@
 		<xsl:variable name="function_clause">
 			<xsl:choose>
 				<xsl:when
-					test="document(string($xml_file))/express/schema/function">
+					test="$xml_file != '1000' and document(string($xml_file))/express/schema/function">
 					1
 				</xsl:when>
 				<xsl:otherwise>
@@ -3338,7 +3338,7 @@
 		<xsl:variable name="imported_function_clause">
 			<xsl:choose>
 				<xsl:when
-					test="document(string($xml_file))/express/schema/interface/described.item[@kind='FUNCTION']">
+					test="$xml_file != '1000' and document(string($xml_file))/express/schema/interface/described.item[@kind='FUNCTION']">
 					1
 				</xsl:when>
 				<xsl:otherwise>
@@ -3350,7 +3350,7 @@
 		<xsl:variable name="rule_clause">
 			<xsl:choose>
 				<xsl:when
-					test="document(string($xml_file))/express/schema/rule">
+					test="$xml_file != '1000' and document(string($xml_file))/express/schema/rule">
 					1
 				</xsl:when>
 				<xsl:otherwise>
@@ -3362,7 +3362,7 @@
 		<xsl:variable name="imported_rule_clause">
 			<xsl:choose>
 				<xsl:when
-					test="document(string($xml_file))/express/schema/interface/described.item[@kind='RULE']">
+					test="$xml_file != '1000' and document(string($xml_file))/express/schema/interface/described.item[@kind='RULE']">
 					1
 				</xsl:when>
 				<xsl:otherwise>
@@ -3374,7 +3374,7 @@
 		<xsl:variable name="procedure_clause">
 			<xsl:choose>
 				<xsl:when
-					test="document(string($xml_file))/express/schema/procedure">
+					test="$xml_file != '1000' and document(string($xml_file))/express/schema/procedure">
 					1
 				</xsl:when>
 				<xsl:otherwise>
@@ -3386,7 +3386,7 @@
 		<xsl:variable name="imported_procedure_clause">
 			<xsl:choose>
 				<xsl:when
-					test="document(string($xml_file))/express/schema/interface/described.item[@kind='PROCEDURE']">
+					test="$xml_file != '1000' and document(string($xml_file))/express/schema/interface/described.item[@kind='PROCEDURE']">
 					1
 				</xsl:when>
 				<xsl:otherwise>
