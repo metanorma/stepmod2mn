@@ -3921,7 +3921,7 @@ $module_ok,' Check the normatives references')"/>
             <xsl:call-template name="insertParagraph">
               <xsl:with-param name="text">
                 <xsl:text>* </xsl:text>
-                <xsl:apply-templates select="$nterm"/>
+                <xsl:apply-templates select="$term"/>
                 <xsl:choose>
                   <xsl:when test="position()=last()">.</xsl:when>
                   <xsl:otherwise>;</xsl:otherwise>
