@@ -4758,7 +4758,7 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 			<xsl:otherwise>
 				<xsl:call-template name="error_message">
 					<xsl:with-param 
-							name="message" select="concat('Error 13: Can not find bibitem referenced by: ',$ref, 'in ../data/basic/bibliography.xml')"/>
+							name="message" select="concat('Error 13: Can not find bibitem referenced by: ',$ref, ' in ../data/basic/bibliography.xml')"/>
 				</xsl:call-template>
 			</xsl:otherwise>
 		</xsl:choose>

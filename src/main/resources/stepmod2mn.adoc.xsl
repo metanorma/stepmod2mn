@@ -567,6 +567,7 @@
 	
 	
 	<xsl:template name="insertBoilerplate">
+		<xsl:param name="aname"/>
 		<xsl:param name="folder"/>
 		<xsl:param name="identifier"/>
 		<xsl:param name="text"/>
@@ -584,7 +585,10 @@
         <xsl:text>&#xa;&#xa;</xsl:text>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:message>Error: boilerplate text is empty.</xsl:message>
+				<xsl:variable name="for_name">
+					<xsl:if test="$aname != ''">for '<xsl:value-of select="$aname"/>'</xsl:if>
+				</xsl:variable>
+        <xsl:message>Error: boilerplate text <xsl:value-of select="$for_name"/> is empty.</xsl:message>
         <!-- <xsl:text>&#xa;&#xa;</xsl:text> -->
       </xsl:otherwise>
     </xsl:choose>

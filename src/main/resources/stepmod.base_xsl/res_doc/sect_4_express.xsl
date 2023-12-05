@@ -901,6 +901,7 @@
         </xsl:variable>
         <xsl:if test="$external_description='false'">
           <xsl:call-template name="insertBoilerplate">
+						<xsl:with-param name="aname" select="$aname"/>
             <xsl:with-param name="folder" select="'General'"/>
             <xsl:with-param name="identifier" select="'SC4_xxxx'"/>
             <!-- Example: Put boilerplate for type select, see 
@@ -958,6 +959,7 @@
         </xsl:variable>
         <xsl:if test="$external_description='false'">
           <xsl:call-template name="insertBoilerplate">
+						<xsl:with-param name="aname" select="$aname"/>
             <xsl:with-param name="folder" select="'General'"/>
             <xsl:with-param name="identifier" select="'SC4_xxxx'"/>
             <!-- Example: Put boilerplate for type enumeration, see 

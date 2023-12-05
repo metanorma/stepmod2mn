@@ -1257,16 +1257,17 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
       <xsl:when test="string-length(./description)>0">
         <!-- only output <p> if description starts with text, otherwise
              assume that the description sarts with <p> -->
-        <xsl:choose>          
+        <!-- <xsl:choose>          
           <xsl:when test="string-length(normalize-space(./description/text()))=0">
             <xsl:apply-templates select="./description" mode="exp_description"/>
           </xsl:when>
           <xsl:otherwise>
-            <!-- <p> -->
+            <p>
               <xsl:apply-templates select="./description" mode="exp_description"/>
-            <!-- </p> -->
+            </p>
           </xsl:otherwise>
-        </xsl:choose>
+        </xsl:choose> -->
+				<xsl:apply-templates select="./description" mode="exp_description"/>
       </xsl:when>
       <xsl:otherwise>
         <!-- <p> -->
@@ -1297,7 +1298,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
 
   <!-- https://github.com/metanorma/stepmod2mn/issues/10 -->
   <!-- If no text is provided in descriptions.xml for SELECT and ENUMERATION types, the XSLT pastes boilerplate descriptions in the document. -->
-  <xsl:if test="./select and normalize-space($type_select_boilerplate) = ''">
+  <xsl:if test="./select and normalize-space($type_select_boilerplate) = '' and string-length(./description) = 0">
       <xsl:variable name="external_description">
         <xsl:call-template name="check_external_description">
           <xsl:with-param name="schema" select="../@name"/>
@@ -1306,6 +1307,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
       </xsl:variable>
       <xsl:if test="$external_description='false'">
         <xsl:call-template name="insertBoilerplate">
+          <xsl:with-param name="aname" select="$aname"/>
           <xsl:with-param name="folder" select="'General'"/>
           <xsl:with-param name="identifier" select="'SC4_xxxx'"/>
           <!-- Example: Put boilerplate for type select, see 
@@ -1360,6 +1362,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
     </xsl:variable>
     <xsl:if test="$external_description='false'">
       <xsl:call-template name="insertBoilerplate">
+				<xsl:with-param name="aname" select="$aname"/>
         <xsl:with-param name="folder" select="'General'"/>
         <xsl:with-param name="identifier" select="'SC4_xxxx'"/>
         <!-- Example: Put boilerplate for type enumeration, see 
