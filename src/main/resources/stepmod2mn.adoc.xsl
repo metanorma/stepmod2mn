@@ -584,8 +584,8 @@
         <xsl:text>&#xa;&#xa;</xsl:text>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:text>Error: boilerplate text is empty.</xsl:text>
-        <xsl:text>&#xa;&#xa;</xsl:text>
+        <xsl:message>Error: boilerplate text is empty.</xsl:message>
+        <!-- <xsl:text>&#xa;&#xa;</xsl:text> -->
       </xsl:otherwise>
     </xsl:choose>
 	</xsl:template>

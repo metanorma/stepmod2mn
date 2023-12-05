@@ -1308,7 +1308,8 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
         <xsl:call-template name="insertBoilerplate">
           <xsl:with-param name="folder" select="'General'"/>
           <xsl:with-param name="identifier" select="'SC4_xxxx'"/>
-          <!-- Example: Put boilerplate for type select, see https://github.com/metanorma/iso-tc184-sc4-directives/blob/master/supplementary-directives.adoc -->
+          <!-- Example: Put boilerplate for type select, see 
+					https://github.com/metanorma/iso-tc184-sc4-directives/blob/main/sources/supplementary-directives/document.adoc -->
           <xsl:with-param name="text"></xsl:with-param>
           <!-- Example /src/main/resources/empty.adoc -->
           <xsl:with-param name="file"></xsl:with-param>
@@ -1361,7 +1362,8 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
       <xsl:call-template name="insertBoilerplate">
         <xsl:with-param name="folder" select="'General'"/>
         <xsl:with-param name="identifier" select="'SC4_xxxx'"/>
-        <!-- Example: Put boilerplate for type enumeration, see https://github.com/metanorma/iso-tc184-sc4-directives/blob/master/supplementary-directives.adoc -->
+        <!-- Example: Put boilerplate for type enumeration, see 
+				https://github.com/metanorma/iso-tc184-sc4-directives/blob/main/sources/supplementary-directives/document.adoc -->
         <xsl:with-param name="text"></xsl:with-param>
       </xsl:call-template>
     </xsl:if>
