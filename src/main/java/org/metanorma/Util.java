@@ -98,6 +98,7 @@ public class Util {
         try {
             Path source = Paths.get(sourceFilename);
             Path target = Paths.get(targetFilename);
+            Files.createDirectories(target.getParent());
             Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException ex) {
             System.err.println("Cannot copy the file \"" + sourceFilename + "\" to the file " + targetFilename + ": " + ex);

@@ -498,8 +498,11 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 					</xsl:apply-templates>
 				</xsl:variable>
 				<xsl:variable name="img_path_full" select="concat($path,'/',$img_path)"/>
-				<xsl:variable name="img_path_relative" select="java:org.metanorma.Util.getRelativePath($img_path_full, $outpath)"/>
-				<xsl:value-of select="$img_path_relative"/>
+				<xsl:variable name="out_path_full" select="concat($outpath,'/',$img_path)"/>
+				<xsl:variable name="copyFile" select="java:org.metanorma.Util.copyFile($img_path_full, $out_path_full)"/>
+				<!-- <xsl:variable name="img_path_relative" select="java:org.metanorma.Util.getRelativePath($img_path_full, $outpath)"/>
+				<xsl:value-of select="$img_path_relative"/>  -->
+				<xsl:value-of select="$img_path"/>
 			</xsl:with-param>
 			<xsl:with-param name="alttext" select="./title"/>
 		</xsl:call-template>
