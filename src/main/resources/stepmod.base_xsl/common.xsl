@@ -556,18 +556,24 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 			</xsl:call-template>
 		</xsl:when>
 		<xsl:otherwise>
-			<xsl:value-of select="$src"/>
-			<xsl:if test="not(ancestor::figure)">
-				<xsl:call-template name="insertImage">
-					<xsl:with-param name="path">
-						<xsl:variable name="img_path" select="$src"/>
-						<xsl:variable name="img_path_full" select="concat($path,'/',$img_path)"/>
-						<xsl:variable name="out_path_full" select="concat($outpath,'/',$img_path)"/>
-						<xsl:variable name="copyFile" select="java:org.metanorma.Util.copyFile($img_path_full, $out_path_full)"/>
-						<xsl:value-of select="$img_path"/>
-					</xsl:with-param>
-				</xsl:call-template>
-			</xsl:if>
+			<xsl:choose>
+				<xsl:when test="not(ancestor::figure)">
+					<xsl:call-template name="insertImage">
+						<xsl:with-param name="path">
+							<xsl:variable name="img_path" select="$src"/>
+							<xsl:variable name="img_path_full" select="concat($path,'/',$img_path)"/>
+							<xsl:variable name="out_path_full" select="concat($outpath,'/',$img_path)"/>
+							<xsl:variable name="copyFile" select="java:org.metanorma.Util.copyFile($img_path_full, $out_path_full)"/>
+							<xsl:value-of select="$img_path"/>
+						</xsl:with-param>
+					</xsl:call-template>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="$src"/>
+				</xsl:otherwise>
+			</xsl:choose>
+			
+			
 			<!-- <div align="center">
 				<xsl:choose>
 					<xsl:when test="./@usemap">
