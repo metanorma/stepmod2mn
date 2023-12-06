@@ -4509,32 +4509,46 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 		</xsl:choose>
 		</xsl:variable>
 		
-		<xsl:variable name="map_file_xml" select="document($map_file)"/>
-		<xsl:variable name="map_file_node" select="$map_file_xml//img.area[@href]"/>
-		<xsl:choose>
-			<xsl:when test="$map_file_node">
-				<xsl:apply-templates select="$map_file_xml//img.area[@href]" mode="svg"/>
-			</xsl:when>
-			<xsl:otherwise>
-				<!-- <xsl:value-of select="concat('ERROR: Image map file ', @file, '(', $map_file, ') does not exist or empty!')"/> -->
-			</xsl:otherwise>
-		</xsl:choose>
-		
+    <xsl:variable name="map_file_exists" select="java:org.metanorma.Util.fileExists($map_file)"/>
+
+		<xsl:if test="normalize-space($map_file_exists) = 'true'">
+			<xsl:variable name="map_file_xml" select="document($map_file)"/>
+			<xsl:variable name="map_file_node" select="$map_file_xml//img.area[@href]"/>
+			<xsl:choose>
+				<xsl:when test="$map_file_node">
+					<xsl:apply-templates select="$map_file_xml//img.area[@href]" mode="svg"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<!-- <xsl:value-of select="concat('ERROR: Image map file ', @file, '(', $map_file, ') does not exist or empty!')"/> -->
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:if>
+
 		<xsl:text>====</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
-    
+
 		<xsl:choose>
-			<xsl:when test="$map_file_node">
-				<!-- <xsl:apply-templates select="$map_file_xml//img.area[@href]" mode="svg"/> -->
+			<xsl:when test="normalize-space($map_file_exists) = 'true'">
+				<xsl:variable name="map_file_xml" select="document($map_file)"/>
+				<xsl:variable name="map_file_node" select="$map_file_xml//img.area[@href]"/>
+				<xsl:choose>
+					<xsl:when test="$map_file_node">
+						<!-- <xsl:apply-templates select="$map_file_xml//img.area[@href]" mode="svg"/> -->
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:variable name="map_warning" select="concat('WARNING: Image map file ', @file, ' (', $map_file, ') is empty!')"/>
+						<xsl:message><xsl:value-of select="$map_warning"/></xsl:message>
+					</xsl:otherwise>
+				</xsl:choose>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:value-of select="concat('ERROR: Image map file ', @file, '(', $map_file, ') does not exist or empty!')"/>
-				<xsl:text>&#xa;</xsl:text>
-				<xsl:text>&#xa;</xsl:text>
+				<xsl:variable name="map_error" select="concat('ERROR: Image map file ', @file, ' (', $map_file, ') does not exist!')"/>
+				<xsl:value-of select="$map_error"/>
+				<xsl:message><xsl:value-of select="$map_error"/></xsl:message>
+				<xsl:text>&#xa;&#xa;</xsl:text>
 			</xsl:otherwise>
 		</xsl:choose>
-    
 	</xsl:template>
 
 	<xsl:template match="imgfile | img" mode="svg_start">
@@ -4583,28 +4597,44 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 		</xsl:choose>
 		</xsl:variable>
 		
-		<xsl:variable name="map_file_xml" select="document($map_file)"/>
+		<xsl:variable name="map_file_exists" select="java:org.metanorma.Util.fileExists($map_file)"/>
 		
-		<xsl:variable name="map_file_node" select="$map_file_xml//img.area[@href]"/>
-		
-		<xsl:choose>
-			<xsl:when test="$map_file_node">
-				<xsl:apply-templates select="$map_file_xml//img.area[@href]" mode="svg"/>
-			</xsl:when>
-			<xsl:otherwise>
-				<!-- <xsl:value-of select="concat('ERROR: Image map file ', @file, '(', $map_file, ') does not exist or empty!')"/> -->
-			</xsl:otherwise>
-		</xsl:choose>
+		<xsl:if test="normalize-space($map_file_exists) = 'true'">
+			<xsl:variable name="map_file_xml" select="document($map_file)"/>
+			
+			<xsl:variable name="map_file_node" select="$map_file_xml//img.area[@href]"/>
+			
+			<xsl:choose>
+				<xsl:when test="$map_file_node">
+					<xsl:apply-templates select="$map_file_xml//img.area[@href]" mode="svg"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<!-- <xsl:value-of select="concat('ERROR: Image map file ', @file, '(', $map_file, ') does not exist or empty!')"/> -->
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:if>
 		
 		<xsl:text>====</xsl:text>
 		<!-- <xsl:text>&#xa;&#xa;</xsl:text> -->
 		
 		<xsl:choose>
-			<xsl:when test="$map_file_node">
-				<!-- <xsl:apply-templates select="$map_file_xml//img.area[@href]" mode="svg"/> -->
+			<xsl:when test="normalize-space($map_file_exists) = 'true'">
+				<xsl:variable name="map_file_xml" select="document($map_file)"/>
+				<xsl:variable name="map_file_node" select="$map_file_xml//img.area[@href]"/>
+				<xsl:choose>
+					<xsl:when test="$map_file_node">
+						<!-- <xsl:apply-templates select="$map_file_xml//img.area[@href]" mode="svg"/> -->
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:variable name="map_warning" select="concat('WARNING: Image map file ', @file, ' (', $map_file, ') is empty!')"/>
+						<xsl:message><xsl:value-of select="$map_warning"/></xsl:message>
+					</xsl:otherwise>
+				</xsl:choose>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:value-of select="concat('ERROR: Image map file ', @file, '(', $map_file, ') does not exist or empty!')"/>
+				<xsl:variable name="map_error" select="concat('ERROR: Image map file ', @file, ' (', $map_file, ') does not exist!')"/>
+				<xsl:value-of select="$map_error"/>
+				<xsl:message><xsl:value-of select="$map_error"/></xsl:message>
 				<xsl:text>&#xa;&#xa;</xsl:text>
 			</xsl:otherwise>
 		</xsl:choose>
@@ -4728,7 +4758,7 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 			<xsl:otherwise>
 				<xsl:call-template name="error_message">
 					<xsl:with-param 
-							name="message" select="concat('Error 13: Can not find bibitem referenced by: ',$ref, 'in ../data/basic/bibliography.xml')"/>
+							name="message" select="concat('Error 13: Can not find bibitem referenced by: ',$ref, ' in ../data/basic/bibliography.xml')"/>
 				</xsl:call-template>
 			</xsl:otherwise>
 		</xsl:choose>

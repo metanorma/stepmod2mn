@@ -23,24 +23,33 @@
 				<!-- bibliography contains reference to ISO/IEC 8824-1 -->
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:call-template name="error_message">
+				<!-- <xsl:call-template name="error_message">
 					<xsl:with-param name="message" select="'Bibliography error: missing reference to ISO/IEC 8824-1#Add &lt;bibitem.inc ref=&quot;ref8824-1&quot;/&gt;'"/>
-				</xsl:call-template>
+				</xsl:call-template> -->
+				<xsl:message>Warning: added missing bibliography reference to ISO/IEC 8824-1.</xsl:message>
+				<xsl:text>* [[[bibitem_ref8824-1,ISO/IEC 8824-1]]], ISO/IEC 8824-1, Information technology — Abstract Syntax Notation One (ASN.1) — Part 1: Specification of basic notation.</xsl:text>
+				<xsl:text>&#xa;&#xa;</xsl:text>
 			</xsl:otherwise>
 		</xsl:choose>
 		<xsl:choose>
 			<xsl:when test="$doc_type='module'">
 				<xsl:if test="not(./bibitem.inc[@ref='AMConGde06'])">
-					<xsl:call-template name="error_message">
+					<!-- <xsl:call-template name="error_message">
 						<xsl:with-param name="message" select="'Bibliography error: missing reference to Guidelines for the content of application modules#Add &lt;bibitem.inc ref=&quot;AMConGde06&quot;/&gt;'"/>
-					</xsl:call-template>
+					</xsl:call-template> -->
+					<xsl:message>Warning: added missing bibliography reference to Guidelines for the content of application modules.</xsl:message>
+					<xsl:text>* [[[bibitem_AMConGde06,ISO TC 184/SC 4 N1685]]], Guidelines for the content of application modules. ISO TC 184/SC 4 N1685, 2004-02-27.</xsl:text>
+					<xsl:text>&#xa;&#xa;</xsl:text>
 				</xsl:if>
 			</xsl:when>
 			<xsl:when test="$doc_type='AP'">
 				<xsl:if test="not(./bibitem.inc[@ref='APConGde'])">
-					<xsl:call-template name="error_message">
+					<!-- <xsl:call-template name="error_message">
 						<xsl:with-param name="message" select="'Bibliography error: missing reference to Guidelines for the content of application protocols that use application modules#Add &lt;bibitem.inc ref=&quot;APConGde&quot;/&gt;'"/>
-					</xsl:call-template>
+					</xsl:call-template> -->
+					<xsl:message>Warning: added missing bibliography reference to Guidelines for the content of application protocols that use application modules.</xsl:message>
+					<xsl:text>* [[bibitem_APConGde, ISO TC 184/SC 4 N1863]]], Guidelines for the content of application protocols that use application modules. ISO TC 184/SC 4 N1863, 2005</xsl:text>
+					<xsl:text>&#xa;&#xa;</xsl:text>
 				</xsl:if>
 			</xsl:when>
 		</xsl:choose>

@@ -567,6 +567,7 @@
 	
 	
 	<xsl:template name="insertBoilerplate">
+		<xsl:param name="aname"/>
 		<xsl:param name="folder"/>
 		<xsl:param name="identifier"/>
 		<xsl:param name="text"/>
@@ -584,8 +585,11 @@
         <xsl:text>&#xa;&#xa;</xsl:text>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:text>Error: boilerplate text is empty.</xsl:text>
-        <xsl:text>&#xa;&#xa;</xsl:text>
+				<xsl:variable name="for_name">
+					<xsl:if test="$aname != ''">for '<xsl:value-of select="$aname"/>'</xsl:if>
+				</xsl:variable>
+        <xsl:message>Error: boilerplate text <xsl:value-of select="$for_name"/> is empty.</xsl:message>
+        <!-- <xsl:text>&#xa;&#xa;</xsl:text> -->
       </xsl:otherwise>
     </xsl:choose>
 	</xsl:template>
@@ -968,7 +972,7 @@
 													$next_char != ',' and $next_char != ';' and $next_char != '&quot;' and $next_char != '.' and $next_char != '?' and $next_char != '!'">true</xsl:when>
 													
 			<!-- text does not start or end with a word character -->
-			<xsl:when test="java_char:isLetter($first_char) != 'true' or java_char:isLetter($last_char) != 'true'">true</xsl:when>
+			<xsl:when test="($first_char != '' and java_char:isLetter($first_char) != 'true') or ($last_char != '' and java_char:isLetter($last_char) != 'true')">true</xsl:when>
 			
 			<xsl:otherwise>false</xsl:otherwise>
 		</xsl:choose>

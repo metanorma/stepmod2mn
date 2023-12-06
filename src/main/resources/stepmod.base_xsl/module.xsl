@@ -1543,7 +1543,7 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
         <xsl:call-template name="error_message">
           <xsl:with-param name="message">
             <xsl:value-of select="concat('(Error in
-                                  module.xml/module/@wg.number.',$type,' - ',
+                                  module.xml/module/@wg.number.',normalize-space($type),' - ',
                                   $test_wg_number)"/>
           </xsl:with-param>
         </xsl:call-template>
@@ -3921,7 +3921,7 @@ $module_ok,' Check the normatives references')"/>
             <xsl:call-template name="insertParagraph">
               <xsl:with-param name="text">
                 <xsl:text>* </xsl:text>
-                <xsl:apply-templates select="$nterm"/>
+                <xsl:apply-templates select="$term"/>
                 <xsl:choose>
                   <xsl:when test="position()=last()">.</xsl:when>
                   <xsl:otherwise>;</xsl:otherwise>

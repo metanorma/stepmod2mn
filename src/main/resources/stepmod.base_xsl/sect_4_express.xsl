@@ -1257,16 +1257,17 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
       <xsl:when test="string-length(./description)>0">
         <!-- only output <p> if description starts with text, otherwise
              assume that the description sarts with <p> -->
-        <xsl:choose>          
+        <!-- <xsl:choose>          
           <xsl:when test="string-length(normalize-space(./description/text()))=0">
             <xsl:apply-templates select="./description" mode="exp_description"/>
           </xsl:when>
           <xsl:otherwise>
-            <!-- <p> -->
+            <p>
               <xsl:apply-templates select="./description" mode="exp_description"/>
-            <!-- </p> -->
+            </p>
           </xsl:otherwise>
-        </xsl:choose>
+        </xsl:choose> -->
+				<xsl:apply-templates select="./description" mode="exp_description"/>
       </xsl:when>
       <xsl:otherwise>
         <!-- <p> -->
@@ -1297,7 +1298,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
 
   <!-- https://github.com/metanorma/stepmod2mn/issues/10 -->
   <!-- If no text is provided in descriptions.xml for SELECT and ENUMERATION types, the XSLT pastes boilerplate descriptions in the document. -->
-  <xsl:if test="./select and normalize-space($type_select_boilerplate) = ''">
+  <xsl:if test="./select and normalize-space($type_select_boilerplate) = '' and string-length(./description) = 0">
       <xsl:variable name="external_description">
         <xsl:call-template name="check_external_description">
           <xsl:with-param name="schema" select="../@name"/>
@@ -1306,9 +1307,11 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
       </xsl:variable>
       <xsl:if test="$external_description='false'">
         <xsl:call-template name="insertBoilerplate">
+          <xsl:with-param name="aname" select="$aname"/>
           <xsl:with-param name="folder" select="'General'"/>
           <xsl:with-param name="identifier" select="'SC4_xxxx'"/>
-          <!-- Example: Put boilerplate for type select, see https://github.com/metanorma/iso-tc184-sc4-directives/blob/master/supplementary-directives.adoc -->
+          <!-- Example: Put boilerplate for type select, see 
+					https://github.com/metanorma/iso-tc184-sc4-directives/blob/main/sources/supplementary-directives/document.adoc -->
           <xsl:with-param name="text"></xsl:with-param>
           <!-- Example /src/main/resources/empty.adoc -->
           <xsl:with-param name="file"></xsl:with-param>
@@ -1359,9 +1362,11 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
     </xsl:variable>
     <xsl:if test="$external_description='false'">
       <xsl:call-template name="insertBoilerplate">
+				<xsl:with-param name="aname" select="$aname"/>
         <xsl:with-param name="folder" select="'General'"/>
         <xsl:with-param name="identifier" select="'SC4_xxxx'"/>
-        <!-- Example: Put boilerplate for type enumeration, see https://github.com/metanorma/iso-tc184-sc4-directives/blob/master/supplementary-directives.adoc -->
+        <!-- Example: Put boilerplate for type enumeration, see 
+				https://github.com/metanorma/iso-tc184-sc4-directives/blob/main/sources/supplementary-directives/document.adoc -->
         <xsl:with-param name="text"></xsl:with-param>
       </xsl:call-template>
     </xsl:if>
@@ -3636,7 +3641,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
           <!-- There seems to be a bug in MXSL3. 
                Should not need to convert $xml_file to a string -->
           <xsl:when
-            test="document(string($xml_file))/express/schema/interface">
+            test="$xml_file != '1000' and document(string($xml_file))/express/schema/interface">
             <xsl:call-template name="express_clause_number">
               <xsl:with-param name="clause" select="'interface'"/>
               <xsl:with-param name="schema_name" select="$schema_name"/>
@@ -3653,7 +3658,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
           <!-- There seems to be a bug in MXSL3. 
                Should not need to convert $xml_file to a string -->
           <xsl:when
-            test="document(string($xml_file))/express/schema/constant">
+            test="$xml_file != '1000' and document(string($xml_file))/express/schema/constant">
             <xsl:call-template name="express_clause_number">
               <xsl:with-param name="clause" select="'constant'"/>
               <xsl:with-param name="schema_name" select="$schema_name"/>
@@ -3670,7 +3675,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
           <!-- There seems to be a bug in MXSL3. 
                Should not need to convert $xml_file to a string -->
           <xsl:when
-            test="document(string($xml_file))/express/schema/type">
+            test="$xml_file != '1000' and document(string($xml_file))/express/schema/type">
             <xsl:call-template name="express_clause_number">
               <xsl:with-param name="clause" select="'type'"/>
               <xsl:with-param name="schema_name" select="$schema_name"/>
@@ -3687,7 +3692,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
           <!-- There seems to be a bug in MXSL3. 
                Should not need to convert $xml_file to a string -->
           <xsl:when
-            test="document(string($xml_file))/express/schema/entity">
+            test="$xml_file != '1000' and document(string($xml_file))/express/schema/entity">
             <xsl:call-template name="express_clause_number">
               <xsl:with-param name="clause" select="'entity'"/>
               <xsl:with-param name="schema_name" select="$schema_name"/>
@@ -3704,7 +3709,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
           <!-- There seems to be a bug in MXSL3. 
                Should not need to convert $xml_file to a string -->
           <xsl:when
-            test="document(string($xml_file))/express/schema/subtype.constraint">
+            test="$xml_file != '1000' and document(string($xml_file))/express/schema/subtype.constraint">
             <xsl:call-template name="express_clause_number">
               <xsl:with-param name="clause" select="'subtype.constraint'"/>
               <xsl:with-param name="schema_name" select="$schema_name"/>
@@ -3722,7 +3727,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
           <!-- There seems to be a bug in MXSL3. 
                Should not need to convert $xml_file to a string -->
           <xsl:when
-            test="document(string($xml_file))/express/schema/function">
+            test="$xml_file != '1000' and document(string($xml_file))/express/schema/function">
             <xsl:call-template name="express_clause_number">
               <xsl:with-param name="clause" select="'function'"/>
               <xsl:with-param name="schema_name" select="$schema_name"/>
@@ -3739,7 +3744,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
           <!-- There seems to be a bug in MXSL3. 
                Should not need to convert $xml_file to a string -->
           <xsl:when
-            test="document(string($xml_file))/express/schema/rule">
+            test="$xml_file != '1000' and document(string($xml_file))/express/schema/rule">
             <xsl:call-template name="express_clause_number">
               <xsl:with-param name="clause" select="'rule'"/>
               <xsl:with-param name="schema_name" select="$schema_name"/>
@@ -3756,7 +3761,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
           <!-- There seems to be a bug in MXSL3. 
                Should not need to convert $xml_file to a string -->
           <xsl:when
-            test="document(string($xml_file))/express/schema/procedure">
+            test="$xml_file != '1000' and document(string($xml_file))/express/schema/procedure">
             <xsl:call-template name="express_clause_number">
               <xsl:with-param name="clause" select="'procedure'"/>
               <xsl:with-param name="schema_name" select="$schema_name"/>
@@ -3773,7 +3778,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
         <!-- There seems to be a bug in MXSL3. 
                Should not need to convert $xml_file to a string --> 
           <xsl:when
-            test="document(string($xml_file))/express/schema/interface/described.item[@kind='CONSTANT']">
+            test="$xml_file != '1000' and document(string($xml_file))/express/schema/interface/described.item[@kind='CONSTANT']">
             <xsl:call-template name="express_clause_number">
               <xsl:with-param name="clause" select="'imported_constant'"/>
               <xsl:with-param name="schema_name" select="$schema_name"/>
@@ -3790,7 +3795,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
           <!-- There seems to be a bug in MXSL3. 
                Should not need to convert $xml_file to a string --> 
           <xsl:when
-            test="document(string($xml_file))/express/schema/interface/described.item[@kind='TYPE']">
+            test="$xml_file != '1000' and document(string($xml_file))/express/schema/interface/described.item[@kind='TYPE']">
             <xsl:call-template name="express_clause_number">
               <xsl:with-param name="clause" select="'imported_type'"/>
               <xsl:with-param name="schema_name" select="$schema_name"/>
@@ -3807,7 +3812,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
           <!-- There seems to be a bug in MXSL3. 
                Should not need to convert $xml_file to a string --> 
           <xsl:when
-            test="document(string($xml_file))/express/schema/interface/described.item[@kind='ENTITY']">
+            test="$xml_file != '1000' and document(string($xml_file))/express/schema/interface/described.item[@kind='ENTITY']">
             <xsl:call-template name="express_clause_number">
               <xsl:with-param name="clause" select="'imported_entity'"/>
               <xsl:with-param name="schema_name" select="$schema_name"/>
@@ -3824,7 +3829,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
           <!-- There seems to be a bug in MXSL3. 
                Should not need to convert $xml_file to a string --> 
           <xsl:when
-            test="document(string($xml_file))/express/schema/interface/described.item[@kind='FUNCTION']">
+            test="$xml_file != '1000' and document(string($xml_file))/express/schema/interface/described.item[@kind='FUNCTION']">
             <xsl:call-template name="express_clause_number">
               <xsl:with-param name="clause" select="'imported_function'"/>
               <xsl:with-param name="schema_name" select="$schema_name"/>
@@ -3841,7 +3846,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
           <!-- There seems to be a bug in MXSL3. 
                Should not need to convert $xml_file to a string --> 
           <xsl:when
-            test="document(string($xml_file))/express/schema/interface/described.item[@kind='RULE']">
+            test="$xml_file != '1000' and document(string($xml_file))/express/schema/interface/described.item[@kind='RULE']">
             <xsl:call-template name="express_clause_number">
               <xsl:with-param name="clause" select="'imported_rule'"/>
               <xsl:with-param name="schema_name" select="$schema_name"/>
@@ -3858,7 +3863,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
         <!-- There seems to be a bug in MXSL3. 
              Should not need to convert $xml_file to a string --> 
         <xsl:when
-            test="document(string($xml_file))/express/schema/interface/described.item[@kind='PROCEDURE']"> 
+            test="$xml_file != '1000' and document(string($xml_file))/express/schema/interface/described.item[@kind='PROCEDURE']"> 
             <xsl:call-template name="express_clause_number">
               <xsl:with-param name="clause" select="'imported_procedure'"/>
               <xsl:with-param name="schema_name" select="$schema_name"/>
@@ -3920,7 +3925,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
     </xsl:call-template>
   </xsl:variable>
 
-  <xsl:variable name="xml_file">
+  <xsl:variable name="xml_file_">
     <xsl:choose>
       <xsl:when test="contains($schema_name,'_arm')">
         <xsl:value-of select="concat($module_dir,'/arm.xml')"/>
@@ -3934,6 +3939,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
       </xsl:otherwise>
     </xsl:choose>      
   </xsl:variable>
+  <xsl:variable name="xml_file" select="normalize-space($xml_file_)"/>>
 
 
   <!-- create a variable for each clause then assign 1 to it if the clause
@@ -3962,7 +3968,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
   <xsl:variable name="constant_clause">
     <xsl:choose>
       <xsl:when
-        test="document(string($xml_file))/express/schema/constant">
+        test="$xml_file != '1000' and document(string($xml_file))/express/schema/constant">
         1
       </xsl:when>
       <xsl:otherwise>
@@ -3974,7 +3980,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
   <xsl:variable name="imported_constant_clause">
     <xsl:choose>
       <xsl:when
-        test="document(string($xml_file))/express/schema/interface/described.item[@kind='CONSTANT']">
+        test="$xml_file != '1000' and document(string($xml_file))/express/schema/interface/described.item[@kind='CONSTANT']">
         1
       </xsl:when>
       <xsl:otherwise>
@@ -3986,7 +3992,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
   <xsl:variable name="type_clause">
     <xsl:choose>
       <xsl:when
-        test="document(string($xml_file))/express/schema/type">
+        test="$xml_file != '1000' and document(string($xml_file))/express/schema/type">
         1
       </xsl:when>
       <xsl:otherwise>
@@ -3998,7 +4004,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
   <xsl:variable name="imported_type_clause">
     <xsl:choose>
       <xsl:when
-        test="document(string($xml_file))/express/schema/interface/described.item[@kind='TYPE']">
+        test="$xml_file != '1000' and document(string($xml_file))/express/schema/interface/described.item[@kind='TYPE']">
         1
       </xsl:when>
       <xsl:otherwise>
@@ -4011,7 +4017,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
   <xsl:variable name="entity_clause">
     <xsl:choose>
       <xsl:when
-        test="document(string($xml_file))/express/schema/entity">
+        test="$xml_file != '1000' and document(string($xml_file))/express/schema/entity">
         1
       </xsl:when>
       <xsl:otherwise>
@@ -4023,7 +4029,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
   <xsl:variable name="imported_entity_clause">
     <xsl:choose>
       <xsl:when
-        test="document(string($xml_file))/express/schema/interface/described.item[@kind='ENTITY' or @kind='ATTRIBUTE']">
+        test="$xml_file != '1000' and document(string($xml_file))/express/schema/interface/described.item[@kind='ENTITY' or @kind='ATTRIBUTE']">
         1
       </xsl:when>
       <xsl:otherwise>
@@ -4035,7 +4041,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
   <xsl:variable name="subtype_constraint_clause">
     <xsl:choose>
       <xsl:when
-        test="document(string($xml_file))/express/schema/subtype.constraint">
+        test="$xml_file != '1000' and document(string($xml_file))/express/schema/subtype.constraint">
         1
       </xsl:when>
       <xsl:otherwise>
@@ -4047,7 +4053,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
   <xsl:variable name="function_clause">
     <xsl:choose>
       <xsl:when
-        test="document(string($xml_file))/express/schema/function">
+        test="$xml_file != '1000' and document(string($xml_file))/express/schema/function">
         1
       </xsl:when>
       <xsl:otherwise>
@@ -4059,7 +4065,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
   <xsl:variable name="imported_function_clause">
     <xsl:choose>
       <xsl:when
-        test="document(string($xml_file))/express/schema/interface/described.item[@kind='FUNCTION']">
+        test="$xml_file != '1000' and document(string($xml_file))/express/schema/interface/described.item[@kind='FUNCTION']">
         1
       </xsl:when>
       <xsl:otherwise>
@@ -4071,7 +4077,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
   <xsl:variable name="rule_clause">
     <xsl:choose>
       <xsl:when
-        test="document(string($xml_file))/express/schema/rule">
+        test="$xml_file != '1000' and document(string($xml_file))/express/schema/rule">
         1
       </xsl:when>
       <xsl:otherwise>
@@ -4083,7 +4089,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
   <xsl:variable name="imported_rule_clause">
     <xsl:choose>
       <xsl:when
-        test="document(string($xml_file))/express/schema/interface/described.item[@kind='RULE']">
+        test="$xml_file != '1000' and document(string($xml_file))/express/schema/interface/described.item[@kind='RULE']">
         1
       </xsl:when>
       <xsl:otherwise>
@@ -4095,7 +4101,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
   <xsl:variable name="procedure_clause">
     <xsl:choose>
       <xsl:when
-        test="document(string($xml_file))/express/schema/procedure">
+        test="$xml_file != '1000' and document(string($xml_file))/express/schema/procedure">
         1
       </xsl:when>
       <xsl:otherwise>
@@ -4107,7 +4113,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
   <xsl:variable name="imported_procedure_clause">
     <xsl:choose>
       <xsl:when
-        test="document(string($xml_file))/express/schema/interface/described.item[@kind='PROCEDURE']">
+        test="$xml_file != '1000' and document(string($xml_file))/express/schema/interface/described.item[@kind='PROCEDURE']">
         1
       </xsl:when>
       <xsl:otherwise>

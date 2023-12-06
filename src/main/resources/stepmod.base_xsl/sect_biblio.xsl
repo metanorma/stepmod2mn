@@ -45,7 +45,8 @@ $Id: sect_biblio.xsl,v 1.12 2010/11/09 11:22:54 radack Exp $
 			</xsl:when>
 			<xsl:otherwise>
 				<!-- output the defaults -->
-        <xsl:variable name="bibliography_default_xml" select="document(concat($path,'../../../../basic/bibliography_default.xml'))"/>
+        <!-- <xsl:variable name="bibliography_default_xml" select="document(concat($path,'../../../../basic/bibliography_default.xml'))"/> -->
+        <xsl:variable name="bibliography_default_xml" select="document(concat($path,'../../basic/bibliography_default.xml'))"/>
 				<xsl:apply-templates select="$bibliography_default_xml/bibliography">
 					<xsl:with-param name="doc_type">module</xsl:with-param>
 				</xsl:apply-templates>
