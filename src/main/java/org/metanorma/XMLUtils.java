@@ -103,6 +103,29 @@ public class XMLUtils {
             Path outAdocPath = Paths.get((new File(inputXmlFile)).getParent(), Constants.DOCUMENT_ADOC);
             outAdocFile = outAdocPath.toString();
         } else {
+            // get linearized XML with default attributes substitution from DTD
+            String linearizedXML = XMLUtils.processLinearizedXML(inputXmlFile);
+            String part = XMLUtils.getTextByXPath(linearizedXML, "*/@part");
+            if (part.isEmpty()) {
+                part = "unknown";
+            }
+
+            String folderDocumentName = "iso-10303-" +  part;
+
+            Path outAdocPath = Paths.get(argOutputPath, folderDocumentName, Constants.DOCUMENT_ADOC);
+            outAdocFile = outAdocPath.toString();
+        }
+        return outAdocFile;
+    }
+
+    public static String getOutputAdocPath2(String argOutputPath, String inputXmlFile) {
+        String outAdocFile = "";
+        if (argOutputPath.isEmpty()) {
+            // if the parameter '--output' is missing,
+            // then save ADOC result in then input folder
+            Path outAdocPath = Paths.get((new File(inputXmlFile)).getParent(), Constants.DOCUMENT_ADOC);
+            outAdocFile = outAdocPath.toString();
+        } else {
             String folderType = "other";
             if (inputXmlFile.toLowerCase().endsWith("resource.xml")) {
                 folderType = "resources";
