@@ -11,8 +11,9 @@ Purpose:
 	xmlns:xalan="http://xml.apache.org/xalan" 
 	xmlns:java="http://xml.apache.org/xalan/java" 
 	xmlns:str="http://exslt.org/strings"
+	xmlns:redirect="http://xml.apache.org/xalan/redirect"
 	exclude-result-prefixes="xalan"
-		version="1.0" extension-element-prefixes="str">
+		version="1.0" extension-element-prefixes="str redirect">
 		
 		<!-- xmlns:msxsl="urn:schemas-microsoft-com:xslt"
 	xmlns:exslt="http://exslt.org/common"
@@ -1782,6 +1783,16 @@ Purpose:
 		<xsl:text>&#xa;&#xa;</xsl:text>
 		</xsl:if> <!-- skip -->
 
+		<xsl:variable name="express_g_diagrams_yaml" select="concat($outpath, '/express-g-diagrams.yaml')"/>
+
+		<xsl:message>Start express_g_diagrams_yaml</xsl:message>
+
+		<redirect:open file="{$express_g_diagrams_yaml}"/>
+		<redirect:write file="{$express_g_diagrams_yaml}">
+			<xsl:text>---</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+		</redirect:write>
+		
 		<!-- generate SVG images -->
 		<xsl:for-each select="./schema/express-g/imgfile | ./schema/express-g/img">
 			<xsl:variable name="schema">
@@ -1790,7 +1801,18 @@ Purpose:
 			<!-- generate SVG from .xml -->
 			<!-- Note: the variable generateSVG is using just for call the function 'generateSVG' -->
 			<xsl:variable name="generateSVG" select="java:generateSVG(java:org.metanorma.stepmod2mn.new(),concat($path,'/','../../resources/', $schema,'/',@file),'',$outpath_schemas,false())"/>
+			
+			<xsl:if test="normalize-space($generateSVG) != ''">
+				<redirect:write file="{$express_g_diagrams_yaml}">
+					<xsl:text>- path: </xsl:text>
+					<xsl:variable name="image_relative_path_new" select="java:org.metanorma.Util.getRelativePath($generateSVG, $outpath)"/>
+					<xsl:value-of select="$image_relative_path_new"/>
+					<xsl:text>&#xa;</xsl:text>
+				</redirect:write>
+			</xsl:if>
+			
 		</xsl:for-each>
+		<redirect:close file="{$express_g_diagrams_yaml}"/>
 
 		<xsl:text>&#xa;&#xa;</xsl:text>
 		<xsl:text>[lutaml_express, schemas, context, leveloffset=+1]</xsl:text>
