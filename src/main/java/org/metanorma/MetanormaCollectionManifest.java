@@ -51,11 +51,11 @@ public class MetanormaCollectionManifest {
 
                     // manifest:
                     //  - level: document
-                    update_docref(yamlDocumentObj, 0, documentFolder);
+                    update_docref(yamlDocumentObj, 0, documentFolder, repositoryRootFolder);
 
                     // manifest:
                     //  - level: attachments
-                    update_docref(yamlDocumentObj, 1, documentFolder);
+                    update_docref(yamlDocumentObj, 1, documentFolder, repositoryRootFolder);
                 }
                 counter++;
             }
@@ -68,7 +68,7 @@ public class MetanormaCollectionManifest {
         }
     }
 
-    private void update_docref(Map<String, Object> yamlDocumentObj, int num, String documentFolder) {
+    private void update_docref(Map<String, Object> yamlDocumentObj, int num, String documentFolder, String repositoryRootFolder) {
         ArrayList docref =
                 ((ArrayList<Object>)
                         ((LinkedHashMap <String, Object>)
@@ -83,7 +83,8 @@ public class MetanormaCollectionManifest {
             String fileref = (String)items.get("fileref");
 
             String fullPath = Paths.get(documentFolder, fileref).toFile().getAbsolutePath().replace("\\","/");
-            items.put("fileref",fullPath);
+            String relativePath = Util.getRelativePath(fullPath, repositoryRootFolder);
+            items.put("fileref",relativePath);
 
             // add updated structure into yaml object
             ArrayList template_docref =

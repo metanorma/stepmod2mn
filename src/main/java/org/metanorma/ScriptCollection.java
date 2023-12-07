@@ -53,6 +53,7 @@ public class ScriptCollection {
             String paramW = "iso10303-output";
             if (outputPath != null && !outputPath.isEmpty()) {
                 paramW = outputPath.replace("\\","/") + "/output";
+                paramW = Util.getRelativePath(paramW, repositoryRootFolder);
             }
 
             sbScript.append("for name in $INPUT_REPOS").append("\n")
