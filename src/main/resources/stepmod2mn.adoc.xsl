@@ -1266,7 +1266,7 @@
 		</redirect:write>
 	</xsl:template>
 	
-	<xsl:template name="generateCollectionSH">
+	<!-- <xsl:template name="generateCollectionSH">
 		<xsl:param name="partnumber"/>
 		<xsl:message>[INFO] Generation collection.sh ...</xsl:message>
 		<redirect:write file="{$outpath}/collection.sh">
@@ -1278,7 +1278,7 @@
 			<xsl:if test="$partnumber != ''"><xsl:text>-</xsl:text><xsl:value-of select="$partnumber"/></xsl:if>
 			<xsl:text>&#xa;</xsl:text>
 		</redirect:write>
-	</xsl:template>
+	</xsl:template> -->
 	
 	<!-- for debug purposes -->
 	<xsl:template match="*" mode="print_as_xml">

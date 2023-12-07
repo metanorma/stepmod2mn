@@ -40,7 +40,8 @@ public class ScriptCollection {
             sbScript.append("INPUT_REPOS=\"");
             List<String> repos = new ArrayList<>();
             for (Map.Entry<String,String> entry: inputOutputFiles) {
-                File f = new File(entry.getKey());
+                //File f = new File(entry.getKey());
+                File f = new File(entry.getValue());
                 repos.add(f.getParentFile().getName());
             }
             sbScript.append(repos.toString()
