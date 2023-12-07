@@ -64,21 +64,32 @@ public class Util {
         }
     }
 
-    public static void createSymbolicLink(String targetFilename, String symbolicLink) {
+    public static void createSymbolicLink(String targetFilename, String symbolicLink, boolean isFolder, boolean isRelativePath) {
+        String os = System.getProperty("os.name");
+        boolean isWindows = os.toLowerCase().contains("windows");
         Path target = Paths.get(targetFilename);
         Path link = Paths.get(symbolicLink);
         try {
-            if (Files.exists(link)) {
+            /*if (Files.exists(link)) {
                 Files.delete(link);
+            }*/
+            Files.deleteIfExists(link);
+            if (isRelativePath) {
+                if(isFolder) {
+                    symbolicLink = link.getParent().toString();
+                }
+                target = Paths.get(Util.getRelativePath(targetFilename, symbolicLink));
             }
             Files.createSymbolicLink(link, target);
         } catch (IOException ex) {
-            String os = System.getProperty("os.name");
-            if (os.toLowerCase().contains("windows")) {
+            if (isWindows) {
                 // need admin right to create symbolic link,
-                // therefore create 'kunction' (mklink /J ...)
+                // therefore create 'function' (mklink /J ...)
                 // found here: https://github.com/Atry/scala-junction
                 try {
+                    if (isRelativePath) {
+                        target = Paths.get(targetFilename);
+                    }
                     Path targetRealPath = target.toRealPath();
                     com.dongxiguo.junction.Junction.createJunction(new File(link.toString()), new File(targetRealPath.toString()));
                 } catch (Exception e) {

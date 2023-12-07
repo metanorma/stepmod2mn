@@ -363,6 +363,9 @@
 					<!-- output template as 04-schemas.adoc -->
 					<!-- <xsl:call-template name="insert_04-schemas_adoc"/> -->
 				</file>
+				<!-- create symbolic link to the folder 'templates` in the root of repository -->
+				<file link="templates" target="../../templates" folder="true" relative="true"/>
+				
 			</xsl:if>
 			
 			<!-- Annex A Short names of entities -->

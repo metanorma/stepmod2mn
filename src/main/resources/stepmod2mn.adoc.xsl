@@ -479,9 +479,16 @@
 	
 	<!-- create symbolic link -->
 	<xsl:template match="file[@target]" mode="text">
-		<xsl:variable name="targetFile" select="concat($path, '/', @target)"/>
+		<xsl:variable name="targetFile" select="concat($outpath, '/', @target)"/>
+			<!--<xsl:choose>
+				<xsl:when test="@relative = 'true'"><xsl:value-of select="@target"/></xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="concat($outpath, '/', @target)"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable> -->
 		<xsl:variable name="symbolicLink" select="concat($outpath, '/', @link)"/>
-		<xsl:variable name="createLink" select="java:org.metanorma.Util.createSymbolicLink($targetFile, $symbolicLink)"/>
+		<xsl:variable name="createLink" select="java:org.metanorma.Util.createSymbolicLink($targetFile, $symbolicLink, @folder = 'true', @relative = 'true')"/>
 	</xsl:template>
 	
 	<!-- copy file from stepmod2mn.jar -->
