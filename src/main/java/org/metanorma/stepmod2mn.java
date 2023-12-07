@@ -361,7 +361,10 @@ public class stepmod2mn {
 
                         try (Stream<Path> walk = Files.walk(Paths.get(fXMLin.getAbsolutePath()))) {
                             List<String> inputXMLfiles = walk.map(x -> x.toString())
-                                    .filter(f -> f.endsWith("resource.xml") || f.endsWith("module.xml")).collect(Collectors.toList());
+                                    .filter(f -> f.endsWith("/resource.xml") ||
+                                            f.endsWith("\\resource.xml") ||
+                                            f.endsWith("/module.xml") ||
+                                            f.endsWith("\\module.xml")).collect(Collectors.toList());
 
                             for (String inputXmlFile: inputXMLfiles) {
                                 String outAdocFile = XMLUtils.getOutputAdocPath(argOutputPath, inputXmlFile);
