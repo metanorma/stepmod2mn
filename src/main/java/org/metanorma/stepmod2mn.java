@@ -361,7 +361,10 @@ public class stepmod2mn {
 
                         try (Stream<Path> walk = Files.walk(Paths.get(fXMLin.getAbsolutePath()))) {
                             List<String> inputXMLfiles = walk.map(x -> x.toString())
-                                    .filter(f -> f.endsWith("resource.xml") || f.endsWith("module.xml")).collect(Collectors.toList());
+                                    .filter(f -> f.endsWith("/resource.xml") ||
+                                            f.endsWith("\\resource.xml") ||
+                                            f.endsWith("/module.xml") ||
+                                            f.endsWith("\\module.xml")).collect(Collectors.toList());
 
                             for (String inputXmlFile: inputXMLfiles) {
                                 String outAdocFile = XMLUtils.getOutputAdocPath(argOutputPath, inputXmlFile);
@@ -666,21 +669,27 @@ public class stepmod2mn {
         this.repositoryIndex = repositoryIndex;
     }
 
-    public void generateSVG(String xmlFilePath, String image, String outPath, boolean isSVGmap) throws IOException, TransformerException, SAXParseException {
+    public String generateSVG(String xmlFilesPath, String image, String outPath, boolean isSVGmap) throws IOException, TransformerException, SAXParseException {
+
         List<String> xmlFiles = new ArrayList<>();
-        try (Stream<Path> walk = Files.walk(Paths.get(xmlFilePath))) {
+        try (Stream<Path> walk = Files.walk(Paths.get(xmlFilesPath))) {
             xmlFiles = walk
                 .filter(p -> !Files.isDirectory(p))   
                 .map(p -> p.toString())
                 .filter(f -> f.toLowerCase().endsWith(Constants.XML_EXTENSION))
                 .collect(Collectors.toList());
         } catch (Exception e) {
-            System.err.println("Can't generate SVG file(s) for " + xmlFilePath + "...");
+            System.err.println("Can't generate SVG file(s) for " + xmlFilesPath + "...");
             e.printStackTrace();
         }
+        List<String> outputSVGs = new ArrayList<>();
         for(String xmlFile: xmlFiles) {
-            new SVGGenerator().generateSVG(xmlFile, image, outPath, isSVGmap);
+            outputSVGs.add(new SVGGenerator().generateSVG(xmlFile, image, outPath, isSVGmap));
         }
-        //xmlFiles.forEach(x -> System.out.println(x));
+        return outputSVGs.toString()
+                .replace("[", "")
+                .replace("]", "")
+                .replace(",", " ")
+                .replace(" ", "");
     }
 }

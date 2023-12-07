@@ -13,7 +13,7 @@ public class SVGGenerator {
 
     final String SVG_EXTENSION = ".svg";
 
-    public void generateSVG(String xmlFile, String image, String outPath, boolean isSVGmap) {
+    public String generateSVG(String xmlFile, String image, String outPath, boolean isSVGmap) {
         try {
             String content = new String(Files.readAllBytes(Paths.get(xmlFile)));
             //if (content.contains("img.area")) {
@@ -72,10 +72,12 @@ public class SVGGenerator {
                     writer.write(xmlSVG);
                 }
                 System.out.println("SVG saved in " + svgFilename + ".");
+                return svgFilename;
             }
         } catch (Exception e)
         {
             e.printStackTrace();
         }
+        return "";
     }
 }

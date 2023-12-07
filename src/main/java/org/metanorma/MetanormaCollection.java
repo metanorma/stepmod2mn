@@ -1,12 +1,12 @@
 package org.metanorma;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class MetanormaCollection {
 
@@ -30,7 +30,42 @@ public class MetanormaCollection {
                     .append("    files:").append("\n");
 
             URI pathRootFolderURI = Paths.get(outputFolder).toUri();
+
+            List<Map.Entry<String,String>> docFolders = new ArrayList<>();
             for (Map.Entry<String, String> entry : inputOutputFiles) {
+                String resultAdoc = entry.getValue();
+                String parentFolder = new File(resultAdoc).getParentFile().getName();
+                if (parentFolder.contains(Constants.ISO_STANDARD_PREFIX)) {
+                    parentFolder = parentFolder.substring(parentFolder.indexOf(Constants.ISO_STANDARD_PREFIX) + Constants.ISO_STANDARD_PREFIX.length());
+                }
+                docFolders.add(new AbstractMap.SimpleEntry<>(parentFolder, resultAdoc));
+            }
+
+            Collections.sort(docFolders, new Comparator<Map.Entry<String, String>>() {
+                public int compare(Map.Entry<String, String> a, Map.Entry<String, String> b){
+                    Integer aInt = toNumeric(a.getKey());
+                    Integer bInt = toNumeric(b.getKey());
+                    if (aInt != -1 && bInt != -1) {
+                        return aInt.compareTo(bInt);
+                    } else {
+                        return a.getKey().compareTo(b.getKey());
+                    }
+                }
+                public int toNumeric(String strNum) {
+                    if (strNum == null) {
+                        return -1;
+                    }
+                    try {
+                        int i = Integer.parseInt(strNum);
+                        return i;
+                    } catch (NumberFormatException nfe) {
+                        return -1;
+                    }
+                }
+            }
+            );
+
+            for (Map.Entry<String, String> entry : docFolders) {
                 String resultAdoc = entry.getValue();
                 URI resultAdocURI = Paths.get(resultAdoc).toUri();
                 URI relativeURI = pathRootFolderURI.relativize(resultAdocURI);

@@ -110,7 +110,7 @@ public class XMLUtils {
                 part = "unknown";
             }
 
-            String folderDocumentName = "iso-10303-" +  part;
+            String folderDocumentName = Constants.ISO_STANDARD_PREFIX +  part;
 
             Path outAdocPath = Paths.get(argOutputPath, folderDocumentName, Constants.DOCUMENT_ADOC);
             outAdocFile = outAdocPath.toString();
