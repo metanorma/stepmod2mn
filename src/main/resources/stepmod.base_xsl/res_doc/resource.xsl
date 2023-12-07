@@ -1785,8 +1785,6 @@ Purpose:
 
 		<xsl:variable name="express_g_diagrams_yaml" select="concat($outpath, '/express-g-diagrams.yaml')"/>
 
-		<xsl:message>Start express_g_diagrams_yaml</xsl:message>
-
 		<redirect:open file="{$express_g_diagrams_yaml}"/>
 		<redirect:write file="{$express_g_diagrams_yaml}">
 			<xsl:text>---</xsl:text>
