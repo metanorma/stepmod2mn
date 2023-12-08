@@ -1812,6 +1812,9 @@ Purpose:
 		</xsl:for-each>
 		<redirect:close file="{$express_g_diagrams_yaml}"/>
 
+		<!-- commented -->
+		<!-- https://github.com/metanorma/stepmod2mn/issues/115 -->
+		<xsl:if test="1 = 2">
 		<xsl:text>&#xa;&#xa;</xsl:text>
 		<xsl:text>[lutaml_express, schemas, context, leveloffset=+1]</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
@@ -1860,7 +1863,10 @@ Purpose:
 		<xsl:text>&#xa;</xsl:text>
 		<xsl:text>---</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
-		
+		</xsl:if>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>include::../templates/diagrams.adoc[]</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
 
 	</xsl:template>
 
