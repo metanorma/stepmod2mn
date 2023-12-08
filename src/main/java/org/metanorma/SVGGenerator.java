@@ -42,7 +42,7 @@ public class SVGGenerator {
                         }
                     }
                 }
-                System.out.println("Generate SVG file for " + xmlFile + "...");
+                System.out.println("[INFO] Generate SVG file for " + xmlFile + "...");
 
 
                 // get linearized XML with default attributes substitution from DTD
@@ -71,7 +71,7 @@ public class SVGGenerator {
                         BufferedWriter writer = Files.newBufferedWriter(Paths.get(svgFilename))) {
                     writer.write(xmlSVG);
                 }
-                System.out.println("SVG saved in " + svgFilename + ".");
+                System.out.println("[INFO] SVG saved in " + svgFilename + ".");
                 return svgFilename;
             }
         } catch (Exception e)

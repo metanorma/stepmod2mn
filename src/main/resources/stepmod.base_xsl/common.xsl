@@ -1534,6 +1534,12 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 		<xsl:variable name="message_" select="normalize-space($message)"/>
 		
 		<xsl:message>
+			<xsl:choose>
+				<xsl:when test="starts-with($message_, 'Error') or starts-with($message_, 'ERROR')">[ERROR] </xsl:when>
+				<xsl:when test="starts-with($message_, '[ERROR]')"></xsl:when>
+				<xsl:when test="contains($message_, ' error ')">[ERROR] </xsl:when>
+				<xsl:otherwise>[WARNING] </xsl:otherwise>
+			</xsl:choose>
 			<xsl:value-of select="translate($message_,$linebreakchar,'&#010;')"/>			
 		</xsl:message>
 		

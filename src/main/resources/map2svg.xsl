@@ -23,10 +23,10 @@
    
 	<xsl:template match="/">
 		<xsl:if test="count(//img) &gt; 1">
-			<xsl:message>Error: count img = <xsl:value-of select="count(//img)"/></xsl:message>
+			<xsl:message>[ERROR] count img = <xsl:value-of select="count(//img)"/></xsl:message>
 		</xsl:if>
 		<xsl:if test="normalize-space($image) != '' and count(//img[@src = $image]) != 1">
-			<xsl:message>Error: count img '<xsl:value-of select="$image"/>' = <xsl:value-of select="count(//img[@src = $image])"/></xsl:message>
+			<xsl:message>[ERROR] count img '<xsl:value-of select="$image"/>' = <xsl:value-of select="count(//img[@src = $image])"/></xsl:message>
 		</xsl:if>
 		<xsl:apply-templates />
 	</xsl:template>
@@ -63,10 +63,10 @@
 		<xsl:variable name="height" select="java:getHeight($bufferedImage)"/>
 		
 		<xsl:if test="number($width) != $width">
-			<xsl:message>Unknown width=<xsl:value-of select="$width"/></xsl:message>
+			<xsl:message>[ERROR] Unknown width=<xsl:value-of select="$width"/></xsl:message>
 		</xsl:if>
 		<xsl:if test="number($height) != $height">
-			<xsl:message>Unknown height=<xsl:value-of select="$height"/></xsl:message>
+			<xsl:message>[ERROR] Unknown height=<xsl:value-of select="$height"/></xsl:message>
 		</xsl:if>
 		
 		<xsl:variable name="filePath" select="java:toPath($file)"/>
@@ -75,7 +75,7 @@
 		<xsl:variable name="base64String" select="java:encodeToString($encoder, $fileContent)"/>
 		
 		<xsl:if test="normalize-space($base64String) = ''">
-			<xsl:message>Error: empty base64 string.</xsl:message>
+			<xsl:message>[ERROR] empty base64 string.</xsl:message>
 		</xsl:if>
 		
 		<!-- xmlns:xlink="http://www.w3.org/1999/xlink" -->
@@ -96,7 +96,7 @@
 	-->
 	
 	<xsl:template match="img.area">
-		<xsl:message>Error: Unknown area '<xsl:value-of select="@shape"/>'</xsl:message>
+		<xsl:message>[ERROR] Unknown area '<xsl:value-of select="@shape"/>'</xsl:message>
 	</xsl:template>
 	
 	<xsl:template match="img.area[@shape = 'rect']">

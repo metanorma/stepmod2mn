@@ -419,7 +419,7 @@
 	
 		<xsl:apply-templates select="xalan:nodeset($adoc)" mode="text"/>
 		
-		<xsl:for-each select="xalan:nodeset($adoc)//file">
+		<xsl:for-each select="xalan:nodeset($adoc)//file[@path]">
 			<xsl:text>include::</xsl:text><xsl:value-of select="@path"/><xsl:text>[]</xsl:text>
 			<xsl:text>&#xa;&#xa;</xsl:text>
 		</xsl:for-each>

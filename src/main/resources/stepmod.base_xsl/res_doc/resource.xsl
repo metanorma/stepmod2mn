@@ -1812,6 +1812,9 @@ Purpose:
 		</xsl:for-each>
 		<redirect:close file="{$express_g_diagrams_yaml}"/>
 
+		<!-- commented -->
+		<!-- https://github.com/metanorma/stepmod2mn/issues/115 -->
+		<xsl:if test="1 = 2">
 		<xsl:text>&#xa;&#xa;</xsl:text>
 		<xsl:text>[lutaml_express, schemas, context, leveloffset=+1]</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
@@ -1860,7 +1863,10 @@ Purpose:
 		<xsl:text>&#xa;</xsl:text>
 		<xsl:text>---</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
-		
+		</xsl:if>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>include::../templates/diagrams.adoc[]</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
 
 	</xsl:template>
 
@@ -4557,13 +4563,13 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 						<!-- <xsl:apply-templates select="$map_file_xml//img.area[@href]" mode="svg"/> -->
 					</xsl:when>
 					<xsl:otherwise>
-						<xsl:variable name="map_warning" select="concat('WARNING: Image map file ', @file, ' (', $map_file, ') is empty!')"/>
+						<xsl:variable name="map_warning" select="concat('[WARNING] Image map file ', @file, ' (', $map_file, ') is empty!')"/>
 						<xsl:message><xsl:value-of select="$map_warning"/></xsl:message>
 					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:variable name="map_error" select="concat('ERROR: Image map file ', @file, ' (', $map_file, ') does not exist!')"/>
+				<xsl:variable name="map_error" select="concat('[ERROR] Image map file ', @file, ' (', $map_file, ') does not exist!')"/>
 				<xsl:value-of select="$map_error"/>
 				<xsl:message><xsl:value-of select="$map_error"/></xsl:message>
 				<xsl:text>&#xa;&#xa;</xsl:text>
@@ -4646,13 +4652,13 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 						<!-- <xsl:apply-templates select="$map_file_xml//img.area[@href]" mode="svg"/> -->
 					</xsl:when>
 					<xsl:otherwise>
-						<xsl:variable name="map_warning" select="concat('WARNING: Image map file ', @file, ' (', $map_file, ') is empty!')"/>
+						<xsl:variable name="map_warning" select="concat('[WARNING] Image map file ', @file, ' (', $map_file, ') is empty!')"/>
 						<xsl:message><xsl:value-of select="$map_warning"/></xsl:message>
 					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:variable name="map_error" select="concat('ERROR: Image map file ', @file, ' (', $map_file, ') does not exist!')"/>
+				<xsl:variable name="map_error" select="concat('[ERROR] Image map file ', @file, ' (', $map_file, ') does not exist!')"/>
 				<xsl:value-of select="$map_error"/>
 				<xsl:message><xsl:value-of select="$map_error"/></xsl:message>
 				<xsl:text>&#xa;&#xa;</xsl:text>

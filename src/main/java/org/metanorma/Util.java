@@ -54,7 +54,7 @@ public class Util {
         ClassLoader classLoader = ClassLoader.getSystemClassLoader();
         try (InputStream is = classLoader.getResourceAsStream(fileName)) {
             if (is == null) {
-                System.err.println("Cannot get resource \"" + fileName + "\" from Jar file.");
+                System.err.println("[ERROR] Cannot get resource \"" + fileName + "\" from Jar file.");
                 return null;
             }
             try (InputStreamReader isr = new InputStreamReader(is);
@@ -97,7 +97,7 @@ public class Util {
                 }
             } else {
 
-                System.err.println("Cannot create the symbolic link \"" + symbolicLink + "\" for the file " + targetFilename + ".");
+                System.err.println("[ERROR] Cannot create the symbolic link \"" + symbolicLink + "\" for the file " + targetFilename + ".");
                 if (ex instanceof FileSystemException) {
                     System.err.println(((FileSystemException) ex).getReason());
                 }
@@ -112,7 +112,7 @@ public class Util {
             Files.createDirectories(target.getParent());
             Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException ex) {
-            System.err.println("Cannot copy the file \"" + sourceFilename + "\" to the file " + targetFilename + ": " + ex);
+            System.err.println("[ERROR] Cannot copy the file \"" + sourceFilename + "\" to the file " + targetFilename + ": " + ex);
         }
     }
 
@@ -120,12 +120,12 @@ public class Util {
         try {
             InputStream stream = getStreamFromResources(stepmod2mn.class.getClassLoader(), sourceFilename);
             if(stream == null) {
-                System.err.println("Cannot get resource \"" + sourceFilename + "\" from Jar file.");
+                System.err.println("[ERROR] Cannot get resource \"" + sourceFilename + "\" from Jar file.");
             }
             Path target = Paths.get(targetFilename);
             Files.copy(stream, target, StandardCopyOption.REPLACE_EXISTING);
         } catch (Exception ex) {
-            System.err.println("Cannot copy the resource file \"" + sourceFilename + "\" to the file " + targetFilename + ": " + ex);
+            System.err.println("[ERROR] Cannot copy the resource file \"" + sourceFilename + "\" to the file " + targetFilename + ": " + ex);
         }
     }
 
@@ -255,7 +255,7 @@ public class Util {
             }
             writeBuffer(sbBuffer, outputFile);
         }
-        System.out.println("Saved (" + fileOut.getName() + ") " + Util.getFileSize(fileOut) + " bytes.");
+        System.out.println("[INFO] Saved (" + fileOut.getName() + ") " + Util.getFileSize(fileOut) + " bytes.");
     }
 
     private static void writeBuffer(StringBuilder sbBuffer, String outputFile) throws IOException {

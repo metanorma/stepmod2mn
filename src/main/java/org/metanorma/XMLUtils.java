@@ -178,7 +178,7 @@ public class XMLUtils {
             }
             return sb.toString();
         } catch (Exception ex) {
-            System.err.println("Can't retrieve the text by XPath '" + expression + "':" + ex);
+            System.err.println("[ERROR] Can't retrieve the text by XPath '" + expression + "':" + ex);
         }
         return "";
     }
