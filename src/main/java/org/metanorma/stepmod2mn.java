@@ -588,7 +588,11 @@ public class stepmod2mn {
             }
 
             transformer.setParameter("outpath", outputPath);
-            transformer.setParameter("outpath_schemas", outputPathSchemas);
+            String outputPathSchemasKind = outputPathSchemas;
+            if (outputPathSchemasKind != null && !outputPathSchemasKind.isEmpty()) {
+                outputPathSchemasKind = Paths.get(outputPathSchemasKind, rootElement + "s").toString();
+            }
+            transformer.setParameter("outpath_schemas", outputPathSchemasKind);
             transformer.setParameter("boilerplate_path", boilerplatePath);
             if (repositoryIndex != null) {
                 transformer.setParameter("repositoryIndex_path", repositoryIndex.getPath());
