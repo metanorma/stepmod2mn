@@ -4239,12 +4239,23 @@ $module_ok,' Check the normatives references')"/>
     </xsl:for-each>
   </xsl:variable>
   
-    <xsl:variable name="generateSVG" select="java:generateSVG(java:org.metanorma.stepmod2mn.new(),concat($path,'/',@file),'',$outpath,true())"/>
-  
+    <!-- <xsl:variable name="generateSVG" select="java:generateSVG(java:org.metanorma.stepmod2mn.new(),concat($path,'/',@file),'',$outpath,true())"/> -->
+    <xsl:variable name="generateSVG" select="java:generateSVG(java:org.metanorma.stepmod2mn.new(),concat($path,'/',@file),'',$outpath_schemas,false())"/>
+		
     <xsl:call-template name="insertImage">
       <xsl:with-param name="id" select="$file"/>
       <xsl:with-param name="title" select="concat($title,$index)"/>
-      <xsl:with-param name="path" select="$href"/>
+      <xsl:with-param name="path">
+				<xsl:choose>
+					<xsl:when test="normalize-space($generateSVG) != ''">
+						<xsl:variable name="image_relative_path_new" select="java:org.metanorma.Util.getRelativePath($generateSVG, $outpath)"/>
+						<xsl:value-of select="$image_relative_path_new"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="$href"/>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:with-param>
     </xsl:call-template>
   </xsl:template>
   <xsl:template match="imgfile" mode="title">
