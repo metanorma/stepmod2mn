@@ -3,6 +3,7 @@ package org.metanorma;
 import java.io.*;
 import java.net.URL;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -513,18 +514,18 @@ public class stepmod2mn {
             // check @part
             String part = XMLUtils.getTextByXPath(linearizedXML, "*/@part");
             if (part.isEmpty() || !Util.isNumeric(part)) {
-                System.err.println("Ignore document processing due the wrong attribute 'part' value: '" + part + "'");
+                System.err.println("[WARNING] Ignore document processing due the wrong attribute 'part' value: '" + part + "'");
                 return false;
             }
 
             String documentName = XMLUtils.getTextByXPath(linearizedXML, "*/@name");
             if (excludeList.contains(documentName)) {
-                System.out.println("The document '" + documentName + "' excluded from the processing.");
+                System.out.println("[WARNING] The document '" + documentName + "' excluded from the processing.");
                 return false;
             }
 
             if (!includeOnlyList.isEmpty() && !includeOnlyList.contains(documentName)) {
-                System.out.println("The document '" + documentName + "' skipped from the processing.");
+                System.out.println("[WARNING] The document '" + documentName + "' skipped from the processing.");
                 return false;
             }
 
@@ -539,12 +540,12 @@ public class stepmod2mn {
             }
 
             if (!(repositoryIndex.contains(documentName, rootElement))) {
-                System.out.println("The document '" + documentName + "' skipped from the processing - it's missing in the repository index.");
+                System.out.println("[WARNING] The document '" + documentName + "' skipped from the processing - it's missing in the repository index.");
                 return false;
             }
 
             if (repositoryIndex.isWithdrawn(documentName, rootElement)) {
-                System.out.println("The document '" + documentName + "' skipped from the processing - it has status 'withdrawn' in the repository index.");
+                System.out.println("[WARNING] The document '" + documentName + "' skipped from the processing - it has status 'withdrawn' in the repository index.");
                 return false;
             }
 
@@ -600,6 +601,10 @@ public class stepmod2mn {
             transformer.setParameter("errors_fatal_log", ERRORS_FATAL_LOG);
 
             transformer.setParameter("debug", DEBUG);
+
+            if (!DEBUG) {
+                transformer.setErrorListener(new CustomErrorListener());
+            }
 
             StringWriter resultWriter = new StringWriter();
             StreamResult sr = new StreamResult(resultWriter);
@@ -683,8 +688,13 @@ public class stepmod2mn {
                 .filter(f -> f.toLowerCase().endsWith(Constants.XML_EXTENSION))
                 .collect(Collectors.toList());
         } catch (Exception e) {
-            System.err.println("Can't generate SVG file(s) for " + xmlFilesPath + "...");
-            e.printStackTrace();
+            System.err.print("[ERROR] Can't generate SVG file(s) for " + xmlFilesPath + "...");
+            if (e instanceof NoSuchFileException || e instanceof FileNotFoundException) {
+                System.err.println(" File not found.");
+            } else {
+                System.err.println("");
+                e.printStackTrace();
+            }
         }
         List<String> outputSVGs = new ArrayList<>();
         for(String xmlFile: xmlFiles) {

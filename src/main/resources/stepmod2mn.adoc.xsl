@@ -595,7 +595,7 @@
 				<xsl:variable name="for_name">
 					<xsl:if test="$aname != ''">for '<xsl:value-of select="$aname"/>'</xsl:if>
 				</xsl:variable>
-        <xsl:message>Error: boilerplate text <xsl:value-of select="$for_name"/> is empty.</xsl:message>
+        <xsl:message>[ERROR] boilerplate text <xsl:value-of select="$for_name"/> is empty.</xsl:message>
         <!-- <xsl:text>&#xa;&#xa;</xsl:text> -->
       </xsl:otherwise>
     </xsl:choose>
@@ -1138,9 +1138,9 @@
 				
 				<xsl:variable name="schema_exp_exists" select="java:org.metanorma.Util.fileExists(concat($path, '/', $schema_exp_relative_path))"/>
 				<xsl:if test="normalize-space($schema_exp_exists) = 'false'">
-					<xsl:variable name="msg">Error: the file '<xsl:value-of select="$schema_exp_relative_path"/>' does not exist.</xsl:variable>
+					<xsl:variable name="msg">[ERROR] File '<xsl:value-of select="$schema_exp_relative_path"/>' does not exist.</xsl:variable>
 					<xsl:message><xsl:value-of select="$msg"/></xsl:message>
-					<xsl:message><xsl:value-of select="$repositoryIndex_path"/></xsl:message>
+					<xsl:message>[INFO] Repository index path: <xsl:value-of select="$repositoryIndex_path"/></xsl:message>
 					<xsl:if test="$repositoryIndex_path != ''">
 						<xsl:if test="count(document($repositoryIndex_path)//resource_doc[@name = $current_resource_name]) = 0">
 							<redirect:write file="{$errors_fatal_log_filename}">

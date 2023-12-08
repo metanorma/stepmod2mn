@@ -1542,7 +1542,7 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
       <xsl:when test="contains($test_wg_number,'Error')">
         <xsl:call-template name="error_message">
           <xsl:with-param name="message">
-            <xsl:value-of select="concat('(Error in
+            <xsl:value-of select="concat('Error in
                                   module.xml/module/@wg.number.',normalize-space($type),' - ',
                                   $test_wg_number)"/>
           </xsl:with-param>

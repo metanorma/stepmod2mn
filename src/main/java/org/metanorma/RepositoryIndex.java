@@ -41,7 +41,7 @@ public class RepositoryIndex {
 
             } catch (Exception ex) {
                 if (isError) {
-                    System.err.println("Can't find the repository index '" + REPOSITORY_INDEX_FILENAME + "'.");
+                    System.err.println("[ERROR] Can't find the repository index '" + REPOSITORY_INDEX_FILENAME + "'.");
                 }
                 endFoldersTree = true;
             }

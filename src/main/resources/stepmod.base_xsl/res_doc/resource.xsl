@@ -4563,13 +4563,13 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 						<!-- <xsl:apply-templates select="$map_file_xml//img.area[@href]" mode="svg"/> -->
 					</xsl:when>
 					<xsl:otherwise>
-						<xsl:variable name="map_warning" select="concat('WARNING: Image map file ', @file, ' (', $map_file, ') is empty!')"/>
+						<xsl:variable name="map_warning" select="concat('[WARNING] Image map file ', @file, ' (', $map_file, ') is empty!')"/>
 						<xsl:message><xsl:value-of select="$map_warning"/></xsl:message>
 					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:variable name="map_error" select="concat('ERROR: Image map file ', @file, ' (', $map_file, ') does not exist!')"/>
+				<xsl:variable name="map_error" select="concat('[ERROR] Image map file ', @file, ' (', $map_file, ') does not exist!')"/>
 				<xsl:value-of select="$map_error"/>
 				<xsl:message><xsl:value-of select="$map_error"/></xsl:message>
 				<xsl:text>&#xa;&#xa;</xsl:text>
@@ -4652,13 +4652,13 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 						<!-- <xsl:apply-templates select="$map_file_xml//img.area[@href]" mode="svg"/> -->
 					</xsl:when>
 					<xsl:otherwise>
-						<xsl:variable name="map_warning" select="concat('WARNING: Image map file ', @file, ' (', $map_file, ') is empty!')"/>
+						<xsl:variable name="map_warning" select="concat('[WARNING] Image map file ', @file, ' (', $map_file, ') is empty!')"/>
 						<xsl:message><xsl:value-of select="$map_warning"/></xsl:message>
 					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:variable name="map_error" select="concat('ERROR: Image map file ', @file, ' (', $map_file, ') does not exist!')"/>
+				<xsl:variable name="map_error" select="concat('[ERROR] Image map file ', @file, ' (', $map_file, ') does not exist!')"/>
 				<xsl:value-of select="$map_error"/>
 				<xsl:message><xsl:value-of select="$map_error"/></xsl:message>
 				<xsl:text>&#xa;&#xa;</xsl:text>
