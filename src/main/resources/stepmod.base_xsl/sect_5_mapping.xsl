@@ -632,7 +632,7 @@ relationship tree structure. The path between the relationship entity and the re
   
   <xsl:text>&#xa;&#xa;</xsl:text>
   
-    <xsl:text>--:: </xsl:text>
+    <xsl:text>pass-format:all[--]:: </xsl:text>
     <xsl:text>the text following is a comment or introduces a clause reference;</xsl:text>
   
   <xsl:text>&#xa;&#xa;</xsl:text>
