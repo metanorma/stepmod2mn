@@ -37,7 +37,8 @@ import org.xml.sax.SAXParseException;
 public class stepmod2mn {
 
     static final String CMD = "java -Xss5m -jar stepmod2mn.jar <resource or module or publication index xml file> [options -o, -v, -b <path> -t <type> -e <documents list> -inc <documents list>]";
-    static final String CMD_SVGscope = "java -jar stepmod2mn.jar <start folder to process xml maps files> --svg";
+    static final String CMD_SVGscope1 = "java -jar stepmod2mn.jar <start folder to process xml maps files> --svg";
+    static final String CMD_SVGscope2 = "java -jar stepmod2mn.jar <start folder to process xml maps files> --output-documents --output-schemas --svg";
     static final String CMD_SVG = "java -jar stepmod2mn.jar --xml <Express Imagemap XML file path> --image <Image file name> [--svg <resulted SVG map file or folder>] [-v]";
     
     static final String INPUT_NOT_FOUND = "Error: %s file '%s' not found!";    
@@ -49,6 +50,9 @@ public class stepmod2mn {
     static final String ERRORS_FATAL_LOG = "errors.fatal.log.txt";
 
     static final String SVG_EXTENSION = ".svg";
+
+    static final String XML_RESOURCE = "resource.xml";
+    static final String XML_MODULE = "module.xml";
 
     static boolean DEBUG = false;
 
@@ -92,7 +96,7 @@ public class stepmod2mn {
         }
     };
     
-    static final Options optionsSVGscope = new Options() {
+    static final Options optionsSVGscope1 = new Options() {
         {
             addOption(Option.builder("svg")
                     .longOpt("svg")
@@ -105,11 +109,33 @@ public class stepmod2mn {
                     .desc("display application version")
                     .required(false)
                     .build());
-            addOption(Option.builder("o")
-                    .longOpt("output")
-                    .desc("output directory")
-                    .hasArg()
+        }
+    };
+
+    static final Options optionsSVGscope2 = new Options() {
+        {
+            addOption(Option.builder("svg")
+                    .longOpt("svg")
+                    .desc("generate SVG files")
+                    .hasArg(false)
+                    .required()
+                    .build());
+            addOption(Option.builder("v")
+                    .longOpt("version")
+                    .desc("display application version")
                     .required(false)
+                    .build());
+            addOption(Option.builder("od")
+                    .longOpt("output-documents")
+                    .desc("output directory for documents's SVG")
+                    .hasArg()
+                    .required(true)
+                    .build());
+            addOption(Option.builder("os")
+                    .longOpt("output-schemas")
+                    .desc("output directory for schemas's SVG")
+                    .hasArg()
+                    .required(true)
                     .build());
         }
     };
@@ -204,7 +230,7 @@ public class stepmod2mn {
 
                 try {
                     stepmod2mn app = new stepmod2mn();
-                    app.generateSVG(xmlIn, imageIn, cmd.getOptionValue("svg"), false);
+                    app.generateSVG(xmlIn, imageIn, cmd.getOptionValue("svg"), null, false);
                     System.out.println("End!");
 
                 } catch (Exception e) {
@@ -217,10 +243,10 @@ public class stepmod2mn {
             }
         } // END optionsSVG
 
-        // optionsSVGscope
+        // optionsSVGscope1
         if(cmdFail) {
             try {
-                CommandLine cmd = parser.parse(optionsSVGscope, args);
+                CommandLine cmd = parser.parse(optionsSVGscope1, args);
                 System.out.print("stepmod2mn ");
                 printVersion(cmd.hasOption("version"));
                 
@@ -235,7 +261,7 @@ public class stepmod2mn {
 
                 try {
                     stepmod2mn app = new stepmod2mn();
-                    app.generateSVG(argPathIn, null, cmd.getOptionValue("output"),false);
+                    app.generateSVG(argPathIn, null, null, null,false);
                     System.out.println("End!");
 
                 } catch (Exception e) {
@@ -247,7 +273,39 @@ public class stepmod2mn {
             } catch (ParseException exp) {
                 cmdFail = true;
             }
-        } // END optionsSVGscope
+        } // END optionsSVGscope1
+
+        // optionsSVGscope2
+        if(cmdFail) {
+            try {
+                CommandLine cmd = parser.parse(optionsSVGscope2, args);
+                System.out.print("stepmod2mn ");
+                printVersion(cmd.hasOption("version"));
+
+                List<String> arglist = cmd.getArgList();
+
+                String argPathIn = arglist.get(0);
+
+                if (!Files.exists(Paths.get(argPathIn))) {
+                    System.out.println(String.format(INPUT_PATH_NOT_FOUND, XML_INPUT, argPathIn));
+                    System.exit(Constants.ERROR_EXIT_CODE);
+                }
+
+                try {
+                    stepmod2mn app = new stepmod2mn();
+                    app.generateSVG(argPathIn, null, cmd.getOptionValue("output-documents"), cmd.getOptionValue("output-schemas"), false);
+                    System.out.println("End!");
+
+                } catch (Exception e) {
+                    e.printStackTrace(System.err);
+                    System.exit(Constants.ERROR_EXIT_CODE);
+                }
+                cmdFail = false;
+
+            } catch (ParseException exp) {
+                cmdFail = true;
+            }
+        } // END optionsSVGscope2
 
         // options
         if(cmdFail) {            
@@ -362,10 +420,10 @@ public class stepmod2mn {
 
                         try (Stream<Path> walk = Files.walk(Paths.get(fXMLin.getAbsolutePath()))) {
                             List<String> inputXMLfiles = walk.map(x -> x.toString())
-                                    .filter(f -> f.endsWith("/resource.xml") ||
-                                            f.endsWith("\\resource.xml") ||
-                                            f.endsWith("/module.xml") ||
-                                            f.endsWith("\\module.xml")).collect(Collectors.toList());
+                                    .filter(f -> f.endsWith("/" + XML_RESOURCE) ||
+                                            f.endsWith("\\" + XML_RESOURCE) ||
+                                            f.endsWith("/" + XML_MODULE) ||
+                                            f.endsWith("\\" + XML_MODULE)).collect(Collectors.toList());
 
                             for (String inputXmlFile: inputXMLfiles) {
                                 String outAdocFile = XMLUtils.getOutputAdocPath(argOutputPath, inputXmlFile);
@@ -641,7 +699,9 @@ public class stepmod2mn {
         HelpFormatter formatter = new HelpFormatter();
         formatter.printHelp(pw, 80, CMD, "", options, 0, 0, "");
         pw.write("\nOR\n\n");
-        formatter.printHelp(pw, 80, CMD_SVGscope, "", optionsSVGscope, 0, 0, "");
+        formatter.printHelp(pw, 80, CMD_SVGscope1, "", optionsSVGscope1, 0, 0, "");
+        pw.write("\nOR\n\n");
+        formatter.printHelp(pw, 80, CMD_SVGscope2, "", optionsSVGscope2, 0, 0, "");
         pw.write("\nOR\n\n");
         formatter.printHelp(pw, 80, CMD_SVG, "", optionsSVG, 0, 0, "");
         pw.flush();
@@ -678,7 +738,7 @@ public class stepmod2mn {
         this.repositoryIndex = repositoryIndex;
     }
 
-    public String generateSVG(String xmlFilesPath, String image, String outPath, boolean isSVGmap) throws IOException, TransformerException, SAXParseException {
+    public String generateSVG(String xmlFilesPath, String image, String outPathDocument, String outPathSchemas, boolean isSVGmap) throws IOException, TransformerException, SAXParseException {
 
         List<String> xmlFiles = new ArrayList<>();
         try (Stream<Path> walk = Files.walk(Paths.get(xmlFilesPath))) {
@@ -698,6 +758,55 @@ public class stepmod2mn {
         }
         List<String> outputSVGs = new ArrayList<>();
         for(String xmlFile: xmlFiles) {
+            String outPath = outPathDocument;
+            // determine: .svg relates to the document or schema
+            if (outPathDocument != null && !outPathDocument.isEmpty() &&
+                    outPathSchemas != null && !outPathSchemas.isEmpty()) {
+                String parentFolder = new File(xmlFile).getParent();
+                String parentFolderName = new File(xmlFile).getParentFile().getName();
+                Path xmlDocumentPath = Paths.get(parentFolder, XML_RESOURCE);
+                if (!xmlDocumentPath.toFile().exists()) {
+                    xmlDocumentPath = Paths.get(parentFolder, XML_MODULE);
+                }
+                /*if (!xmlDocumentPath.toFile().exists()) {
+                    if (xmlDocumentPath.toString().contains("/resources/") ||
+                            xmlDocumentPath.toString().contains("\\resources\\")) {
+
+                    }
+                }*/
+                if (!xmlDocumentPath.toFile().exists()) {
+                    xmlDocumentPath = null;
+                    // the folder 'resource', or another non 'resource_docs' or modules folder
+                    // then output to 'schemas' folder
+                    outPath = outPathSchemas;
+                    isSVGmap = false;
+                } else {
+
+                    String xmlFilename = xmlDocumentPath.getFileName().toString();
+                    String linearizedXML = XMLUtils.processLinearizedXML(xmlDocumentPath.toString());
+
+                    boolean isSchemaSVG = false;
+                    String xpathSchemaSVG = "//schema/express-g/imgfile[@file = '" + xmlFilename + "']/@file | " +
+                            "//schema/express-g/img[@file = '" + xmlFilename  + "']/@file | " +
+                            "//arm/express-g/img[@file = '" + xmlFilename  + "']/@file | " +
+                            "//arm/express-g/imgfile[@file = '" + xmlFilename  + "']/@file | " +
+                            "//mim/express-g/img[@file = '" + xmlFilename  + "']/@file | " +
+                            "//mim/express-g/imgfile[@file = '" + xmlFilename  + "']/@file";
+                    String attFile = XMLUtils.getTextByXPath(linearizedXML, xpathSchemaSVG);
+                    isSchemaSVG = !attFile.isEmpty();
+
+                    String attPart = XMLUtils.getTextByXPath(linearizedXML, "*/@part");
+
+                    if (isSchemaSVG) {
+                        isSVGmap = false;
+                        outPath = Paths.get(outPathSchemas, parentFolderName).toString();
+                    } else {
+                        isSVGmap = true;
+                        String folderDocumentName = Constants.ISO_STANDARD_PREFIX + attPart;
+                        outPath = Paths.get(outPath, folderDocumentName).toString();
+                    }
+                }
+            }
             outputSVGs.add(new SVGGenerator().generateSVG(xmlFile, image, outPath, isSVGmap));
         }
         return outputSVGs.toString()
