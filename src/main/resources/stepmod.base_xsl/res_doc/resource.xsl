@@ -1865,7 +1865,7 @@ Purpose:
 		<xsl:text>&#xa;</xsl:text>
 		</xsl:if>
 		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>include::../templates/diagrams.adoc[]</xsl:text>
+		<xsl:text>include::../../../templates/diagrams.adoc[]</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
 
 	</xsl:template>
