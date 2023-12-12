@@ -25,6 +25,8 @@ import java.io.*;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 public class XMLUtils {
 
@@ -182,4 +184,29 @@ public class XMLUtils {
         }
         return "";
     }
+
+    public static List<String> getValuesByXPath(String xml, String expression) {
+        try {
+            InputSource is = new InputSource();
+            is.setCharacterStream(new StringReader(xml));
+
+            DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = builderFactory.newDocumentBuilder();
+            Document xmlDocument = builder.parse(is);
+            XPath xPath = XPathFactory.newInstance().newXPath();
+
+            NodeList nodeList = (NodeList) xPath.compile(expression).evaluate(xmlDocument, XPathConstants.NODESET);
+            StringBuilder sb = new StringBuilder();
+            List<String> values = new ArrayList<>();
+            for (int i = 0; i < nodeList.getLength(); i++) {
+                Node node = nodeList.item(i);
+                values.add(node.getNodeValue());
+            }
+            return values;
+        } catch (Exception ex) {
+            System.err.println("[ERROR] Can't retrieve the text by XPath '" + expression + "':" + ex);
+        }
+        return null;
+    }
+
 }

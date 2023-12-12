@@ -349,7 +349,7 @@
 			<xsl:if test="resource/schema">
 				<!-- https://github.com/metanorma/stepmod2mn/issues/58#issuecomment-1826282430 -->
 				<!-- <file path="sections_common/04-schemas.adoc" link="sections_common" target="../../../sections_common"> --> <!-- /04-schemas.adoc -->
-				<file path="sections/04-schemas.adoc" resource="04-schemas.adoc"> <!-- /04-schemas.adoc -->
+				<!-- <file path="sections/04-schemas.adoc" resource="04-schemas.adoc"> --> <!-- /04-schemas.adoc -->
 					
 					<!-- Commented -->
 					<!-- See https://github.com/metanorma/stepmod2mn/issues/52 -->
@@ -362,9 +362,13 @@
 					</xsl:for-each> -->
 					<!-- output template as 04-schemas.adoc -->
 					<!-- <xsl:call-template name="insert_04-schemas_adoc"/> -->
-				</file>
+				<!-- </file> -->
 				<!-- create symbolic link to the folder 'templates` in the root of repository -->
-				<file link="templates" target="../../templates" folder="true" relative="true"/>
+				<!-- <file link="templates" target="../../templates" folder="true" relative="true"/> -->
+				
+				
+				<file path="../../templates/schemas.adoc">
+				</file>
 				
 			</xsl:if>
 			
