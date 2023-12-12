@@ -729,6 +729,8 @@ public class stepmod2mn {
     private static void printVersion(boolean print) {
         if (print) {            
             System.out.println(VER);
+        } else {
+            System.out.println("");
         }
     }       
 
@@ -787,6 +789,7 @@ public class stepmod2mn {
     public String generateSVGs(String xmlFilesPath, String image, String outPathDocument, String outPathSchemas, boolean isSVGmap) throws IOException, TransformerException, SAXParseException {
 
         List<String> xmlFiles = new ArrayList<>();
+        System.out.println("[INFO] Finding *.xml files...");
         try (Stream<Path> walk = Files.walk(Paths.get(xmlFilesPath))) {
             xmlFiles = walk
                 .filter(p -> !Files.isDirectory(p))   
@@ -802,58 +805,118 @@ public class stepmod2mn {
                 e.printStackTrace();
             }
         }
+
+        // list of the document's xml: resource.xml and module.xml
+        System.out.print("[INFO] Finding images in the resource.xml and module.xml files...");
+        List<String> xmlDocuments = xmlFiles.stream().filter(f -> f.endsWith("/" + XML_RESOURCE) ||
+                f.endsWith("\\" + XML_RESOURCE) ||
+                f.endsWith("/" + XML_MODULE) ||
+                f.endsWith("\\" + XML_MODULE)).collect(Collectors.toList());
+
+        // iteration of each document xml and collect img and imgfile values for schemas
+        String xpathImages = "//schema/express-g/imgfile/@file | " +
+                "//schema/express-g/img/@file | " +
+                "//arm/express-g/img/@file | " +
+                "//arm_lf/express-g/img/@file | " +
+                "//arm/express-g/imgfile/@file | " +
+                "//arm_lf/express-g/imgfile/@file | " +
+                "//mim/express-g/img/@file | " +
+                "//mim_lf/express-g/img/@file | " +
+                "//mim/express-g/imgfile/@file | " +
+                "//mim_lf/express-g/imgfile/@file";
+        Map<String, String> imageVsSchemaType = new LinkedHashMap<>();
+        for(String xmlDocument: xmlDocuments) {
+            String linearizedXML = XMLUtils.processLinearizedXML(xmlDocument);
+            String type = "resources";
+            if (xmlDocument.endsWith("module.xml")) {
+                type = "modules";
+            }
+            List<String> images = XMLUtils.getValuesByXPath(linearizedXML, xpathImages);
+            for(String item: images) {
+                /*if (imageVsSchemaType.get(item) != null && !imageVsSchemaType.get(item).equals(type)) {
+                    System.out.println("Attention!");
+                }
+                if (imageVsSchemaType.containsKey(item) && imageVsSchemaType.containsValue(type) && !imageVsSchemaType.get(item).equals(type)) {
+                    System.out.println("Attention!");
+                }*/
+                imageVsSchemaType.put(item, type);
+            }
+        }
+        System.out.println(" " + imageVsSchemaType.size()  + " images found.");
+        //System.out.println(imageVsSchemaType);
+
         List<String> outputSVGs = new ArrayList<>();
         for(String xmlFile: xmlFiles) {
             String outPath = outPathDocument;
             // determine: .svg relates to the document or schema
             if (outPathDocument != null && !outPathDocument.isEmpty() &&
                     outPathSchemas != null && !outPathSchemas.isEmpty()) {
+                String filename = new File(xmlFile).getName();
                 String parentFolder = new File(xmlFile).getParent();
                 String parentFolderName = new File(xmlFile).getParentFile().getName();
                 Path xmlDocumentPath = Paths.get(parentFolder, XML_RESOURCE);
                 if (!xmlDocumentPath.toFile().exists()) {
                     xmlDocumentPath = Paths.get(parentFolder, XML_MODULE);
                 }
-                /*if (!xmlDocumentPath.toFile().exists()) {
-                    if (xmlDocumentPath.toString().contains("/resources/") ||
-                            xmlDocumentPath.toString().contains("\\resources\\")) {
 
-                    }
-                }*/
                 if (!xmlDocumentPath.toFile().exists()) {
                     xmlDocumentPath = null;
                     // the folder 'resource', or another non 'resource_docs' or modules folder
                     // then output to 'schemas' folder
-                    outPath = outPathSchemas;
+                    String kind = imageVsSchemaType.get(filename);
+                    if (kind == null) {
+                        kind = "modules";
+                    }
+                    outPath = Paths.get(outPathSchemas, kind).toString();
                     isSVGmap = false;
                 } else {
 
                     String xmlFilename = xmlDocumentPath.getFileName().toString();
                     String linearizedXML = XMLUtils.processLinearizedXML(xmlDocumentPath.toString());
 
-                    boolean isSchemaSVG = false;
-                    String xpathSchemaSVG = "//schema/express-g/imgfile[@file = '" + xmlFilename + "']/@file | " +
-                            "//schema/express-g/img[@file = '" + xmlFilename  + "']/@file | " +
-                            "//arm/express-g/img[@file = '" + xmlFilename  + "']/@file | " +
-                            "//arm/express-g/imgfile[@file = '" + xmlFilename  + "']/@file | " +
-                            "//mim/express-g/img[@file = '" + xmlFilename  + "']/@file | " +
-                            "//mim/express-g/imgfile[@file = '" + xmlFilename  + "']/@file";
-                    String attFile = XMLUtils.getTextByXPath(linearizedXML, xpathSchemaSVG);
-                    isSchemaSVG = !attFile.isEmpty();
+                    String xpathImageSVG = "//imgfile[@file = '" + filename + "']/@file | " +
+                            "//img[@file = '" + filename  + "']/@file";
 
-                    String attPart = XMLUtils.getTextByXPath(linearizedXML, "*/@part");
+                    // check existing of image reference
+                    String attFile = XMLUtils.getTextByXPath(linearizedXML, xpathImageSVG);
+                    if (!attFile.isEmpty()) {
 
-                    if (isSchemaSVG) {
-                        isSVGmap = false;
-                        outPath = Paths.get(outPathSchemas, parentFolderName).toString();
+                        boolean isSchemaSVG = false;
+                        String xpathSchemaSVG = "//schema/express-g/imgfile[@file = '" + filename + "']/@file | " +
+                                "//schema/express-g/img[@file = '" + filename + "']/@file | " +
+                                "//arm/express-g/img[@file = '" + filename + "']/@file | " +
+                                "//arm_lf/express-g/img[@file = '" + filename + "']/@file | " +
+                                "//arm/express-g/imgfile[@file = '" + filename + "']/@file | " +
+                                "//arm_lf/express-g/imgfile[@file = '" + filename + "']/@file | " +
+                                "//mim/express-g/img[@file = '" + filename + "']/@file | " +
+                                "//mim_lf/express-g/img[@file = '" + filename + "']/@file | " +
+                                "//mim/express-g/imgfile[@file = '" + filename + "']/@file | " +
+                                "//mim_lf/express-g/imgfile[@file = '" + filename + "']/@file";
+                        attFile = XMLUtils.getTextByXPath(linearizedXML, xpathSchemaSVG);
+                        isSchemaSVG = !attFile.isEmpty();
+
+                        String attPart = XMLUtils.getTextByXPath(linearizedXML, "*/@part");
+
+                        if (isSchemaSVG) {
+                            isSVGmap = false;
+                            String kind = imageVsSchemaType.get(filename);
+                            if (kind == null) {
+                                kind = "modules";
+                            }
+                            outPath = Paths.get(outPathSchemas, kind).toString();
+                        } else {
+                            isSVGmap = true;
+                            String folderDocumentName = Constants.ISO_STANDARD_PREFIX + attPart;
+                            outPath = Paths.get(outPath, folderDocumentName).toString();
+                        }
                     } else {
-                        isSVGmap = true;
-                        String folderDocumentName = Constants.ISO_STANDARD_PREFIX + attPart;
-                        outPath = Paths.get(outPath, folderDocumentName).toString();
+                        xmlFile = null;
                     }
                 }
             }
-            outputSVGs.add(new SVGGenerator().generateSVG(xmlFile, image, outPath, isSVGmap));
+            if (xmlFile != null) {
+                outputSVGs.add(new SVGGenerator().generateSVG(xmlFile, image, outPath, isSVGmap));
+            }
         }
         return outputSVGs.toString()
                 .replace("[", "")
