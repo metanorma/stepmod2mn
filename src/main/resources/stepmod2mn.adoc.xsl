@@ -504,6 +504,8 @@
 		<xsl:variable name="copyFile" select="java:org.metanorma.Util.copyFile($sourceFile, $targetFile)"/>
 	</xsl:template>
 	
+	<xsl:template match="file[@empty = 'true']" mode="text"/>
+	
 	<xsl:template match="ExternalDocumentReference" mode="text">
 		<!-- <xsl:text>&lt;&lt;</xsl:text>
 		
@@ -1226,7 +1228,7 @@
 			<xsl:text>&#xa;</xsl:text>
 			<xsl:text>[%unnumbered]</xsl:text>
 			<xsl:text>&#xa;</xsl:text>
-			<xsl:text>= {{schemaname }}</xsl:text>
+			<xsl:text>== {{schemaname }}</xsl:text>
 			<xsl:text>&#xa;</xsl:text>
 			<xsl:text></xsl:text>
 			<xsl:text>&#xa;</xsl:text>
