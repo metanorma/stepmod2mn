@@ -1226,7 +1226,7 @@
 			<xsl:text>&#xa;</xsl:text>
 			<xsl:text>[%unnumbered]</xsl:text>
 			<xsl:text>&#xa;</xsl:text>
-			<xsl:text>= {{schemaname }}</xsl:text>
+			<xsl:text>== {{schemaname }}</xsl:text>
 			<xsl:text>&#xa;</xsl:text>
 			<xsl:text></xsl:text>
 			<xsl:text>&#xa;</xsl:text>
