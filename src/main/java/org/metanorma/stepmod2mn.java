@@ -575,6 +575,7 @@ public class stepmod2mn {
 
     //private void convertstepmod2mn(File fXMLin, File fileOut) throws IOException, TransformerException, SAXParseException {
     private boolean convertstepmod2mn(String xmlFilePath, File fileOut) throws IOException, TransformerException, SAXParseException {
+        boolean result = true;
         try {
 
             System.out.println(String.format(INPUT_LOG, XML_INPUT, xmlFilePath));
@@ -588,13 +589,17 @@ public class stepmod2mn {
 
             // Issue: https://github.com/metanorma/stepmod2mn/issues/75
             // check @part
+            String documentName = XMLUtils.getTextByXPath(linearizedXML, "*/@name");
             String part = XMLUtils.getTextByXPath(linearizedXML, "*/@part");
-            if (part.isEmpty() || !Util.isNumeric(part)) {
-                System.err.println("[WARNING] Ignore document processing due the wrong attribute 'part' value: '" + part + "'");
-                return false;
+            String xslKind = "resource";
+            String rootElement = XMLUtils.getRootElement(linearizedXML);
+            switch (rootElement) {
+                case "resource":
+                case "module":
+                    xslKind = rootElement;
+                    break;
             }
 
-            String documentName = XMLUtils.getTextByXPath(linearizedXML, "*/@name");
             if (excludeList.contains(documentName)) {
                 System.out.println("[WARNING] The document '" + documentName + "' excluded from the processing.");
                 return false;
@@ -605,24 +610,20 @@ public class stepmod2mn {
                 return false;
             }
 
-            String xslKind = "resource";
-
-            String rootElement = XMLUtils.getRootElement(linearizedXML);
-            switch (rootElement) {
-                case "resource":
-                case "module":
-                    xslKind = rootElement;
-                    break;
+            if (part.isEmpty() || !Util.isNumeric(part)) {
+                //System.err.println("[WARNING] Ignore document processing due the wrong attribute 'part' value: '" + part + "'");
+                System.out.println("[WARNING] The document '" + documentName + "' skipped in the metanorma collection due the wrong attribute 'part' value: '" + part + "'");
+                result = false;
             }
 
             if (!(repositoryIndex.contains(documentName, rootElement))) {
-                System.out.println("[WARNING] The document '" + documentName + "' skipped from the processing - it's missing in the repository index.");
-                return false;
+                System.out.println("[WARNING] The document '" + documentName + "' skipped in the metanorma collection - it's missing in the repository index.");
+                result = false;
             }
 
             if (repositoryIndex.isWithdrawn(documentName, rootElement)) {
-                System.out.println("[WARNING] The document '" + documentName + "' skipped from the processing - it has status 'withdrawn' in the repository index.");
-                return false;
+                System.out.println("[WARNING] The document '" + documentName + "' skipped in the metanorma collection - it has status 'withdrawn' in the repository index.");
+                result = false;
             }
 
             System.out.println(String.format(OUTPUT_LOG, Constants.FORMAT.toUpperCase(), fileOut.toString()));
@@ -693,7 +694,7 @@ public class stepmod2mn {
             if (fileErrorsFatalLog.length() != 0) {
                 // if current document doesn't exist in the repository index, then
                 // delete it from list
-                return false;
+                result = false;
             } else {
                 // delete empty
                 if (Files.exists(fileErrorsFatalLog.toPath())) {
@@ -707,7 +708,7 @@ public class stepmod2mn {
             e.printStackTrace(System.err);
             System.exit(Constants.ERROR_EXIT_CODE);
         }
-        return true;
+        return result;
     }
 
 
