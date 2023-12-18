@@ -77,7 +77,8 @@ public class MetanormaCollection {
             metanormaYml.append("\n")
                     .append("  collection:").append("\n")
                     .append("    organization: " + ORGANIZATION).append("\n")
-                    .append("    name: " + NAME).append("\n");
+                    .append("    name: \"" + namePublicationIndex).append("\"\n");
+                    //.append("    name: " + NAME).append("\n");
 
             Files.createDirectories(pathOutputFolder);
 
