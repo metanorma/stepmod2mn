@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
@@ -20,7 +22,7 @@ public class MetanormaCollection {
     public MetanormaCollection(List<Map.Entry<String,String>> inputOutputFiles) {
         this.inputOutputFiles = inputOutputFiles;
     }
-    public void generate(String outputFolder) throws IOException {
+    public void generate(String outputFolder, String namePublicationIndex) throws IOException {
         if (outputFolder != null && !outputFolder.isEmpty()) {
             // Generate metanorma.yml in the root of path
             StringBuilder metanormaYml = new StringBuilder();
@@ -29,7 +31,8 @@ public class MetanormaCollection {
                     .append("  source:").append("\n")
                     .append("    files:").append("\n");
 
-            URI pathRootFolderURI = Paths.get(outputFolder).toUri();
+            Path pathOutputFolder = Paths.get(outputFolder);
+            URI pathRootFolderURI = pathOutputFolder.toUri();
 
             List<Map.Entry<String,String>> docFolders = new ArrayList<>();
             for (Map.Entry<String, String> entry : inputOutputFiles) {
@@ -76,10 +79,21 @@ public class MetanormaCollection {
                     .append("    organization: " + ORGANIZATION).append("\n")
                     .append("    name: " + NAME).append("\n");
 
+            Files.createDirectories(pathOutputFolder);
+
+            if (namePublicationIndex == null) {
+                namePublicationIndex = "";
+            }
+            if (!namePublicationIndex.isEmpty()) {
+                namePublicationIndex = namePublicationIndex + ".";
+            }
+
             //append string buffer/builder to buffered writer
-            BufferedWriter writer = new BufferedWriter(new FileWriter(Paths.get(outputFolder, "metanorma.yml").toFile()));
+            Path pathMetanormaYml = Paths.get(outputFolder, namePublicationIndex + "metanorma.yml");
+            BufferedWriter writer = new BufferedWriter(new FileWriter(pathMetanormaYml.toFile()));
             writer.write(metanormaYml.toString());
             writer.close();
+            System.out.println("[INFO] Saved " + pathMetanormaYml.toString() + ".");
         }
     }
 }

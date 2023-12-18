@@ -104,7 +104,7 @@ e.g.
 java -Xss5m -jar target/stepmod2mn-1.32.jar data/ --include-only "fundamentals_of_product_description_and_support kinematics"
 ----
 
-=== Convert the documents specified in the publication index xml file in the tags 'resource_docs' and 'modules' into the Metanorma AsciiDoc format:
+=== Generate Metanorma collection files (metanorma.yml and collection.yml) for the documents specified in the publication index xml file in the tags 'resource_docs' and 'modules':
 
 [source,sh]
 ----
@@ -118,11 +118,9 @@ e.g.
 java -Xss5m -jar target/stepmod2mn-1.32.jar publication/part1000/CR_PMI_5/publication_index.xml
 ----
 
-NOTE: the resulted AsciiDocs will be saved in the folder with the source resource.xml and module.xml files.
+NOTE: the Metanorma collection files .yml will be saved in the 3 level up folder (usually, source repository's root folder).
 
-NOTE: the Metanorma collection file 'metanorma.yml' will be saved in the 3 level up folder (usually, source repository's root folder).
-
-=== Convert the documents specified in the publication index xml file in the tags 'resource_docs' and 'modules' into the Metanorma AsciiDoc format,
+=== Generate Metanorma collection files (metanorma.yml and collection.yml) for the documents specified in the publication index xml file in the tags 'resource_docs' and 'modules',
 and save them into the output folder:
 
 [source,sh]
@@ -134,11 +132,11 @@ e.g.
 
 [source,sh]
 ----
-java -Xss5m -jar target/stepmod2mn-1.32.jar publication/part1000/CR_PMI_5/publication_index.xml --output documents/
+java -Xss5m -jar target/stepmod2mn-1.32.jar iso-10303-srl/iso-10303-stepmod-wg12/publication/part1000/CR_PMI_5/publication_index.xml --output iso-10303-srl/
 ----
 
 
-=== Convert the specified type of the document (resource_docs or modules) in the publication index xml file into the Metanorma AsciiDoc format:
+=== Generate Metanorma collection files (metanorma.yml and collection.yml) for the specified type of the document (resource_docs or modules) in the publication index xml file:
 
 [source,sh]
 ----
@@ -151,8 +149,6 @@ e.g.
 ----
 java -Xss5m -jar target/stepmod2mn-1.32.jar publication/part1000/CR_PMI_5/publication_index.xml --type resource_docs
 ----
-
-NOTE: the resulted AsciiDocs will be saved in the folder with the source resource.xml (or module.xml) files.
 
 NOTE: the Metanorma collection file 'metanorma.yml' will be saved in the 3 level up folder (usually, source repository's root folder).
 

@@ -4,6 +4,7 @@ import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.*;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
@@ -30,12 +31,13 @@ public class MetanormaCollectionManifest {
         }
     }
 
-    public void generate() throws IOException {
+    public void generate(String namePublicationIndex) throws IOException {
         // get repository root folder from 1st file
         String repositoryRootFolder = Util.getRepositoryRootFolder(inputOutputFiles.get(0).getValue());
         if (repositoryRootFolder.isEmpty() && outputPath != null && !outputPath.isEmpty()) {
-            String parentOutputPath = new File(outputPath).getParent();
-            repositoryRootFolder = parentOutputPath;
+            //String parentOutputPath = new File(outputPath).getParent();
+            //repositoryRootFolder = parentOutputPath;
+            repositoryRootFolder = outputPath;
         }
         if (!repositoryRootFolder.isEmpty()) {
             int counter = 0;
@@ -63,8 +65,18 @@ public class MetanormaCollectionManifest {
             DumperOptions options = new DumperOptions();
             options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
             Yaml yaml = new Yaml(options);
-            PrintWriter writer = new PrintWriter(Paths.get(repositoryRootFolder, "collection.yml").toFile());
+
+            if (namePublicationIndex == null) {
+                namePublicationIndex = "";
+            }
+            if (!namePublicationIndex.isEmpty()) {
+                namePublicationIndex = namePublicationIndex + ".";
+            }
+
+            Path pathMetanormaCollectionYml = Paths.get(repositoryRootFolder, namePublicationIndex + "collection.yml");
+            PrintWriter writer = new PrintWriter(pathMetanormaCollectionYml.toFile());
             yaml.dump(yamlObj, writer);
+            System.out.println("[INFO] Saved " + pathMetanormaCollectionYml.toString() + ".");
         }
     }
 
@@ -83,7 +95,13 @@ public class MetanormaCollectionManifest {
             String fileref = (String)items.get("fileref");
 
             String fullPath = Paths.get(documentFolder, fileref).toFile().getAbsolutePath().replace("\\","/");
-            String relativePath = Util.getRelativePath(fullPath, repositoryRootFolder);
+            String fullPathCanonical = fullPath;
+            try {
+                fullPathCanonical = Paths.get(fullPathCanonical).toFile().getCanonicalPath().replace("\\","/");
+            } catch (Exception ex) {
+                System.out.println("[WARNING] " + ex.toString());
+            }
+            String relativePath = Util.getRelativePath(fullPathCanonical, repositoryRootFolder);
             items.put("fileref",relativePath);
 
             // add updated structure into yaml object
