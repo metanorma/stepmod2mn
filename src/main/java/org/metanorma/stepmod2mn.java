@@ -166,6 +166,12 @@ public class stepmod2mn {
                     .hasArg()
                     .required(false)
                     .build());
+            addOption(Option.builder("in")
+                    .longOpt("input-documents")
+                    .desc("folder with adoc documents (for publication index only)")
+                    .hasArg()
+                    .required(false)
+                    .build());
             addOption(Option.builder("inc")
                     .longOpt("include-only")
                     .desc("process specified documents only (list in the quotes, spaces separated)")
@@ -196,6 +202,9 @@ public class stepmod2mn {
 
     List<String> excludeList = new ArrayList<>();
     List<String> includeOnlyList = new ArrayList<>();
+
+    boolean isPublicationIndexMode = false;
+
     /**
      * Main method.
      *
@@ -390,12 +399,19 @@ public class stepmod2mn {
             includeOnlyList = Arrays.asList(cmd.getOptionValue("include-only").split(" "));
         }
 
+        String inputDocumentsFolder = "";
+        if (cmd.hasOption("input-documents")) {
+            inputDocumentsFolder = cmd.getOptionValue("input-documents");
+        }
+
         String inputFolder = "";
 
         List<Map.Entry<String,String>> inputOutputFiles = new ArrayList<>();
 
         boolean isStandaloneXML = false;
         RepositoryIndex repositoryIndex = null;
+        boolean isPublicationIndexMode = false;
+        String namePublicationIndex = "";
         // if remote file (http or https)
         if (Util.isUrl(argXMLin)) {
 
@@ -469,7 +485,9 @@ public class stepmod2mn {
                 // if input is Publication Index XML file
             } else if (argXMLin_normalized.toLowerCase().endsWith("publication_index.xml")) {
                 try {
+                    isPublicationIndexMode = true;
                     File fpublication_index = new File(argXMLin_normalized);
+                    namePublicationIndex = new File(argXMLin_normalized).getParentFile().getName();
                     File rootFolder = fpublication_index.getParentFile().getParentFile().getParentFile().getParentFile();
                     // inputFolder is root of repository
                     inputFolder = rootFolder.getAbsolutePath();
@@ -487,7 +505,14 @@ public class stepmod2mn {
 
                     for (String documentFilename: documentsPaths) {
                         Path inputXmlFilePath = Paths.get(dataPath.toString(), documentFilename);
-                        String outAdocFile = XMLUtils.getOutputAdocPath(argOutputPath, inputXmlFilePath.toString());
+                        String adocFolder = argOutputPath;
+                        if (inputDocumentsFolder.isEmpty()) {
+                            adocFolder = Paths.get(argOutputPath, "documents").toString(); //default
+                        } else {
+                            adocFolder = inputDocumentsFolder;
+                        }
+
+                        String outAdocFile = XMLUtils.getOutputAdocPath(adocFolder, inputXmlFilePath.toString());
                         inputOutputFiles.add(new AbstractMap.SimpleEntry<>(inputXmlFilePath.toString(), outAdocFile));
                     }
 
@@ -530,6 +555,7 @@ public class stepmod2mn {
                 }
                 app.setResourcePath(resourcePath);
                 app.setRepositoryIndex(repositoryIndex);
+                app.setPublicationIndexMode(isPublicationIndexMode);
                 app.setOutputPathSchemas(outputPathSchemas);
                 app.setExcludeList(excludeList);
                 app.setIncludeOnlyList(includeOnlyList);
@@ -539,17 +565,20 @@ public class stepmod2mn {
                 }
             }
 
-            inputOutputFiles.removeAll(badInputOutputFiles);
+            if (!inputOutputFiles.isEmpty() && isPublicationIndexMode) {
 
-            if (!inputOutputFiles.isEmpty()) {
+                inputOutputFiles.removeAll(badInputOutputFiles);
+
                 // Generate collection.sh
-                new ScriptCollection(argOutputPath, inputOutputFiles).generate();
+                // commented, see https://github.com/metanorma/stepmod2mn/issues/124#issuecomment-1859657292
+                // new ScriptCollection(argOutputPath, inputOutputFiles).generate();
 
                 // Generate collection manifest collection.yml
-                new MetanormaCollectionManifest(argOutputPath, inputOutputFiles).generate();
+                new MetanormaCollectionManifest(argOutputPath, inputOutputFiles).generate(namePublicationIndex);
 
                 // Generate cover.html
-                new MetanormaCover(argOutputPath, inputOutputFiles).generate();
+                // commented, see https://github.com/metanorma/stepmod2mn/issues/124#issuecomment-1859657292
+                // new MetanormaCover(argOutputPath, inputOutputFiles).generate();
 
                 //if (isInputFolder) {
                 // Generate metanorma.yml in the root of path
@@ -561,7 +590,7 @@ public class stepmod2mn {
                 if (metanormaCollectionPath == null || metanormaCollectionPath.isEmpty()) {
                     metanormaCollectionPath = inputFolder;
                 }
-                new MetanormaCollection(inputOutputFiles).generate(metanormaCollectionPath);
+                new MetanormaCollection(inputOutputFiles).generate(metanormaCollectionPath, namePublicationIndex);
                 //}
             }
 
@@ -583,7 +612,7 @@ public class stepmod2mn {
             Source srcXSL = null;
 
             String bibdataFileName = fileOut.getName();
-            
+
             // get linearized XML with default attributes substitution from DTD
             String linearizedXML = XMLUtils.processLinearizedXML(xmlFilePath);
 
@@ -610,98 +639,102 @@ public class stepmod2mn {
                 return false;
             }
 
-            if (part.isEmpty() || !Util.isNumeric(part)) {
+            if (isPublicationIndexMode && (part.isEmpty() || !Util.isNumeric(part))) {
                 //System.err.println("[WARNING] Ignore document processing due the wrong attribute 'part' value: '" + part + "'");
                 System.out.println("[WARNING] The document '" + documentName + "' skipped in the metanorma collection due the wrong attribute 'part' value: '" + part + "'");
                 result = false;
             }
 
-            if (!(repositoryIndex.contains(documentName, rootElement))) {
+            if (isPublicationIndexMode && !(repositoryIndex.contains(documentName, rootElement))) {
                 System.out.println("[WARNING] The document '" + documentName + "' skipped in the metanorma collection - it's missing in the repository index.");
                 result = false;
             }
 
-            if (repositoryIndex.isWithdrawn(documentName, rootElement)) {
+            if (isPublicationIndexMode && repositoryIndex.isWithdrawn(documentName, rootElement)) {
                 System.out.println("[WARNING] The document '" + documentName + "' skipped in the metanorma collection - it has status 'withdrawn' in the repository index.");
                 result = false;
             }
 
-            System.out.println(String.format(OUTPUT_LOG, Constants.FORMAT.toUpperCase(), fileOut.toString()));
-            System.out.println();
+            if (!isPublicationIndexMode) {
 
-            System.out.println("Transforming...");
+                System.out.println(String.format(OUTPUT_LOG, Constants.FORMAT.toUpperCase(), fileOut.toString()));
+                System.out.println();
 
-            // load linearized xml
-            Source src = new StreamSource(new StringReader(linearizedXML));
-            ClassLoader cl = this.getClass().getClassLoader();
+                System.out.println("Transforming...");
 
-            String systemID = "stepmod2mn." + xslKind + ".adoc.xsl";
+                // load linearized xml
+                Source src = new StreamSource(new StringReader(linearizedXML));
+                ClassLoader cl = this.getClass().getClassLoader();
 
-            //InputStream in = cl.getResourceAsStream(systemID);
-            URL url = cl.getResource(systemID);
-            
-            srcXSL = new StreamSource(Util.getStreamFromResources(getClass().getClassLoader(), systemID));//"stepmod2mn.adoc.xsl"
-            srcXSL.setSystemId(url.toExternalForm());
-            
-            TransformerFactory factory = TransformerFactory.newInstance();
-            factory.setURIResolver(new ClasspathResourceURIResolver());            
-            Transformer transformer = factory.newTransformer();
-            
-            Templates cachedXSLT = factory.newTemplates(srcXSL);
-            //transformer = factory.newTransformer(srcXSL);
-            transformer = cachedXSLT.newTransformer();
-            
-            transformer.setParameter("docfile", bibdataFileName);
-            transformer.setParameter("pathSeparator", File.separator);
-            transformer.setParameter("path", resourcePath);
-            String outputPath = fileOut.getParent();
-            if (outputPath == null) {
-                outputPath = System.getProperty("user.dir");
-            }
+                String systemID = "stepmod2mn." + xslKind + ".adoc.xsl";
 
-            Path pathFileErrorsFatalLog = Paths.get(outputPath, ERRORS_FATAL_LOG);
-            File fileErrorsFatalLog = new File(pathFileErrorsFatalLog.toString());
-            if (fileErrorsFatalLog.exists()) {
-                Files.delete(pathFileErrorsFatalLog);
-            }
+                //InputStream in = cl.getResourceAsStream(systemID);
+                URL url = cl.getResource(systemID);
 
-            transformer.setParameter("outpath", outputPath);
-            String outputPathSchemasKind = outputPathSchemas;
-            if (outputPathSchemasKind != null && !outputPathSchemasKind.isEmpty()) {
-                outputPathSchemasKind = Paths.get(outputPathSchemasKind, rootElement + "s").toString();
-            }
-            transformer.setParameter("outpath_schemas", outputPathSchemasKind);
-            transformer.setParameter("boilerplate_path", boilerplatePath);
-            if (repositoryIndex != null) {
-                transformer.setParameter("repositoryIndex_path", repositoryIndex.getPath());
-            }
-            transformer.setParameter("errors_fatal_log", ERRORS_FATAL_LOG);
+                srcXSL = new StreamSource(Util.getStreamFromResources(getClass().getClassLoader(), systemID));//"stepmod2mn.adoc.xsl"
+                srcXSL.setSystemId(url.toExternalForm());
 
-            transformer.setParameter("debug", DEBUG);
+                TransformerFactory factory = TransformerFactory.newInstance();
+                factory.setURIResolver(new ClasspathResourceURIResolver());
+                Transformer transformer = factory.newTransformer();
 
-            if (!DEBUG) {
-                transformer.setErrorListener(new CustomErrorListener());
-            }
+                Templates cachedXSLT = factory.newTemplates(srcXSL);
+                //transformer = factory.newTransformer(srcXSL);
+                transformer = cachedXSLT.newTransformer();
 
-            StringWriter resultWriter = new StringWriter();
-            StreamResult sr = new StreamResult(resultWriter);
+                transformer.setParameter("docfile", bibdataFileName);
+                transformer.setParameter("pathSeparator", File.separator);
+                transformer.setParameter("path", resourcePath);
+                String outputPath = fileOut.getParent();
+                if (outputPath == null) {
+                    outputPath = System.getProperty("user.dir");
+                }
 
-            transformer.transform(src, sr);
-            String adoc = resultWriter.toString();
-
-            Util.writeStringToFile(adoc, fileOut);
-
-            if (fileErrorsFatalLog.length() != 0) {
-                // if current document doesn't exist in the repository index, then
-                // delete it from list
-                result = false;
-            } else {
-                // delete empty
-                if (Files.exists(fileErrorsFatalLog.toPath())) {
+                Path pathFileErrorsFatalLog = Paths.get(outputPath, ERRORS_FATAL_LOG);
+                File fileErrorsFatalLog = new File(pathFileErrorsFatalLog.toString());
+                if (fileErrorsFatalLog.exists()) {
                     Files.delete(pathFileErrorsFatalLog);
                 }
-            }
 
+                transformer.setParameter("outpath", outputPath);
+                String outputPathSchemasKind = outputPathSchemas;
+                if (outputPathSchemasKind != null && !outputPathSchemasKind.isEmpty()) {
+                    outputPathSchemasKind = Paths.get(outputPathSchemasKind, rootElement + "s").toString();
+                }
+                transformer.setParameter("outpath_schemas", outputPathSchemasKind);
+                transformer.setParameter("boilerplate_path", boilerplatePath);
+                if (repositoryIndex != null) {
+                    transformer.setParameter("repositoryIndex_path", repositoryIndex.getPath());
+                }
+                transformer.setParameter("errors_fatal_log", ERRORS_FATAL_LOG);
+
+                transformer.setParameter("debug", DEBUG);
+
+                if (!DEBUG) {
+                    transformer.setErrorListener(new CustomErrorListener());
+                }
+
+                StringWriter resultWriter = new StringWriter();
+                StreamResult sr = new StreamResult(resultWriter);
+
+                transformer.transform(src, sr);
+                String adoc = resultWriter.toString();
+
+                Util.writeStringToFile(adoc, fileOut);
+
+                if (fileErrorsFatalLog.length() != 0) {
+                    // if current document doesn't exist in the repository index, then
+                    // delete it from list
+                    if(isPublicationIndexMode) {
+                        result = false;
+                    }
+                } else {
+                    // delete empty
+                    if (Files.exists(fileErrorsFatalLog.toPath())) {
+                        Files.delete(pathFileErrorsFatalLog);
+                    }
+                }
+            }
         } catch (SAXParseException e) {            
             throw (e);
         } catch (Exception e) {
@@ -757,6 +790,10 @@ public class stepmod2mn {
 
     public void setRepositoryIndex(RepositoryIndex repositoryIndex) {
         this.repositoryIndex = repositoryIndex;
+    }
+
+    public void setPublicationIndexMode(boolean isPublicationIndexMode) {
+        this.isPublicationIndexMode = isPublicationIndexMode;
     }
 
     public String generateSVG(String xmlFilesPath, String image, String outPath, boolean isSVGmap) throws IOException, TransformerException, SAXParseException {

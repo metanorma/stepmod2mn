@@ -279,7 +279,8 @@
 		
 		<redirect:close file="{$errors_fatal_log_filename}"/>
 		
-		<xsl:call-template name="generateHtmlAttachmentsSH"/>
+		<!-- commented, see https://github.com/metanorma/stepmod2mn/issues/124#issuecomment-1859657292 -->
+		<!-- <xsl:call-template name="generateHtmlAttachmentsSH"/> -->
 		
 		<!-- commented: https://github.com/metanorma/annotated-express/issues/134 -->
 		<!-- <xsl:call-template name="generateCollectionSH">
