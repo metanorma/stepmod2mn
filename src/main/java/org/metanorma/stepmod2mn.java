@@ -196,6 +196,9 @@ public class stepmod2mn {
 
     List<String> excludeList = new ArrayList<>();
     List<String> includeOnlyList = new ArrayList<>();
+
+    boolean isPublicationIndexMode = false;
+
     /**
      * Main method.
      *
@@ -396,6 +399,8 @@ public class stepmod2mn {
 
         boolean isStandaloneXML = false;
         RepositoryIndex repositoryIndex = null;
+        boolean isPublicationIndexMode = false;
+        String namePublicationIndex = "";
         // if remote file (http or https)
         if (Util.isUrl(argXMLin)) {
 
@@ -469,7 +474,9 @@ public class stepmod2mn {
                 // if input is Publication Index XML file
             } else if (argXMLin_normalized.toLowerCase().endsWith("publication_index.xml")) {
                 try {
+                    isPublicationIndexMode = true;
                     File fpublication_index = new File(argXMLin_normalized);
+                    namePublicationIndex = new File(argXMLin_normalized).getParentFile().getName();
                     File rootFolder = fpublication_index.getParentFile().getParentFile().getParentFile().getParentFile();
                     // inputFolder is root of repository
                     inputFolder = rootFolder.getAbsolutePath();
@@ -530,6 +537,7 @@ public class stepmod2mn {
                 }
                 app.setResourcePath(resourcePath);
                 app.setRepositoryIndex(repositoryIndex);
+                app.setPublicationIndexMode(isPublicationIndexMode);
                 app.setOutputPathSchemas(outputPathSchemas);
                 app.setExcludeList(excludeList);
                 app.setIncludeOnlyList(includeOnlyList);
@@ -539,17 +547,20 @@ public class stepmod2mn {
                 }
             }
 
-            inputOutputFiles.removeAll(badInputOutputFiles);
+            if (!inputOutputFiles.isEmpty() && isPublicationIndexMode) {
 
-            if (!inputOutputFiles.isEmpty()) {
+                inputOutputFiles.removeAll(badInputOutputFiles);
+
                 // Generate collection.sh
-                new ScriptCollection(argOutputPath, inputOutputFiles).generate();
+                // commented, see https://github.com/metanorma/stepmod2mn/issues/124#issuecomment-1859657292
+                // new ScriptCollection(argOutputPath, inputOutputFiles).generate();
 
                 // Generate collection manifest collection.yml
-                new MetanormaCollectionManifest(argOutputPath, inputOutputFiles).generate();
+                new MetanormaCollectionManifest(argOutputPath, inputOutputFiles).generate(namePublicationIndex);
 
                 // Generate cover.html
-                new MetanormaCover(argOutputPath, inputOutputFiles).generate();
+                // commented, see https://github.com/metanorma/stepmod2mn/issues/124#issuecomment-1859657292
+                // new MetanormaCover(argOutputPath, inputOutputFiles).generate();
 
                 //if (isInputFolder) {
                 // Generate metanorma.yml in the root of path
@@ -561,7 +572,7 @@ public class stepmod2mn {
                 if (metanormaCollectionPath == null || metanormaCollectionPath.isEmpty()) {
                     metanormaCollectionPath = inputFolder;
                 }
-                new MetanormaCollection(inputOutputFiles).generate(metanormaCollectionPath);
+                new MetanormaCollection(inputOutputFiles).generate(metanormaCollectionPath, namePublicationIndex);
                 //}
             }
 
@@ -583,7 +594,7 @@ public class stepmod2mn {
             Source srcXSL = null;
 
             String bibdataFileName = fileOut.getName();
-            
+
             // get linearized XML with default attributes substitution from DTD
             String linearizedXML = XMLUtils.processLinearizedXML(xmlFilePath);
 
