@@ -253,7 +253,7 @@
 		<xsl:text>&#xa;</xsl:text> -->
 		<xsl:text>:mn-document-class: iso</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>:mn-output-extensions: xml,html,doc,pdf,html_alt,rxl</xsl:text>
+		<xsl:text>:mn-output-extensions: xml,html,pdf,rxl</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
 		<xsl:text>:local-cache-only:</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
