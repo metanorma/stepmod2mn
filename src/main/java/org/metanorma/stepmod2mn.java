@@ -36,7 +36,7 @@ import org.xml.sax.SAXParseException;
  */
 public class stepmod2mn {
 
-    static final String CMD = "java -Xss5m -jar stepmod2mn.jar <resource or module or publication index xml file> [options -o, -v, -b <path> -t <type> -e <documents list> -inc <documents list>]";
+    static final String CMD = "java -Xss5m -jar stepmod2mn.jar <resource or module or publication index xml file> [options -o, -od, -os -v, -b <path> -t <type> -e <documents list> -inc <documents list>]";
     static final String CMD_SVGscope1 = "java -jar stepmod2mn.jar <start folder to process xml maps files> --svg";
     static final String CMD_SVGscope2 = "java -jar stepmod2mn.jar <start folder to process xml maps files> --output-documents --output-schemas --svg";
     static final String CMD_SVG = "java -jar stepmod2mn.jar --xml <Express Imagemap XML file path> --image <Image file name> [--svg <resulted SVG map file or folder>] [-v]";
@@ -145,6 +145,18 @@ public class stepmod2mn {
             addOption(Option.builder("o")
                     .longOpt("output")
                     .desc("output file name (for one .xml input file) or directory")
+                    .hasArg()
+                    .required(false)
+                    .build());
+            addOption(Option.builder("od")
+                    .longOpt("output-documents")
+                    .desc("output directory for documents")
+                    .hasArg()
+                    .required(false)
+                    .build());
+            addOption(Option.builder("os")
+                    .longOpt("output-schemas")
+                    .desc("output directory for schemas")
                     .hasArg()
                     .required(false)
                     .build());
@@ -370,6 +382,11 @@ public class stepmod2mn {
         String outputPathSchemas = "";
         if (cmd.hasOption("output")) {
             argOutputPath = cmd.getOptionValue("output");
+        }
+        if (cmd.hasOption("output-documents")) {
+            argOutputPath = cmd.getOptionValue("output-documents");
+        }
+        if (!argOutputPath.isEmpty()) {
             String outPath_normalized = argOutputPath;
             if (outPath_normalized.startsWith("./") || outPath_normalized.startsWith(".\\")) {
                 outPath_normalized = outPath_normalized.substring(2);
@@ -381,6 +398,18 @@ public class stepmod2mn {
             Path schemasPath = Paths.get(new File(argOutputPath).getParent(), "schemas");
             // create 'schemas' folder at the same level as output folder (for instance 'documents')
             outputPathSchemas = schemasPath.toString();
+        }
+
+        if (cmd.hasOption("output-schemas")) {
+            outputPathSchemas = cmd.getOptionValue("output-schemas");
+            String outputPathSchemas_normalized = outputPathSchemas;
+            if (outputPathSchemas_normalized.startsWith("./") || outputPathSchemas_normalized.startsWith(".\\")) {
+                outputPathSchemas_normalized = outputPathSchemas_normalized.substring(2);
+            }
+            File fXMLout = new File(outputPathSchemas_normalized);
+            outputPathSchemas = fXMLout.getAbsoluteFile().toString();
+        }
+        if (!outputPathSchemas.isEmpty()) {
             new File(outputPathSchemas).mkdirs();
         }
 
