@@ -1173,9 +1173,9 @@
 				<xsl:text>&#xa;</xsl:text>
 			</xsl:for-each>
 			<xsl:for-each select="resource/schema">
-				<xsl:text>        - fileref: </xsl:text><xsl:value-of select="concat('sections/schemadocs/',@name,'.htm')"/>
+				<xsl:text>        - fileref: </xsl:text><xsl:value-of select="concat('sections/schemadocs/',@name,'.html')"/>
 				<xsl:text>&#xa;</xsl:text>
-				<xsl:text>          identifier: </xsl:text><xsl:value-of select="@name"/><xsl:text>.htm</xsl:text>
+				<xsl:text>          identifier: </xsl:text><xsl:value-of select="@name"/><xsl:text>.html</xsl:text>
 				<xsl:text>&#xa;</xsl:text>
 				<xsl:text>          attachment: true</xsl:text>
 				<xsl:text>&#xa;</xsl:text>
@@ -1264,7 +1264,7 @@
 			<xsl:text>&#xa;</xsl:text>
 			<xsl:text>  rm $local</xsl:text>
 			<xsl:text>&#xa;</xsl:text>
-			<xsl:text>  mv "${local%%.adoc}.html" "sections/schemadocs/${local%%.adoc}.htm"</xsl:text>
+			<xsl:text>  mv "${local%%.adoc}.html" "sections/schemadocs/${local%%.adoc}.html"</xsl:text>
 			<xsl:text>&#xa;</xsl:text>
 			<xsl:text>  mv "${local%%.adoc}.err.html" sections/schemadocs</xsl:text>
 			<xsl:text>&#xa;</xsl:text>
