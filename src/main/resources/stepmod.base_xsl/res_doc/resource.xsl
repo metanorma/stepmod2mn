@@ -1502,7 +1502,7 @@ Purpose:
 							<xsl:value-of select="concat('c_exp_schema_',$pos,'.xml')"/>
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:value-of select="concat('c_exp_schema_',$pos,'.htm')"/>
+							<xsl:value-of select="concat('c_exp_schema_',$pos,'.html')"/>
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:variable>
@@ -1696,7 +1696,7 @@ Purpose:
 							<xsl:value-of select="concat($expg_path,'.xml')"/>
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:value-of select="concat($expg_path,'.htm')"/>
+							<xsl:value-of select="concat($expg_path,'.html')"/>
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:variable>
