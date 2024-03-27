@@ -2782,6 +2782,8 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
     <!-- <h2>2 Normative references</h2> -->
     <xsl:text>[bibliography]</xsl:text>
     <xsl:text>&#xa;</xsl:text>
+    <xsl:text>[[normrefs]]</xsl:text>
+    <xsl:text>&#xa;</xsl:text>
     <xsl:text>== </xsl:text>
     <xsl:text>Normative references</xsl:text>
     <xsl:text>&#xa;&#xa;</xsl:text>

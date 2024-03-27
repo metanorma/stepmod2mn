@@ -162,6 +162,13 @@
       </xsl:choose>      
     </xsl:variable>
   
+		<xsl:variable name="schema_type">
+			<xsl:choose>
+        <xsl:when test="contains($schema_name,'_arm')">_arm</xsl:when>
+        <xsl:when test="contains($schema_name,'_mim')">_mim</xsl:when>
+			</xsl:choose>
+		</xsl:variable>
+		
     <!-- <h2>
       <A NAME="interfaces">
         <xsl:value-of select="$clause_header"/>
@@ -171,7 +178,8 @@
     <!-- current xpath is express/schema/interface -->
     <xsl:if test="normalize-space($clause_header) != ''">
       <xsl:call-template name="insertHeaderADOC">
-        <xsl:with-param name="id">interfaces_<xsl:value-of select="$schema_name"/></xsl:with-param>
+        <!-- <xsl:with-param name="id">interfaces_<xsl:value-of select="$schema_name"/></xsl:with-param> -->
+        <xsl:with-param name="id" select="concat('interfaces', $schema_type)"/>
         <xsl:with-param name="level" select="3"/>
         <xsl:with-param name="header" select="$clause_header"/>					
       </xsl:call-template>
@@ -885,13 +893,21 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
       </xsl:choose>      
     </xsl:variable>
 
+		<xsl:variable name="schema_type">
+			<xsl:choose>
+        <xsl:when test="contains($schema_name,'_arm')">_arm</xsl:when>
+        <xsl:when test="contains($schema_name,'_mim')">_mim</xsl:when>
+			</xsl:choose>
+		</xsl:variable>
+
     <!-- <h2>
       <A NAME="constants">
         <xsl:value-of select="$clause_header"/>
       </A>
     </h2> -->
     <xsl:call-template name="insertHeaderADOC">
-      <xsl:with-param name="id" select="concat('constants_', $schema_name)"/>
+      <!-- <xsl:with-param name="id" select="concat('constants_', $schema_name)"/> -->
+			<xsl:with-param name="id" select="concat('constants', $schema_type)"/>
       <xsl:with-param name="header" select="$clause_header"/>					
     </xsl:call-template>
     
@@ -1080,6 +1096,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
     name="graphics" 
     select="''"/>
 
+
   <xsl:variable name="clause_number">
     <xsl:call-template name="express_clause_number">
       <xsl:with-param name="clause" select="'type'"/>
@@ -1156,8 +1173,17 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
         <xsl:value-of select="$clause_header"/>
       </a>
     </h2> -->
+		
+		<xsl:variable name="schema_type">
+			<xsl:choose>
+        <xsl:when test="contains($schema_name,'_arm')">_arm</xsl:when>
+        <xsl:when test="contains($schema_name,'_mim')">_mim</xsl:when>
+			</xsl:choose>
+		</xsl:variable>
+		
     <xsl:call-template name="insertHeaderADOC">
-      <xsl:with-param name="id" select="concat('types_', $schema_name)"/>
+      <!-- <xsl:with-param name="id" select="concat('types_', $schema_name)"/> -->
+			<xsl:with-param name="id" select="concat('types', $schema_type)"/>
       <xsl:with-param name="header" select="$clause_header"/>					
       <xsl:with-param name="level" select="3"/>					
     </xsl:call-template>
@@ -1662,6 +1688,13 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
       </xsl:choose>      
     </xsl:variable>
 
+		<xsl:variable name="schema_type">
+			<xsl:choose>
+        <xsl:when test="contains($schema_name,'_arm')">_arm</xsl:when>
+        <xsl:when test="contains($schema_name,'_mim')">_mim</xsl:when>
+			</xsl:choose>
+		</xsl:variable>
+
     <!-- <h2>
       <a name="entities">
         <xsl:value-of select="$clause_header"/>
@@ -1669,7 +1702,8 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
     </h2> -->
     <xsl:text>&#xa;&#xa;</xsl:text>
     <xsl:call-template name="insertHeaderADOC">
-      <xsl:with-param name="id" select="concat('entities_', $schema_name)"/>
+      <!-- <xsl:with-param name="id" select="concat('entities_', $schema_name)"/> -->
+			<xsl:with-param name="id" select="concat('entities', $schema_type)"/>
       <xsl:with-param name="header" select="$clause_header"/>
       <xsl:with-param name="level" select="3"/>
     </xsl:call-template>
@@ -2516,6 +2550,13 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
       </xsl:choose>      
     </xsl:variable>
 
+		<xsl:variable name="schema_type">
+			<xsl:choose>
+        <xsl:when test="contains($schema_name,'_arm')">_arm</xsl:when>
+        <xsl:when test="contains($schema_name,'_mim')">_mim</xsl:when>
+			</xsl:choose>
+		</xsl:variable>
+
     <!-- <h2>
       <a name="subtype_constraints">
         <xsl:value-of select="$clause_header"/>
@@ -2524,7 +2565,8 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
     <p><xsl:value-of select="$clause_intro"/></p> -->
     
     <xsl:call-template name="insertHeaderADOC">
-      <xsl:with-param name="id" select="concat('subtype_constraints', $schema_name)"/>
+      <!-- <xsl:with-param name="id" select="concat('subtype_constraints', $schema_name)"/> -->
+			<xsl:with-param name="id" select="concat('subtype_constraints', $schema_type)"/>
       <xsl:with-param name="header" select="$clause_header"/>
       <xsl:with-param name="level" select="2"/>					
     </xsl:call-template>
@@ -2959,6 +3001,13 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
       </xsl:choose>      
     </xsl:variable>
 
+		<xsl:variable name="schema_type">
+			<xsl:choose>
+        <xsl:when test="contains($schema_name,'_arm')">_arm</xsl:when>
+        <xsl:when test="contains($schema_name,'_mim')">_mim</xsl:when>
+			</xsl:choose>
+		</xsl:variable>
+		
     <!-- <h2>
       <a name="functions">
         <xsl:value-of select="$clause_header"/>
@@ -2967,7 +3016,8 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
     <p><xsl:value-of select="$clause_intro"/></p> -->
     
     <xsl:call-template name="insertHeaderADOC">
-      <xsl:with-param name="id" select="concat('functions', $schema_name)"/>
+      <!-- <xsl:with-param name="id" select="concat('functions', $schema_name)"/> -->
+			<xsl:with-param name="id" select="concat('functions', $schema_type)"/>
       <xsl:with-param name="header" select="$clause_header"/>
       <xsl:with-param name="level" select="2"/>
     </xsl:call-template>
@@ -3129,6 +3179,13 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
       </xsl:choose>      
     </xsl:variable>
 
+		<xsl:variable name="schema_type">
+			<xsl:choose>
+        <xsl:when test="contains($schema_name,'_arm')">_arm</xsl:when>
+        <xsl:when test="contains($schema_name,'_mim')">_mim</xsl:when>
+			</xsl:choose>
+		</xsl:variable>
+		
     <!-- <h2>
       <a name="procedures">
         <xsl:value-of 
@@ -3137,7 +3194,8 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
       </h2> 
       <p><xsl:value-of select="$clause_intro"/></p> -->
     <xsl:call-template name="insertHeaderADOC">
-      <xsl:with-param name="id" select="concat('procedures', $schema_name)"/>
+      <!-- <xsl:with-param name="id" select="concat('procedures', $schema_name)"/> -->
+			<xsl:with-param name="id" select="concat('procedures', $schema_type)"/>
       <xsl:with-param name="header" select="$clause_header"/>
       <xsl:with-param name="level" select="2"/>
     </xsl:call-template>
@@ -3400,6 +3458,14 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
         </xsl:when>
       </xsl:choose>      
     </xsl:variable>
+		
+		<xsl:variable name="schema_type">
+			<xsl:choose>
+        <xsl:when test="contains($schema_name,'_arm')">_arm</xsl:when>
+        <xsl:when test="contains($schema_name,'_mim')">_mim</xsl:when>
+			</xsl:choose>
+		</xsl:variable>
+		
     <!-- <h2>
       <a name="rules">
         <xsl:value-of select="$clause_header"/>
@@ -3407,7 +3473,8 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
     </h2>
     <p><xsl:value-of select="$clause_intro"/></p> -->
     <xsl:call-template name="insertHeaderADOC">
-      <xsl:with-param name="id" select="concat('rules', $schema_name)"/>
+      <!-- <xsl:with-param name="id" select="concat('rules', $schema_name)"/> -->
+			<xsl:with-param name="id" select="concat('rules', $schema_type)"/>
       <xsl:with-param name="header" select="$clause_header"/>
       <xsl:with-param name="level" select="2"/>
     </xsl:call-template>
