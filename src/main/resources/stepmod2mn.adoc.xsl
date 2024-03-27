@@ -406,23 +406,34 @@
 	<xsl:template name="insertHyperlink">
 		<xsl:param name="a"/>
 		<xsl:param name="asText" select="'false'"/>
+		<xsl:param name="isInternalLink">false</xsl:param>
 		<xsl:variable name="href">
 			<xsl:choose>
 				<xsl:when test="xalan:nodeset($a)/*/@HREF"><xsl:value-of select="xalan:nodeset($a)/*/@HREF"/></xsl:when>
 				<xsl:otherwise><xsl:value-of select="xalan:nodeset($a)/*/@href"/></xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
+		<xsl:variable name="isInternetLink" select="normalize-space(starts-with($href,'www.') or starts-with($href, 'http://') or starts-with($href, 'https://'))"/>
+		<xsl:variable name="link_text" select="normalize-space(xalan:nodeset($a)/*/text())"/>
 		<xsl:choose>
-			<xsl:when test="$asText = 'true'">
-				<xsl:variable name="link_text" select="normalize-space(xalan:nodeset($a)/*/text())"/>
+			<xsl:when test="$asText = 'true' or $isInternetLink = 'true'">
 				<xsl:choose>
-					<xsl:when test="$href = $link_text and (starts-with($href,'www.') or starts-with($href, 'http://') or starts-with($href, 'https://'))">
+					<xsl:when test="$href = $link_text and $isInternetLink = 'true'">
 						<xsl:value-of select="$href"/>
 					</xsl:when>
 					<xsl:otherwise>
 						<xsl:value-of select="$href"/><xsl:text>[</xsl:text><xsl:value-of select="$link_text"/><xsl:text>]</xsl:text>
 					</xsl:otherwise>
 				</xsl:choose>
+			</xsl:when>
+			<xsl:when test="$isInternalLink = 'true'">
+				<xsl:text>&lt;&lt;</xsl:text>
+				<xsl:choose>
+					<xsl:when test="starts-with($href,'#')"><xsl:value-of select="substring-after($href,'#')"/></xsl:when>
+					<xsl:otherwise><xsl:value-of select="$href"/></xsl:otherwise>
+				</xsl:choose>
+				<xsl:if test="$link_text != ''">,<xsl:value-of select="$link_text"/></xsl:if>
+				<xsl:text>&gt;&gt;</xsl:text>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:element name="ExternalDocumentReference">

@@ -462,6 +462,7 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 			<xsl:call-template name="table_aname">
 				<xsl:with-param name="table" select="."/>
 				<xsl:with-param name="number" select="@number"/>
+				<xsl:with-param name="letter" select="@letter"/>
 				<xsl:with-param name="id" select="@id"/>
 			</xsl:call-template>
 		</xsl:variable>
@@ -489,7 +490,10 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 			image::images/a1.png[Alt1]
 		-->
 		<xsl:call-template name="insertImage">
-			<xsl:with-param name="id" select="concat('figure', $number, $letter)"/>
+			<xsl:with-param name="id" select="$aname"/>
+				<!-- <xsl:value-of select="@id"/>
+				<xsl:if test="not(@id)"><xsl:value-of select="concat('figure', $number, $letter)"/></xsl:if>
+			</xsl:with-param> -->
 			<xsl:with-param name="title" select="./title"/>
 			<xsl:with-param name="path">
 				<xsl:variable name="img_path">
@@ -985,6 +989,7 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 					</xsl:choose>
 				</a>
 			</xsl:with-param>
+			<xsl:with-param name="isInternalLink" select="normalize-space(starts-with($href,'#'))"/>
 		</xsl:call-template>
 	
 </xsl:template>
@@ -1155,7 +1160,7 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 	</xsl:variable>
 	
 	<xsl:if test="$aname != ''">
-		<xsl:text>[#</xsl:text><xsl:value-of select="$aname"/><xsl:text>]</xsl:text>
+		<xsl:text>[[</xsl:text><xsl:value-of select="$aname"/><xsl:text>]]</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
 	</xsl:if>
 	<xsl:text>[cols="</xsl:text>
@@ -2326,6 +2331,8 @@ width="20" height="20"/> -->
 			</xsl:choose>
 		</xsl:variable>
 
+		<!-- construct_tmp=<xsl:value-of select="$construct_tmp"/> -->
+
 		<xsl:variable name="construct">
 			<xsl:choose>
 				<!-- test that a valid value is given for construct -->
@@ -2357,7 +2364,6 @@ width="20" height="20"/> -->
 			</xsl:choose>
 		</xsl:variable>
 
-
 		<xsl:variable name="href">
 			<xsl:choose>
 				<xsl:when test="$module=''">
@@ -2379,27 +2385,31 @@ width="20" height="20"/> -->
 							 -->
 				</xsl:when>
 				<xsl:when test="$section=''">
-					<xsl:value-of
+					<!-- <xsl:value-of
 						select="concat('../../../modules/',$module,'/sys/introduction',
-										$FILE_EXT)"/>
+										$FILE_EXT)"/> -->
+					<xsl:value-of select="'introduction'"/>
 				</xsl:when>
 				<xsl:when test="$section='introduction'">
-					<xsl:value-of
+					<!-- <xsl:value-of
 						select="concat('../../../modules/',$module,'/sys/introduction',
-										$FILE_EXT,$construct)"/>
+										$FILE_EXT,$construct)"/> -->
+					<xsl:value-of select="$construct"/>
 				</xsl:when>
 
 				<xsl:when test="$section='1_scope'">
 					<xsl:choose>
-						<xsl:when test="$construct">
-							<xsl:value-of
+						<xsl:when test="$construct != ''">
+							<!-- <xsl:value-of
 								select="concat('../../../modules/',$module,
-												'/sys/1_scope',$FILE_EXT,$construct)"/>
+												'/sys/1_scope',$FILE_EXT,$construct)"/> -->
+							<xsl:value-of select="$construct"/>
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:value-of
+							<!-- <xsl:value-of
 								select="concat('../../../modules/',$module,
-												'/sys/1_scope',$FILE_EXT,'#scope')"/>
+												'/sys/1_scope',$FILE_EXT,'#scope')"/> -->
+							<xsl:value-of select="'scope'"/>
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:when>
@@ -2407,14 +2417,16 @@ width="20" height="20"/> -->
 				<xsl:when test="$section='1_inscope'">
 					<xsl:choose>
 						<xsl:when test="$construct=''">
-							<xsl:value-of
+							<!-- <xsl:value-of
 								select="concat('../../../modules/',$module,
-												'/sys/1_scope',$FILE_EXT,'#inscope')"/>
+												'/sys/1_scope',$FILE_EXT,'#inscope')"/> -->
+							<xsl:value-of select="'inscope'"/>
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:value-of
+							<!-- <xsl:value-of
 								select="concat('../../../modules/',$module,
-												'/sys/1_scope',$FILE_EXT,$construct)"/>
+												'/sys/1_scope',$FILE_EXT,$construct)"/> -->
+							<xsl:value-of select="$construct"/>
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:when>
@@ -2422,14 +2434,16 @@ width="20" height="20"/> -->
 				<xsl:when test="$section='1_outscope'">
 					<xsl:choose>
 						<xsl:when test="$construct=''">
-							<xsl:value-of
+							<!-- <xsl:value-of
 								select="concat('../../../modules/',$module,
-												'/sys/1_scope',$FILE_EXT,'#outscope')"/>
+												'/sys/1_scope',$FILE_EXT,'#outscope')"/> -->
+							<xsl:value-of select="'outscope'"/>
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:value-of
+							<!-- <xsl:value-of
 								select="concat('../../../modules/',$module,
-												'/sys/1_scope',$FILE_EXT,$construct)"/>
+												'/sys/1_scope',$FILE_EXT,$construct)"/> -->
+							<xsl:value-of select="$construct"/>
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:when>
@@ -2437,14 +2451,16 @@ width="20" height="20"/> -->
 				<xsl:when test="$section='2_normrefs'">
 					<xsl:choose>
 						<xsl:when test="$construct=''">
-							<xsl:value-of
+							<!-- <xsl:value-of
 								select="concat('../../../modules/',$module,
-												'/sys/2_refs',$FILE_EXT)"/>
+												'/sys/2_refs',$FILE_EXT)"/> -->
+							<xsl:value-of select="'normrefs'"/>
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:value-of
+							<!-- <xsl:value-of
 								select="concat('../../../modules/',$module,
-												'/sys/2_refs',$FILE_EXT,$construct)"/>
+												'/sys/2_refs',$FILE_EXT,$construct)"/> -->
+							<xsl:value-of select="$construct"/>
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:when>
@@ -2452,14 +2468,16 @@ width="20" height="20"/> -->
 				<xsl:when test="$section='3_definition'">
 					<xsl:choose>
 						<xsl:when test="$construct=''">
-							<xsl:value-of
+							<!-- <xsl:value-of
 								select="concat('../../../modules/',$module,
-												'/sys/3_defs',$FILE_EXT)"/>
+												'/sys/3_defs',$FILE_EXT)"/> -->
+							<xsl:value-of select="'termsdefns'"/>
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:value-of
+							<!-- <xsl:value-of
 								select="concat('../../../modules/',$module,
-												'/sys/3_defs',$FILE_EXT,$construct)"/>
+												'/sys/3_defs',$FILE_EXT,$construct)"/> -->
+							<xsl:value-of select="$construct"/>
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:when>
@@ -2467,14 +2485,16 @@ width="20" height="20"/> -->
 				<xsl:when test="$section='3_abbreviations'">
 					<xsl:choose>
 						<xsl:when test="$construct=''">
-					<xsl:value-of
+					<!-- <xsl:value-of
 						select="concat('../../../modules/',$module,
-										'/sys/3_defs',$FILE_EXT)"/>
+										'/sys/3_defs',$FILE_EXT)"/> -->
+					<xsl:value-of select="'abbrv'"/>
 				</xsl:when>
 						<xsl:otherwise>
-							<xsl:value-of
+							<!-- <xsl:value-of
 								select="concat('../../../modules/',$module,
-												'/sys/3_defs',$FILE_EXT,$construct)"/>
+												'/sys/3_defs',$FILE_EXT,$construct)"/> -->
+							<xsl:value-of select="$construct"/>
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:when>
@@ -2482,14 +2502,16 @@ width="20" height="20"/> -->
 				<xsl:when test="$section='4_uof'">
 					<xsl:choose>
 						<xsl:when test="$construct=''">
-							<xsl:value-of
+							<!-- <xsl:value-of
 								select="concat('../../../modules/',$module,
-												'/sys/4_info_reqs',$FILE_EXT,'#uof')"/>
+												'/sys/4_info_reqs',$FILE_EXT,'#uof')"/> -->
+							<xsl:value-of select="'uof'"/>
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:value-of
+							<!-- <xsl:value-of
 								select="concat('../../../modules/',$module,
-												'/sys/4_info_reqs',$FILE_EXT,$construct)"/>
+												'/sys/4_info_reqs',$FILE_EXT,$construct)"/> -->
+							<xsl:value-of select="$construct"/>
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:when>
@@ -2497,14 +2519,16 @@ width="20" height="20"/> -->
 				<xsl:when test="$section='4_interfaces'">
 					<xsl:choose>
 						<xsl:when test="$construct=''">
-							<xsl:value-of
+							<!-- <xsl:value-of
 								select="concat('../../../modules/',$module,
-												'/sys/4_info_reqs',$FILE_EXT,'#interfaces')"/>
+												'/sys/4_info_reqs',$FILE_EXT,'#interfaces')"/> -->
+							<xsl:value-of select="'interfaces_arm'"/>
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:value-of
+							<!-- <xsl:value-of
 								select="concat('../../../modules/',$module,
-												'/sys/4_info_reqs',$FILE_EXT,$construct)"/>
+												'/sys/4_info_reqs',$FILE_EXT,$construct)"/> -->
+							<xsl:value-of select="$construct"/>
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:when>
@@ -2512,14 +2536,16 @@ width="20" height="20"/> -->
 				<xsl:when test="$section='4_constants'">
 					<xsl:choose>
 						<xsl:when test="$construct=''">
-							<xsl:value-of
+							<!-- <xsl:value-of
 								select="concat('../../../modules/',$module,
-												'/sys/4_info_reqs',$FILE_EXT,'#constants')"/>
+												'/sys/4_info_reqs',$FILE_EXT,'#constants')"/> -->
+							<xsl:value-of select="'constants_arm'"/>
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:value-of
+							<!-- <xsl:value-of
 								select="concat('../../../modules/',$module,
-												'/sys/4_info_reqs',$FILE_EXT,$construct)"/>
+												'/sys/4_info_reqs',$FILE_EXT,$construct)"/> -->
+							<xsl:value-of select="$construct"/>
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:when>
@@ -2527,14 +2553,16 @@ width="20" height="20"/> -->
 				<xsl:when test="$section='4_types'">
 					<xsl:choose>
 						<xsl:when test="$construct=''">
-							<xsl:value-of
+							<!-- <xsl:value-of
 								select="concat('../../../modules/',$module,
-												'/sys/4_info_reqs',$FILE_EXT,'#types')"/>
+												'/sys/4_info_reqs',$FILE_EXT,'#types')"/> -->
+							<xsl:value-of select="'types_arm'"/>
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:value-of
+							<!-- <xsl:value-of
 								select="concat('../../../modules/',$module,
-												'/sys/4_info_reqs',$FILE_EXT,$construct)"/>
+												'/sys/4_info_reqs',$FILE_EXT,$construct)"/> -->
+							<xsl:value-of select="$construct"/>
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:when>
@@ -2542,14 +2570,16 @@ width="20" height="20"/> -->
 				<xsl:when test="$section='4_entities'">
 					<xsl:choose>
 						<xsl:when test="$construct=''">
-							<xsl:value-of
+							<!-- <xsl:value-of
 								select="concat('../../../modules/',$module,
-												'/sys/4_info_reqs',$FILE_EXT,'#entities')"/>
+												'/sys/4_info_reqs',$FILE_EXT,'#entities')"/> -->
+							<xsl:value-of select="'entities_arm'"/>
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:value-of
+							<!-- <xsl:value-of
 								select="concat('../../../modules/',$module,
-												'/sys/4_info_reqs',$FILE_EXT,$construct)"/>
+												'/sys/4_info_reqs',$FILE_EXT,$construct)"/> -->
+							<xsl:value-of select="$construct"/>
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:when>
@@ -2557,14 +2587,16 @@ width="20" height="20"/> -->
 				<xsl:when test="$section='4_subtype_constraints'">
 					<xsl:choose>
 						<xsl:when test="$construct=''">
-							<xsl:value-of
+							<!-- <xsl:value-of
 								select="concat('../../../modules/',$module,
-												'/sys/4_info_reqs',$FILE_EXT,'#subtype_constraints')"/>
+												'/sys/4_info_reqs',$FILE_EXT,'#subtype_constraints')"/> -->
+							<xsl:value-of select="'subtype_constraints_arm'"/>
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:value-of
+							<!-- <xsl:value-of
 								select="concat('../../../modules/',$module,
-												'/sys/4_info_reqs',$FILE_EXT,$construct)"/>
+												'/sys/4_info_reqs',$FILE_EXT,$construct)"/> -->
+							<xsl:value-of select="$construct"/>
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:when>
@@ -2572,14 +2604,16 @@ width="20" height="20"/> -->
 				<xsl:when test="$section='4_rules'">
 					<xsl:choose>
 						<xsl:when test="$construct=''">
-							<xsl:value-of
+							<!-- <xsl:value-of
 								select="concat('../../../modules/',$module,
-												'/sys/4_info_reqs',$FILE_EXT,'#rules')"/>              
+												'/sys/4_info_reqs',$FILE_EXT,'#rules')"/>               -->
+							<xsl:value-of select="'rules_arm'"/>
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:value-of
+							<!-- <xsl:value-of
 								select="concat('../../../modules/',$module,
-												'/sys/4_info_reqs',$FILE_EXT,$construct)"/>              
+												'/sys/4_info_reqs',$FILE_EXT,$construct)"/>  -->             
+							<xsl:value-of select="$construct"/>
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:when>
@@ -2587,14 +2621,16 @@ width="20" height="20"/> -->
 				<xsl:when test="$section='4_functions'">
 					<xsl:choose>
 						<xsl:when test="$construct=''">
-							<xsl:value-of
+							<!-- <xsl:value-of
 								select="concat('../../../modules/',$module,
-												'/sys/4_info_reqs',$FILE_EXT,'#functions')"/>
+												'/sys/4_info_reqs',$FILE_EXT,'#functions')"/> -->
+							<xsl:value-of select="'functions_arm'"/>
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:value-of
+							<!-- <xsl:value-of
 								select="concat('../../../modules/',$module,
-												'/sys/4_info_reqs',$FILE_EXT,$construct)"/>
+												'/sys/4_info_reqs',$FILE_EXT,$construct)"/> -->
+							<xsl:value-of select="$construct"/>
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:when>
@@ -2602,14 +2638,16 @@ width="20" height="20"/> -->
 				<xsl:when test="$section='4_procedures'">
 					<xsl:choose>
 						<xsl:when test="$construct=''">
-							<xsl:value-of
+							<!-- <xsl:value-of
 								select="concat('../../../modules/',$module,
-												'/sys/4_info_reqs',$FILE_EXT,'#procedures')"/>
+												'/sys/4_info_reqs',$FILE_EXT,'#procedures')"/> -->
+							<xsl:value-of select="'procedures_arm'"/>
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:value-of
+							<!-- <xsl:value-of
 								select="concat('../../../modules/',$module,
-												'/sys/4_info_reqs',$FILE_EXT,$construct)"/>
+												'/sys/4_info_reqs',$FILE_EXT,$construct)"/> -->
+							<xsl:value-of select="$construct"/>
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:when>
@@ -2617,14 +2655,16 @@ width="20" height="20"/> -->
 				<xsl:when test="$section='5_mapping'">
 					<xsl:choose>
 						<xsl:when test="$construct=''">
-							<xsl:value-of
+							<!-- <xsl:value-of
 								select="concat('../../../modules/',$module,
-												'/sys/5_mapping',$FILE_EXT,'#mapping')"/>
+												'/sys/5_mapping',$FILE_EXT,'#mapping')"/> -->
+							<xsl:value-of select="'mapping'"/>
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:value-of
+							<!-- <xsl:value-of
 								select="concat('../../../modules/',$module,
-												'/sys/5_mapping',$FILE_EXT,$construct)"/>
+												'/sys/5_mapping',$FILE_EXT,$construct)"/> -->
+							<xsl:value-of select="$construct"/>
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:when>
@@ -2632,14 +2672,16 @@ width="20" height="20"/> -->
 				<xsl:when test="$section='5_mim_express'">
 					<xsl:choose>
 						<xsl:when test="$construct=''">
-							<xsl:value-of
+							<!-- <xsl:value-of
 								select="concat('../../../modules/',$module,
-												'/sys/5_mim',$FILE_EXT,'#mim_express')"/>
+												'/sys/5_mim',$FILE_EXT,'#mim_express')"/> -->
+							<xsl:value-of select="'mim_express'"/>
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:value-of
+							<!-- <xsl:value-of
 								select="concat('../../../modules/',$module,
-												'/sys/5_mim',$FILE_EXT,$construct)"/>
+												'/sys/5_mim',$FILE_EXT,$construct)"/> -->
+							<xsl:value-of select="$construct"/>
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:when>
@@ -2647,14 +2689,16 @@ width="20" height="20"/> -->
 				<xsl:when test="$section='5_interfaces'">
 					<xsl:choose>
 						<xsl:when test="$construct=''">
-							<xsl:value-of
+							<!-- <xsl:value-of
 								select="concat('../../../modules/',$module,
-												'/sys/5_mim',$FILE_EXT,'#interfaces')"/>              
+												'/sys/5_mim',$FILE_EXT,'#interfaces')"/> -->  
+							<xsl:value-of select="'interfaces_mim'"/>
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:value-of
+							<!-- <xsl:value-of
 								select="concat('../../../modules/',$module,
-												'/sys/5_mim',$FILE_EXT,$construct)"/>
+												'/sys/5_mim',$FILE_EXT,$construct)"/> -->
+							<xsl:value-of select="$construct"/>
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:when>
@@ -2662,14 +2706,16 @@ width="20" height="20"/> -->
 				<xsl:when test="$section='5_constants'">
 					<xsl:choose>
 						<xsl:when test="$construct=''">
-							<xsl:value-of
+							<!-- <xsl:value-of
 								select="concat('../../../modules/',$module,
-												'/sys/5_mim',$FILE_EXT,'#constants')"/>
+												'/sys/5_mim',$FILE_EXT,'#constants')"/> -->
+							<xsl:value-of select="'constants_mim'"/>
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:value-of
+							<!-- <xsl:value-of
 								select="concat('../../../modules/',$module,
-												'/sys/5_mim',$FILE_EXT,$construct)"/>
+												'/sys/5_mim',$FILE_EXT,$construct)"/> -->
+							<xsl:value-of select="$construct"/>
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:when>
@@ -2677,14 +2723,16 @@ width="20" height="20"/> -->
 				<xsl:when test="$section='5_types'">
 					<xsl:choose>
 						<xsl:when test="$construct=''">
-							<xsl:value-of
+							<!-- <xsl:value-of
 								select="concat('../../../modules/',$module,
-												'/sys/5_mim',$FILE_EXT,'#types')"/>
+												'/sys/5_mim',$FILE_EXT,'#types')"/> -->
+							<xsl:value-of select="'types_mim'"/>
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:value-of
+							<!-- <xsl:value-of
 								select="concat('../../../modules/',$module,
-												'/sys/5_mim',$FILE_EXT,$construct)"/>
+												'/sys/5_mim',$FILE_EXT,$construct)"/> -->
+							<xsl:value-of select="$construct"/>
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:when>
@@ -2692,14 +2740,16 @@ width="20" height="20"/> -->
 				<xsl:when test="$section='5_entities'">
 					<xsl:choose>
 						<xsl:when test="$construct=''">
-							<xsl:value-of
+							<!-- <xsl:value-of
 								select="concat('../../../modules/',$module,
-												'/sys/5_mim',$FILE_EXT,'#entities')"/>
+												'/sys/5_mim',$FILE_EXT,'#entities')"/> -->
+							<xsl:value-of select="'entities_mim'"/>
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:value-of
+							<!-- <xsl:value-of
 								select="concat('../../../modules/',$module,
-												'/sys/5_mim',$FILE_EXT,$construct)"/>
+												'/sys/5_mim',$FILE_EXT,$construct)"/> -->
+							<xsl:value-of select="$construct"/>
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:when>
@@ -2707,14 +2757,16 @@ width="20" height="20"/> -->
 				<xsl:when test="$section='5_subtype_constraints'">
 					<xsl:choose>
 						<xsl:when test="$construct=''">
-							<xsl:value-of
+							<!-- <xsl:value-of
 								select="concat('../../../modules/',$module,
-												'/sys/5_mim',$FILE_EXT,'#subtype_constraints')"/>
+												'/sys/5_mim',$FILE_EXT,'#subtype_constraints')"/> -->
+							<xsl:value-of select="'subtype_constraints_mim'"/>
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:value-of
+							<!-- <xsl:value-of
 								select="concat('../../../modules/',$module,
-												'/sys/5_mim',$FILE_EXT,$construct)"/>
+												'/sys/5_mim',$FILE_EXT,$construct)"/> -->
+							<xsl:value-of select="$construct"/>
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:when>
@@ -2722,14 +2774,16 @@ width="20" height="20"/> -->
 				<xsl:when test="$section='5_rules'">
 					<xsl:choose>
 						<xsl:when test="$construct=''">
-							<xsl:value-of
+							<!-- <xsl:value-of
 								select="concat('../../../modules/',$module,
-												'/sys/5_mim',$FILE_EXT,'#rules')"/>
+												'/sys/5_mim',$FILE_EXT,'#rules')"/> -->
+							<xsl:value-of select="'rules_mim'"/>
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:value-of
+							<!-- <xsl:value-of
 								select="concat('../../../modules/',$module,
-												'/sys/5_mim',$FILE_EXT,$construct)"/>
+												'/sys/5_mim',$FILE_EXT,$construct)"/> -->
+							<xsl:value-of select="$construct"/>
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:when>
@@ -2737,14 +2791,16 @@ width="20" height="20"/> -->
 				<xsl:when test="$section='5_functions'">
 					<xsl:choose>
 						<xsl:when test="$construct=''">
-							<xsl:value-of
+							<!-- <xsl:value-of
 								select="concat('../../../modules/',$module,
-												'/sys/5_mim',$FILE_EXT,'#functions')"/>
+												'/sys/5_mim',$FILE_EXT,'#functions')"/> -->
+							<xsl:value-of select="'functions_mim'"/>
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:value-of
+							<!-- <xsl:value-of
 								select="concat('../../../modules/',$module,
-												'/sys/5_mim',$FILE_EXT,$construct)"/>
+												'/sys/5_mim',$FILE_EXT,$construct)"/> -->
+							<xsl:value-of select="$construct"/>
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:when>
@@ -2752,29 +2808,33 @@ width="20" height="20"/> -->
 				<xsl:when test="$section='5_procedures'">
 					<xsl:choose>
 						<xsl:when test="$construct=''">
-							<xsl:value-of
+							<!-- <xsl:value-of
 								select="concat('../../../modules/',$module,
-												'/sys/5_mim',$FILE_EXT,'#procedures')"/>
+												'/sys/5_mim',$FILE_EXT,'#procedures')"/> -->
+							<xsl:value-of select="'procedures_mim'"/>
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:value-of
+							<!-- <xsl:value-of
 								select="concat('../../../modules/',$module,
-												'/sys/5_mim',$FILE_EXT,$construct)"/>
+												'/sys/5_mim',$FILE_EXT,$construct)"/> -->
+							<xsl:value-of select="$construct"/>
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:when>
 
 				<xsl:when test="$section='f_usage_guide'">
 					<xsl:choose>
-						<xsl:when test="$construct">
-							<xsl:value-of
+						<xsl:when test="$construct != ''">
+							<!-- <xsl:value-of
 								select="concat('../../../modules/',$module,
-										'/sys/f_guide',$FILE_EXT,$construct)"/>
+										'/sys/f_guide',$FILE_EXT,$construct)"/> -->
+							<xsl:value-of select="$construct"/>
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:value-of
+							<!-- <xsl:value-of
 								select="concat('../../../modules/',$module,
-												'/sys/f_guide',$FILE_EXT,'#annexf')"/>
+												'/sys/f_guide',$FILE_EXT,'#annexf')"/> -->
+							<xsl:value-of select="'AnnexF'"/>
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:when>
@@ -2790,7 +2850,9 @@ width="20" height="20"/> -->
 		[sect:<xsl:value-of select="$section"/>]
 		[module:<xsl:value-of select="$module"/>]
 		[href:<xsl:value-of select="$href"/>]
+		[construct_tmp:<xsl:value-of select="$construct_tmp"/>]
 		[construct:<xsl:value-of select="$construct"/>]
+		[id:<xsl:value-of select="$id"/>]
 				 -->
 		<xsl:choose>
 			<xsl:when test="$href=''">
@@ -2809,8 +2871,24 @@ width="20" height="20"/> -->
 						<!-- <a href="{$href}"><xsl:apply-templates/></a> -->
 						<xsl:call-template name="insertHyperlink">
 							<xsl:with-param name="a">
-								<a href="{$href}"><xsl:apply-templates/></a>
+								<a href="{$href}">
+									<xsl:choose>
+										<xsl:when test="($construct_tmp = 'figure' or $construct_tmp = 'table') and $id != ''">
+											<xsl:attribute name="href"><xsl:value-of select="concat($construct_tmp, '_', $id)"/></xsl:attribute>
+											<xsl:variable name="a_text"><xsl:apply-templates/></xsl:variable>
+											<xsl:choose>
+												<xsl:when test="starts-with($a_text, 'Figure ')"><xsl:value-of select="substring-after($a_text, 'Figure ')"/></xsl:when>
+												<xsl:when test="starts-with($a_text, 'Table ')"><xsl:value-of select="substring-after($a_text, 'Table ')"/></xsl:when>
+												<xsl:otherwise><xsl:value-of select="$a_text"/></xsl:otherwise>
+											</xsl:choose>
+										</xsl:when>
+										<xsl:otherwise>
+											<xsl:apply-templates/>
+										</xsl:otherwise>
+									</xsl:choose>
+								</a>
 							</xsl:with-param>
+							<xsl:with-param name="isInternalLink">true</xsl:with-param>
 						</xsl:call-template>						
 					</xsl:when>
 					<xsl:otherwise>
@@ -4038,6 +4116,7 @@ is case sensitive.')"/>
 	<xsl:template name="table_aname">
 		<xsl:param name="table" select="."/>
 		<xsl:param name="number" select="./@number"/>
+		<xsl:param name="letter" select="./@letter"/>
 		<xsl:param name="id" select="./@id"/>
 
 		<xsl:variable name="aname">
@@ -4046,7 +4125,7 @@ is case sensitive.')"/>
 					<xsl:value-of select="concat(name($table),'_',$id)"/>
 				</xsl:when>
 				<xsl:otherwise>          
-					<xsl:value-of select="concat(name($table),'_',$number)"/>
+					<xsl:value-of select="concat(name($table),'_',$number,$letter)"/>
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>

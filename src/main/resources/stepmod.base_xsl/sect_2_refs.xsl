@@ -41,10 +41,12 @@ $Id: sect_2_refs.xsl,v 1.21 2018/08/22 23:06:22 mike Exp $
     <!-- <h2>2 Normative references</h2> -->
     
     <xsl:text>[bibliography]</xsl:text>
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>== </xsl:text>
-		<xsl:text>Normative references</xsl:text>
-		<xsl:text>&#xa;&#xa;</xsl:text>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:text>[[normrefs]]</xsl:text>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:text>== </xsl:text>
+    <xsl:text>Normative references</xsl:text>
+    <xsl:text>&#xa;&#xa;</xsl:text>
     
     <!--<p>
       The following referenced documents are indispensable for the application of
@@ -145,6 +147,8 @@ $Id: sect_2_refs.xsl,v 1.21 2018/08/22 23:06:22 mike Exp $
     <!-- <h2>2 Normative references</h2> -->
     <xsl:text>[bibliography]</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
+    <xsl:text>[[normrefs]]</xsl:text>
+    <xsl:text>&#xa;</xsl:text>
 		<xsl:text>== </xsl:text>
 		<xsl:text>Normative references</xsl:text>
 		<xsl:text>&#xa;&#xa;</xsl:text>
