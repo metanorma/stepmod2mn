@@ -412,11 +412,12 @@
 				<xsl:otherwise><xsl:value-of select="xalan:nodeset($a)/*/@href"/></xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
+		<xsl:variable name="isInternetLink" select="normalize-space(starts-with($href,'www.') or starts-with($href, 'http://') or starts-with($href, 'https://'))"/>
 		<xsl:choose>
-			<xsl:when test="$asText = 'true'">
+			<xsl:when test="$asText = 'true' or $isInternetLink = 'true'">
 				<xsl:variable name="link_text" select="normalize-space(xalan:nodeset($a)/*/text())"/>
 				<xsl:choose>
-					<xsl:when test="$href = $link_text and (starts-with($href,'www.') or starts-with($href, 'http://') or starts-with($href, 'https://'))">
+					<xsl:when test="$href = $link_text and $isInternetLink = 'true'">
 						<xsl:value-of select="$href"/>
 					</xsl:when>
 					<xsl:otherwise>
