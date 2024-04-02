@@ -1802,8 +1802,8 @@ Purpose:
 			
 			<xsl:if test="normalize-space($generateSVG) != ''">
 				<redirect:write file="{$express_g_diagrams_yaml}">
-					<xsl:text>- path: </xsl:text>
-					<xsl:variable name="image_relative_path_new" select="java:org.metanorma.Util.getRelativePath($generateSVG, $outpath)"/>
+					<xsl:text>- path: ../</xsl:text> <!-- added '../' because `:imagesdir: images` added, see https://github.com/metanorma/stepmod2mn/issues/138 -->
+					<xsl:variable name="image_relative_path_new" select="java:org.metanorma.Util.getRelativePath($generateSVG, $outpath)"/> 
 					<xsl:value-of select="$image_relative_path_new"/>
 					<xsl:text>&#xa;</xsl:text>
 				</redirect:write>
