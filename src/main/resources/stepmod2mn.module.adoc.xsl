@@ -161,6 +161,8 @@
 
 	<xsl:variable name="current_module" select="/module/@name"/>
 	
+	<xsl:variable name="imagesdir">images</xsl:variable>
+	
 	<!-- module.xml -->
 	<xsl:template match="/">
 		<xsl:variable name="title-intro-en">Industrial automation systems and integration</xsl:variable>
@@ -249,8 +251,9 @@
 		<xsl:text>&#xa;</xsl:text>
 		
 		<!-- commented: https://github.com/metanorma/stepmod2mn/issues/49 -->
-		<!-- <xsl:text>:imagesdir: images</xsl:text>
-		<xsl:text>&#xa;</xsl:text> -->
+		<!-- uncommented: https://github.com/metanorma/stepmod2mn/issues/138 -->
+		<xsl:text>:imagesdir: </xsl:text><xsl:value-of select="$imagesdir"/>
+		<xsl:text>&#xa;</xsl:text>
 		<xsl:text>:mn-document-class: iso</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
 		<xsl:text>:mn-output-extensions: xml,html,pdf,rxl</xsl:text>

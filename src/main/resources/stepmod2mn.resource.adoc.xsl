@@ -156,6 +156,8 @@
 
 	<xsl:variable name="current_module" select="/resource/@name"/>
 	
+	<xsl:variable name="imagesdir">images</xsl:variable>
+	
 	<!-- resource.xml -->
 	<xsl:template match="/">
 		<xsl:variable name="title-intro-en">Industrial automation systems and integration</xsl:variable>
@@ -244,8 +246,9 @@
 		<xsl:text>&#xa;</xsl:text>
 		
 		<!-- commented: https://github.com/metanorma/stepmod2mn/issues/49 -->
-		<!-- <xsl:text>:imagesdir: images</xsl:text>
-		<xsl:text>&#xa;</xsl:text> -->
+		<!-- uncommented: https://github.com/metanorma/stepmod2mn/issues/138 -->
+		<xsl:text>:imagesdir: </xsl:text><xsl:value-of select="$imagesdir"/>
+		<xsl:text>&#xa;</xsl:text>
 		<xsl:text>:mn-document-class: iso</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
 		<xsl:text>:mn-output-extensions: xml,html,pdf,rxl</xsl:text>
@@ -364,8 +367,9 @@
 					<!-- output template as 04-schemas.adoc -->
 					<!-- <xsl:call-template name="insert_04-schemas_adoc"/> -->
 				<!-- </file> -->
+				
 				<!-- create symbolic link to the folder 'templates` in the root of repository -->
-				<!-- <file link="templates" target="../../templates" folder="true" relative="true"/> -->
+				<file link="templates" target="../../templates" folder="true" relative="true"/>
 				
 				
 				<file path="../../templates/schemas.adoc" empty="true">

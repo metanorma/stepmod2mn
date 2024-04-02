@@ -1802,8 +1802,8 @@ Purpose:
 			
 			<xsl:if test="normalize-space($generateSVG) != ''">
 				<redirect:write file="{$express_g_diagrams_yaml}">
-					<xsl:text>- path: </xsl:text>
-					<xsl:variable name="image_relative_path_new" select="java:org.metanorma.Util.getRelativePath($generateSVG, $outpath)"/>
+					<xsl:text>- path: ../</xsl:text> <!-- added '../' because `:imagesdir: images` added, see https://github.com/metanorma/stepmod2mn/issues/138 -->
+					<xsl:variable name="image_relative_path_new" select="java:org.metanorma.Util.getRelativePath($generateSVG, $outpath)"/> 
 					<xsl:value-of select="$image_relative_path_new"/>
 					<xsl:text>&#xa;</xsl:text>
 				</redirect:write>
@@ -4505,7 +4505,7 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 		
 		<!-- generate SVG from .xml -->
 		<!-- Note: the variable generateSVG is using just for call the function 'generateSVG' -->
-		<xsl:variable name="generateSVG" select="java:generateSVG(java:org.metanorma.stepmod2mn.new(),concat($path,'/',@file),'',$outpath, true())"/>
+		<xsl:variable name="generateSVG" select="java:generateSVG(java:org.metanorma.stepmod2mn.new(),concat($path,'/',@file),'',concat($outpath, '/', $imagesdir, '/'), true())"/>
 		
 		<xsl:variable name="svg_filename" select="concat(substring-before(@file, '.xml'), '.svg')"/>
 		<!-- image::basic_attribute_schemaexpg1.svg[] -->
