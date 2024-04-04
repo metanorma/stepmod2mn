@@ -78,7 +78,21 @@
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
-		<xsl:variable name="frag" select="concat('bibitem_',@id)"/>
+		<xsl:variable name="number">
+			<xsl:choose>
+				<xsl:when test="stdnumber"><xsl:value-of select="stdnumber"/></xsl:when>
+				<xsl:when test="number"><xsl:value-of select="number"/></xsl:when>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:variable name="id">
+			<xsl:choose>
+				<xsl:when test="@id"><xsl:value-of select="@id"/></xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="translate($number, '/  ', '___')"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:variable name="frag" select="concat('bibitem_',$id)"/>
     <!-- <xsl:apply-templates select="." mode="print_as_xml"/> -->
 		<!-- <p>
 			<A NAME="{$frag}"/>
