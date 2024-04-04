@@ -400,12 +400,12 @@
       
       <!-- Annex F Application module implementation and usage guide -->
       <!-- sys/f_guide.xml -->
-      <xsl:if test="module/usage_guide">
+      <!-- <xsl:if test="module/usage_guide"> --> <!-- always create Annex F , https://github.com/metanorma/stepmod2mn/issues/143 -->
         <xsl:message>[INFO] Processing Annex F Application module implementation and usage guide ...</xsl:message>		
         <file path="sections/96-usage_guide.adoc">
           <xsl:apply-templates select="module" mode="annex_f"/> <!-- sect_f_guide.xsl -->
         </file>
-      </xsl:if>
+      <!-- </xsl:if> -->
 			
 			<!-- Annex F/G Change history -->
       <!-- sys/g_change -->

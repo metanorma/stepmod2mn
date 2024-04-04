@@ -27,13 +27,13 @@ $Id: sect_g_change.xsl,v 1.17 2017/09/29 06:01:47 mikeward Exp $
 
 <!-- overwrites the template declared in module.xsl -->
 <xsl:template match="module" mode="change_history">
-  <xsl:variable name="annex_letter">
-    <xsl:choose>
+  <xsl:variable name="annex_letter">G</xsl:variable>
+    <!-- <xsl:choose>
       <xsl:when test="//changes and //usage_guide">G</xsl:when>
       <xsl:when test="//changes">F</xsl:when>
       <xsl:otherwise>G</xsl:otherwise>
     </xsl:choose>
-  </xsl:variable>
+  </xsl:variable> -->
   <xsl:call-template name="annex_header">
     <xsl:with-param name="annex_no" select="$annex_letter"/>
     <xsl:with-param name="heading" 
@@ -101,12 +101,12 @@ $Id: sect_g_change.xsl,v 1.17 2017/09/29 06:01:47 mikeward Exp $
 
   <xsl:template match="changes">    
     
-    <xsl:variable name="annex_letter">
-      <xsl:choose>
+    <xsl:variable name="annex_letter">G</xsl:variable>
+      <!-- <xsl:choose>
         <xsl:when test="//changes and //usage_guide">G</xsl:when>
         <xsl:when test="//changes">F</xsl:when>
       </xsl:choose>
-    </xsl:variable>
+    </xsl:variable> -->
     
     <xsl:for-each select="change">
       <xsl:sort data-type="number" select="@version"/>
