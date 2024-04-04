@@ -32,6 +32,9 @@ $Id: sect_6_refdata.xsl,v 1.1 2006/05/18 16:17:23 dmprice Exp $
 	  <xsl:choose>
     <xsl:when test="refdata">
 		
+		
+		<xsl:if test="1 = 2"> <!-- skip, replaced by template, see below https://github.com/metanorma/stepmod2mn/issues/142 -->
+		
 		<!-- <p> -->
     <xsl:call-template name="insertParagraph">
       <xsl:with-param name="text">Implementations of this part of ISO 10303 shall make use of the capability to classify an 
@@ -103,7 +106,12 @@ and from the http://www.iso.org[ISO]<!-- <a href="http://www.iso.org">ISO</a>-->
         <!-- <li> --><xsl:text>* </xsl:text>no other UML, EXPRESS or OWL concepts appear in these diagrams.<xsl:text>&#xa;&#xa;</xsl:text><!-- </li> -->
         <!-- </ul>		 -->
         <xsl:text>&#xa;&#xa;</xsl:text>
-		
+        
+      </xsl:if> <!-- 1 = 2 -->
+        
+      <xsl:text>include::../../../templates/module_refdata.adoc[]</xsl:text>
+      <xsl:text>&#xa;&#xa;</xsl:text>
+				
       <xsl:apply-templates select="refdata"/>
     </xsl:when>
     <xsl:otherwise>

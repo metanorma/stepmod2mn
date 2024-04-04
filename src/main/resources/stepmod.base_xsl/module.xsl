@@ -718,12 +718,12 @@ TT remove since locke is no longer available.
       </xsl:otherwise>
     </xsl:choose>
     <xsl:if test="./changes">
-      <xsl:variable name="annex_letter">
-        <xsl:choose>
+      <xsl:variable name="annex_letter">G</xsl:variable>
+       <!--  <xsl:choose>
           <xsl:when test="./changes and ./usage_guide">G</xsl:when>
           <xsl:when test="./changes">F</xsl:when>
         </xsl:choose>
-      </xsl:variable>
+      </xsl:variable> -->
       <!-- <br/><br/>A detailed description of the changes is provided in Annex <a
           href="g_change{$FILE_EXT}">
           <xsl:value-of select="$annex_letter"/>
