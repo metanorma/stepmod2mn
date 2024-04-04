@@ -4505,7 +4505,8 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 		
 		<!-- generate SVG from .xml -->
 		<!-- Note: the variable generateSVG is using just for call the function 'generateSVG' -->
-		<xsl:variable name="generateSVG" select="java:generateSVG(java:org.metanorma.stepmod2mn.new(),concat($path,'/',@file),'',concat($outpath, '/', $imagesdir, '/'), true())"/>
+		<!-- <xsl:variable name="generateSVG" select="java:generateSVG(java:org.metanorma.stepmod2mn.new(),concat($path,'/',@file),'',concat($outpath, '/', $imagesdir, '/'), true())"/> -->
+		<xsl:variable name="generateSVG" select="java:generateSVG(java:org.metanorma.stepmod2mn.new(),concat($path,'/',@file),'', $outpath, true())"/>
 		
 		<xsl:variable name="svg_filename" select="concat(substring-before(@file, '.xml'), '.svg')"/>
 		<!-- image::basic_attribute_schemaexpg1.svg[] -->

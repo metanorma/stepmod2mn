@@ -12,6 +12,7 @@ import java.nio.file.Paths;
 public class SVGGenerator {
 
     final String SVG_EXTENSION = ".svg";
+    final String IMAGES_DIR = "images";
 
     public String generateSVG(String xmlFile, String image, String outPath, boolean isSVGmap) {
         try {
@@ -32,8 +33,13 @@ public class SVGGenerator {
                             schemaName = new File(xmlFile).getParentFile().getName();
                             Files.createDirectories(Paths.get(outPath, schemaName));
                         }
+                        String imagesFolder = "";
+                        if (isSVGmap) {
+                            imagesFolder = IMAGES_DIR;
+                            Files.createDirectories(Paths.get(outPath, imagesFolder));
+                        }
 
-                        svgFilename = Paths.get(outPath, schemaName, svgFilename).toString();
+                        svgFilename = Paths.get(outPath, imagesFolder, schemaName, svgFilename).toString();
                     } else {
                         svgFilename = outPath;
                         String parentFolder = new File(svgFilename).getParent();
