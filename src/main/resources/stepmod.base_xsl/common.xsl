@@ -1109,7 +1109,7 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 	<xsl:text>"</xsl:text>
 </xsl:template>
 
-<xsl:template match="eqn/sub | bigeqn/sub" priority="2">
+<xsl:template match="eqn//sub | bigeqn//sub" priority="2">
 	<xsl:variable name="multichar" select="normalize-space(string-length() &gt; 1)"/>
 	<xsl:text>_</xsl:text>
 	<xsl:if test="$multichar = 'true'">(</xsl:if>
@@ -1117,7 +1117,7 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 	<xsl:if test="$multichar = 'true'">)</xsl:if>
 </xsl:template>
 
-<xsl:template match="eqn/sup | bigeqn/sup" priority="2">
+<xsl:template match="eqn//sup | bigeqn//sup" priority="2">
 	<xsl:variable name="multichar" select="normalize-space(string-length() &gt; 1)"/>
 	<xsl:text>^</xsl:text>
 	<xsl:if test="$multichar = 'true'">(</xsl:if>
