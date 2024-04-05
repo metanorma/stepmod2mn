@@ -1055,15 +1055,76 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 	<xsl:if test="string-length($eqn_id > 0)">
 		<a name="{$eqn_id}"/>
 	</xsl:if> -->	
-	<xsl:if test="string-length($eqn_id) > 0"><xsl:text>[[</xsl:text><xsl:value-of select="$eqn_id"/><xsl:text>]]</xsl:text></xsl:if>
-	<xsl:text>stem:[</xsl:text>
-	<xsl:apply-templates/>
-	<xsl:text>]</xsl:text>
-	<xsl:if test="(following-sibling::*[1][local-name() = 'p'] or following-sibling::*[1][local-name() = 'P']) and not(following-sibling::node()[1][self::text()][normalize-space()!=''])">
+	
+	<xsl:if test="not(preceding-sibling::*[1][local-name() = 'p' or local-name() = 'P' or local-name() = 'note' or local-name() = 'example'])">
 		<xsl:text>&#xa;&#xa;</xsl:text>
 	</xsl:if>
 	
+	<xsl:if test="string-length($eqn_id) > 0"><xsl:text>[[</xsl:text><xsl:value-of select="$eqn_id"/><xsl:text>]]</xsl:text></xsl:if>
+	<!-- <xsl:text>stem:[</xsl:text> -->
+	<xsl:text>[stem</xsl:text>
+	<xsl:variable name="eqn_text" select="translate(normalize-space(),'&#160;&#8195;','')"/>
+	<xsl:variable name="regex_numbered">(.*)\(\d+\)$</xsl:variable>
+	<xsl:if test="normalize-space(java:matches(java:java.lang.String.new($eqn_text), $regex_numbered)) = 'false'">
+		<xsl:text>%unnumbered</xsl:text>
+	</xsl:if>
+	
+	<xsl:text>]</xsl:text>
+	<xsl:text>&#xa;</xsl:text>
+	<xsl:text>++++</xsl:text>
+	<xsl:text>&#xa;</xsl:text>
+	<xsl:variable name="stem_text_"><xsl:apply-templates/></xsl:variable>
+	<xsl:variable name="stem_text__" select="normalize-space(translate(normalize-space($stem_text_),'&#160;&#8195;','  '))"/>
+	<xsl:value-of select="java:replaceAll(java:java.lang.String.new($stem_text__),$regex_numbered,'$1')"/>
+	<xsl:text>&#xa;</xsl:text>
+	<xsl:text>++++</xsl:text>
+	<!-- <xsl:text>]</xsl:text> -->
+	<xsl:if test="(following-sibling::*[1][local-name() = 'p'] or following-sibling::*[1][local-name() = 'P']) and not(following-sibling::node()[1][self::text()][normalize-space()!=''])">
+		<xsl:text>&#xa;&#xa;</xsl:text>
+	</xsl:if>	
 </xsl:template>
+
+
+<xsl:template match="eqn//b[not(i)] | bigeqn//b[not(i)]" priority="2">
+	<xsl:text>bb "</xsl:text>
+	<xsl:apply-templates />
+	<xsl:text>"</xsl:text>
+</xsl:template>
+
+<xsl:template match="eqn//i[not(b)] | bigeqn//i[not(b)]" priority="2">
+	<xsl:text>ii "</xsl:text>
+	<xsl:apply-templates />
+	<xsl:text>"</xsl:text>
+</xsl:template>
+
+<xsl:template match="eqn/b/i | bigeqn/b/i" priority="3">
+	<xsl:text>bii "</xsl:text>
+	<xsl:apply-templates />
+	<xsl:text>"</xsl:text>
+</xsl:template>
+
+<xsl:template match="eqn/i/b | bigeqn/i/b" priority="3">
+	<xsl:text>bii "</xsl:text>
+	<xsl:apply-templates />
+	<xsl:text>"</xsl:text>
+</xsl:template>
+
+<xsl:template match="eqn/sub | bigeqn/sub" priority="2">
+	<xsl:variable name="multichar" select="normalize-space(string-length() &gt; 1)"/>
+	<xsl:text>_</xsl:text>
+	<xsl:if test="$multichar = 'true'">(</xsl:if>
+	<xsl:apply-templates />
+	<xsl:if test="$multichar = 'true'">)</xsl:if>
+</xsl:template>
+
+<xsl:template match="eqn/sup | bigeqn/sup" priority="2">
+	<xsl:variable name="multichar" select="normalize-space(string-length() &gt; 1)"/>
+	<xsl:text>^</xsl:text>
+	<xsl:if test="$multichar = 'true'">(</xsl:if>
+	<xsl:apply-templates />
+	<xsl:if test="$multichar = 'true'">)</xsl:if>
+</xsl:template>
+
 
 <!-- <xsl:template match="bigeqn" >
 	<font size="+2">
