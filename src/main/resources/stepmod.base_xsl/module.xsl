@@ -4012,7 +4012,9 @@ $module_ok,' Check the normatives references')"/>
           </xsl:otherwise>
         </xsl:choose> -->
         <xsl:text>* </xsl:text>
-        <xsl:apply-templates select="$term"/>
+        <xsl:apply-templates select="$term">
+          <xsl:with-param name="show_id">false</xsl:with-param>
+        </xsl:apply-templates>
         <xsl:choose>
           <xsl:when test="position()=last()">.</xsl:when>
           <xsl:otherwise>;</xsl:otherwise>
