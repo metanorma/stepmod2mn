@@ -10,7 +10,7 @@ $Id: common.xsl,v 1.204 2018/10/07 10:51:54 mike Exp $
 <xsl:stylesheet 
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"   
 	xmlns:xalan="http://xml.apache.org/xalan" xmlns:java="http://xml.apache.org/xalan/java"
-	exclude-result-prefixes="xalan"
+	exclude-result-prefixes="xalan java"
 	version="1.0">
 
 <!-- xmlns:msxsl="urn:schemas-microsoft-com:xslt"
@@ -1064,7 +1064,7 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 	<!-- <xsl:text>stem:[</xsl:text> -->
 	<xsl:text>[stem</xsl:text>
 	<xsl:variable name="eqn_text" select="translate(normalize-space(),'&#160;&#8195;','')"/>
-	<xsl:variable name="regex_numbered">(.*)\(\d+\)$</xsl:variable>
+	<xsl:variable name="regex_numbered">(.*) \(\d+\)$</xsl:variable>
 	<xsl:if test="normalize-space(java:matches(java:java.lang.String.new($eqn_text), $regex_numbered)) = 'false'">
 		<xsl:text>%unnumbered</xsl:text>
 	</xsl:if>
@@ -1073,9 +1073,9 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 	<xsl:text>&#xa;</xsl:text>
 	<xsl:text>++++</xsl:text>
 	<xsl:text>&#xa;</xsl:text>
-	<xsl:variable name="stem_text_"><xsl:apply-templates/></xsl:variable>
-	<xsl:variable name="stem_text__" select="normalize-space(translate(normalize-space($stem_text_),'&#160;&#8195;','  '))"/>
-	<xsl:value-of select="java:replaceAll(java:java.lang.String.new($stem_text__),$regex_numbered,'$1')"/>
+	<xsl:variable name="step_preprocess"><xsl:apply-templates select="." mode="stem_preprocess"/></xsl:variable>
+	<xsl:variable name="stem_text" select="normalize-space(translate(normalize-space($step_preprocess),'&#160;&#8195;','  '))"/>
+	<xsl:value-of select="java:replaceAll(java:java.lang.String.new($stem_text),$regex_numbered,'$1')"/>
 	<xsl:text>&#xa;</xsl:text>
 	<xsl:text>++++</xsl:text>
 	<!-- <xsl:text>]</xsl:text> -->
@@ -1084,45 +1084,57 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 	</xsl:if>	
 </xsl:template>
 
-
-<xsl:template match="eqn//b[not(i)] | bigeqn//b[not(i)]" priority="2">
-	<xsl:text>bb "</xsl:text>
-	<xsl:apply-templates />
-	<xsl:text>"</xsl:text>
+<xsl:template match="@*|node()" mode="stem_preprocess">
+	<xsl:apply-templates select="node()" mode="stem_preprocess"/>
 </xsl:template>
 
-<xsl:template match="eqn//i[not(b)] | bigeqn//i[not(b)]" priority="2">
-	<xsl:text>ii "</xsl:text>
-	<xsl:apply-templates />
-	<xsl:text>"</xsl:text>
-</xsl:template>
-
-<xsl:template match="eqn/b/i | bigeqn/b/i" priority="3">
-	<xsl:text>bii "</xsl:text>
-	<xsl:apply-templates />
-	<xsl:text>"</xsl:text>
-</xsl:template>
-
-<xsl:template match="eqn/i/b | bigeqn/i/b" priority="3">
-	<xsl:text>bii "</xsl:text>
-	<xsl:apply-templates />
-	<xsl:text>"</xsl:text>
-</xsl:template>
-
-<xsl:template match="eqn//sub | bigeqn//sub" priority="2">
-	<xsl:variable name="multichar" select="normalize-space(string-length() &gt; 1)"/>
-	<xsl:text>_</xsl:text>
-	<xsl:if test="$multichar = 'true'">(</xsl:if>
-	<xsl:apply-templates />
-	<xsl:if test="$multichar = 'true'">)</xsl:if>
-</xsl:template>
-
-<xsl:template match="eqn//sup | bigeqn//sup" priority="2">
-	<xsl:variable name="multichar" select="normalize-space(string-length() &gt; 1)"/>
-	<xsl:text>^</xsl:text>
-	<xsl:if test="$multichar = 'true'">(</xsl:if>
-	<xsl:apply-templates />
-	<xsl:if test="$multichar = 'true'">)</xsl:if>
+<xsl:template match="text()[normalize-space() != '']" mode="stem_preprocess">
+	<xsl:variable name="multichar" select="contains(normalize-space(), ' ')"/>
+	<xsl:choose>
+		<xsl:when test="parent::b and ancestor::i">
+			<xsl:text>bii </xsl:text>
+			<xsl:if test="$multichar = 'true'">"</xsl:if>
+			<xsl:value-of select="."/>
+			<xsl:if test="$multichar = 'true'">"</xsl:if>
+		</xsl:when>
+		<xsl:when test="parent::b and not(ancestor::i)">
+			<xsl:text>bb </xsl:text>
+			<xsl:if test="$multichar = 'true'">"</xsl:if>
+			<xsl:value-of select="."/>
+			<xsl:if test="$multichar = 'true'">"</xsl:if>
+		</xsl:when>
+		<xsl:when test="parent::i and not(ancestor::b)">
+			<xsl:text>ii </xsl:text>
+			<xsl:if test="$multichar = 'true'">"</xsl:if>
+			<xsl:value-of select="."/>
+			<xsl:if test="$multichar = 'true'">"</xsl:if>
+		</xsl:when>
+		<xsl:when test="parent::sub">
+			<xsl:text>_</xsl:text>
+			<xsl:if test="$multichar = 'true'">(</xsl:if>
+			<xsl:variable name="bi">
+				<xsl:choose>
+					<xsl:when test="ancestor::b and ancestor::i">bi </xsl:when>
+					<xsl:when test="ancestor::b">bb </xsl:when>
+					<xsl:when test="ancestor::i">ii </xsl:when>
+				</xsl:choose>
+			</xsl:variable>
+			<xsl:if test="normalize-space($bi) != '' and $multichar = 'true'">"</xsl:if>
+			<xsl:value-of select="$bi"/>
+			<xsl:value-of select="."/>
+			<xsl:if test="normalize-space($bi) != '' and $multichar = 'true'">"</xsl:if>
+			<xsl:if test="$multichar = 'true'">)</xsl:if>
+		</xsl:when>
+		<xsl:when test="parent::sup">
+			<xsl:text>^</xsl:text>
+			<xsl:if test="$multichar = 'true'">(</xsl:if>
+			<xsl:value-of select="."/>
+			<xsl:if test="$multichar = 'true'">)</xsl:if>
+		</xsl:when>
+		<xsl:otherwise>
+			<xsl:value-of select="."/>
+		</xsl:otherwise>
+	</xsl:choose>
 </xsl:template>
 
 
