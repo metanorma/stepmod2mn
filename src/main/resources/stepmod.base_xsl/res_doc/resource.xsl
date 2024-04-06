@@ -3574,7 +3574,7 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 
 
 	<xsl:template match="term">
-		<xsl:param name="show_id" select="'true'"/>
+		<xsl:param name="show_id" select="'false'"/>
 		<xsl:variable name="nterm" select="normalize-space(.)"/>
 		<!-- <a name="term-{$nterm}">
 			<xsl:value-of select="$nterm"/>
