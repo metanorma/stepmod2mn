@@ -4000,7 +4000,8 @@ $module_ok,' Check the normatives references')"/>
   </xsl:template>
   <xsl:template match="term.ref" mode="normref">
     <xsl:variable name="ref" select="@linkend"/>
-    <xsl:variable name="term" select="document(concat($path, '../../../data/basic/normrefs.xml'))/normref.list/normref/term[@id=$ref]"/>
+    <xsl:variable name="term_" select="document(concat($path, '../../../data/basic/normrefs.xml'))/normref.list/normref/term[@id=$ref]"/>
+		<xsl:variable name="term" select="$term_[1]"/>
     <xsl:choose>
       <xsl:when test="$term">
         <!-- <xsl:choose>
@@ -4011,7 +4012,7 @@ $module_ok,' Check the normatives references')"/>
             <li><xsl:apply-templates select="$term"/>;</li>
           </xsl:otherwise>
         </xsl:choose> -->
-        <xsl:text>* </xsl:text>
+        <xsl:text>* </xsl:text><!-- debug: <xsl:apply-templates select="$term" mode="print_as_xml"/> -->
         <xsl:apply-templates select="$term">
           <xsl:with-param name="show_id">false</xsl:with-param>
         </xsl:apply-templates>
