@@ -3574,7 +3574,7 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 
 
 	<xsl:template match="term">
-		<xsl:param name="show_id" select="'true'"/>
+		<xsl:param name="show_id" select="'false'"/>
 		<xsl:variable name="nterm" select="normalize-space(.)"/>
 		<!-- <a name="term-{$nterm}">
 			<xsl:value-of select="$nterm"/>
@@ -4772,7 +4772,7 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 		<xsl:param name="number_start" select="0"/>
 
 		<xsl:variable name="ref" select="@ref"/>
-		<xsl:variable name="bibitem" select="document(concat($path, '../../../data/basic/bibliography.xml'))/bibitem.list/bibitem[@id=$ref]"/>
+		<xsl:variable name="bibitem" select="document(concat($path, '../../../data/basic/bibliography.xml'))/bibitem.list/bibitem[@id=$ref][1]"/>
 		
 		<xsl:choose>
 			<xsl:when test="$bibitem">

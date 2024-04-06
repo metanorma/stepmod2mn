@@ -214,7 +214,7 @@
 		<xsl:param name="number_start" select="0"/>
 		<xsl:param name="bib_file"/>
 		<xsl:variable name="ref" select="@ref"/>
-		<xsl:variable name="bibitem" select="document(string($bib_file))/bibitem.list/node()[starts-with(local-name(),'bibitem') and (@id=$ref)]"/>
+		<xsl:variable name="bibitem" select="document(string($bib_file))/bibitem.list/node()[starts-with(local-name(),'bibitem') and (@id=$ref)][1]"/>
 		<xsl:choose>
 			<xsl:when test="$bibitem">
 				<xsl:apply-templates select="$bibitem">
@@ -390,7 +390,7 @@
 		</xsl:for-each>
 		<xsl:for-each select="bibitem.inc">
 			<xsl:variable name="ref" select="@ref"/>
-			<xsl:variable name="bibitem_inc" select="$bibitem_list/bibitem[@id=$ref]"/>
+			<xsl:variable name="bibitem_inc" select="$bibitem_list/bibitem[@id=$ref][1]"/>
 			<xsl:element name="bibitem">
 				<xsl:if test="$bibitem_inc/@published='n'">
 					<xsl:attribute name="published"><xsl:value-of select="'n'"/></xsl:attribute>
