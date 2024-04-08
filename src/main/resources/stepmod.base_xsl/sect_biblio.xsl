@@ -64,10 +64,12 @@ $Id: sect_biblio.xsl,v 1.12 2010/11/09 11:22:54 radack Exp $
 			<!-- Input bibliographic_entry_collection = <<doc_iso10303-1130,anchor=scope>> -->
 			<!-- Output : * [[[doc_iso10303-54,repo:(current-metanorma-collection/iso10303-54)]]] (Derived shape element). -->
 			<xsl:variable name="bibitem_id" select="substring-before(substring-after($bibliographic_entry_collection,'&lt;&lt;'),',')"/>
-			<xsl:variable name="doc_id" select="substring-after($bibitem_id, 'doc_')"/>
-			<xsl:variable name="doc_title" select="."/>
-			<xsl:value-of select="concat('* [[[', $bibitem_id, ',repo:(current-metanorma-collection/', $doc_id, ')]]] (', $doc_title, ').')"/>
-			<xsl:text>&#xa;&#xa;</xsl:text>
+			<xsl:if test="starts-with($bibitem_id, 'doc_')">
+				<xsl:variable name="doc_id" select="substring-after($bibitem_id, 'doc_')"/>
+				<xsl:variable name="doc_title" select="."/>
+				<xsl:value-of select="concat('* [[[', $bibitem_id, ',repo:(current-metanorma-collection/', $doc_id, ')]]] (', $doc_title, ').')"/>
+				<xsl:text>&#xa;&#xa;</xsl:text>
+			</xsl:if>
 		</xsl:for-each>
 		
 		
