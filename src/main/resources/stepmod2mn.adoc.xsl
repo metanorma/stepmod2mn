@@ -18,6 +18,11 @@
 
 	<xsl:strip-space elements="*"/>
 	
+	<xsl:variable name="annex_id_usage_info">usage_info</xsl:variable>
+	<xsl:variable name="annex_id_change_history">change_history</xsl:variable>
+	<xsl:variable name="annex_id_add_scope">add_scope</xsl:variable>
+	<xsl:variable name="annex_id_tech_discussion">tech_discussion</xsl:variable>
+	<xsl:variable name="annex_id_examples">annex_examples</xsl:variable>
 	
 	<xsl:template name="getLanguage">
 		<xsl:choose>
@@ -77,7 +82,7 @@
 			<xsl:text>]</xsl:text>
 			<xsl:text>&#xa;</xsl:text>
 		</xsl:if>
-		<xsl:if test="$annex_no != ''">
+		<xsl:if test="$annex_no != '' or $annex_id != ''">
 			<xsl:text>[appendix</xsl:text>
 			<xsl:if test="$obligation != ''">
 				<xsl:text>,obligation=</xsl:text><xsl:value-of select="$obligation"/>

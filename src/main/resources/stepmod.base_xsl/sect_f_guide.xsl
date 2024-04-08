@@ -25,10 +25,11 @@ $Id: sect_f_guide.xsl,v 1.4 2002/09/02 09:09:57 robbod Exp $
 <!-- overwrites the template declared in module.xsl -->
 <xsl:template match="module" mode="annex_f">
   <xsl:call-template name="annex_header">
-    <xsl:with-param name="annex_no" select="'F'"/>
+    <xsl:with-param name="annex_id" select="$annex_id_usage_info"/>
+    <!-- <xsl:with-param name="annex_no" select="'F'"/> -->
     <xsl:with-param name="heading" 
       select="'Application module implementation and usage guide'"/>
-    <xsl:with-param name="aname" select="'annexf'"/>
+    <!-- <xsl:with-param name="aname" select="'annexf'"/> -->
   </xsl:call-template>
 
   <xsl:choose>

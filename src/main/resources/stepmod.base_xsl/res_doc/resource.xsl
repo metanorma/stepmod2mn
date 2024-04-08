@@ -982,20 +982,21 @@ Purpose:
 		</xsl:call-template>
 		
 		<xsl:if test="./changes">
-			<xsl:variable name="annex_letter">
+			<!-- <xsl:variable name="annex_letter">
 				<xsl:choose>
 					<xsl:when test="./examples and ./tech_discussion">G</xsl:when>
 					<xsl:when test="./examples or ./tech_discussion">F</xsl:when>
 					<xsl:otherwise>E</xsl:otherwise>
 				</xsl:choose>
-			</xsl:variable>
+			</xsl:variable> -->
 			<!-- <br/><br/>A detailed description of the changes is provided in Annex <a
 				href="g_change{$FILE_EXT}">
 				<xsl:value-of select="$annex_letter"/>
 			</a>.  -->
 			
 			<xsl:call-template name="insertParagraph">
-			<xsl:with-param name="text">A detailed description of the changes is provided in &lt;&lt;Annex<xsl:value-of select="$annex_letter"/>&gt;&gt;.
+			<!-- <xsl:with-param name="text">A detailed description of the changes is provided in &lt;&lt;Annex<xsl:value-of select="$annex_letter"/>&gt;&gt;. -->
+			<xsl:with-param name="text">A detailed description of the changes is provided in &lt;&lt;<xsl:value-of select="$annex_id_change_history"/>&gt;&gt;.
 				</xsl:with-param>
 		</xsl:call-template>
 		</xsl:if>
@@ -4165,7 +4166,8 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 		<xsl:param name="current_resource"/>
 		<xsl:param name="moreNormRefs"/>    
 		<xsl:variable  name="ref" select="@linkend"/>
-		<xsl:variable name="term" select="document(concat($path, '../../../data/basic/normrefs.xml'))/normref.list/normref/term[@id=$ref]"/>
+		<xsl:variable name="term_" select="document(concat($path, '../../../data/basic/normrefs.xml'))/normref.list/normref/term[@id=$ref]"/>
+		<xsl:variable name="term" select="$term_[1]"/>
 		<xsl:variable name="term_ref_text">
 			<xsl:choose>
 				<xsl:when test="$term">
@@ -4341,11 +4343,11 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 			</xsl:call-template>      
 		</xsl:if>
 		
-		<xsl:variable name="annex_list">
+		<!-- <xsl:variable name="annex_list">
 			<xsl:apply-templates select="//application_protocol" mode="annex_list"/>
-		</xsl:variable>
+		</xsl:variable> -->
 		
-		<xsl:variable name="annex_letter" select="'E'"/>
+		<!-- <xsl:variable name="annex_letter" select="'E'"/> -->
 					
 		<!-- <h2>
 			<a name="{$title}">
@@ -4355,8 +4357,10 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 		<xsl:call-template name="insertHeaderADOC">
 			<xsl:with-param name="id" select="$title"/>		
 			<xsl:with-param name="level" select="2"/>
-			<xsl:with-param name="header" select="concat($annex_letter,'.',$sect_no,' ',$title)"/>					
-			<xsl:with-param name="annex_no" select="$annex_letter"/>
+			<!-- <xsl:with-param name="header" select="concat($annex_letter,'.',$sect_no,' ',$title)"/>					 -->
+			<xsl:with-param name="header" select="$title"/>					
+			<xsl:with-param name="annex_id" select="concat($annex_id_tech_discussion,'_',$sect_no)"/>
+			<!-- <xsl:with-param name="annex_no" select="$annex_letter"/> -->
 		</xsl:call-template>
 		
 		<xsl:apply-templates/>

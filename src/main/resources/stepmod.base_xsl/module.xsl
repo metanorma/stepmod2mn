@@ -718,7 +718,7 @@ TT remove since locke is no longer available.
       </xsl:otherwise>
     </xsl:choose>
     <xsl:if test="./changes">
-      <xsl:variable name="annex_letter">G</xsl:variable>
+      <!-- <xsl:variable name="annex_letter">G</xsl:variable> -->
        <!--  <xsl:choose>
           <xsl:when test="./changes and ./usage_guide">G</xsl:when>
           <xsl:when test="./changes">F</xsl:when>
@@ -729,7 +729,8 @@ TT remove since locke is no longer available.
           <xsl:value-of select="$annex_letter"/>
         </a>.  -->
       <xsl:call-template name="insertParagraph">
-        <xsl:with-param name="text">A detailed description of the changes is provided in &lt;&lt;Annex<xsl:value-of select="$annex_letter"/>&gt;&gt;</xsl:with-param>
+        <!-- <xsl:with-param name="text">A detailed description of the changes is provided in &lt;&lt;Annex<xsl:value-of select="$annex_letter"/>&gt;&gt;</xsl:with-param> -->
+        <xsl:with-param name="text">A detailed description of the changes is provided in &lt;&lt;<xsl:value-of select="$annex_id_change_history"/>&gt;&gt;.</xsl:with-param>
       </xsl:call-template>
     </xsl:if>
     <!-- </p>     -->
@@ -1010,7 +1011,7 @@ TT remove since locke is no longer available.
       </xsl:with-param>
     </xsl:call-template>
     <xsl:if test="../changes">
-      <xsl:variable name="annex_letter">
+      <!-- <xsl:variable name="annex_letter">
         <xsl:choose>
           <xsl:when test="../changes and ../usage_guide">
             <xsl:value-of select="concat('G.',../@version)"/>
@@ -1019,7 +1020,7 @@ TT remove since locke is no longer available.
             <xsl:value-of select="concat('F.',../@version)"/>
           </xsl:when>
         </xsl:choose>
-      </xsl:variable>
+      </xsl:variable> -->
       <!--TT bug 6869
       <p>      
       <xsl:variable name="aname" select="concat('change_',../@version)"/>
