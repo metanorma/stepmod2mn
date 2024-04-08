@@ -22,7 +22,7 @@
 	<xsl:variable name="annex_id_change_history">change_history</xsl:variable>
 	<xsl:variable name="annex_id_add_scope">add_scope</xsl:variable>
 	<xsl:variable name="annex_id_tech_discussion">tech_discussion</xsl:variable>
-	<xsl:variable name="annex_id_examples">examples</xsl:variable>
+	<xsl:variable name="annex_id_examples">annex_examples</xsl:variable>
 	
 	<xsl:template name="getLanguage">
 		<xsl:choose>
