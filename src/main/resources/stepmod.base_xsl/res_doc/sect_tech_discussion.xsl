@@ -24,7 +24,7 @@ $Id: sect_e_examples.xsl,v 1.1 2002/10/16 00:43:38 thendrix Exp $
 	<!-- overwrites the template declared in module.xsl -->
 	<xsl:template match="resource" mode="tech_discussion">
 
-		 <xsl:variable name="annex_list">
+		 <!-- <xsl:variable name="annex_list">
 			 <xsl:apply-templates select="." mode="annex_list" />
 		 </xsl:variable>
 
@@ -35,12 +35,13 @@ $Id: sect_e_examples.xsl,v 1.1 2002/10/16 00:43:38 thendrix Exp $
 		</xsl:call-template>
 		</xsl:variable>
 
-		<xsl:variable name="annex_letter" select="substring('EFGH',$pos,1)" />
+		<xsl:variable name="annex_letter" select="substring('EFGH',$pos,1)" /> -->
 
 		<xsl:call-template name="annex_header">
-			<xsl:with-param name="annex_no" select="$annex_letter"/>
+			<xsl:with-param name="annex_id" select="$annex_id_tech_discussion"/>
+			<!-- <xsl:with-param name="annex_no" select="$annex_letter"/> -->
 			<xsl:with-param name="heading" select="'Technical discussion'"/>
-			<xsl:with-param name="aname" select="'tech_discussion'"/>
+			<!-- <xsl:with-param name="aname" select="'tech_discussion'"/> -->
 		</xsl:call-template>
 
 		<xsl:apply-templates select="tech_discussion"/>

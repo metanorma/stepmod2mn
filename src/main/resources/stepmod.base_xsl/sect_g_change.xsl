@@ -27,7 +27,7 @@ $Id: sect_g_change.xsl,v 1.17 2017/09/29 06:01:47 mikeward Exp $
 
 <!-- overwrites the template declared in module.xsl -->
 <xsl:template match="module" mode="change_history">
-  <xsl:variable name="annex_letter">G</xsl:variable>
+  <!-- <xsl:variable name="annex_letter">G</xsl:variable> -->
     <!-- <xsl:choose>
       <xsl:when test="//changes and //usage_guide">G</xsl:when>
       <xsl:when test="//changes">F</xsl:when>
@@ -35,10 +35,11 @@ $Id: sect_g_change.xsl,v 1.17 2017/09/29 06:01:47 mikeward Exp $
     </xsl:choose>
   </xsl:variable> -->
   <xsl:call-template name="annex_header">
-    <xsl:with-param name="annex_no" select="$annex_letter"/>
+    <xsl:with-param name="annex_id" select="$annex_id_change_history"/>
+    <!-- <xsl:with-param name="annex_no" select="$annex_letter"/> -->
     <xsl:with-param name="heading" 
       select="'Change history'"/>
-    <xsl:with-param name="aname" select="'annexg'"/>
+    <!-- <xsl:with-param name="aname" select="'annexg'"/> -->
   </xsl:call-template>
   
   <xsl:variable name="part_no">
@@ -101,7 +102,7 @@ $Id: sect_g_change.xsl,v 1.17 2017/09/29 06:01:47 mikeward Exp $
 
   <xsl:template match="changes">    
     
-    <xsl:variable name="annex_letter">G</xsl:variable>
+    <!-- <xsl:variable name="annex_letter">G</xsl:variable> -->
       <!-- <xsl:choose>
         <xsl:when test="//changes and //usage_guide">G</xsl:when>
         <xsl:when test="//changes">F</xsl:when>
@@ -157,21 +158,21 @@ $Id: sect_g_change.xsl,v 1.17 2017/09/29 06:01:47 mikeward Exp $
 			</xsl:call-template>
       
       <xsl:apply-templates select="./description"/>
-      <xsl:apply-templates select="./arm.changes">
-        <xsl:with-param name="annex" select="concat($annex_letter,'.',position()+1)"/>
-      </xsl:apply-templates>      
-      <xsl:apply-templates select="./mapping.changes">
-        <xsl:with-param name="annex" select="concat($annex_letter,'.',position()+1)"/>
-      </xsl:apply-templates>
-      <xsl:apply-templates select="./mim.changes">
-        <xsl:with-param name="annex" select="concat($annex_letter,'.',position()+1)"/>
-      </xsl:apply-templates>
-      <xsl:apply-templates select="./arm_longform.changes">
-        <xsl:with-param name="annex" select="concat($annex_letter,'.',position()+1)"/>
-      </xsl:apply-templates>
-      <xsl:apply-templates select="./mim_longform.changes">
-        <xsl:with-param name="annex" select="concat($annex_letter,'.',position()+1)"/>
-      </xsl:apply-templates>
+      <xsl:apply-templates select="./arm.changes"/>
+        <!-- <xsl:with-param name="annex" select="concat($annex_letter,'.',position()+1)"/>
+      </xsl:apply-templates>       -->
+      <xsl:apply-templates select="./mapping.changes"/>
+        <!-- <xsl:with-param name="annex" select="concat($annex_letter,'.',position()+1)"/>
+      </xsl:apply-templates> -->
+      <xsl:apply-templates select="./mim.changes"/>
+        <!-- <xsl:with-param name="annex" select="concat($annex_letter,'.',position()+1)"/>
+      </xsl:apply-templates> -->
+      <xsl:apply-templates select="./arm_longform.changes"/>
+        <!-- <xsl:with-param name="annex" select="concat($annex_letter,'.',position()+1)"/>
+      </xsl:apply-templates> -->
+      <xsl:apply-templates select="./mim_longform.changes"/>
+        <!-- <xsl:with-param name="annex" select="concat($annex_letter,'.',position()+1)"/>
+      </xsl:apply-templates> -->
     </xsl:for-each>
   </xsl:template>
   

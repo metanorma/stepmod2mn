@@ -26,17 +26,18 @@ This file is a copy of the file data/xsl/sect_g_changes.xsl for application modu
 
 	<!-- overwrites the template declared in resource.xsl -->
 	<xsl:template match="resource" mode="change_history">
-		<xsl:variable name="annex_letter">
+		<!-- <xsl:variable name="annex_letter">
 			<xsl:choose>
 					<xsl:when test="//examples and //tech_discussion">G</xsl:when>
 					<xsl:when test="//examples or //tech_discussion">F</xsl:when>
 					<xsl:otherwise>E</xsl:otherwise>
 			</xsl:choose>
-		</xsl:variable>
+		</xsl:variable> -->
 		<xsl:call-template name="annex_header">
-			<xsl:with-param name="annex_no" select="$annex_letter"/>
+			<xsl:with-param name="annex_id" select="$annex_id_change_history"/>
+			<!-- <xsl:with-param name="annex_no" select="$annex_letter"/> -->
 			<xsl:with-param name="heading" select="'Change history'"/>
-			<xsl:with-param name="aname" select="'annexg'"/>
+			<!-- <xsl:with-param name="aname" select="'annexg'"/> -->
 		</xsl:call-template>
 		
 		<xsl:variable name="part_no">
@@ -137,13 +138,13 @@ This file is a copy of the file data/xsl/sect_g_changes.xsl for application modu
 
 	<xsl:template match="changes">    
 		
-		<xsl:variable name="annex_letter">
+		<!-- <xsl:variable name="annex_letter">
 			<xsl:choose>
 				<xsl:when test="//examples and //tech_discussion">G</xsl:when>
 				<xsl:when test="//examples or //tech_discussion">F</xsl:when>
 				<xsl:otherwise>E</xsl:otherwise>
 			</xsl:choose>
-		</xsl:variable>
+		</xsl:variable> -->
 		
 		<xsl:for-each select="change_edition">
 			<xsl:sort data-type="number" select="@version"/>
@@ -200,9 +201,9 @@ This file is a copy of the file data/xsl/sect_g_changes.xsl for application modu
 			
 			<xsl:for-each select="./schema.changes">
 				<xsl:variable name="schema_changes">
-					<xsl:apply-templates select=".">
-						<xsl:with-param name="annex" select="concat($annex_letter,'.',../@version,'.',position()+1)"/>
-					</xsl:apply-templates>
+					<xsl:apply-templates select="."/>
+						<!-- <xsl:with-param name="annex" select="concat($annex_letter,'.',../@version,'.',position()+1)"/>
+					</xsl:apply-templates> -->
 				</xsl:variable>
 				<xsl:copy-of select="$schema_changes"/>
 				<xsl:if test="not(java:endsWith(java:java.lang.String.new($schema_changes),'&#xa;') or java:endsWith(java:java.lang.String.new($schema_changes),'&#xd;'))">

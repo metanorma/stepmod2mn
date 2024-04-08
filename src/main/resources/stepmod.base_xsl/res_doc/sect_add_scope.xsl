@@ -24,7 +24,7 @@ $Id: sect_g_add_scope.xsl,v 1.2 2002/12/20 12:35:58 nigelshaw Exp $
 <!-- overwrites the template declared in module.xsl -->
 <xsl:template match="resource" mode="additional_scope">
 
-	 <xsl:variable name="annex_list">
+	 <!-- <xsl:variable name="annex_list">
 		 <xsl:apply-templates select="." mode="annex_list" />
 	 </xsl:variable>
 
@@ -35,14 +35,13 @@ $Id: sect_g_add_scope.xsl,v 1.2 2002/12/20 12:35:58 nigelshaw Exp $
 	</xsl:call-template>
 	</xsl:variable>
 
-	<xsl:variable name="annex_letter" select="substring('EFGH',$pos,1)" />
-
-
+	<xsl:variable name="annex_letter" select="substring('EFGH',$pos,1)" /> -->
 
 	<xsl:call-template name="annex_header">
-		<xsl:with-param name="annex_no" select="$annex_letter"/>
+		<xsl:with-param name="annex_id" select="$annex_id_add_scope"/>
+		<!-- <xsl:with-param name="annex_no" select="$annex_letter"/> -->
 		<xsl:with-param name="heading" select="'Additional scope'"/>
-		<xsl:with-param name="aname" select="'add_scope'"/>
+		<!-- <xsl:with-param name="aname" select="'add_scope'"/> -->
 	</xsl:call-template>
 
 	<xsl:apply-templates select="add_scope"/>
