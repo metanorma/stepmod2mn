@@ -4165,7 +4165,8 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 		<xsl:param name="current_resource"/>
 		<xsl:param name="moreNormRefs"/>    
 		<xsl:variable  name="ref" select="@linkend"/>
-		<xsl:variable name="term" select="document(concat($path, '../../../data/basic/normrefs.xml'))/normref.list/normref/term[@id=$ref]"/>
+		<xsl:variable name="term_" select="document(concat($path, '../../../data/basic/normrefs.xml'))/normref.list/normref/term[@id=$ref]"/>
+		<xsl:variable name="term" select="$term_[1]"/>
 		<xsl:variable name="term_ref_text">
 			<xsl:choose>
 				<xsl:when test="$term">
