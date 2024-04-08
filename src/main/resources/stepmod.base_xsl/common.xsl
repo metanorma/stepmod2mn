@@ -2917,7 +2917,7 @@ width="20" height="20"/> -->
 							 -->
 				</xsl:otherwise>
 			</xsl:choose>
-		</xsl:variable>
+		</xsl:variable> <!-- END: href -->
 
 		<!-- debug
 		[sect:<xsl:value-of select="$section"/>]
@@ -2956,7 +2956,26 @@ width="20" height="20"/> -->
 											</xsl:choose>
 										</xsl:when>
 										<xsl:otherwise>
-											<xsl:apply-templates/>
+										
+											<xsl:variable name="module_curr" select="ancestor::module/@name"/>
+											
+											<xsl:choose>
+												<xsl:when test="$module_curr != $module"> <!-- link to the another module -->
+													<xsl:variable name="mod_dir">
+													<xsl:call-template name="module_directory">
+															<xsl:with-param name="module" select="$module"/>
+														</xsl:call-template>
+													</xsl:variable>
+													<xsl:variable name="module_part" select="document(concat($mod_dir,'/module.xml'))/*/@part"/>
+													<xsl:attribute name="href"><xsl:value-of select="concat('doc_iso10303-',$module_part)"/></xsl:attribute>
+													<xsl:value-of select="concat('anchor=',$href)"/>
+													<!-- Example: <<doc_iso10303-54,anchor=scope>> -->
+												</xsl:when>
+												<xsl:otherwise>
+													<xsl:apply-templates/>
+												</xsl:otherwise>
+											</xsl:choose>
+										
 										</xsl:otherwise>
 									</xsl:choose>
 								</a>

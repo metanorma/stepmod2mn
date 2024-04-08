@@ -56,6 +56,21 @@ $Id: sect_biblio.xsl,v 1.12 2010/11/09 11:22:54 radack Exp $
 		<xsl:apply-templates select="./bibliography" mode="unpublished_bibitems_footnote">
 			<xsl:with-param name="doc_type">module</xsl:with-param>
 		</xsl:apply-templates>
+		
+		<xsl:for-each select="//module_ref">
+			<xsl:variable name="bibliographic_entry_collection">
+				<xsl:apply-templates select="."/>
+			</xsl:variable>
+			<!-- Input bibliographic_entry_collection = <<doc_iso10303-1130,anchor=scope>> -->
+			<!-- Output : * [[[doc_iso10303-54,repo:(current-metanorma-collection/iso10303-54)]]] (Derived shape element). -->
+			<xsl:variable name="bibitem_id" select="substring-before(substring-after($bibliographic_entry_collection,'&lt;&lt;'),',')"/>
+			<xsl:variable name="doc_id" select="substring-after($bibitem_id, 'doc_')"/>
+			<xsl:variable name="doc_title" select="."/>
+			<xsl:value-of select="concat('* [[[', $bibitem_id, ',repo:(current-metanorma-collection/', $doc_id, ')]]] (', $doc_title, ').')"/>
+			<xsl:text>&#xa;&#xa;</xsl:text>
+		</xsl:for-each>
+		
+		
 	</xsl:template>
 	<!-- MWD START -->
 	<xsl:template match="resource" mode="bibiliog">
