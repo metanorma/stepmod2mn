@@ -8,7 +8,9 @@ $Id: sect_biblio.xsl,v 1.12 2010/11/09 11:22:54 radack Exp $
      
 -->
 <!-- Updated: Alexander Dyuzhev, for stepmod2mn tool -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+	xmlns:xalan="http://xml.apache.org/xalan"
+	version="1.0">
 <!-- 	<xsl:import href="module.xsl"/>-->
 	<!-- 
        the stylesheet that allows different stylesheets to be applied 
@@ -57,21 +59,29 @@ $Id: sect_biblio.xsl,v 1.12 2010/11/09 11:22:54 radack Exp $
 			<xsl:with-param name="doc_type">module</xsl:with-param>
 		</xsl:apply-templates>
 		
-		<xsl:for-each select="//module_ref">
-			<xsl:variable name="bibliographic_entry_collection">
-				<xsl:apply-templates select="."/>
-			</xsl:variable>
-			<!-- Input bibliographic_entry_collection = <<doc_iso10303-1130,anchor=scope>> -->
-			<!-- Output : * [[[doc_iso10303-54,repo:(current-metanorma-collection/iso10303-54)]]] (Derived shape element). -->
-			<xsl:variable name="bibitem_id" select="substring-before(substring-after($bibliographic_entry_collection,'&lt;&lt;'),',')"/>
-			<xsl:if test="starts-with($bibitem_id, 'doc_')">
-				<xsl:variable name="doc_id" select="substring-after($bibitem_id, 'doc_')"/>
-				<xsl:variable name="doc_title" select="."/>
-				<xsl:value-of select="concat('* [[[', $bibitem_id, ',repo:(current-metanorma-collection/', $doc_id, ')]]] (', $doc_title, ').')"/>
+		<xsl:variable name="bibliographic_entries_collection">
+			<xsl:for-each select="//module_ref">
+				<xsl:variable name="bibliographic_entry_collection">
+					<xsl:apply-templates select="."/>
+				</xsl:variable>
+				<!-- Input bibliographic_entry_collection = <<doc_iso10303-1130,anchor=scope>> -->
+				<!-- Output : * [[[doc_iso10303-54,repo:(current-metanorma-collection/iso10303-54)]]] (Derived shape element). -->
+				<xsl:variable name="bibitem_id" select="substring-before(substring-after($bibliographic_entry_collection,'&lt;&lt;'),',')"/>
+				<xsl:if test="starts-with($bibitem_id, 'doc_')">
+					<item>
+						<xsl:variable name="doc_id" select="substring-after($bibitem_id, 'doc_')"/>
+						<xsl:variable name="doc_title" select="."/>
+						<xsl:value-of select="concat('* [[[', $bibitem_id, ',repo:(current-metanorma-collection/', $doc_id, ')]]] (', $doc_title, ').')"/>
+					</item>
+				</xsl:if>
+			</xsl:for-each>
+		</xsl:variable>
+		<xsl:for-each select="xalan:nodeset($bibliographic_entries_collection)/item">
+			<xsl:if test="not(preceding-sibling::*[. = current()])">
+				<xsl:value-of select="."/>
 				<xsl:text>&#xa;&#xa;</xsl:text>
 			</xsl:if>
 		</xsl:for-each>
-		
 		
 	</xsl:template>
 	<!-- MWD START -->
