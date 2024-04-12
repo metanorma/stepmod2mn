@@ -372,7 +372,8 @@
 				<file link="templates" target="../../templates" folder="true" relative="true"/>
 				
 				
-				<file path="../../templates/schemas.adoc" empty="true">
+				<!-- <file path="../../templates/schemas.adoc" empty="true"> -->
+				<file path="templates/resources/schemas.adoc" empty="true">
 				</file>
 				
 			</xsl:if>
