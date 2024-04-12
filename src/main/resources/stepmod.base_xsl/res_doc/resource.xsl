@@ -1866,7 +1866,15 @@ Purpose:
 		<xsl:text>&#xa;</xsl:text>
 		</xsl:if>
 		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>include::../../../templates/diagrams.adoc[]</xsl:text>
+		<!-- <xsl:text>include::../../../templates/diagrams.adoc[]</xsl:text> -->
+		<xsl:text>[yaml2text,express-g-diagrams.yaml,diagrams]</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>----</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>include::templates/common_files/diagrams.liquid[]</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>----</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
 
 	</xsl:template>

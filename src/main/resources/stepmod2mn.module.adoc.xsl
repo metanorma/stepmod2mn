@@ -295,53 +295,57 @@
 			
 			<!-- Foreword-->
 			<!-- sys/foreword.xml -->
-			<xsl:message>[INFO] Processing Foreword ...</xsl:message>
-			<file path="sections/00-foreword.adoc">
-				<xsl:apply-templates select="module" mode="foreword"/> <!-- module.xsl  -->
-			</file>
+      <xsl:message>[INFO] Processing Foreword ...</xsl:message>
+      <file path="sections/00-foreword.adoc">
+        <xsl:apply-templates select="module" mode="foreword"/> <!-- module.xsl  -->
+      </file>
       
-			<!-- Introduction -->
-			<!-- sys/introduction.xml -->
-			<xsl:message>[INFO] Processing Introduction ...</xsl:message>
-			<xsl:variable name="introduction">
-				<xsl:apply-templates select="module" mode="introduction"/> <!-- sect_introduction.xsl  -->
-			</xsl:variable>
-			<xsl:if test="normalize-space($introduction) != ''">
-				<file path="sections/00-introduction.adoc">
-					<xsl:copy-of select="$introduction"/>
-				</file>
-			</xsl:if>
-					
-			<!-- 1 Scope -->
-			<!-- sys/1_scope.xml -->
-			<xsl:message>[INFO] Processing Scope ...</xsl:message>
-			<file path="sections/01-scope.adoc">
-				<xsl:apply-templates select="module" mode="scope_module"/>	<!-- sect_1_scope.xsl  -->	
-			</file>
-			
-			
-			<!-- 2 Normative references -->
-			<!-- sys/2_refs.xml -->
-			<xsl:message>[INFO] Processing Normative references ...</xsl:message>		
-			<file path="sections/02-norm-refs.adoc">
-				<xsl:apply-templates select="module" mode="norm_refs_module"/> <!-- sect_2_refs.xsl  -->
-			</file>
-			
-			
-			<!-- 3 Terms, definitions and abbreviated terms -->
-			<!-- sys/3_defs.xml -->
-			<!-- 3.1 Terms and definitions -->
-			<!-- 3.2 Abbreviated terms -->
-			<xsl:message>[INFO] Processing Terms, definitions and abbreviated terms ...</xsl:message>		
-			<file path="sections/03-terms.adoc">
-				<xsl:apply-templates select="module" mode="terms_definitions_module"/> <!-- sect_3_defs.xsl -->
-			</file>
-			
+      <!-- Introduction -->
+      <!-- sys/introduction.xml -->
+      <xsl:message>[INFO] Processing Introduction ...</xsl:message>
+      <xsl:variable name="introduction">
+        <xsl:apply-templates select="module" mode="introduction"/> <!-- sect_introduction.xsl  -->
+      </xsl:variable>
+      <xsl:if test="normalize-space($introduction) != ''">
+        <file path="sections/00-introduction.adoc">
+          <xsl:copy-of select="$introduction"/>
+        </file>
+      </xsl:if>
+          
+      <!-- 1 Scope -->
+      <!-- sys/1_scope.xml -->
+      <xsl:message>[INFO] Processing Scope ...</xsl:message>
+      <file path="sections/01-scope.adoc">
+        <xsl:apply-templates select="module" mode="scope_module"/>	<!-- sect_1_scope.xsl  -->	
+      </file>
+      
+      
+      <!-- 2 Normative references -->
+      <!-- sys/2_refs.xml -->
+      <xsl:message>[INFO] Processing Normative references ...</xsl:message>		
+      <file path="sections/02-norm-refs.adoc">
+        <xsl:apply-templates select="module" mode="norm_refs_module"/> <!-- sect_2_refs.xsl  -->
+      </file>
+      
+      
+      <!-- 3 Terms, definitions and abbreviated terms -->
+      <!-- sys/3_defs.xml -->
+      <!-- 3.1 Terms and definitions -->
+      <!-- 3.2 Abbreviated terms -->
+      <xsl:message>[INFO] Processing Terms, definitions and abbreviated terms ...</xsl:message>		
+      <file path="sections/03-terms.adoc">
+        <xsl:apply-templates select="module" mode="terms_definitions_module"/> <!-- sect_3_defs.xsl -->
+      </file>
+      
       <!-- 4 Information requirements -->
       <!-- sys/4_info_reqs.xml -->
       <!-- 4.1 ARM entity definition -->
-      <xsl:message>[INFO] Processing Information requirements ...</xsl:message>		
-      <file path="sections/04-info_reqs.adoc">
+      <xsl:message>[INFO] Processing Information requirements (images only) ...</xsl:message>		
+      <!-- note: path_ignore for skip file generation on the disk,
+      empty="true" for skip include:: in the document.adoc,
+      see https://github.com/metanorma/stepmod2mn/issues/159
+      -->
+      <file path_ignore="sections/04-info_reqs.adoc" empty="true">
         <xsl:apply-templates select="module" mode="info_reqs_module"/> <!-- sect_4_info_reqs.xsl -->
       </file>
       
@@ -351,52 +355,66 @@
       <!-- sys/5_mim.xml -->
       <!-- 5.1 Mapping specification -->
       <!-- 5.2 MIM EXPRESS short listing -->
-      <xsl:message>[INFO] Processing Module interpreted model ...</xsl:message>		
-      <file path="sections/05-mim.adoc">
+      <xsl:message>[INFO] Processing Module interpreted model (images only) ...</xsl:message>		
+      <file path_ignore="sections/05-mim.adoc" empty="true">
         <xsl:apply-templates select="module" mode="mim_main_module"/> <!-- sect_5_main.xsl  -->
       </file>
+      <file path="templates/modules/schemas.adoc" empty="true">
+      </file>
       
-			<!-- 6 Module reference data -->
+      <!-- 6 Module reference data -->
       <!-- sys/6_refdata.xml -->
-			<xsl:message>[INFO] Processing Module reference data ...</xsl:message>		
-      <file path="sections/06-refdata.adoc">
+      <xsl:message>[INFO] Processing Module reference data (images only) ...</xsl:message>		
+      <file path_ignore="sections/06-refdata.adoc" empty="true">
         <xsl:apply-templates select="module" mode="refdata_module"/> <!-- sect_6_refdata.xsl -->
       </file>
-			
-			<!-- Annex A Short names of entities -->
+      <file path="templates/modules/module_refdata.adoc" empty="true">
+      </file>
+      
+      <!-- Annex A Short names of entities -->
       <!-- sys/a_short_names.xml -->
-			<xsl:message>[INFO] Processing Annex A Short names of entities ...</xsl:message>		
-			<file path="sections/91-short-names.adoc">
-				<xsl:apply-templates select="module" mode="annex_a"/> <!-- sect_a_short_names.xsl  -->
-			</file>
-			
-			<!-- Annex B Information object registration -->
+      <xsl:message>[INFO] Processing Annex A Short names of entities (images only) ...</xsl:message>		
+      <file path_ignore="sections/91-short-names.adoc" empty="true">
+        <xsl:apply-templates select="module" mode="annex_a"/> <!-- sect_a_short_names.xsl  -->
+      </file>
+      <file path="templates/modules/module_annex_short_names.adoc" empty="true">
+      </file>
+      
+      <!-- Annex B Information object registration -->
       <!-- sys/b_obj_reg.xml -->
-			<xsl:message>[INFO] Processing Annex B Information object registration ...</xsl:message>		
-			<file path="sections/92-identifier.adoc">
-				<xsl:apply-templates select="module" mode="annex_b"/> <!-- sect_b_obj_reg.xsl  -->
-			</file>
+      <xsl:message>[INFO] Processing Annex B Information object registration (images only) ...</xsl:message>		
+      <file path_ignore="sections/92-identifier.adoc" empty="true">
+        <xsl:apply-templates select="module" mode="annex_b"/> <!-- sect_b_obj_reg.xsl  -->
+      </file>
+      <file path="templates/modules/module_annex_identifier.adoc" empty="true">
+      </file>
 
       <!-- Annex C ARM EXPRESS-G -->
       <!-- sys/c_arm_expg.xml -->
-			<xsl:message>[INFO] Processing Annex C ARM EXPRESS-G ...</xsl:message>		
-			<file path="sections/93-arm-express-g.adoc">
-				<xsl:apply-templates select="module" mode="annex_c"/> <!-- sect_c_arm_expg.xsl -->
-			</file>
+      <xsl:message>[INFO] Processing Annex C ARM EXPRESS-G (images only) ...</xsl:message>		
+      <file path_ignore="sections/93-arm-express-g.adoc" empty="true">
+        <xsl:apply-templates select="module" mode="annex_c"/> <!-- sect_c_arm_expg.xsl -->
+      </file>
+      <file path="templates/modules/module_annex_diagrams_arm.adoc" empty="true">
+      </file>
 
       <!-- Annex D MIM EXPRESS-G -->
       <!-- sys/d_mim_expg.xml -->
-			<xsl:message>[INFO] Processing Annex D MIM EXPRESS-G ...</xsl:message>		
-			<file path="sections/94-mim-express-g.adoc">
-				<xsl:apply-templates select="module" mode="annex_d"/> <!-- sect_d_mim_expg.xsl -->
-			</file>
+      <xsl:message>[INFO] Processing Annex D MIM EXPRESS-G (images only) ...</xsl:message>		
+      <file path_ignore="sections/94-mim-express-g.adoc" empty="true">
+        <xsl:apply-templates select="module" mode="annex_d"/> <!-- sect_d_mim_expg.xsl -->
+      </file>
+      <file path="templates/modules/module_annex_diagrams_mim.adoc" empty="true">
+      </file>
       
-			<!-- Annex E Computer interpretable listings -->
+      <!-- Annex E Computer interpretable listings -->
       <!-- sys/e_exp.xml -->
-			<xsl:message>[INFO] Processing Annex E Computer interpretable listings ...</xsl:message>		
-			<file path="sections/95-listings.adoc">
-				<xsl:apply-templates select="module" mode="annex_e"/> <!-- sect_e_exp.xsl -->
-			</file>
+      <xsl:message>[INFO] Processing Annex E Computer interpretable listings (images only) ...</xsl:message>		
+      <file path_ignore="sections/95-listings.adoc" empty="true">
+        <xsl:apply-templates select="module" mode="annex_e"/> <!-- sect_e_exp.xsl -->
+      </file>
+      <file path="templates/modules/module_annex_listings.adoc" empty="true">
+      </file>
       
       <!-- Annex F Application module implementation and usage guide -->
       <!-- sys/f_guide.xml -->
@@ -406,31 +424,33 @@
           <xsl:apply-templates select="module" mode="annex_f"/> <!-- sect_f_guide.xsl -->
         </file>
       <!-- </xsl:if> -->
-			
-			<!-- Annex F/G Change history -->
-      <!-- sys/g_change -->
-			<xsl:if test="module/changes">
-				<xsl:message>[INFO] Processing Annex Change history ...</xsl:message>		
-				<file path="sections/97-change-history.adoc">
-					<xsl:apply-templates select="module" mode="change_history"/> <!-- sect_g_change.xsl -->
-				</file>
-			</xsl:if>
       
-		</xsl:variable>
-		
-		<!-- <xsl:copy-of select="$adoc"/> -->
-	
-		<xsl:apply-templates select="xalan:nodeset($adoc)" mode="text"/>
-		
-		<xsl:for-each select="xalan:nodeset($adoc)//file[@path]">
-			<xsl:text>include::</xsl:text><xsl:value-of select="@path"/><xsl:text>[]</xsl:text>
-			<xsl:text>&#xa;&#xa;</xsl:text>
-		</xsl:for-each>
-		
-			
-		<!-- Bibliography -->
+      <!-- Annex F/G Change history -->
+      <!-- sys/g_change -->
+      <xsl:if test="module/changes">
+        <xsl:message>[INFO] Processing Annex Change history (images only) ...</xsl:message>		
+        <file path_ignore="sections/97-change-history.adoc" empty="true">
+          <xsl:apply-templates select="module" mode="change_history"/> <!-- sect_g_change.xsl -->
+        </file>
+        <file path="templates/modules/module_annex_change_history.adoc" empty="true">
+        </file>
+      </xsl:if>
+      
+    </xsl:variable>
+    
+    <!-- <xsl:copy-of select="$adoc"/> -->
+  
+    <xsl:apply-templates select="xalan:nodeset($adoc)" mode="text"/>
+    
+    <xsl:for-each select="xalan:nodeset($adoc)//file[@path]">
+      <xsl:text>include::</xsl:text><xsl:value-of select="@path"/><xsl:text>[]</xsl:text>
+      <xsl:text>&#xa;&#xa;</xsl:text>
+    </xsl:for-each>
+    
+      
+    <!-- Bibliography -->
     <!-- sys/biblio.xml -->
-		<!-- <xsl:if test="module/bibliography/*"> -->
+    <!-- <xsl:if test="module/bibliography/*"> -->
     <xsl:message>[INFO] Processing Bibliography ...</xsl:message>
     <redirect:write file="{$outpath}/sections/99-bibliography.adoc">
       <xsl:apply-templates select="module" mode="bibliography"/> <!-- res_doc/sect_biblio.xsl  -->	

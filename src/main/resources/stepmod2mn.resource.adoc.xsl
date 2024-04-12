@@ -350,7 +350,7 @@
 			<!-- 4.1 General -->
 			<!-- 4.2 Fundamental concepts and assumptions -->
 			<!-- 4.3 Draughting elements entity definitions -->		
-			<xsl:if test="resource/schema">
+			<!-- <xsl:if test="resource/schema"> -->
 				<!-- https://github.com/metanorma/stepmod2mn/issues/58#issuecomment-1826282430 -->
 				<!-- <file path="sections_common/04-schemas.adoc" link="sections_common" target="../../../sections_common"> --> <!-- /04-schemas.adoc -->
 				<!-- <file path="sections/04-schemas.adoc" resource="04-schemas.adoc"> --> <!-- /04-schemas.adoc -->
@@ -372,10 +372,11 @@
 				<file link="templates" target="../../templates" folder="true" relative="true"/>
 				
 				
-				<file path="../../templates/schemas.adoc" empty="true">
+				<!-- <file path="../../templates/schemas.adoc" empty="true"> -->
+				<file path="templates/resources/schemas.adoc" empty="true">
 				</file>
 				
-			</xsl:if>
+			<!-- </xsl:if> -->
 			
 			<!-- Annex A Short names of entities -->
 			<xsl:message>[INFO] Processing Annex A Short names of entities ...</xsl:message>		
