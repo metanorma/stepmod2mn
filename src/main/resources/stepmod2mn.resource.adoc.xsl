@@ -203,11 +203,11 @@
 		<xsl:text>:title-part-fr: </xsl:text><xsl:value-of select="$title-part-fr"/>
 		<xsl:text>&#xa;</xsl:text>
 		
-		<xsl:text>:doctype: international-standard</xsl:text>
+		<xsl:text>:doctype: </xsl:text><xsl:apply-templates select="resource" mode="getDocType"/>
 		<xsl:text>&#xa;</xsl:text>
 		
 		<xsl:variable name="docstage">
-			<xsl:apply-templates select="resource" mode="docstage"/>
+			<xsl:apply-templates select="resource" mode="getDocStage"/>
 		</xsl:variable>
 		<xsl:if test="normalize-space($docstage) != ''">
 			<xsl:value-of select="$docstage"/>
@@ -228,7 +228,7 @@
 		<xsl:text>&#xa;</xsl:text>
 		<xsl:text>:workgroup-type: WG</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>:workgroup-number: 12</xsl:text>
+		<xsl:text>:workgroup-number: </xsl:text><xsl:call-template name="get_module_wg_group"/>
 		<xsl:text>&#xa;</xsl:text>
 		
 		<xsl:text>:secretariat: ANSI</xsl:text>
