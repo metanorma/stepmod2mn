@@ -48,11 +48,41 @@
 	</xsl:template>
 
 	<!-- from  dtd/module.dtd: status (CD | FDIS | DIS | IS | CD-TS | TS | WD) "CD-TS" -->
-	<xsl:template name="getDoctype">
+	<xsl:template match="resource| module" mode="getDocType">
 		<xsl:choose>
 			<xsl:when test="@status='CD-TS' or @status='TS'">technical-specification</xsl:when>
 			<xsl:when test="not(@status) or @status = ''">technical-specification</xsl:when>
 			<xsl:otherwise>international-standard</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	
+	<xsl:template match="resource| module" mode="getDocStage">
+		<xsl:choose>
+			<xsl:when test="@status='WD'"> <!-- WORKING DRAFT -->
+				<xsl:text>:docstage: 20</xsl:text>
+				<xsl:text>&#xa;</xsl:text>
+				<xsl:text>:docsubstage: 00</xsl:text>
+			</xsl:when>
+			<xsl:when test="@status='CD' or @status='CD-TS'"> <!-- COMMITTEE DRAFT -->
+				<xsl:text>:docstage: 30</xsl:text>
+				<xsl:text>&#xa;</xsl:text>
+				<xsl:text>:docsubstage: 00</xsl:text>
+			</xsl:when>
+			<xsl:when test="@status='DIS'"> <!-- DRAFT INTERNATIONAL STANDARD -->
+				<xsl:text>:docstage: 40</xsl:text>
+				<xsl:text>&#xa;</xsl:text>
+				<xsl:text>:docsubstage: 00</xsl:text>
+			</xsl:when>
+			<xsl:when test="@status='FDIS'"> <!-- FINAL DRAFT INTERNATIONAL STANDARD -->
+				<xsl:text>:docstage: 50</xsl:text>
+				<xsl:text>&#xa;</xsl:text>
+				<xsl:text>:docsubstage: 00</xsl:text>
+			</xsl:when>
+			<xsl:when test="@status='IS' or @status='TS'"> <!-- INTERNATIONAL STANDARD, or TECHNICAL SPECIFICATION -->
+				<xsl:text>:docstage: 60</xsl:text>
+				<xsl:text>&#xa;</xsl:text>
+				<xsl:text>:docsubstage: 60</xsl:text>        
+			</xsl:when>
 		</xsl:choose>
 	</xsl:template>
 

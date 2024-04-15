@@ -161,42 +161,6 @@ $Id: sect_1_scope.xsl,v 1.6 2008/12/16 15:44:48 darla Exp $
 		</xsl:choose>
 	</xsl:template>
 
-	<xsl:template match="resource" mode="docstage">
-		<xsl:choose>
-			<xsl:when test="@status='WD'"> <!-- WORKING DRAFT -->
-				<xsl:text>:docstage: 20</xsl:text>
-				<xsl:text>&#xa;</xsl:text>
-				<xsl:text>:docsubstage: 00</xsl:text>
-			</xsl:when>
-			<xsl:when test="@status='CD' or @status='CD-TS'"> <!-- COMMITTEE DRAFT -->
-				<xsl:text>:docstage: 30</xsl:text>
-				<xsl:text>&#xa;</xsl:text>
-				<xsl:text>:docsubstage: 00</xsl:text>
-			</xsl:when>
-			<xsl:when test="@status='DIS'"> <!-- DRAFT INTERNATIONAL STANDARD -->
-				<xsl:text>:docstage: 40</xsl:text>
-				<xsl:text>&#xa;</xsl:text>
-				<xsl:text>:docsubstage: 00</xsl:text>
-			</xsl:when>
-			<xsl:when test="@status='FDIS'"> <!-- FINAL DRAFT INTERNATIONAL STANDARD -->
-				<xsl:text>:docstage: 50</xsl:text>
-				<xsl:text>&#xa;</xsl:text>
-				<xsl:text>:docsubstage: 00</xsl:text>
-			</xsl:when>
-			<xsl:when test="@status='IS'"> <!-- INTERNATIONAL STANDARD -->
-				<xsl:text>:docstage: 60</xsl:text>
-				<xsl:text>&#xa;</xsl:text>
-				<xsl:text>:docsubstage: 60</xsl:text>        
-			</xsl:when>
-			<xsl:when test="@status='TS'"> <!-- TECHNICAL SPECIFICATION -->
-				<xsl:text>:docstage: 30</xsl:text>
-				<xsl:text>&#xa;</xsl:text>
-				<xsl:text>:docsubstage: 00</xsl:text>        
-			</xsl:when>
-		</xsl:choose>
-	</xsl:template>
-	
-	
 	
 </xsl:stylesheet>
 

@@ -208,11 +208,11 @@
 		<xsl:text>:title-part-fr: </xsl:text><xsl:value-of select="$title-part-fr"/>
 		<xsl:text>&#xa;</xsl:text>
 		
-		<xsl:text>:doctype: </xsl:text><xsl:call-template name="getDoctype"/>
+		<xsl:text>:doctype: </xsl:text><xsl:apply-templates select="module" mode="getDocType"/>
 		<xsl:text>&#xa;</xsl:text>
 		
 		<xsl:variable name="docstage">
-			<xsl:apply-templates select="module" mode="docstage"/>
+			<xsl:apply-templates select="module" mode="getDocStage"/>
 		</xsl:variable>
 		<xsl:if test="normalize-space($docstage) != ''">
 			<xsl:value-of select="$docstage"/>
