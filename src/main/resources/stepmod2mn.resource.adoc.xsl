@@ -203,7 +203,7 @@
 		<xsl:text>:title-part-fr: </xsl:text><xsl:value-of select="$title-part-fr"/>
 		<xsl:text>&#xa;</xsl:text>
 		
-		<xsl:text>:doctype: international-standard</xsl:text>
+		<xsl:text>:doctype: </xsl:text><xsl:call-template name="getDoctype"/>
 		<xsl:text>&#xa;</xsl:text>
 		
 		<xsl:variable name="docstage">

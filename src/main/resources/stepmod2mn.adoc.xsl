@@ -47,6 +47,15 @@
 		</xsl:choose>
 	</xsl:template>
 
+	<!-- from  dtd/module.dtd: status (CD | FDIS | DIS | IS | CD-TS | TS | WD) "CD-TS" -->
+	<xsl:template name="getDoctype">
+		<xsl:choose>
+			<xsl:when test="@status='CD-TS' or @status='TS'">technical-specification</xsl:when>
+			<xsl:when test="not(@status) or @status = ''">technical-specification</xsl:when>
+			<xsl:otherwise>international-standard</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
 	<xsl:template name="insertHeaderADOC">
 		<xsl:param name="id"/>
 		<xsl:param name="attributes"/>
