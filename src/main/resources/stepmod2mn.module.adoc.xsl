@@ -233,7 +233,7 @@
 		<xsl:text>&#xa;</xsl:text>
 		<xsl:text>:workgroup-type: WG</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>:workgroup-number: 12</xsl:text>
+		<xsl:text>:workgroup-number: </xsl:text><xsl:call-template name="get_module_wg_group"/>
 		<xsl:text>&#xa;</xsl:text>
 		
 		<xsl:text>:secretariat: ANSI</xsl:text>
