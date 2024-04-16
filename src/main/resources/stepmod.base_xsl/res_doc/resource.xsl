@@ -4430,7 +4430,7 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 		<!-- </ul> -->
 	</xsl:template>
 
-	<xsl:template match="imgfile" mode="expressg">
+	<xsl:template match="imgfile|img" mode="expressg">
 		<xsl:variable name="file">
 			<xsl:call-template name="set_file_ext">
 				<xsl:with-param name="filename" select="@file"/>
