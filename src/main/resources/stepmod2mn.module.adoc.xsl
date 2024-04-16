@@ -498,6 +498,14 @@
         <xsl:text>- schemas/modules/</xsl:text><xsl:value-of select="$current_module"/><xsl:text>/mim.changes.yaml</xsl:text>
         <xsl:text>&#xa;</xsl:text>
       </xsl:if>
+      <xsl:if test="/module/changes/change/arm_longform.changes">
+        <xsl:text>- schemas/modules/</xsl:text><xsl:value-of select="$current_module"/><xsl:text>/arm_lf.changes.yaml</xsl:text>
+        <xsl:text>&#xa;</xsl:text>
+      </xsl:if>
+      <xsl:if test="/module/changes/change/mim_longform.changes">
+        <xsl:text>- schemas/modules/</xsl:text><xsl:value-of select="$current_module"/><xsl:text>/mim_lf.changes.yaml</xsl:text>
+        <xsl:text>&#xa;</xsl:text>
+      </xsl:if>
     </redirect:write>
   </xsl:template>
 	
