@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="./document_xsl.xsl" ?>
+<!-- <?xml-stylesheet type="text/xsl" href="./document_xsl.xsl" ?> -->
 <!--
 $Id: module.xsl,v 1.252 2018/08/23 11:13:36 mike Exp $
   Author:  Rob Bodington, Eurostep Limited
@@ -8,7 +8,7 @@ $Id: module.xsl,v 1.252 2018/08/23 11:13:36 mike Exp $
      
 -->
 <!-- Updated: Alexander Dyuzhev, for stepmod2mn tool-->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:java="http://xml.apache.org/xalan/java" xmlns:str="http://exslt.org/strings" xmlns:xalan="http://xml.apache.org/xalan" exclude-result-prefixes="xalan" version="1.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:java="http://xml.apache.org/xalan/java" xmlns:str="http://exslt.org/strings" xmlns:redirect="http://xml.apache.org/xalan/redirect" xmlns:xalan="http://xml.apache.org/xalan" exclude-result-prefixes="xalan" extension-element-prefixes="str redirect" version="1.0">
   <!--
     exclude-result-prefixes="msxsl exslt"
     xmlns:msxsl="urn:schemas-microsoft-com:xslt"
@@ -4172,10 +4172,27 @@ $module_ok,' Check the normatives references')"/>
   </xsl:template>
   <xsl:template match="express-g">
     <!-- <xsl:text>&#xa;</xsl:text> -->
-    <xsl:apply-templates select="imgfile|img" mode="expressg"/>
+    
+    <xsl:variable name="parent_element" select="local-name(..)"/>
+    <!-- express-g-diagrams-arm.yaml or express-g-diagrams-mim.yaml -->
+    <xsl:variable name="express_g_diagrams_yaml" select="concat($outpath, '/express-g-diagrams-', $parent_element, '.yaml')"/>
+    <xsl:message>express_g_diagrams_yaml=<xsl:value-of select="$express_g_diagrams_yaml"/></xsl:message>
+    <redirect:open file="{$express_g_diagrams_yaml}"/>
+    <redirect:write file="{$express_g_diagrams_yaml}">
+      <xsl:text>---</xsl:text>
+      <xsl:text>&#xa;</xsl:text>
+    </redirect:write>
+    
+    <xsl:apply-templates select="imgfile|img" mode="expressg">
+      <xsl:with-param name="express_g_diagrams_yaml" select="$express_g_diagrams_yaml"/>
+    </xsl:apply-templates>
+    
+    <redirect:close file="{$express_g_diagrams_yaml}"/>
+    
     <xsl:text>&#xa;</xsl:text>
   </xsl:template>
-  <xsl:template match="imgfile" mode="expressg">
+  <xsl:template match="imgfile|img" mode="expressg">
+    <xsl:param name="express_g_diagrams_yaml"/>
     <xsl:variable name="file">
       <!-- <xsl:call-template name="set_file_ext">
       <xsl:with-param name="filename" select="@file"/>
@@ -4247,7 +4264,16 @@ $module_ok,' Check the normatives references')"/>
   
     <!-- <xsl:variable name="generateSVG" select="java:generateSVG(java:org.metanorma.stepmod2mn.new(),concat($path,'/',@file),'',$outpath,true())"/> -->
     <xsl:variable name="generateSVG" select="java:generateSVG(java:org.metanorma.stepmod2mn.new(),concat($path,'/',@file),'',$outpath_schemas,false())"/>
-		
+
+    <xsl:if test="normalize-space($generateSVG) != ''">
+      <redirect:write file="{$express_g_diagrams_yaml}">
+        <xsl:text>- path: ../</xsl:text> <!-- added '../' because `:imagesdir: images` added, see https://github.com/metanorma/stepmod2mn/issues/138 -->
+        <xsl:variable name="image_relative_path_new" select="java:org.metanorma.Util.getRelativePath($generateSVG, $outpath)"/> 
+        <xsl:value-of select="$image_relative_path_new"/>
+        <xsl:text>&#xa;</xsl:text>
+      </redirect:write>
+    </xsl:if>
+
     <xsl:call-template name="insertImage">
       <xsl:with-param name="id" select="$file"/>
       <xsl:with-param name="title" select="concat($title,$index)"/>

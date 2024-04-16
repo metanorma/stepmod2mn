@@ -267,7 +267,10 @@
 		<xsl:text>&#xa;</xsl:text>
 		
 		<!-- Generation schemas.yaml -->
-		<!-- <xsl:call-template name="generateSchemasYaml"/> -->
+		<xsl:call-template name="generateSchemasYaml"/>
+		
+		<!-- Generation changes_paths.yaml -->
+		<xsl:call-template name="generateChangesPathsYaml"/>
 		
 		<!-- Generation collection.yml -->
 		<!-- <xsl:call-template name="generateCollectionYaml">
@@ -436,6 +439,11 @@
         </file>
       </xsl:if>
       
+      <!-- create symbolic link to the folder 'templates` in the root of repository -->
+      <file link="templates" target="../../templates" folder="true" relative="true"/>
+      
+      <file link="sections/templates" target="../../templates" folder="true" relative="true"/>
+      
     </xsl:variable>
     
     <!-- <xsl:copy-of select="$adoc"/> -->
@@ -462,4 +470,118 @@
 		
 	</xsl:template>
 	
+  <!-- Example:
+  - - -
+  - changes.yaml
+  - schemas/modules/geometric_tolerance/mapping.changes.yaml
+  - schemas/modules/geometric_tolerance/arm.changes.yaml
+  - schemas/modules/geometric_tolerance/mim.changes.yaml
+  -->
+  <xsl:template name="generateChangesPathsYaml">
+    <xsl:message>[INFO] Generation changes_paths.yaml ...</xsl:message>
+		<redirect:write file="{$outpath}/changes_paths.yaml">
+			<xsl:text>---</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+      <xsl:if test="/module/changes/change/description">
+        <xsl:text>- changes.yaml</xsl:text>
+        <xsl:text>&#xa;</xsl:text>
+      </xsl:if>
+      <xsl:if test="/module/changes/change/mapping.changes">
+        <xsl:text>- schemas/modules/</xsl:text><xsl:value-of select="$current_module"/><xsl:text>/mapping.changes.yaml</xsl:text>
+        <xsl:text>&#xa;</xsl:text>
+      </xsl:if>
+      <xsl:if test="/module/changes/change/arm.changes">
+        <xsl:text>- schemas/modules/</xsl:text><xsl:value-of select="$current_module"/><xsl:text>/arm.changes.yaml</xsl:text>
+        <xsl:text>&#xa;</xsl:text>
+      </xsl:if>
+       <xsl:if test="/module/changes/change/mim.changes">
+        <xsl:text>- schemas/modules/</xsl:text><xsl:value-of select="$current_module"/><xsl:text>/mim.changes.yaml</xsl:text>
+        <xsl:text>&#xa;</xsl:text>
+      </xsl:if>
+      <xsl:if test="/module/changes/change/arm_longform.changes">
+        <xsl:text>- schemas/modules/</xsl:text><xsl:value-of select="$current_module"/><xsl:text>/arm_lf.changes.yaml</xsl:text>
+        <xsl:text>&#xa;</xsl:text>
+      </xsl:if>
+      <xsl:if test="/module/changes/change/mim_longform.changes">
+        <xsl:text>- schemas/modules/</xsl:text><xsl:value-of select="$current_module"/><xsl:text>/mim_lf.changes.yaml</xsl:text>
+        <xsl:text>&#xa;</xsl:text>
+      </xsl:if>
+    </redirect:write>
+  </xsl:template>
+	
+  <!-- Example: 
+  - - -
+  schemas:
+    Geometric_tolerance_arm:
+      path: ../../schemas/modules/geometric_tolerance/arm.exp
+    Geometric_tolerance_mim:
+      path: ../../schemas/modules/geometric_tolerance/mim.exp
+  -->
+	<xsl:template name="generateSchemasYaml">
+		<xsl:message>[INFO] Generation schemas.yaml ...</xsl:message>
+		<redirect:write file="{$outpath}/schemas.yaml">
+			<xsl:text>---</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>schemas:</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:for-each select="document(concat($path, 'arm.xml'))/express/schema | document(concat($path, 'mim.xml'))/express/schema">
+				<xsl:text>  </xsl:text><xsl:value-of select="@name"/><xsl:text>:</xsl:text>
+				<xsl:text>&#xa;</xsl:text>
+				<xsl:text>    path: </xsl:text>
+        
+        
+        <xsl:variable name="UPPER">ABCDEFGHIJKLMNOPQRSTUVWXYZ</xsl:variable>
+        <xsl:variable name="LOWER">abcdefghijklmnopqrstuvwxyz</xsl:variable>
+        <xsl:variable name="name_lcase" select="translate(@name,$UPPER, $LOWER)"/>
+        <xsl:variable name="name">
+          <xsl:choose>
+            <xsl:when test="contains($name_lcase,'_arm')">
+              <xsl:value-of select="substring-before($name_lcase,'_arm')"/>
+            </xsl:when>
+            <xsl:when test="contains($name_lcase,'_mim')">
+              <xsl:value-of select="substring-before($name_lcase,'_mim')"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="$name_lcase"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="arm_or_mim">
+          <xsl:choose>
+            <xsl:when test="contains($name_lcase,'_arm')">arm</xsl:when>
+            <xsl:when test="contains($name_lcase,'_mim')">mim</xsl:when>
+            <xsl:otherwise><xsl:value-of select="$name_lcase"/></xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+				<!-- generate relative path to the schema's annotated.exp -->
+				<!-- current input path: $path -->
+				<!-- Step1: calculate full path to '../../modules/',@name,'/',@name,'_annotated.exp' -->
+				<!-- Step2: calculate relative path to '../../modules/',@name,'/',@name,'_annotated.exp' from output path -->
+				
+				<!-- https://github.com/metanorma/stepmod2mn/issues/87 -->
+				<!-- <xsl:variable name="schema_annotated_exp_relative_path" select="concat('../../modules/',@name,'/',@name,'_annotated.exp')"/> -->
+				<xsl:variable name="schema_annotated_exp_relative_path" select="concat('../../modules/',$name,'/',$arm_or_mim,'.exp')"/>
+				<xsl:variable name="schema_annotated_exp_path">
+					<xsl:choose>
+						<xsl:when test="$outpath_schemas != ''">
+							<xsl:value-of select="concat($outpath_schemas,'/',$name,'/',$arm_or_mim,'.exp')"/>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:value-of select="concat($path, '/', $schema_annotated_exp_relative_path)"/>
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:variable>
+				<!-- <xsl:variable name="schema_annotated_exp_path" select="concat($path, '/', $schema_annotated_exp_relative_path)"/> -->
+				
+				<xsl:variable name="schema_annotated_exp_relative_path_new" select="java:org.metanorma.Util.getRelativePath($schema_annotated_exp_path, $outpath)"/>
+				<xsl:value-of select="$schema_annotated_exp_relative_path_new"/>
+				<xsl:text>&#xa;</xsl:text>
+				
+				<!-- <xsl:text>    path: </xsl:text>
+				<xsl:value-of select="$schema_annotated_exp_relative_path"/>
+				<xsl:text>&#xa;</xsl:text> -->
+			</xsl:for-each>
+		</redirect:write>
+	</xsl:template>
+  
 </xsl:stylesheet>
