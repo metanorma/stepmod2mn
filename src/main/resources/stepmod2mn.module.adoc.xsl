@@ -442,6 +442,8 @@
       <!-- create symbolic link to the folder 'templates` in the root of repository -->
       <file link="templates" target="../../templates" folder="true" relative="true"/>
       
+      <file link="sections/templates" target="../../templates" folder="true" relative="true"/>
+      
     </xsl:variable>
     
     <!-- <xsl:copy-of select="$adoc"/> -->
