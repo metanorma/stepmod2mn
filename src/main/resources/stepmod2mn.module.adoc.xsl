@@ -269,6 +269,9 @@
 		<!-- Generation schemas.yaml -->
 		<!-- <xsl:call-template name="generateSchemasYaml"/> -->
 		
+		<!-- Generation changes_paths.yaml -->
+		<xsl:call-template name="generateChangesPathsYaml"/>
+		
 		<!-- Generation collection.yml -->
 		<!-- <xsl:call-template name="generateCollectionYaml">
 			<xsl:with-param name="data_element">
@@ -436,6 +439,9 @@
         </file>
       </xsl:if>
       
+      <!-- create symbolic link to the folder 'templates` in the root of repository -->
+      <file link="templates" target="../../templates" folder="true" relative="true"/>
+      
     </xsl:variable>
     
     <!-- <xsl:copy-of select="$adoc"/> -->
@@ -461,5 +467,36 @@
 		
 		
 	</xsl:template>
+	
+  <!-- Example:
+  - - -
+  - changes.yaml
+  - schemas/modules/geometric_tolerance/mapping.changes.yaml
+  - schemas/modules/geometric_tolerance/arm.changes.yaml
+  - schemas/modules/geometric_tolerance/mim.changes.yaml
+  -->
+  <xsl:template name="generateChangesPathsYaml">
+    <xsl:message>[INFO] Generation changes_paths.yaml ...</xsl:message>
+		<redirect:write file="{$outpath}/changes_paths.yaml">
+			<xsl:text>---</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+      <xsl:if test="/module/changes/change/description">
+        <xsl:text>- changes.yaml</xsl:text>
+        <xsl:text>&#xa;</xsl:text>
+      </xsl:if>
+      <xsl:if test="/module/changes/change/mapping.changes">
+        <xsl:text>- schemas/modules/</xsl:text><xsl:value-of select="$current_module"/><xsl:text>/mapping.changes.yaml</xsl:text>
+        <xsl:text>&#xa;</xsl:text>
+      </xsl:if>
+      <xsl:if test="/module/changes/change/arm.changes">
+        <xsl:text>- schemas/modules/</xsl:text><xsl:value-of select="$current_module"/><xsl:text>/arm.changes.yaml</xsl:text>
+        <xsl:text>&#xa;</xsl:text>
+      </xsl:if>
+       <xsl:if test="/module/changes/change/mim.changes">
+        <xsl:text>- schemas/modules/</xsl:text><xsl:value-of select="$current_module"/><xsl:text>/mim.changes.yaml</xsl:text>
+        <xsl:text>&#xa;</xsl:text>
+      </xsl:if>
+    </redirect:write>
+  </xsl:template>
 	
 </xsl:stylesheet>
