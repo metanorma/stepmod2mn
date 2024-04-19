@@ -4176,7 +4176,7 @@ $module_ok,' Check the normatives references')"/>
     <xsl:variable name="parent_element" select="local-name(..)"/>
     <!-- express-g-diagrams-arm.yaml or express-g-diagrams-mim.yaml -->
     <xsl:variable name="express_g_diagrams_yaml" select="concat($outpath, '/express-g-diagrams-', $parent_element, '.yaml')"/>
-    <xsl:message>express_g_diagrams_yaml=<xsl:value-of select="$express_g_diagrams_yaml"/></xsl:message>
+    
     <redirect:open file="{$express_g_diagrams_yaml}"/>
     <redirect:write file="{$express_g_diagrams_yaml}">
       <xsl:text>---</xsl:text>
