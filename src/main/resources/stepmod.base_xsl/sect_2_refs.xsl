@@ -449,6 +449,7 @@ $Id: sect_2_refs.xsl,v 1.21 2018/08/22 23:06:22 mike Exp $
       </xsl:variable>
       
       <xsl:variable name="module_xml" select="concat($module_dir,'/module.xml')"/>
+      <xsl:variable name="module_xml_document" select="document($module_xml)"/>
       
       <xsl:variable name="module_ok">
         <xsl:call-template name="check_module_exists">
@@ -458,7 +459,7 @@ $Id: sect_2_refs.xsl,v 1.21 2018/08/22 23:06:22 mike Exp $
       
       <xsl:choose>
         <xsl:when test="$module_ok='true'">
-          <xsl:apply-templates select="document($module_xml)" mode="generate_node"/>
+          <xsl:apply-templates select="$module_xml_document" mode="generate_node"/>
         </xsl:when>
         <xsl:otherwise>
           <xsl:call-template name="error_message">
