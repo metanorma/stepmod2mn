@@ -30,8 +30,9 @@
     <xsl:if test="string-length($dvlp_fldr)>0">
       <xsl:variable name="issue_file" 
         select="concat('../',$module_dir,'/dvlp/issues.xml')"/>
+      <xsl:variable name="issue_file_document" select="document($issue_file)"/>
       <xsl:apply-templates
-        select="document($issue_file)/issues/issue[@type=$clause]" 
+        select="$issue_file_document/issues/issue[@type=$clause]" 
         mode="inline_issue">
         <xsl:sort select="@status" order="descending"/>
       </xsl:apply-templates>
@@ -80,9 +81,9 @@
 
     <xsl:variable name="module_xml"
       select="concat('../',$module_dir,'/module.xml')"/>
-    
+    <xsl:variable name="module_xml_document" select="document($module_xml)"/>
     <xsl:variable name="dvlp_fldr"
-      select="string(document($module_xml)/module/@development.folder)"/> 
+      select="string($module_xml_document/module/@development.folder)"/> 
 
     <xsl:if test="string-length($dvlp_fldr)>0">
     <xsl:variable name="arm_mim">
@@ -132,14 +133,15 @@
 
 
     <xsl:variable name="issue_file" select="concat('../',$module_dir,'/dvlp/issues.xml')"/>
+    <xsl:variable name="issue_file_document" select="document($issue_file)"/>
 
     <xsl:apply-templates
-      select="document($issue_file)/issues/issue[@type='arm' and @linkend=$xref]" mode="inline_issue">
+      select="$issue_file_document/issues/issue[@type='arm' and @linkend=$xref]" mode="inline_issue">
       <xsl:sort select="@status" order="descending"/>
     </xsl:apply-templates>
 
     <xsl:apply-templates
-      select="document($issue_file)/issues/issue[@type='mim' and @linkend=$xref]" mode="inline_issue">
+      select="$issue_file_document/issues/issue[@type='mim' and @linkend=$xref]" mode="inline_issue">
       <xsl:sort select="@status" order="descending"/>
     </xsl:apply-templates>
 
@@ -301,7 +303,8 @@
     <xsl:if test="string-length($dvlp_fldr)>0">
       
       <xsl:variable name="issue_file" select="concat('../../data/modules/',../../@name,'/dvlp/issues.xml')"/>
-      <xsl:for-each select="document($issue_file)/issues/issue[@type='mapping_table']">
+      <xsl:variable name="issue_file_document" select="document($issue_file)"/>
+      <xsl:for-each select="$issue_file_document/issues/issue[@type='mapping_table']">
         <xsl:variable name="linkend">
           <xsl:call-template name="issue_ae_map_aname">
             <xsl:with-param name="linkend" select="@linkend"/>
@@ -328,8 +331,8 @@
     <xsl:if test="string-length($dvlp_fldr)>0">      
       <xsl:variable name="issue_file"
         select="concat('../../data/modules/',../../../@name,'/dvlp/issues.xml')"/>
-
-      <xsl:for-each select="document($issue_file)/issues/issue[@type='mapping_table']">
+      <xsl:variable name="issue_file_document" select="document($issue_file)"/>
+      <xsl:for-each select="$issue_file_document/issues/issue[@type='mapping_table']">
         <xsl:variable name="linkend">
           <xsl:call-template name="issue_ae_map_aname">
             <xsl:with-param name="linkend" select="@linkend"/>
@@ -352,7 +355,8 @@
     <xsl:if test="string-length($dvlp_fldr)>0">
       <xsl:variable name="issue_file"
         select="concat('../../data/modules/',@name,'/dvlp/issues.xml')"/>   
-      <xsl:for-each select="document($issue_file)/issues/issue[@type='mapping_table']">
+      <xsl:variable name="issue_file_document" select="document($issue_file)"/>
+      <xsl:for-each select="$issue_file_document/issues/issue[@type='mapping_table']">
         <xsl:if test="string-length(normalize-space(@linkend))=0">
           <xsl:apply-templates select="." mode="inline_issue"/>
         </xsl:if>

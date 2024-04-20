@@ -136,9 +136,10 @@
             </xsl:call-template>
         </xsl:variable>
         
+        <xsl:variable name="express_file_to_read_document" select="document(concat($path, '../../', string($express_file_to_read)))"/>
         <!-- get schema node contained in express file -->
         <xsl:variable name="if_schema_node"
-            select="document(concat($path, '../../', string($express_file_to_read)))//express/schema" />
+            select="$express_file_to_read_document//express/schema" />
         
         <!-- add separator before name of schema -->
         <xsl:variable name="if_schema_name_list_item" select="concat('|', $if_schema_name)"/>
@@ -1149,7 +1150,7 @@ Needs to deal with expressions starting with not ( i.e. ANDOR above
         <xsl:choose>
           <!-- would have been better to use xsl:if != but this does not
                work, hence use of when and otherwise -->
-          <xsl:when test="document(concat($path, '../../../repository_index.xml'))/repository_index/modules/module[@name=$module_name]" />
+          <xsl:when test="$repository_index_xml_document/repository_index/modules/module[@name=$module_name]" />
           <xsl:otherwise>
             <xsl:value-of 
               select="concat('ERROR el1: ', $module_name, 
@@ -1162,7 +1163,7 @@ Needs to deal with expressions starting with not ( i.e. ANDOR above
         <xsl:choose>
           <!-- would have been better to use xsl:if != but this does not
                work, hence use of when and otherwise -->
-          <xsl:when test="document(concat($path, '../../../repository_index.xml'))/repository_index/modules/module[@name=$module_name]" />
+          <xsl:when test="$repository_index_xml_document/repository_index/modules/module[@name=$module_name]" />
           <xsl:otherwise>
             <xsl:value-of 
               select="concat('ERROR el2: ', $module_name, 
@@ -1175,7 +1176,7 @@ Needs to deal with expressions starting with not ( i.e. ANDOR above
         <xsl:choose>
           <!-- would have been better to use xsl:if != but this does not
                work, hence use of when and otherwise -->
-          <xsl:when test="document(concat($path, '../../../repository_index.xml'))/repository_index/resources/resource[@name=$schema_name_tmp]" />
+          <xsl:when test="$repository_index_xml_document/repository_index/resources/resource[@name=$schema_name_tmp]" />
           <xsl:otherwise>
             <xsl:value-of 
               select="concat('ERROR el3: ', $module_name, 
@@ -1392,7 +1393,7 @@ Needs to deal with expressions starting with not ( i.e. ANDOR above
 <xsl:template name="build_resource_xref_list">
   <xsl:call-template name="build_resource_xref_list_rec">
     <xsl:with-param name="resources"
-      select="document(concat($path, '../../../repository_index.xml'))/repository_index/resources/resource" />
+      select="$repository_index_xml_document/repository_index/resources/resource" />
   </xsl:call-template>
 </xsl:template>
 <xsl:template name="build_resource_xref_list_rec">
@@ -1405,8 +1406,9 @@ Needs to deal with expressions starting with not ( i.e. ANDOR above
   <xsl:variable name="express_file" 
     select="concat($path,'../../../data/resources/',
             $first_resource/@name,'/',$first_resource/@name,'.xml')"/>
+  <xsl:variable name="express_file_document" select="document($express_file)"/>
   <xsl:variable name="object_nodes"
-    select="document($express_file)/express/schema/entity|/express/schema/type|/express/schema/subtype.constraint|/express/schema/function|/express/schema/procedure|/express/schema/rule|/express/schema/constant"/>
+    select="$express_file_document/express/schema/entity|/express/schema/type|/express/schema/subtype.constraint|/express/schema/function|/express/schema/procedure|/express/schema/rule|/express/schema/constant"/>
   <xsl:choose>
     <xsl:when test="$remaining_resources">
       <xsl:variable name="l_xref_list">

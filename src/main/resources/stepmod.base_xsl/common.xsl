@@ -1460,6 +1460,8 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 		</xsl:choose>
 	</xsl:template>
 
+	<xsl:variable name="repository_index_xml_document" select="document(concat($path, '../../../repository_index.xml'))"/>
+
 	<!-- given the name of a module, check to see whether it has been
 			 included in the repository_index.xml file
 			 Return true or if not found, an error message.
@@ -1476,7 +1478,7 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 		<xsl:variable name="ret_val">
 				<xsl:choose>
 					<xsl:when
-						test="document(concat($path, '../../../repository_index.xml'))/repository_index/modules/module[@name=$module_name]">
+						test="$repository_index_xml_document/repository_index/modules/module[@name=$module_name]">
 						<xsl:value-of select="'true'"/>
 					</xsl:when>
 					<xsl:otherwise>
@@ -1505,7 +1507,7 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 		<xsl:variable name="ret_val">
 			<xsl:choose>
 				<xsl:when
-					test="document(concat($path, '../../../repository_index.xml'))/repository_index/business_object_models/business_object_model[@name=$bom_name]">
+					test="$repository_index_xml_document/repository_index/business_object_models/business_object_model[@name=$bom_name]">
 					<xsl:value-of select="'true'"/>
 				</xsl:when>
 				<xsl:otherwise>
@@ -1534,7 +1536,7 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 		<xsl:variable name="ret_val">
 				<xsl:choose>
 					<xsl:when
-						test="document(concat($path, '../../../repository_index.xml'))/repository_index/resources/resource[@name=$lschema]">
+						test="$repository_index_xml_document/repository_index/resources/resource[@name=$lschema]">
 						<xsl:value-of select="'true'"/>
 					</xsl:when>
 					<xsl:otherwise>
@@ -1557,7 +1559,7 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 		<xsl:variable name="ret_val">
 				<xsl:choose>
 					<xsl:when
-						test="document(concat($path,'../../../repository_index.xml'))/repository_index/resources/resource[@name=$lschema]">
+						test="$repository_index_xml_document/repository_index/resources/resource[@name=$lschema]">
 						<xsl:value-of select="'true'"/>
 					</xsl:when>
 					<xsl:otherwise>
@@ -1583,7 +1585,7 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 		<xsl:variable name="ret_val">
 				<xsl:choose>
 					<xsl:when
-						test="document(concat($path,'../../../repository_index.xml'))/repository_index/resource_docs/resource_doc[@name=$resdoc_name]">
+						test="$repository_index_xml_document/repository_index/resource_docs/resource_doc[@name=$resdoc_name]">
 						<xsl:value-of select="'true'"/>
 					</xsl:when>
 					<xsl:otherwise>
@@ -2159,21 +2161,23 @@ width="20" height="20"/> -->
 				</xsl:when>
 				<xsl:when test="$arm_mim_ir='ir_express'"><!-- MWD 2017-09-13 and 2018-01-29 -->
 					<xsl:variable name="resource_number">
-						<xsl:value-of select="document(concat($path, '../../../repository_index.xml'))//resource[@name=$module]/@part"/>
+						<xsl:value-of select="$repository_index_xml_document//resource[@name=$module]/@part"/>
 					</xsl:variable>
 					<!--<xsl:message>resource_number:<xsl:value-of select="$resource_number"/></xsl:message>-->
 					<xsl:variable name="resource_doc">
-						<xsl:value-of select="document(concat($path, '../../../repository_index.xml'))//resource_doc[@part=$resource_number]/@name"/>
+						<xsl:value-of select="$repository_index_xml_document//resource_doc[@part=$resource_number]/@name"/>
 					</xsl:variable>
 					<!--<xsl:message>resource_doc:<xsl:value-of select="$resource_doc"/></xsl:message>-->
 					
+					<xsl:variable name="docs_xml_document" select="document(concat($path, '../../../data/library/docs.xml'))"/>
+					
 					<xsl:choose>
-						<xsl:when test="document(concat($path, '../../../data/library/docs.xml'))//doc[@name=$resource_doc]/@format='pdf'">
+						<xsl:when test="$docs_xml_document//doc[@name=$resource_doc]/@format='pdf'">
 							<xsl:value-of select="concat($baselink,'resources/',$module,'/', $module,$FILE_EXT,'#',$express_ref)"/>
 						</xsl:when>
 						
 					 
-						<xsl:when test="document(concat($path, '../../../data/library/docs.xml'))//doc[@name=$resource_doc]/@format='html-stepmod'">
+						<xsl:when test="$docs_xml_document//doc[@name=$resource_doc]/@format='html-stepmod'">
 							<!--<xsl:variable name="schema_name" select="substring-before($express_ref, '.')"/> MWD 2018-02-05 -->
 							
 							<xsl:variable name="schema_name">
@@ -2966,7 +2970,8 @@ width="20" height="20"/> -->
 															<xsl:with-param name="module" select="$module"/>
 														</xsl:call-template>
 													</xsl:variable>
-													<xsl:variable name="module_part" select="document(concat($mod_dir,'/module.xml'))/*/@part"/>
+													<xsl:variable name="module_xml_document" select="document(concat($mod_dir,'/module.xml'))"/>
+													<xsl:variable name="module_part" select="$module_xml_document/*/@part"/>
 													<xsl:attribute name="href"><xsl:value-of select="concat('doc_iso10303-',$module_part)"/></xsl:attribute>
 													<xsl:value-of select="concat('anchor=',$href)"/>
 													<!-- Example: <<doc_iso10303-54,anchor=scope>> -->
@@ -3562,13 +3567,15 @@ width="20" height="20"/> -->
 			<xsl:with-param name="module" select="$module"/>
 		</xsl:call-template>
 	</xsl:variable>
+	
+	<xsl:variable name="module_xml_document" select="document(concat($mod_dir,'/module.xml'))"/>
 	<xsl:variable name="part">
 		<xsl:value-of
-			select="document(concat($mod_dir,'/module.xml'))/module/@part"/>
+			select="$module_xml_document/module/@part"/>
 	</xsl:variable>
 	<xsl:variable name="status">
 		<xsl:value-of
-			select="document(concat($mod_dir,'/module.xml'))/module/@status"/>
+			select="$module_xml_document/module/@status"/>
 	</xsl:variable>
 	<xsl:value-of select="concat('ISO/',$status,'&#160;10303-',$part)"/>
 </xsl:template>
@@ -4617,8 +4624,9 @@ is case sensitive.')"/>
 
 <xsl:template match="projlead">
 	<xsl:variable name="ref" select="@ref"/>
+	<xsl:variable name="contacts_xml_document" select="document('../data/basic/contacts.xml')"/>
 	<xsl:variable name="projlead"
-		select="document('../data/basic/contacts.xml')/contact.list/contact[@id=$ref]"/>
+		select="$contacts_xml_document/contact.list/contact[@id=$ref]"/>
 	<!-- <b>Project leader: </b> -->
 	<xsl:text> *Project leader:* </xsl:text>
 	<xsl:choose>
@@ -4637,8 +4645,9 @@ is case sensitive.')"/>
 
 <xsl:template match="projlead" mode="no_address">
 	<xsl:variable name="ref" select="@ref"/>
+	<xsl:variable name="contacts_xml_document" select="document('../data/basic/contacts.xml')"/>
 	<xsl:variable name="projlead"
-		select="document('../data/basic/contacts.xml')/contact.list/contact[@id=$ref]"/>
+		select="$contacts_xml_document/contact.list/contact[@id=$ref]"/>
 	<xsl:choose>
 		<xsl:when test="$projlead">
 			<xsl:apply-templates select="$projlead" mode="no_address"/>      
@@ -4655,8 +4664,9 @@ is case sensitive.')"/>
 
 <xsl:template match="projlead" mode="name">
 	<xsl:variable name="ref" select="@ref"/>
+	<xsl:variable name="contacts_xml_document" select="document('../data/basic/contacts.xml')"/>
 	<xsl:variable name="projlead"
-		select="document('../data/basic/contacts.xml')/contact.list/contact[@id=$ref]"/>
+		select="$contacts_xml_document/contact.list/contact[@id=$ref]"/>
 	<xsl:choose>
 		<xsl:when test="$projlead">
 			<xsl:apply-templates select="$projlead" mode="name"/>      
@@ -4673,8 +4683,9 @@ is case sensitive.')"/>
 
 <xsl:template match="editor">
 	<xsl:variable name="ref" select="@ref"/>
+	<xsl:variable name="contacts_xml_document" select="document('../data/basic/contacts.xml')"/>
 	<xsl:variable name="editor"
-		select="document('../data/basic/contacts.xml')/contact.list/contact[@id=$ref]"/>
+		select="$contacts_xml_document/contact.list/contact[@id=$ref]"/>
 	<!-- <b>Project editor: </b> -->  
 	<xsl:text> *Project editor:* </xsl:text>
 	<xsl:choose>
@@ -4694,8 +4705,9 @@ is case sensitive.')"/>
 
 <xsl:template match="editor" mode="no_address">
 	<xsl:variable name="ref" select="@ref"/>
+	<xsl:variable name="contacts_xml_document" select="document('../data/basic/contacts.xml')"/>
 	<xsl:variable name="editor"
-		select="document('../data/basic/contacts.xml')/contact.list/contact[@id=$ref]"/>
+		select="$contacts_xml_document/contact.list/contact[@id=$ref]"/>
 	<xsl:choose>
 		<xsl:when test="$editor">
 			<xsl:apply-templates select="$editor"  mode="no_address"/>      
@@ -4712,8 +4724,9 @@ is case sensitive.')"/>
 
 <xsl:template match="editor" mode="name">
 	<xsl:variable name="ref" select="@ref"/>
+	<xsl:variable name="contacts_xml_document" select="document('../data/basic/contacts.xml')"/>
 	<xsl:variable name="editor"
-		select="document('../data/basic/contacts.xml')/contact.list/contact[@id=$ref]"/>
+		select="$contacts_xml_document/contact.list/contact[@id=$ref]"/>
 	<xsl:choose>
 		<xsl:when test="$editor">
 			<xsl:apply-templates select="$editor"  mode="name"/>      
@@ -4731,8 +4744,9 @@ is case sensitive.')"/>
 
 <xsl:template match="developer" mode="name">
 	<xsl:variable name="ref" select="@ref"/>
+	<xsl:variable name="contacts_xml_document" select="document('../data/basic/contacts.xml')"/>
 	<xsl:variable name="developer"
-		select="document('../data/basic/contacts.xml')/contact.list/contact[@id=$ref]"/>
+		select="$contacts_xml_document/contact.list/contact[@id=$ref]"/>
 	<xsl:choose>
 		<xsl:when test="$developer">
 			<xsl:apply-templates select="$developer" mode="name"/>      
@@ -5090,7 +5104,7 @@ is case sensitive.')"/>
 		
 		<xsl:variable name="ret_val">
 			<xsl:choose>
-				<xsl:when test="document(concat($path,'../../../repository_index.xml'))/repository_index/application_protocols/application_protocol[@name=$application_protocol_name]">
+				<xsl:when test="$repository_index_xml_document/repository_index/application_protocols/application_protocol[@name=$application_protocol_name]">
 					<xsl:value-of select="'true'"/>
 				</xsl:when>
 				<xsl:otherwise>

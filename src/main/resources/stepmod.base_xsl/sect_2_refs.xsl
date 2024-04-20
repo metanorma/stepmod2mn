@@ -403,8 +403,9 @@ $Id: sect_2_refs.xsl,v 1.21 2018/08/22 23:06:22 mike Exp $
   
   <xsl:template match="abbreviation.inc" mode="generate_node">
   <xsl:variable name="abbr.inc" select="@linkend"/>
+  <xsl:variable name="abbreviations_xml_document" select="document(concat($path,'../../../data/basic/abbreviations.xml'))"/>
   <xsl:variable name="abbr" 
-    select="document(concat($path,'../../../data/basic/abbreviations.xml'))/abbreviation.list/abbreviation[@id=$abbr.inc]"/>
+    select="$abbreviations_xml_document/abbreviation.list/abbreviation[@id=$abbr.inc]"/>
   <xsl:choose>
     <xsl:when test="$abbr/term.ref/@normref">
       <xsl:variable name="ref" select="$abbr/term.ref/@normref"/>
@@ -476,10 +477,11 @@ $Id: sect_2_refs.xsl,v 1.21 2018/08/22 23:06:22 mike Exp $
             <xsl:with-param name="schema" select="$schema_lcase"/>
           </xsl:call-template>
         </xsl:variable>
+        <xsl:variable name="schema_xml_document" select="document(concat($path,'../../../data/resources/',
+            $schema_lcase,'/',$schema_lcase,'.xml'))"/>
         <xsl:if test="$ir_ok='true'">
           <xsl:variable name="ir_ref"
-            select="document(concat($path,'../../../data/resources/',
-            $schema_lcase,'/',$schema_lcase,'.xml'))/express/@reference"
+            select="$schema_xml_document/express/@reference"
           />
           <xsl:variable name="ir_refn1" select="normalize-space($ir_ref)"/>   
           <xsl:variable name="ir_refn2">

@@ -236,9 +236,10 @@ $Id: sect_a_short_names.xsl,v 1.27 2018/01/18 20:20:21 mike Exp $
       </xsl:variable>
       <xsl:variable name="mim_entity" select="@entity"/>
       <xsl:variable name="mim_xml" select="concat($module_dir,'/mim.xml')"/>
+      <xsl:variable name="mim_xml_document" select="document($mim_xml)"/>
       <xsl:choose>
         <xsl:when
-          test="document($mim_xml)/express/schema/entity[@name=$mim_entity]">
+          test="$mim_xml_document/express/schema/entity[@name=$mim_entity]">
           <xsl:value-of select="$mim_entity"/>
         </xsl:when>
         <xsl:otherwise>

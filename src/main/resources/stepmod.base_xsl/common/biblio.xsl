@@ -214,7 +214,8 @@
 		<xsl:param name="number_start" select="0"/>
 		<xsl:param name="bib_file"/>
 		<xsl:variable name="ref" select="@ref"/>
-		<xsl:variable name="bibitem" select="document(string($bib_file))/bibitem.list/node()[starts-with(local-name(),'bibitem') and (@id=$ref)][1]"/>
+		<xsl:variable name="bib_file_document" select="document(string($bib_file))"/>
+		<xsl:variable name="bibitem" select="$bib_file_document/bibitem.list/node()[starts-with(local-name(),'bibitem') and (@id=$ref)][1]"/>
 		<xsl:choose>
 			<xsl:when test="$bibitem">
 				<xsl:apply-templates select="$bibitem">
@@ -380,7 +381,8 @@
 	<!-- collect up all bibitems in order to check for unpublished bib items -->
 	<xsl:template match="bibliography" mode="collect_bibitems">
 		<xsl:param name="bib_file"/>
-		<xsl:variable name="bibitem_list" select="document(string($bib_file))/bibitem.list"/>
+		<xsl:variable name="bib_file_document" select="document(string($bib_file))"/>
+		<xsl:variable name="bibitem_list" select="$bib_file_document/bibitem.list"/>
 		<xsl:for-each select="bibitem">
 			<xsl:element name="bibitem">
 				<xsl:if test="@published='n'">
