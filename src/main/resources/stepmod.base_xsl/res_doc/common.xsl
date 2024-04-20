@@ -811,13 +811,14 @@ $Id: common.xsl,v 1.33 2008/05/21 20:50:25 abf Exp $
 			<xsl:with-param name="resdoc" select="$resdoc"/>
 		</xsl:call-template>
 	</xsl:variable>
+	<xsl:variable name="resource_xml_document" select="document(concat($resdoc_dir,'/resource.xml'))"/>
 	<xsl:variable name="part">
 		<xsl:value-of
-			select="document(concat($resdoc_dir,'/resource.xml'))/resource/@part"/>
+			select="$resource_xml_document/resource/@part"/>
 	</xsl:variable>
 	<xsl:variable name="status">
 		<xsl:value-of
-			select="document(concat($resdoc_dir,'/resource.xml'))/resource/@status"/>
+			select="$resource_xml_document/resource/@status"/>
 	</xsl:variable>
 
 		<xsl:variable name="orgname" select="'ISO'"/>
@@ -845,9 +846,10 @@ $Id: common.xsl,v 1.33 2008/05/21 20:50:25 abf Exp $
 			<xsl:with-param name="resdoc" select="$resdoc"/>
 		</xsl:call-template>
 	</xsl:variable>
+	<xsl:variable name="resource_xml_document" select="document(concat($resdoc_dir,'/resource.xml'))"/>
 	<xsl:variable name="part">
 		<xsl:value-of
-			select="document(concat($resdoc_dir,'/resource.xml'))/resource/@part"/>
+			select="$resource_xml_document/resource/@part"/>
 	</xsl:variable>
 
 		<xsl:variable name="orgname" select="'ISO'"/>

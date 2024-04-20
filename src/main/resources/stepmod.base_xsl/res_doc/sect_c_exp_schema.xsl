@@ -77,8 +77,9 @@ $Id: sect_c_exp_schema.xsl,v 1.7 2014/05/29 20:31:13 nigelshaw Exp $
 						</xsl:call-template>
 					</xsl:variable>
 					<xsl:variable name="express_xml" select="concat($resource_dir,'/',@name,'.xml')"/>
+					<xsl:variable name="express_xml_document" select="document($express_xml)"/>
 					<xsl:call-template name="build_xref_list">
-						<xsl:with-param name="express" select="document($express_xml)/express"/>
+						<xsl:with-param name="express" select="$express_xml_document/express"/>
 					</xsl:call-template>
 				</xsl:for-each>
 			</xsl:when>
@@ -114,8 +115,9 @@ $Id: sect_c_exp_schema.xsl,v 1.7 2014/05/29 20:31:13 nigelshaw Exp $
 						</xsl:call-template>
 					</xsl:variable>
 					<xsl:variable name="express_xml" select="concat($resource_dir,'/',$resource_dir,'.xml')"/>
+					<xsl:variable name="express_xml_document" select="document($express_xml)"/>
 					<xsl:call-template name="build_xref_list">
-						<xsl:with-param name="express" select="document($express_xml)/express"/>
+						<xsl:with-param name="express" select="$express_xml_document/express"/>
 					</xsl:call-template>
 				</xsl:for-each>
 			</xsl:when>

@@ -62,8 +62,9 @@ $Id: sect_5_mim.xsl,v 1.5 2003/05/28 09:27:00 robbod Exp $
         </xsl:variable>
         
         <xsl:variable name="express_xml" select="concat($module_dir,'/mim.xml')"/>
+        <xsl:variable name="express_xml_document" select="document($express_xml)"/>
         <xsl:call-template name="build_xref_list">
-          <xsl:with-param name="express" select="document($express_xml)/express"/>
+          <xsl:with-param name="express" select="$express_xml_document/express"/>
         </xsl:call-template>
       </xsl:when>
       <xsl:when test="/module">
@@ -74,8 +75,9 @@ $Id: sect_5_mim.xsl,v 1.5 2003/05/28 09:27:00 robbod Exp $
         </xsl:variable>
         
         <xsl:variable name="express_xml" select="concat($module_dir,'/mim.xml')"/>
+        <xsl:variable name="express_xml_document" select="document($express_xml)"/>
         <xsl:call-template name="build_xref_list">
-          <xsl:with-param name="express" select="document($express_xml)/express"/>
+          <xsl:with-param name="express" select="$express_xml_document/express"/>
         </xsl:call-template>        
       </xsl:when>
     </xsl:choose>

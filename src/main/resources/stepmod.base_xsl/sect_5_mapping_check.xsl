@@ -37,7 +37,8 @@ $Id: sect_5_mapping_check.xsl,v 1.28 2015/08/28 10:54:31 mikeward Exp $
     </xsl:variable>
     <xsl:value-of select="concat($module_dir, '/mim.xml')"/>
   </xsl:variable>
-  <xsl:variable name="mim_node" select="document($mim_file)/express"/><!-- MWD added --> 
+  <xsl:variable name="mim_file_document" select="document($mim_file)"/>
+  <xsl:variable name="mim_node" select="$mim_file_document/express"/><!-- MWD added --> 
   <xsl:variable name="mim_schema_name" select="$mim_node//schema/@name"/><!-- MWD added --> 
   <!-- <xsl:variable name="arm_file" 
                 select="concat($path,'../../../data/modules/',/module_clause/@directory,'/arm.xml')"/> --><!-- MWD added --> 
@@ -49,7 +50,8 @@ $Id: sect_5_mapping_check.xsl,v 1.28 2015/08/28 10:54:31 mikeward Exp $
     </xsl:variable>
     <xsl:value-of select="concat($module_dir, '/arm.xml')"/>
   </xsl:variable>
-  <xsl:variable name="arm_node" select="document($arm_file)/express"/><!-- MWD added --> 
+  <xsl:variable name="arm_file_document" select="document($arm_file)"/>
+  <xsl:variable name="arm_node" select="$arm_file_document/express"/><!-- MWD added --> 
   <xsl:variable name="schema-name" select="concat($mod_dir_from_5mvxml,'_mim')"/><!--MWD from mapping_view -->
   <xsl:variable name="schemas" ><!-- MWD added --> 
     <xsl:choose><!-- MWD added --> 
@@ -87,8 +89,10 @@ $Id: sect_5_mapping_check.xsl,v 1.28 2015/08/28 10:54:31 mikeward Exp $
   </xsl:variable>
   <xsl:variable name="ae_nodes" select="./ae"/>
 
+  <xsl:variable name="arm_xml_document" select="document(concat($module_dir,'/arm.xml'))"/>
+
   <xsl:for-each
-    select="document(concat($module_dir,'/arm.xml'))/express/schema/entity">
+    select="$arm_xml_document/express/schema/entity">
     <xsl:variable name="entity" select="@name"/>
     <xsl:variable name="ae_node" select="$ae_nodes[@entity=$entity]"/>
     <xsl:variable name="aa_nodes" select="$ae_node/aa"/>
@@ -227,6 +231,7 @@ $Id: sect_5_mapping_check.xsl,v 1.28 2015/08/28 10:54:31 mikeward Exp $
     </xsl:variable>
 
     <xsl:variable name="arm_xml" select="concat($module_dir,'/arm.xml')"/>
+    <xsl:variable name="arm_xml_document" select="document($arm_xml)"/>
 
     <xsl:choose>
       <xsl:when test="contains(@attribute,'(as')">
@@ -251,7 +256,7 @@ $Id: sect_5_mapping_check.xsl,v 1.28 2015/08/28 10:54:31 mikeward Exp $
           </xsl:call-template>
         </xsl:variable>
         <xsl:if 
-          test="not(document($arm_xml)/express/schema/entity[@name=$arm_entity]/explicit[@name=$redec_attr])">
+          test="not($arm_xml_document/express/schema/entity[@name=$arm_entity]/explicit[@name=$redec_attr])">
           <!--  check that the attribute exists in the arm -->
           <xsl:call-template name="error_message">
             <xsl:with-param name="message"
@@ -265,7 +270,7 @@ $Id: sect_5_mapping_check.xsl,v 1.28 2015/08/28 10:54:31 mikeward Exp $
 
       <!--  check that the attribute exists in the arm -->
       <xsl:when
-        test="not(document($arm_xml)/express/schema/entity[@name=$arm_entity]/explicit[@name=$arm_attr])">
+        test="not($arm_xml_document/express/schema/entity[@name=$arm_entity]/explicit[@name=$arm_attr])">
 
         <xsl:choose>
           <xsl:when test="@inherited_from_module">
@@ -732,7 +737,8 @@ $Id: sect_5_mapping_check.xsl,v 1.28 2015/08/28 10:54:31 mikeward Exp $
 <xsl:template name="mapping-full-parse"><!-- MWD new template added -->
    <xsl:variable name="module_file" 
      select="concat($path,'../../../data/modules/', $mod_dir_from_5mvxml,'/module.xml')"/>
-   <xsl:variable name="module_node" select="document($module_file)/module"/>
+   <xsl:variable name="module_file_document" select="document($module_file)"/>
+   <xsl:variable name="module_node" select="$module_file_document/module"/>
 	<module>
 	<xsl:attribute name="name">
 		<xsl:value-of select="$mod_dir_from_5mvxml" />
@@ -1146,8 +1152,9 @@ $Id: sect_5_mapping_check.xsl,v 1.28 2015/08/28 10:54:31 mikeward Exp $
         <x><xsl:value-of select="translate($file_name,'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
           'abcdefghijklmnopqrstuvwxyz')" /></x>
       </xsl:if>
+      <xsl:variable name="file_name_document" select="document($file_name)"/>
       <xsl:variable name="mim-node"
-        select="document($file_name)/express"/>
+        select="$file_name_document/express"/>
       <!-- get the list of schemas for this level that have not already been done -->
       <xsl:variable name="my-kids" >
         <xsl:if test="not(contains($done,concat(' ',$this-schema,' ')))" >

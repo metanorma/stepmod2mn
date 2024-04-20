@@ -257,8 +257,9 @@ $Id: sect_a_short_names.xsl,v 1.10 2018/01/18 20:20:21 mike Exp $
 				</xsl:call-template>
 			</xsl:variable>
 			<xsl:variable name="express_xml" select="concat($resource_dir,'/',@name,'.xml')"/>  
+			<xsl:variable name="express_xml_document" select="document($express_xml)"/>  
 			<xsl:choose>
-				<xsl:when test="document($express_xml)/express/schema/entity[@name=$entity]">
+				<xsl:when test="$express_xml_document/express/schema/entity[@name=$entity]">
 					<xsl:value-of select="$entity"/>
 				</xsl:when>
 			</xsl:choose>

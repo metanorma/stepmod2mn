@@ -162,10 +162,11 @@
           <xsl:variable name="lmodule" 
             select="translate($resource,$UPPER,$LOWER)"/>
 
+          <xsl:variable name="module_xml_document" select="document(concat('../../data/resources/',$lmodule,'/',$lmodule,'.xml'))"/>
           <!-- found integrated resource schema, so get IR title -->
           <xsl:variable name="reference">
             <xsl:value-of
-              select="document(concat('../../data/resources/',$lmodule,'/',$lmodule,'.xml'))/express/@reference"/>
+              select="$module_xml_document/express/@reference"/>
           </xsl:variable>
 
           <xsl:choose>

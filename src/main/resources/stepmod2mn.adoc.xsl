@@ -1158,7 +1158,8 @@
 					<xsl:message><xsl:value-of select="$msg"/></xsl:message>
 					<xsl:message>[INFO] Repository index path: <xsl:value-of select="$repositoryIndex_path"/></xsl:message>
 					<xsl:if test="$repositoryIndex_path != ''">
-						<xsl:if test="count(document($repositoryIndex_path)//resource_doc[@name = $current_resource_name]) = 0">
+						<xsl:variable name="repositoryIndex_path_document" select="document($repositoryIndex_path)"/>
+						<xsl:if test="count($repositoryIndex_path_document//resource_doc[@name = $current_resource_name]) = 0">
 							<redirect:write file="{$errors_fatal_log_filename}">
 								<xsl:value-of select="$msg"/><xsl:text>&#xa;</xsl:text>
 							</redirect:write>

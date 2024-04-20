@@ -17,14 +17,14 @@ You will need the `maven` build tool and `make`.
 
 [source,sh]
 ----
-java -Xss5m -jar target/stepmod2mn-1.44.jar <XML-FileName>
+java -Xss5m -jar target/stepmod2mn-1.45.jar <XML-FileName>
 ----
 
 e.g. 
 
 [source,sh]
 ----
-java -Xss5m -jar target/stepmod2mn-1.44.jar data/resource_docs/draughting_elements/resource.xml 
+java -Xss5m -jar target/stepmod2mn-1.45.jar data/resource_docs/draughting_elements/resource.xml 
 ----
 
 NOTE: resulted AsciiDoc found in data/resource_docs/draughting_elements/document.adoc
@@ -34,28 +34,28 @@ NOTE: resulted AsciiDoc found in data/resource_docs/draughting_elements/document
 
 [source,sh]
 ----
-java -Xss5m -jar target/stepmod2mn-1.44.jar <XML-FileName> [--output <AsciiDoc-FileName>]
+java -Xss5m -jar target/stepmod2mn-1.45.jar <XML-FileName> [--output <AsciiDoc-FileName>]
 ----
 
 e.g. 
 
 [source,sh]
 ----
-java -Xss5m -jar target/stepmod2mn-1.44.jar data/resource_docs/draughting_elements/resource.xml --output result_dir/draughting_elements/document.adoc
+java -Xss5m -jar target/stepmod2mn-1.45.jar data/resource_docs/draughting_elements/resource.xml --output result_dir/draughting_elements/document.adoc
 ----
 
 === Convert all resource.xml and module.xml in the specified folder and sub-folders into the Metanorma AsciiDoc format:
 
 [source,sh]
 ----
-java -Xss5m -jar target/stepmod2mn-1.44.jar <Input-folder>
+java -Xss5m -jar target/stepmod2mn-1.45.jar <Input-folder>
 ----
 
 e.g. 
 
 [source,sh]
 ----
-java -Xss5m -jar target/stepmod2mn-1.44.jar data/
+java -Xss5m -jar target/stepmod2mn-1.45.jar data/
 ----
 
 NOTE: the result AsciiDocs will be saved in the folder with the source resource.xml and module.xml files.
@@ -65,14 +65,14 @@ NOTE: the result AsciiDocs will be saved in the folder with the source resource.
 
 [source,sh]
 ----
-java -Xss5m -jar target/stepmod2mn-1.44.jar <Input-folder> [--output <Output-folder>]
+java -Xss5m -jar target/stepmod2mn-1.45.jar <Input-folder> [--output <Output-folder>]
 ----
 
 e.g. 
 
 [source,sh]
 ----
-java -Xss5m -jar target/stepmod2mn-1.44.jar data/ --output documents/
+java -Xss5m -jar target/stepmod2mn-1.45.jar data/ --output documents/
 ----
 
 
@@ -80,42 +80,42 @@ java -Xss5m -jar target/stepmod2mn-1.44.jar data/ --output documents/
 
 [source,sh]
 ----
-java -Xss5m -jar target/stepmod2mn-1.44.jar <Input-folder> [--exclude <documents list>]
+java -Xss5m -jar target/stepmod2mn-1.45.jar <Input-folder> [--exclude <documents or part numbers list>]
 ----
 
 e.g. 
 
 [source,sh]
 ----
-java -Xss5m -jar target/stepmod2mn-1.44.jar data/ --exclude "machining_features"
+java -Xss5m -jar target/stepmod2mn-1.45.jar data/ --exclude "machining_features 104"
 ----
 
 === Convert only specified documents resource.xml and module.xml in the specified folder and sub-folders into the Metanorma AsciiDoc format:
 
 [source,sh]
 ----
-java -Xss5m -jar target/stepmod2mn-1.44.jar <Input-folder> [--include-only <documents list>]
+java -Xss5m -jar target/stepmod2mn-1.45.jar <Input-folder> [--include-only <documents list>]
 ----
 
 e.g. 
 
 [source,sh]
 ----
-java -Xss5m -jar target/stepmod2mn-1.44.jar data/ --include-only "fundamentals_of_product_description_and_support kinematics"
+java -Xss5m -jar target/stepmod2mn-1.45.jar data/ --include-only "fundamentals_of_product_description_and_support kinematics"
 ----
 
 === Generate Metanorma collection files (metanorma.yml and collection.yml) for the documents specified in the publication index xml file in the tags 'resource_docs' and 'modules':
 
 [source,sh]
 ----
-java -Xss5m -jar target/stepmod2mn-1.44.jar <Publication-Index-XML-FileName>
+java -Xss5m -jar target/stepmod2mn-1.45.jar <Publication-Index-XML-FileName>
 ----
 
 e.g.
 
 [source,sh]
 ----
-java -Xss5m -jar target/stepmod2mn-1.44.jar publication/part1000/CR_PMI_5/publication_index.xml
+java -Xss5m -jar target/stepmod2mn-1.45.jar publication/part1000/CR_PMI_5/publication_index.xml
 ----
 
 NOTE: the Metanorma collection files .yml will be saved in the 3 level up folder (usually, source repository's root folder).
@@ -125,14 +125,14 @@ and save them into the output folder:
 
 [source,sh]
 ----
-java -Xss5m -jar target/stepmod2mn-1.44.jar <Publication-Index-XML-FileName> [--output <Output-folder>]
+java -Xss5m -jar target/stepmod2mn-1.45.jar <Publication-Index-XML-FileName> [--output <Output-folder>]
 ----
 
 e.g.
 
 [source,sh]
 ----
-java -Xss5m -jar target/stepmod2mn-1.44.jar iso-10303-srl/iso-10303-stepmod-wg12/publication/part1000/CR_PMI_5/publication_index.xml --output iso-10303-srl/
+java -Xss5m -jar target/stepmod2mn-1.45.jar iso-10303-srl/iso-10303-stepmod-wg12/publication/part1000/CR_PMI_5/publication_index.xml --output iso-10303-srl/
 ----
 
 NOTE: the output folder should contains the folder with the generated .adoc (usually, 'documents'). You can specify this folder obviously by the parameter '--input-documents':
@@ -141,7 +141,7 @@ e.g.
 
 [source,sh]
 ----
-java -Xss5m -jar target/stepmod2mn-1.44.jar iso-10303-srl/iso-10303-stepmod-wg12/publication/part1000/CR_PMI_5/publication_index.xml --output iso-10303-srl/CR_PMI_5 --input-documents iso-10303-srl/documents
+java -Xss5m -jar target/stepmod2mn-1.45.jar iso-10303-srl/iso-10303-stepmod-wg12/publication/part1000/CR_PMI_5/publication_index.xml --output iso-10303-srl/CR_PMI_5 --input-documents iso-10303-srl/documents
 ----
 
 NOTE: the Metanorma collection files (.yml) will be saved in the folder 'iso-10303-srl/CR_PMI_5' and the references point to the documents in the folder iso-10303-srl/documents.
@@ -151,14 +151,14 @@ NOTE: the Metanorma collection files (.yml) will be saved in the folder 'iso-103
 
 [source,sh]
 ----
-java -Xss5m -jar target/stepmod2mn-1.44.jar <Publication-Index-XML-FileName> [--type <resource_docs or modules>]
+java -Xss5m -jar target/stepmod2mn-1.45.jar <Publication-Index-XML-FileName> [--type <resource_docs or modules>]
 ----
 
 e.g.
 
 [source,sh]
 ----
-java -Xss5m -jar target/stepmod2mn-1.44.jar publication/part1000/CR_PMI_5/publication_index.xml --type resource_docs
+java -Xss5m -jar target/stepmod2mn-1.45.jar publication/part1000/CR_PMI_5/publication_index.xml --type resource_docs
 ----
 
 NOTE: the Metanorma collection file 'metanorma.yml' will be saved in the 3 level up folder (usually, source repository's root folder).
@@ -168,42 +168,42 @@ NOTE: the Metanorma collection file 'metanorma.yml' will be saved in the 3 level
 
 [source,sh]
 ----
-java -jar target/stepmod2mn-1.44.jar <start folder to process xml maps files> --svg
+java -jar target/stepmod2mn-1.45.jar <start folder to process xml maps files> --svg
 ----
 
 e.g. 
 
 [source,sh]
 ----
-java -jar target/stepmod2mn-1.44.jar data/resources --svg
+java -jar target/stepmod2mn-1.45.jar data/resources --svg
 ----
 
 === Generate SVG images for the XML in the specified folder and sub-folders, and save them in the output folder:
 
 [source,sh]
 ----
-java -jar target/stepmod2mn-1.44.jar <start folder to process xml maps files> --svg [--output <Output-folder>]
+java -jar target/stepmod2mn-1.45.jar <start folder to process xml maps files> --svg [--output <Output-folder>]
 ----
 
 e.g. 
 
 [source,sh]
 ----
-java -jar target/stepmod2mn-1.44.jar data/resources --svg --output schemas/
+java -jar target/stepmod2mn-1.45.jar data/resources --svg --output schemas/
 ----
 
 === Generate SVG image for Express Imagemap XML and Image:
 
 [source,sh]
 ----
-java -jar stepmod2mn-1.44.jar --xml <Express Imagemap XML file path> --image <Image file name> [--svg <resulted SVG map file or folder>]
+java -jar stepmod2mn-1.45.jar --xml <Express Imagemap XML file path> --image <Image file name> [--svg <resulted SVG map file or folder>]
 ----
 
 e.g.
 
 [source,sh]
 ----
-java -jar stepmod2mn-1.44.jar --xml data\resource_docs\fundamentals_of_product_description_and_support\schema_diagexpg1.xml --image schema_diagexpg1.gif --svg schema_diagexpg1.svg
+java -jar stepmod2mn-1.45.jar --xml data\resource_docs\fundamentals_of_product_description_and_support\schema_diagexpg1.xml --image schema_diagexpg1.gif --svg schema_diagexpg1.svg
 ----
 
 
@@ -223,7 +223,7 @@ Update version in `pom.xml`, e.g.:
 ----
 <groupId>org.metanorma</groupId>
 <artifactId>stepmod2mn</artifactId>
-<version>1.44</version>
+<version>1.45</version>
 <name>STEPmod XML to Metanorma AsciiDoc converter</name>
 ----
 
@@ -234,8 +234,8 @@ Tag the same version in Git:
 
 [source,xml]
 ----
-git tag v1.44
-git push origin v1.44
+git tag v1.45
+git push origin v1.45
 ----
 
 Then the corresponding GitHub release will be automatically created at:

@@ -56,8 +56,9 @@ $Id: expressg_icon.xsl,v 1.13 2014/06/13 12:58:59 nigelshaw Exp $
 				<xsl:value-of select="//business_object_model_clause/@directory"/>
 			</xsl:when>
 			<xsl:when test="/application_protocol">
-				<xsl:value-of select="document(concat($path, '../../../data/application_protocols/',
-					/application_protocol/@directory,'/application_protocol.xml'))/application_protocol/@business_object_model"/>
+				<xsl:variable name="application_protocol_xml_document" select="document(concat($path, '../../../data/application_protocols/',
+					/application_protocol/@directory,'/application_protocol.xml'))"/>
+				<xsl:value-of select="$application_protocol_xml_document/application_protocol/@business_object_model"/>
 			</xsl:when>
 		</xsl:choose>
         <!--<xsl:call-template name="bom_directory">

@@ -155,8 +155,9 @@ $Id: express_description.xsl,v 1.53 2016/08/26 10:19:51 mikeward Exp $
       <xsl:value-of select="$return2"/>
     </xsl:variable>
 
+    <xsl:variable name="description_file_document" select="document($description_file)"/>
     <xsl:variable name="descriptions"
-      select="document($description_file)/ext_descriptions"/>    
+      select="$description_file_document/ext_descriptions"/>    
 
     <xsl:variable name="description"
       select="$descriptions/ext_description[@linkend=$xref]"/>
@@ -757,9 +758,10 @@ $Id: express_description.xsl,v 1.53 2016/08/26 10:19:51 mikeward Exp $
         </xsl:variable> <!-- xref -->
 
 
-
+        <xsl:variable name="description_file_document" select="document($description_file)"/>
+        
         <xsl:variable name="description"
-          select="document($description_file)/ext_descriptions/ext_description[@linkend=$xref]"/>
+          select="$description_file_document/ext_descriptions/ext_description[@linkend=$xref]"/>
         <!-- debug
         <xsl:message>
           <xsl:value-of select="concat($xref,' -',string-length($description))"/></xsl:message>
@@ -859,8 +861,10 @@ $Id: express_description.xsl,v 1.53 2016/08/26 10:19:51 mikeward Exp $
       <xsl:value-of select="$return2"/>
     </xsl:variable>
     
+		<xsl:variable name="description_file_document" select="document($description_file)"/>
+		
     <xsl:variable name="description"
-      select="document($description_file)/ext_descriptions/ext_description[@linkend=$xref]"/>
+      select="$description_file_document/ext_descriptions/ext_description[@linkend=$xref]"/>
     <xsl:choose>
       <xsl:when test="$description//note">
         <xsl:value-of select="'notes'"/>

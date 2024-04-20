@@ -297,8 +297,9 @@ $Id: sect_introduction.xsl,v 1.13 2010/10/20 07:44:26 robbod Exp $
 			</xsl:call-template>
 		</xsl:variable>
 		<xsl:variable name="express_xml" select="concat($resource_dir,'/',$schema-name,'.xml')"/>
+		<xsl:variable name="express_xml_document" select="document($express_xml)"/>
 
-		<xsl:variable name="ref" select="document($express_xml)/express/@reference"/>
+		<xsl:variable name="ref" select="$express_xml_document/express/@reference"/>
 
 		<xsl:choose>
 			<xsl:when test="$ref" >

@@ -74,8 +74,9 @@ $Id: sect_5_mapping.xsl,v 1.89 2019/03/28 19:39:31 mike Exp $
                refpath is now done in mapping view 
           -->
           <xsl:variable name="express_xml" select="concat($module_dir,'/arm.xml')"/>
+          <xsl:variable name="express_xml_document" select="document($express_xml)"/>
           <xsl:call-template name="build_xref_list">
-            <xsl:with-param name="express" select="document($express_xml)/express"/>
+            <xsl:with-param name="express" select="$express_xml_document/express"/>
           </xsl:call-template>
         </xsl:when>
         <xsl:when test="/module">
@@ -86,8 +87,9 @@ $Id: sect_5_mapping.xsl,v 1.89 2019/03/28 19:39:31 mike Exp $
           </xsl:variable>
           
           <xsl:variable name="express_xml" select="concat($module_dir,'/mim.xml')"/>
+          <xsl:variable name="express_xml_document" select="document($express_xml)"/>
           <xsl:call-template name="build_xref_list">
-            <xsl:with-param name="express" select="document($express_xml)/express"/>
+            <xsl:with-param name="express" select="$express_xml_document/express"/>
           </xsl:call-template>        
         </xsl:when>
       </xsl:choose>
@@ -205,9 +207,10 @@ $Id: sect_5_mapping.xsl,v 1.89 2019/03/28 19:39:31 mike Exp $
       <xsl:with-param name="module" select="@schema"/>
     </xsl:call-template>
   </xsl:variable>
-
+  <xsl:variable name="module_xml_document" select="document(concat($mod_dir,'/module.xml'))"/>
+	
   <xsl:variable name="part">
-    <xsl:value-of select="concat('ISO 10303-',document(concat($mod_dir,'/module.xml'))/module/@part)"/>
+    <xsl:value-of select="concat('ISO 10303-',$module_xml_document/module/@part)"/>
   </xsl:variable>
 
   <xsl:variable name="module_name">
@@ -753,6 +756,7 @@ relationship tree structure. The path between the relationship entity and the re
 
 
   <xsl:variable name="arm_xml" select="concat($module_dir,'/arm.xml')"/>
+  <xsl:variable name="arm_xml_document" select="document($arm_xml)"/>
 
   <xsl:variable name="UPPER">ABCDEFGHIJKLMNOPQRSTUVWXYZ</xsl:variable>
   <xsl:variable name="LOWER">abcdefghijklmnopqrstuvwxyz</xsl:variable>
@@ -808,7 +812,7 @@ relationship tree structure. The path between the relationship entity and the re
                   ') does not exist in stepmod/repository_index.xml')"/>
       </xsl:call-template>
     </xsl:when>
-    <xsl:when test="not(document($arm_xml)/express/schema/entity[@name=$arm_entity])">
+    <xsl:when test="not($arm_xml_document/express/schema/entity[@name=$arm_entity])">
       <xsl:call-template name="error_message">
         <xsl:with-param name="message"
           select="concat('Error m1: The entity ', $arm_entity, 
@@ -856,7 +860,7 @@ relationship tree structure. The path between the relationship entity and the re
     <xsl:if test="$module_ok = 'true'">
       <xsl:variable name="selects">
         <xsl:apply-templates 
-          select="document($arm_xml)/express/schema/entity[@name=$arm_entity]/explicit"
+          select="$arm_xml_document/express/schema/entity[@name=$arm_entity]/explicit"
           mode="output_extensible_attributes"/>
       </xsl:variable>
       <xsl:variable name="nselects">
@@ -1001,6 +1005,7 @@ relationship tree structure. The path between the relationship entity and the re
   </xsl:variable>
 
   <xsl:variable name="arm_xml" select="concat($module_dir,'/arm.xml')"/>
+  <xsl:variable name="arm_xml_document" select="document($arm_xml)"/>
 
   <xsl:variable name="sect_no" select="concat($sect,'.',position())"/>
 
@@ -1099,7 +1104,7 @@ relationship tree structure. The path between the relationship entity and the re
     <xsl:if test="$module_aok='true'">
       <xsl:variable name="ae" select="../@entity"/>
       <xsl:variable name="entity_node"
-        select="document($arm_xml)/express/schema/entity[@name=$ae]"/>      
+        select="$arm_xml_document/express/schema/entity[@name=$ae]"/>      
       <!-- 
         Commented out as the current method of getting expressg link
         assumes that all entities etc are in same module 
@@ -1249,6 +1254,8 @@ relationship tree structure. The path between the relationship entity and the re
         </xsl:when>
         <xsl:otherwise>
 
+          <xsl:variable name="module_xml_document" select="document(concat($module_dir,'/module.xml'))"/>
+
           <!-- get the refpath from the mapped attribute of the original module and extend -->          
           <xsl:variable name="refpath">
             <xsl:choose>
@@ -1263,14 +1270,17 @@ relationship tree structure. The path between the relationship entity and the re
                 <xsl:variable name="extended_select" select="./@extended_select"/>
        	        <xsl:variable name="attribute" select="../../@attribute"/>
                	<xsl:variable name="alt_id" select="../@alt_map.inc"/>
+
+
+
 		     <xsl:choose>
-			<xsl:when test="document(concat($module_dir,'/module.xml'))/module/mapping_table/ae[@entity=$ae]/aa[@attribute=$attribute and @assertion_to=$extended_select]/alt_map" >
+			<xsl:when test="$module_xml_document/module/mapping_table/ae[@entity=$ae]/aa[@attribute=$attribute and @assertion_to=$extended_select]/alt_map" >
 		                <xsl:value-of
-        		          select="document(concat($module_dir,'/module.xml'))/module/mapping_table/ae[@entity=$ae]/aa[@attribute=$attribute and @assertion_to=$extended_select]/alt_map[@alt_map.inc=$alt_id]/refpath"/>	
+        		          select="$module_xml_document/module/mapping_table/ae[@entity=$ae]/aa[@attribute=$attribute and @assertion_to=$extended_select]/alt_map[@alt_map.inc=$alt_id]/refpath"/>	
 			</xsl:when>			     
 			<xsl:otherwise>
 		                <xsl:value-of 
-                		  select="document(concat($module_dir,'/module.xml'))/module/mapping_table/ae[@entity=$ae]/aa[@attribute=$attribute and @assertion_to=$extended_select]/refpath"/>
+                		  select="$module_xml_document/module/mapping_table/ae[@entity=$ae]/aa[@attribute=$attribute and @assertion_to=$extended_select]/refpath"/>
 			</xsl:otherwise>
 		      </xsl:choose>
               </xsl:when>
@@ -1279,7 +1289,7 @@ relationship tree structure. The path between the relationship entity and the re
                 <xsl:variable name="extended_select" select="./@extended_select"/>
                 <xsl:variable name="attribute" select="../@attribute"/>
                 <xsl:value-of 
-                  select="document(concat($module_dir,'/module.xml'))/module/mapping_table/ae[@entity=$ae]/aa[@attribute=$attribute and @assertion_to=$extended_select]/refpath"/>
+                  select="$module_xml_document/module/mapping_table/ae[@entity=$ae]/aa[@attribute=$attribute and @assertion_to=$extended_select]/refpath"/>
               </xsl:otherwise>
             </xsl:choose>
           </xsl:variable>
@@ -1475,9 +1485,10 @@ relationship tree structure. The path between the relationship entity and the re
               </xsl:call-template>
             </xsl:when>
             <xsl:otherwise>
+              <xsl:variable name="module_xml_document" select="document(concat($module_dir,'/module.xml'))"/>
               <!-- get the alt_map description from the original module -->
               <xsl:variable name="alt_description"
-                select="document(concat($module_dir,'/module.xml'))/module/mapping_table/ae[@entity=$ae]/alt_map[@id=$dsc.id]"/>
+                select="$module_xml_document/module/mapping_table/ae[@entity=$ae]/alt_map[@id=$dsc.id]"/>
               <xsl:if test="$alt_description">
                 <xsl:apply-templates select="$alt_description" mode="output_id_description"/>              
               </xsl:if>
@@ -1792,6 +1803,7 @@ the mapping specification')"/>
   </xsl:variable> <!-- module_ok -->
 
   <xsl:variable name="arm_xml" select="concat($module_dir,'/arm.xml')"/>
+  <xsl:variable name="arm_xml_document" select="document($arm_xml)"/>
   <xsl:variable name="UPPER">ABCDEFGHIJKLMNOPQRSTUVWXYZ</xsl:variable>
   <xsl:variable name="LOWER">abcdefghijklmnopqrstuvwxyz</xsl:variable>
 
@@ -1831,7 +1843,7 @@ the mapping specification')"/>
 @original_module attribute (', @original_module,') does not exist in stepmod/repository_index.xml')"/>
       </xsl:call-template>
     </xsl:when>
-    <xsl:when test="not(document($arm_xml)/express/schema/subtype.constraint[@name=$arm_constraint])">
+    <xsl:when test="not($arm_xml_document/express/schema/subtype.constraint[@name=$arm_constraint])">
       <xsl:call-template name="error_message">
         <xsl:with-param name="message"
           select="concat('Error m1: The subtype constraint ', $arm_constraint, 

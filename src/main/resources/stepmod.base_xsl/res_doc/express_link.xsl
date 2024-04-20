@@ -139,12 +139,12 @@
 							<xsl:with-param name="schema_name" select="$if_schema_name"/>
 						</xsl:call-template>
 					</xsl:variable>
-					
+					<xsl:variable name="express_file_to_read_document" select="document(concat($path, '../', string($express_file_to_read)))"/>
 				 
 					
 					<!-- get schema node contained in express file -->
 					<xsl:variable name="if_schema_node"
-						select="document(concat($path, '../', string($express_file_to_read)))//express/schema"/>
+						select="$express_file_to_read_document//express/schema"/>
 					
 					
 					<!-- add separator before name of schema -->
@@ -1115,7 +1115,7 @@
 		<xsl:variable name="ret_val">
 			<xsl:choose>
 						<xsl:when
-							test="document(concat($path, '../../../repository_index.xml'))/repository_index/resources/resource[@name=$schema_name_tmp]"/>
+							test="$repository_index_xml_document/repository_index/resources/resource[@name=$schema_name_tmp]"/>
 						<xsl:otherwise>
 							<xsl:value-of 
 								select="concat('ERROR el3: ', $schema_name_tmp, 
@@ -1250,9 +1250,10 @@
 			 Normally used to assign the list to global_xref_list
 	-->
 	<xsl:template name="build_resource_xref_list">
+	  <xsl:variable name="repository_index_xml_document" select="document('../repository_index.xml')"/>
 		<xsl:call-template name="build_resource_xref_list_rec">
 			<xsl:with-param name="resources"
-				select="document('../repository_index.xml')/repository_index/resources/resource"/>
+				select="$repository_index_xml_document/repository_index/resources/resource"/>
 		</xsl:call-template>
 	</xsl:template>
 	<xsl:template name="build_resource_xref_list_rec">
@@ -1265,8 +1266,9 @@
 		<xsl:variable name="express_file" 
 			select="concat($path,'../../../data/resources/',
 							$first_resource/@name,'/',$first_resource/@name,'.xml')"/>
+		<xsl:variable name="express_file_document" select="document($express_file)"/>
 		<xsl:variable name="object_nodes"
-			select="document($express_file)/express/schema/entity|/express/schema/type|/express/schema/subtype.constraint|/express/schema/function|/express/schema/procedure|/express/schema/rule|/express/schema/constant"/>
+			select="$express_file_document/express/schema/entity|/express/schema/type|/express/schema/subtype.constraint|/express/schema/function|/express/schema/procedure|/express/schema/rule|/express/schema/constant"/>
 		<xsl:choose>
 			<xsl:when test="$remaining_resources">
 				<xsl:variable name="l_xref_list">

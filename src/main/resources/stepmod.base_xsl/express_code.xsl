@@ -173,13 +173,14 @@
               <xsl:with-param name="module" select="$module"/>
             </xsl:call-template>
           </xsl:variable>
+					<xsl:variable name="module_xml_document" select="document(concat($mod_dir,'/module.xml'))"/>
           <xsl:variable name="part">
             <xsl:value-of
-              select="document(concat($mod_dir,'/module.xml'))/module/@part"/>
+              select="$module_xml_document/module/@part"/>
           </xsl:variable>
               <xsl:variable name="status">
             <xsl:value-of
-              select="document(concat($mod_dir,'/module.xml'))/module/@status"/>
+              select="$module_xml_document/module/@status"/>
           </xsl:variable>
           <xsl:value-of select="concat('&#160;&#160;&#160;-- ISO/',$status,'&#160;10303-',$part)"/>
         </xsl:when>
@@ -212,10 +213,11 @@
           <xsl:variable name="lmodule" 
             select="translate($module,$UPPER,$LOWER)"/>
 
+					<xsl:variable name="module_xml_document" select="document(concat('../data/resources/',$lmodule,'/',$lmodule,'.xml'))"/>
           <!-- found integrated resource schema, so get IR title -->
           <xsl:variable name="reference">
             <xsl:value-of
-              select="document(concat('../data/resources/',$lmodule,'/',$lmodule,'.xml'))/express/@reference"/>
+              select="$module_xml_document/express/@reference"/>
           </xsl:variable>
 
           <xsl:choose>

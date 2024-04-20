@@ -663,6 +663,11 @@ public class stepmod2mn {
                 return false;
             }
 
+            if (excludeList.contains(part)) {
+                System.out.println("[WARNING] The document '" + documentName + "' (part '" + part + "') excluded from the processing.");
+                return false;
+            }
+
             if (!includeOnlyList.isEmpty() && !includeOnlyList.contains(documentName)) {
                 System.out.println("[WARNING] The document '" + documentName + "' skipped from the processing.");
                 return false;

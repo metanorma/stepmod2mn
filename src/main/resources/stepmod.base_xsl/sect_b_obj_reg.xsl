@@ -43,14 +43,16 @@ $Id: sect_b_obj_reg.xsl,v 1.12 2004/11/02 11:26:59 robbod Exp $
 
   <xsl:variable name="arm_xml"
     select="concat($module_dir,'/arm.xml')"/>
+  <xsl:variable name="arm_xml_document" select="document($arm_xml)"/>
 
   <xsl:variable name="mim_xml"
     select="concat($module_dir,'/mim.xml')"/>
+  <xsl:variable name="mim_xml_document" select="document($mim_xml)"/>
 
   <!-- there is only one schema in a module -->
   <xsl:variable 
     name="schema_name" 
-    select="document($arm_xml)/express/schema/@name"/>
+    select="$arm_xml_document/express/schema/@name"/>
 
   <xsl:variable
     name="object_reg" 
@@ -107,7 +109,7 @@ $Id: sect_b_obj_reg.xsl,v 1.12 2004/11/02 11:26:59 robbod Exp $
   
   <!-- get the name of the ARM schema from the express -->
   <xsl:variable name="arm_schema" 
-    select="document($arm_xml)/express/schema/@name"/>
+    select="$arm_xml_document/express/schema/@name"/>
   <xsl:variable name="arm_schema_reg" 
     select="translate($arm_schema,$UPPER, $LOWER)"/>
 
@@ -156,7 +158,7 @@ $Id: sect_b_obj_reg.xsl,v 1.12 2004/11/02 11:26:59 robbod Exp $
 
   <!-- get the name of the MIM schema from the express -->
   <xsl:variable name="mim_schema" 
-    select="document($mim_xml)/express/schema/@name"/>
+    select="$mim_xml_document/express/schema/@name"/>
   <xsl:variable name="mim_schema_reg" 
     select="translate($mim_schema,$UPPER, $LOWER)"/>
 
@@ -208,8 +210,9 @@ $Id: sect_b_obj_reg.xsl,v 1.12 2004/11/02 11:26:59 robbod Exp $
     <!-- get the name of the ARM_LF schema from the express -->
     <xsl:variable name="arm_lf_xml"
       select="concat($module_dir,'/arm_lf.xml')"/>
+    <xsl:variable name="arm_lf_xml_document" select="document($arm_lf_xml)"/>
     <xsl:variable name="arm_schema_lf" 
-      select="document($arm_lf_xml)/express/schema/@name"/>
+      select="$arm_lf_xml_document/express/schema/@name"/>
     <xsl:variable name="arm_schema_lf_reg" 
       select="translate($arm_schema_lf,$UPPER, $LOWER)"/>
     
@@ -260,8 +263,9 @@ $Id: sect_b_obj_reg.xsl,v 1.12 2004/11/02 11:26:59 robbod Exp $
     <!-- get the name of the MIM_LF schema from the express -->
     <xsl:variable name="mim_lf_xml"
       select="concat($module_dir,'/mim_lf.xml')"/>
+    <xsl:variable name="mim_lf_xml_document" select="document($mim_lf_xml)"/>
     <xsl:variable name="mim_schema_lf" 
-      select="document($mim_lf_xml)/express/schema/@name"/>
+      select="$mim_lf_xml_document/express/schema/@name"/>
     <xsl:variable name="mim_schema_lf_reg" 
       select="translate($mim_schema_lf,$UPPER, $LOWER)"/>
     
