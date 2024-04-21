@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- <?xml-stylesheet type="text/xsl" href="./document_xsl.xsl" ?> -->
 
 <!--
-$Id: sect_1_scope.xsl,v 1.6 2008/12/16 15:44:48 darla Exp $
-	Purpose: Output the Scope section as a web page
+$Id: sect_1_scope.xsl,v 1.8 2020/03/02 14:39:22 tom Exp $
+  Purpose: Output the Scope section as a web page
 -->
 <!-- Updated: Alexander Dyuzhev, for stepmod2mn tool-->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:java="http://xml.apache.org/xalan/java" 
@@ -13,7 +14,7 @@ $Id: sect_1_scope.xsl,v 1.6 2008/12/16 15:44:48 darla Exp $
 <!-- <xsl:output method="html"/> -->
 
 	<!-- overwrites the template declared in resource.xsl -->
-	<xsl:template match="resource" mode="scope_resource">
+	<xsl:template match="resource" mode="scope_resource"> <!-- called from stepmod2mn.resource.adoc.xsl  -->
 	<!--  <xsl:apply-templates select="." mode="special_header"/>
 		<h1>
 			Industrial automation systems and integration &#8212; <br/>
@@ -61,8 +62,8 @@ $Id: sect_1_scope.xsl,v 1.6 2008/12/16 15:44:48 darla Exp $
 		
 		<xsl:variable name="resdoc_name">
 			<xsl:call-template name="res_display_name">
-			<xsl:with-param name="res" select="@name"/>
-			</xsl:call-template>           
+				<xsl:with-param name="res" select="@name"/>
+			</xsl:call-template>
 		</xsl:variable>
 		<xsl:variable name="lcletters">abcdefghijklmnopqrstuvwxyz</xsl:variable>
 		<xsl:variable name="ucletters">ABCDEFGHIJKLMNOPQRSTUVWXYZ</xsl:variable>    
@@ -71,17 +72,17 @@ $Id: sect_1_scope.xsl,v 1.6 2008/12/16 15:44:48 darla Exp $
 		</xsl:variable>
 		<xsl:choose>
 			<xsl:when test="$doctype='aic'">
-					<xsl:text>This part of ISO 10303 specifies the interpretation of the integrated resources to satisfy requirements for the representation of </xsl:text>
+					<xsl:text>This document specifies the interpretation of the integrated resources to satisfy requirements for the representation of </xsl:text>
 					<xsl:value-of select="translate($resdoc_name,$ucletters,$lcletters)"/>.
 					<xsl:text>&#xa;</xsl:text>
 			</xsl:when>
 			<xsl:when test="$doctype='igr'">
-					<xsl:text>This part of ISO 10303 specifies the integrated generic resource constructs for </xsl:text>
+					<xsl:text>This document specifies the integrated generic resource constructs for </xsl:text>
 					<xsl:value-of select="translate($resdoc_name,$ucletters,$lcletters)"/>.
 					<xsl:text>&#xa;</xsl:text>
 			</xsl:when>
 			<xsl:when test="$doctype='iar'">
-					<xsl:text>This part of ISO 10303 specifies the integrated application resource constructs for </xsl:text>
+					<xsl:text>This document specifies the integrated application resource constructs for </xsl:text>
 					<xsl:value-of select="translate($resdoc_name,$ucletters,$lcletters)"/>.
 					<xsl:text>&#xa;</xsl:text>
 			</xsl:when>
