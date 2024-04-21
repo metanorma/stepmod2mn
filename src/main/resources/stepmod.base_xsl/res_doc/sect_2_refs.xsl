@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- <?xml-stylesheet type="text/xsl" href="./document_xsl.xsl" ?> -->
 
 <!--
-$Id: sect_2_refs.xsl,v 1.6 2002/08/05 16:20:48 robbod Exp $
+$Id: sect_2_refs.xsl,v 1.1 2002/10/16 00:43:38 thendrix Exp $
   Author:  Rob Bodington, Eurostep Limited
   Owner:   Developed by Eurostep and supplied to NIST under contract.
   Purpose: Output the refs section as a web page
@@ -23,7 +24,7 @@ $Id: sect_2_refs.xsl,v 1.6 2002/08/05 16:20:48 robbod Exp $
 
 <!-- overwrites the template declared in resource.xsl -->
 
-<xsl:template match="resource" mode="norm_refs_resource">
+<xsl:template match="resource" mode="norm_refs_resource"> <!-- called from stepmod2mn.resource.adoc.xsl  -->
   <xsl:call-template name="output_normrefs">
     <xsl:with-param name="resource_number" select="./@part"/>
     <xsl:with-param name="current_resource" select="."/>
