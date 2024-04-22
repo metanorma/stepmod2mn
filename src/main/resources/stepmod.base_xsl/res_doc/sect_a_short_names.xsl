@@ -2,7 +2,7 @@
 <!-- <?xml-stylesheet type="text/xsl" href="./document_xsl.xsl" ?> -->
 
 <!--
-$Id: sect_a_short_names.xsl,v 1.10 2018/01/18 20:20:21 mike Exp $
+$Id: sect_a_short_names.xsl,v 1.12 2020/03/02 14:39:21 tom Exp $
 	Author:  Rob Bodington, Eurostep Limited
 	Owner:   Developed by Eurostep and supplied to NIST under contract.
 	Purpose:
@@ -69,7 +69,7 @@ $Id: sect_a_short_names.xsl,v 1.10 2018/01/18 20:20:21 mike Exp $
 
 			<xsl:otherwise>
 				<!--<p>
-					Entity names in this part of ISO 10303 have been defined in other
+					Entity names in this document have been defined in other
 					parts of ISO 10303. Requirements on the use of the short names are
 					found in the implementation methods included in ISO 10303.  
 				</p> MWD 2018-01-10 http://wikistep.org/bugzilla/show_bug.cgi?id=6456 -->
@@ -138,7 +138,7 @@ $Id: sect_a_short_names.xsl,v 1.10 2018/01/18 20:20:21 mike Exp $
 	<xsl:template match="shortnames">
 		<!--<p>
 			Table A.1 provides the short names for entities defined in the MIM of
-			this part of ISO 10303. Requirements on the use of the short names are
+			this document. Requirements on the use of the short names are
 			found in the implementation methods included in ISO 10303. 
 		</p>
 		<p class="note">
@@ -211,7 +211,7 @@ $Id: sect_a_short_names.xsl,v 1.10 2018/01/18 20:20:21 mike Exp $
 		</div> MWD 2018-01-18 http://wikistep.org/bugzilla/show_bug.cgi?id=6456 -->
 	</xsl:template>
 
-	<xsl:template match="shortname">
+	<xsl:template match="shortname"> <!-- note: this template isn't using, see commented <xsl:apply-templates select="shortname"> above -->
 		<!-- <tr>
 			<td width="77%" align="left"> -->
 				<!-- check that the entity exists well we will do this later -->
