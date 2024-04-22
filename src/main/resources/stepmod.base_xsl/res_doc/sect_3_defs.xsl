@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- <?xml-stylesheet type="text/xsl" href="./document_xsl.xsl" ?> -->
+
 <!--
-$Id: sect_3_defs.xsl,v 1.5 2009/12/24 17:42:04 lothartklein Exp $
+$Id: sect_3_defs.xsl,v 1.6 2010/02/03 23:18:57 lothartklein Exp $
   Author:  Rob Bodington, Eurostep Limited
   Owner:   Developed by Eurostep and supplied to NIST under contract.
   Purpose:
@@ -21,7 +23,7 @@ $Id: sect_3_defs.xsl,v 1.5 2009/12/24 17:42:04 lothartklein Exp $
   <xsl:output method="html"/>
 
 <!-- overwrites the template declared in resource.xsl -->
-<xsl:template match="resource" mode="terms_definitions_resource">
+<xsl:template match="resource" mode="terms_definitions_resource"> <!-- called from stepmod2mn.resource.adoc.xsl  -->
   <!-- Output the terms identified in the normative references -->
   <!-- <h2 level="1">
     <a name="defns"> -->
@@ -48,11 +50,21 @@ $Id: sect_3_defs.xsl,v 1.5 2009/12/24 17:42:04 lothartklein Exp $
     </a>
   </h2> -->
 	
+	<!-- https://github.com/metanorma/stepmod2mn/issues/145#issuecomment-2069004086:
+	
+		== Terms, definitions and abbreviated terms
+
+		[source=ISO_10303_2]
+		=== Terms and definitions
+	-->
+	<!-- ISO 1303-2 is published so no footnote needed -->
+	
 	<xsl:variable name="header">Terms, definitions and abbreviated terms</xsl:variable>
 		
 	<xsl:text>&#xa;</xsl:text>
 	<xsl:call-template name="insertHeaderADOC">
-		<xsl:with-param name="id" select="'defns'"/>		
+		<xsl:with-param name="id" select="'defns'"/>
+		<xsl:with-param name="attributes" select="'source=ISO_10303_2'"/>
 		<xsl:with-param name="level" select="1"/>
 		<xsl:with-param name="header" select="$header"/>					
 	</xsl:call-template>
@@ -62,17 +74,47 @@ $Id: sect_3_defs.xsl,v 1.5 2009/12/24 17:42:04 lothartklein Exp $
         Terms and definitions
       </a>        
     </h2>   -->
-	
-	<!-- <xsl:call-template name="insertHeaderADOC">
-		<xsl:with-param name="id" select="'termsdefns'"/>		
+
+	<xsl:call-template name="insertHeaderADOC">
+		<xsl:with-param name="id" select="'termsdefns'"/>
 		<xsl:with-param name="level" select="2"/>
 		<xsl:with-param name="header" select="'Terms and definitions'"/>					
-	</xsl:call-template> -->	
-		
-  <xsl:call-template name="output_terms">
+	</xsl:call-template>
+  
+  <!-- <xsl:call-template name="output_terms">
     <xsl:with-param name="current_resource" select="."/>
     <xsl:with-param name="resource_number" select="./@part"/>
-  </xsl:call-template>
+  </xsl:call-template> -->
+
+   <!-- <p>For the purposes of this document, the terms and definitions given
+    in ISO 10303-2 <sup><a href="#tobepub">1</a>)</sup> apply.</p>
+    <p>ISO and IEC maintain terminology databases for use in standardization
+    at the following addresses:</p>
+    <table>
+      <tr>
+	<td>— ISO Online browsing platform: available at <a href="https://www.iso.org/obp" target="_blank">https://www.iso.org/obp</a>;</td>
+      </tr>
+      <tr>
+	<td>— IEC Electropedia: available at <a href="https://www.electropedia.org/" target="_blank">https://www.electropedia.org/</a>.</td>
+      </tr>
+    </table> -->
+
+    <xsl:call-template name="output_abbreviations">
+      <xsl:with-param name="section" select="2"/>
+    </xsl:call-template>
+
+    <!-- <table width="500">
+      <tr>
+        <td><hr/></td>
+      </tr>
+      <tr>
+        <td>
+          <a name="tobepub">
+            <sup>1)</sup> Under preparation. Stage at time of publication: ISO/FDIS 10303-2:2023</a>
+        </td>
+      </tr>
+    </table> -->
+	
 </xsl:template>
   
 </xsl:stylesheet>
