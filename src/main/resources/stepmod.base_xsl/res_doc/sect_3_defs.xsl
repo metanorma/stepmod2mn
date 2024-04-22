@@ -77,6 +77,7 @@ $Id: sect_3_defs.xsl,v 1.6 2010/02/03 23:18:57 lothartklein Exp $
 
 	<xsl:call-template name="insertHeaderADOC">
 		<xsl:with-param name="id" select="'termsdefns'"/>
+		<xsl:with-param name="attributes" select="'heading=terms and definitions'"/>
 		<xsl:with-param name="level" select="2"/>
 		<xsl:with-param name="header" select="'Terms and definitions'"/>					
 	</xsl:call-template>
