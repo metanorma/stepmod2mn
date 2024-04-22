@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
+<!-- <?xml-stylesheet type="text/xsl" href="./document_xsl.xsl" ?> -->
 
 <!--
-		 $Id: sect_4_express.xsl,v 1.41 2017/09/16 18:57:00 mikeward Exp $
+     $Id: sect_4_express.xsl,v 1.44 2020/03/02 14:39:21 tom Exp $
 
 	Author: Rob Bodington, Eurostep Limited
 	Owner:  Developed by Eurostep and supplied to NIST under contract.
@@ -25,8 +26,8 @@
 	<xsl:output method="html"/>
 
 	<!-- +++++++++++++++++++
-				 Global variables
-			 +++++++++++++++++++ -->
+		 Global variables
+	 +++++++++++++++++++ -->
 	
 	
 	
@@ -513,7 +514,7 @@
 				<!-- <p class="note">
 					<small>
 						NOTE&#160;3&#160;&#160;
-						There may be subtypes and items of select lists that appear in
+						There can be subtypes and items of select lists that appear in
 						the integrated resources that are
 						not imported into the AIC. Constructs are eliminated from the subtype
 						tree or select list through the use of
@@ -529,7 +530,7 @@
 				
 				<xsl:call-template name="insertNote">
 					<xsl:with-param name="text">
-						There may be subtypes and items of select lists that appear in
+						There can be subtypes and items of select lists that appear in
 						the integrated resources that are
 						not imported into the AIC. Constructs are eliminated from the subtype
 						tree or select list through the use of
@@ -3651,7 +3652,7 @@
 				
 		<xsl:call-template name="insertParagraph">
 			<xsl:with-param name="text">
-				The following modifications apply to this part of ISO 10303.
+				The following modifications apply to this document.
 			</xsl:with-param>
 		</xsl:call-template>
 		
@@ -3937,14 +3938,14 @@
 							<!-- <p class="note">
 								<small>
 									NOTE&#160;&#160;This empty extensible select requires
-									extension in a further schema to ensure that entities that refer to it have
+									extension in a schema that interfaces this schema to ensure that entities that refer to it have
 									at least one valid instantiation.
 								</small>
 							</p> -->
 							<xsl:call-template name="insertNote">
 								<xsl:with-param name="text">
 									This empty extensible select requires
-									extension in a further schema to ensure that entities that refer to it have
+									extension in a schema that interfaces this schema to ensure that entities that refer to it have
 									at least one valid instantiation.
 								</xsl:with-param>
 							</xsl:call-template>
