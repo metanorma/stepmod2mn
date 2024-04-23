@@ -4220,12 +4220,15 @@ is case sensitive.')"/>
 
 		<xsl:variable name="aname">
 			<xsl:choose>
-				<xsl:when test="$id">
+				<xsl:when test="normalize-space($id) != ''">
 					<xsl:value-of select="concat(name($table),'_',$id)"/>
 				</xsl:when>
-				<xsl:otherwise>          
+				<xsl:when test="normalize-space($number) != '' or normalize-space($letter) != ''">
 					<xsl:value-of select="concat(name($table),'_',$number,$letter)"/>
-				</xsl:otherwise>
+				</xsl:when>
+				<!-- <xsl:otherwise>          
+					<xsl:value-of select="concat(name($table),'_',$number,$letter)"/>
+				</xsl:otherwise> -->
 			</xsl:choose>
 		</xsl:variable>
 		<xsl:value-of select="$aname"/>   
