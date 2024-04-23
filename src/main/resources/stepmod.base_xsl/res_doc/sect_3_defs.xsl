@@ -64,7 +64,7 @@ $Id: sect_3_defs.xsl,v 1.6 2010/02/03 23:18:57 lothartklein Exp $
 	<xsl:text>&#xa;</xsl:text>
 	<xsl:call-template name="insertHeaderADOC">
 		<xsl:with-param name="id" select="'defns'"/>
-		<xsl:with-param name="attributes" select="'source=ISO_10303_2'"/>
+		<!-- <xsl:with-param name="attributes" select="'source=ISO_10303_2'"/> -->
 		<xsl:with-param name="level" select="1"/>
 		<xsl:with-param name="header" select="$header"/>					
 	</xsl:call-template>
@@ -75,17 +75,17 @@ $Id: sect_3_defs.xsl,v 1.6 2010/02/03 23:18:57 lothartklein Exp $
       </a>        
     </h2>   -->
 
-	<xsl:call-template name="insertHeaderADOC">
+	<!-- <xsl:call-template name="insertHeaderADOC">
 		<xsl:with-param name="id" select="'termsdefns'"/>
 		<xsl:with-param name="attributes" select="'heading=terms and definitions'"/>
 		<xsl:with-param name="level" select="2"/>
 		<xsl:with-param name="header" select="'Terms and definitions'"/>					
-	</xsl:call-template>
+	</xsl:call-template> -->
   
-  <!-- <xsl:call-template name="output_terms">
+  <xsl:call-template name="output_terms">
     <xsl:with-param name="current_resource" select="."/>
     <xsl:with-param name="resource_number" select="./@part"/>
-  </xsl:call-template> -->
+  </xsl:call-template>
 
    <!-- <p>For the purposes of this document, the terms and definitions given
     in ISO 10303-2 <sup><a href="#tobepub">1</a>)</sup> apply.</p>
@@ -100,9 +100,9 @@ $Id: sect_3_defs.xsl,v 1.6 2010/02/03 23:18:57 lothartklein Exp $
       </tr>
     </table> -->
 
-    <xsl:call-template name="output_abbreviations">
+    <!-- <xsl:call-template name="output_abbreviations">
       <xsl:with-param name="section" select="2"/>
-    </xsl:call-template>
+    </xsl:call-template> -->
 
     <!-- <table width="500">
       <tr>
