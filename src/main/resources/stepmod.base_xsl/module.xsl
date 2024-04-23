@@ -1006,11 +1006,21 @@ TT remove since locke is no longer available.
     <xsl:apply-templates select=".." mode="output_clause_issue">
       <xsl:with-param name="clause" select="'purpose'"/>
     </xsl:apply-templates>
-    <xsl:call-template name="insertParagraph">
-      <xsl:with-param name="text">
+		
+    <xsl:choose>
+      <xsl:when test="not(*)">
+        <xsl:call-template name="insertParagraph">
+          <xsl:with-param name="text">
+            <xsl:apply-templates/>
+          </xsl:with-param>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
         <xsl:apply-templates/>
-      </xsl:with-param>
-    </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
+		
+    
     <xsl:if test="../changes">
       <!-- <xsl:variable name="annex_letter">
         <xsl:choose>
