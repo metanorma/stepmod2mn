@@ -79,7 +79,7 @@ This file is a copy of the file data/xsl/sect_g_changes.xsl for application modu
 				<xsl:call-template name="insertParagraph">
 					<xsl:with-param name="text">
 						This annex documents the history of technical modifications made to 
-						<xsl:value-of select="concat('ISO/TS 10303-',@part)"/>.
+						this document.
 					</xsl:with-param>
 				</xsl:call-template>
 				<!-- </p> -->
@@ -98,8 +98,8 @@ This file is a copy of the file data/xsl/sect_g_changes.xsl for application modu
 				<xsl:call-template name="insertULitem">
 					<xsl:with-param name="text">
 						instances encoded according to ISO 10303-21, and that conform to an ISO 10303 application
-						protocol based on the previous edition of this part of ISO 10303, also conform to a revision of that 
-						application protocol based on this edition of this part of ISO 10303;
+						protocol based on the previous edition of this document, also conform to a revision of that 
+						application protocol based on this edition of this document;
 					</xsl:with-param>
 				</xsl:call-template>
 			<!-- </li>
@@ -107,8 +107,8 @@ This file is a copy of the file data/xsl/sect_g_changes.xsl for application modu
 				<xsl:call-template name="insertULitem">
 					<xsl:with-param name="text">
 						interfaces that conform to ISO 10303-22 and to an ISO 10303 application protocol based on the
-						previous edition of this part of ISO 10303, also conform to a revision of that application protocol 
-						based on this edition of this part of ISO 10303;
+						previous edition of this document, also conform to a revision of that application protocol 
+						based on this edition of this document;
 					</xsl:with-param>
 				</xsl:call-template>
 			<!-- </li>
@@ -116,7 +116,7 @@ This file is a copy of the file data/xsl/sect_g_changes.xsl for application modu
 				<xsl:call-template name="insertULitem">
 					<xsl:with-param name="text">
 						the mapping tables of ISO 10303 application protocols based on the previous edition of this 
-						part of ISO 10303 remain valid in a revision of that application protocol based on this edition of this part of ISO 10303.
+						part of ISO 10303 remain valid in a revision of that application protocol based on this edition of this document.
 					</xsl:with-param>
 				</xsl:call-template>
 			<!-- </li>
@@ -158,7 +158,12 @@ This file is a copy of the file data/xsl/sect_g_changes.xsl for application modu
 			<xsl:call-template name="insertHeaderADOC">
 				<xsl:with-param name="id" select="$aname"/>		
 				<xsl:with-param name="level" select="2"/>
-				<xsl:with-param name="header" select="concat('Changes made in edition ',@version)"/>					
+				<xsl:with-param name="header">
+					<xsl:value-of select="concat('Changes made in edition ',@version)"/>
+					<xsl:if test="@version = /resource/@version">
+						<xsl:value-of select="' (this edition)'"/>
+					</xsl:if>
+				</xsl:with-param>
 			</xsl:call-template>
 			
 			<!-- <h2>
@@ -183,7 +188,7 @@ This file is a copy of the file data/xsl/sect_g_changes.xsl for application modu
 					<xsl:call-template name="number_to_word">
 						<xsl:with-param name="number" select="@version"/>
 					</xsl:call-template>
-					edition of this part of ISO 10303 
+					edition of this document 
 					<xsl:choose>
 						<xsl:when test="@version = /resource/@version">incorporates</xsl:when>
 						<xsl:otherwise>incorporated</xsl:otherwise>
