@@ -4744,9 +4744,17 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 		-->
 		<xsl:variable name="bibitem_cnt" select="count(./bibitem)"/>
 
-		<xsl:apply-templates select="./bibitem.inc">
+		<!-- <xsl:apply-templates select="./bibitem.inc">
 			<xsl:with-param name="number_start" select="$bibitem_cnt"/>
-		</xsl:apply-templates>
+		</xsl:apply-templates> -->
+		<xsl:for-each select="./bibitem.inc">
+			<xsl:if test="not(preceding-sibling::bibitem.inc[@ref = current()/@ref])"> <!-- prevent duplicates -->
+				<xsl:apply-templates select=".">
+					<xsl:with-param name="number_start" select="$bibitem_cnt"/>
+				</xsl:apply-templates>
+			</xsl:if>
+		</xsl:for-each>
+    
 	</xsl:template>
 
 
