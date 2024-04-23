@@ -1562,6 +1562,7 @@ Purpose:
 			<!-- </table> -->
 		<!-- </div> -->
 		
+		<!-- .exp files generate by stepmod-utils tool, no need <xsl:template match="resource" mode="express_listings"> from sect_c_exp_schema.xsl -->
 		<!-- resource -->
 		<!-- <xsl:for-each select="schema">
 			<xsl:variable name="schema_pos" select="position()"/>
@@ -1569,8 +1570,6 @@ Purpose:
 					<xsl:with-param name="pos" select="$schema_pos"/>
 				</xsl:apply-templates>
 		</xsl:for-each> -->
-		
-		
 		
 		
 		<xsl:text>|===</xsl:text>
