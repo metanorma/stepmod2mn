@@ -23,7 +23,7 @@ $Id: sect_add_scope.xsl,v 1.1 2003/01/15 23:44:35 thendrix Exp $
 	<xsl:output method="html"/> -->
 
 <!-- overwrites the template declared in module.xsl -->
-<xsl:template match="resource" mode="additional_scope">
+<xsl:template match="resource" mode="additional_scope"> <!-- called from stepmod2mn.resource.adoc.xsl  -->
 
 	 <!-- <xsl:variable name="annex_list">
 		 <xsl:apply-templates select="." mode="annex_list" />

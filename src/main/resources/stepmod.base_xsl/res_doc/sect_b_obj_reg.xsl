@@ -23,7 +23,7 @@ $Id: sect_b_obj_reg.xsl,v 1.11 2020/03/02 14:39:21 tom Exp $
 	<xsl:output method="html"/> -->
 
 	<!-- overwrites the template declared in module.xsl -->
-	<xsl:template match="resource" mode="annex_b">
+	<xsl:template match="resource" mode="annex_b"> <!-- called from stepmod2mn.resource.adoc.xsl  -->
 		<xsl:call-template name="annex_header">
 			<xsl:with-param name="annex_no" select="'B'"/>
 			<xsl:with-param name="annex_id" select="'info_object_reg'"/>
