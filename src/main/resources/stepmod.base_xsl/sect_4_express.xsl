@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<?xml-stylesheet type="text/xsl" href="./document_xsl.xsl" ?>
+<!-- <?xml-stylesheet type="text/xsl" href="./document_xsl.xsl" ?> -->
 
 <!--
      $Id: sect_4_express.xsl,v 1.134 2019/03/27 21:16:08 mike Exp $
@@ -4439,7 +4439,7 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
     </xsl:with-param>
   </xsl:call-template>
   
-  The following modifications apply to this part of ISO 10303.
+  The following modifications apply to this document.
     </xsl:with-param>
   </xsl:call-template>
   
@@ -4543,33 +4543,30 @@ This probably wont work because notes need to be numbered, etc. Probably need a 
         <!-- </p> -->
         <!-- <p class="note">
           <small> -->
-        <xsl:call-template name="insertNote">
-          <xsl:with-param name="text">
+        <!-- <xsl:call-template name="insertNote">
+          <xsl:with-param name="text"> -->
             <xsl:choose>
               <xsl:when test="./note">
-                <!-- NOTE&#160;1&#160;&#160;The list of entity data types may be -->
-                The list of entity data types may be
+                The list of entity data types can be
                 extended in application modules that use the constructs of
                 this module.
               </xsl:when>
               <xsl:when test="string-length($ext_notes)>0">
-                <!-- NOTE&#160;1&#160;&#160;The list of entity data types may be -->
-                The list of entity data types may be
+                The list of entity data types can be
                 extended in application modules that use the constructs of
                 this module.
               </xsl:when>
               <xsl:otherwise>
-                <!-- NOTE&#160;&#160;The list of entity data types may be -->
-                The list of entity data types may be
+                The list of entity data types can be
                 extended in application modules that use the constructs of
                 this module.
               </xsl:otherwise>
             </xsl:choose>
-          </xsl:with-param>
-        </xsl:call-template>
+          <!-- </xsl:with-param>
+        </xsl:call-template> -->
           <!-- </small>
         </p> -->
-                </xsl:when>
+      </xsl:when>
 
       <xsl:when test="(@basedon and @extensible='NO') or @basedon">
         <!-- an extended not extensible SELECT type  -->

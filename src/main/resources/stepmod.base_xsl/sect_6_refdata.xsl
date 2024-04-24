@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="./document_xsl.xsl" ?>
+<!-- <?xml-stylesheet type="text/xsl" href="./document_xsl.xsl" ?> -->
 
 <!--
-$Id: sect_6_refdata.xsl,v 1.1 2006/05/18 16:17:23 dmprice Exp $
+$Id: sect_6_refdata.xsl,v 1.2 2010/11/09 17:40:31 philsp Exp $
   Author:  David Price, Eurostep Limited
   Owner:   Developed by Eurostep and supplied to OSJTF under contract.
   Purpose:
@@ -37,9 +37,9 @@ $Id: sect_6_refdata.xsl,v 1.1 2006/05/18 16:17:23 dmprice Exp $
 		
 		<!-- <p> -->
     <xsl:call-template name="insertParagraph">
-      <xsl:with-param name="text">Implementations of this part of ISO 10303 shall make use of the capability to classify an 
+      <xsl:with-param name="text">Implementations of this document shall make use of the capability to classify an 
        entity type using <b>Classification_assignment</b> (see ISO 10303-1114), <b>Class</b> (see ISO 10303-1070) and <b>External_class</b> (see ISO 10303-1275).
-       This annex contains a subclause for each entity type defined in or used by this part of ISO 10303 for which that capability
+       This annex contains a subclause for each entity type defined in or used by this document for which that capability
        shall be applied. The specified Uniform Resource Identifier (URI) is used to identify each class.
      </xsl:with-param>
    </xsl:call-template>

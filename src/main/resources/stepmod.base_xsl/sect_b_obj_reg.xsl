@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="./document_xsl.xsl" ?>
+<!-- <?xml-stylesheet type="text/xsl" href="./document_xsl.xsl" ?> -->
 
 <!--
-$Id: sect_b_obj_reg.xsl,v 1.12 2004/11/02 11:26:59 robbod Exp $
+$Id: sect_b_obj_reg.xsl,v 1.13 2006/11/09 14:28:50 darla Exp $
   Author:  Rob Bodington, Eurostep Limited
   Owner:   Developed by Eurostep and supplied to NIST under contract.
   Purpose:
@@ -57,9 +57,24 @@ $Id: sect_b_obj_reg.xsl,v 1.12 2004/11/02 11:26:59 robbod Exp $
   <xsl:variable
     name="object_reg" 
     select="concat('{ iso standard 10303 part(',@part,') version(',@version,')')"/>
+    
+  <xsl:variable name="inf_obj_annex_letter">
+    <xsl:choose>
+      <xsl:when test="./mim">B</xsl:when>
+      <xsl:otherwise>A</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <xsl:variable name="inf_obj_arm_lf_number">
+    <xsl:choose>
+      <xsl:when test="./mim">3</xsl:when>
+      <xsl:otherwise>2</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  
   <!-- <h2>
     <a name="b1">
-      B.1 Document identification
+      <xsl:value-of select="$inf_obj_annex_letter"/> Document identification
     </a>
   </h2> -->
   <xsl:call-template name="insertHeaderADOC">
@@ -90,7 +105,7 @@ $Id: sect_b_obj_reg.xsl,v 1.12 2004/11/02 11:26:59 robbod Exp $
   <!-- <p> -->
   <xsl:call-template name="insertParagraph">
     <xsl:with-param name="text">
-    is assigned to this part of ISO 10303. The meaning of this value is defined
+    is assigned to this document. The meaning of this value is defined
     in ISO/IEC 8824-1, and is described in ISO 10303-1.  
     </xsl:with-param>
   </xsl:call-template>
@@ -98,7 +113,7 @@ $Id: sect_b_obj_reg.xsl,v 1.12 2004/11/02 11:26:59 robbod Exp $
 
   <!-- <h2>
     <a name="b2">
-      B.2 Schema identification
+      <xsl:value-of select="$inf_obj_annex_letter"/>.2 Schema identification
     </a>
   </h2> -->
   <xsl:call-template name="insertHeaderADOC">
@@ -116,7 +131,7 @@ $Id: sect_b_obj_reg.xsl,v 1.12 2004/11/02 11:26:59 robbod Exp $
 
   <!-- <h2>
     <a name="b21">
-      B.2.1 <xsl:value-of select="$arm_schema"/> schema identification
+      <xsl:value-of select="$inf_obj_annex_letter"/>.2.1 <xsl:value-of select="$arm_schema"/> schema identification
     </a>
   </h2> -->
   <xsl:call-template name="insertHeaderADOC">
@@ -156,54 +171,55 @@ $Id: sect_b_obj_reg.xsl,v 1.12 2004/11/02 11:26:59 robbod Exp $
   </xsl:call-template>
   <!-- </p> -->
 
-  <!-- get the name of the MIM schema from the express -->
-  <xsl:variable name="mim_schema" 
-    select="$mim_xml_document/express/schema/@name"/>
-  <xsl:variable name="mim_schema_reg" 
-    select="translate($mim_schema,$UPPER, $LOWER)"/>
+  <xsl:if test="./mim">
+    <!-- get the name of the MIM schema from the express -->
+    <xsl:variable name="mim_schema" 
+      select="$mim_xml_document/express/schema/@name"/>
+    <xsl:variable name="mim_schema_reg" 
+      select="translate($mim_schema,$UPPER, $LOWER)"/>
 
-  <!-- <h2>
-    <a name="b22">
-      B.2.2 <xsl:value-of select="$mim_schema"/> schema identification
-    </a>
-  </h2> -->
-  <xsl:call-template name="insertHeaderADOC">
-    <xsl:with-param name="id" select="'b22'"/>
-    <xsl:with-param name="level" select="3"/>
-    <xsl:with-param name="header"><xsl:value-of select="$mim_schema"/> schema identification</xsl:with-param>
-  </xsl:call-template>
+    <!-- <h2>
+      <a name="b22">
+        <xsl:value-of select="$inf_obj_annex_letter"/>.2.2 <xsl:value-of select="$mim_schema"/> schema identification
+      </a>
+    </h2> -->
+    <xsl:call-template name="insertHeaderADOC">
+      <xsl:with-param name="id" select="'b22'"/>
+      <xsl:with-param name="level" select="3"/>
+      <xsl:with-param name="header"><xsl:value-of select="$mim_schema"/> schema identification</xsl:with-param>
+    </xsl:call-template>
 
-  <!-- <p> -->
-  <xsl:call-template name="insertParagraph">
-    <xsl:with-param name="text">
-    To provide for unambiguous identification of the schema specifications
-    given in this application module in an open information system, the object
-    identifiers are assigned as follows: 
-    </xsl:with-param>
-  </xsl:call-template>
-  <!-- </p> -->
-  
-  <!-- <p align="center"> -->
-  <xsl:text>[align=center]</xsl:text>
-  <xsl:text>&#xa;</xsl:text>
-  <xsl:call-template name="insertParagraph">
-    <xsl:with-param name="text">
-    <xsl:value-of 
-      select="concat($object_reg,' schema(1) ', $mim_schema_reg,'(2) }' )"/>
-    </xsl:with-param>
-  </xsl:call-template>
-  <!-- </p> -->
-  
-  <!-- <p> -->
-  <xsl:call-template name="insertParagraph">
-    <xsl:with-param name="text">
-    is assigned to the <xsl:value-of select="$mim_schema"/> schema. 
-    The meaning of this value is defined in ISO/IEC 8824-1, and is described in
-    ISO 10303-1.  
-    </xsl:with-param>
-  </xsl:call-template>
-  <!-- </p> -->
-
+    <!-- <p> -->
+    <xsl:call-template name="insertParagraph">
+      <xsl:with-param name="text">
+      To provide for unambiguous identification of the schema specifications
+      given in this application module in an open information system, the object
+      identifiers are assigned as follows: 
+      </xsl:with-param>
+    </xsl:call-template>
+    <!-- </p> -->
+    
+    <!-- <p align="center"> -->
+    <xsl:text>[align=center]</xsl:text>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:call-template name="insertParagraph">
+      <xsl:with-param name="text">
+      <xsl:value-of 
+        select="concat($object_reg,' schema(1) ', $mim_schema_reg,'(2) }' )"/>
+      </xsl:with-param>
+    </xsl:call-template>
+    <!-- </p> -->
+    
+    <!-- <p> -->
+    <xsl:call-template name="insertParagraph">
+      <xsl:with-param name="text">
+      is assigned to the <xsl:value-of select="$mim_schema"/> schema. 
+      The meaning of this value is defined in ISO/IEC 8824-1, and is described in
+      ISO 10303-1.  
+      </xsl:with-param>
+    </xsl:call-template>
+    <!-- </p> -->
+  </xsl:if>
 
 
   <xsl:if test="./arm_lf">
@@ -219,7 +235,7 @@ $Id: sect_b_obj_reg.xsl,v 1.12 2004/11/02 11:26:59 robbod Exp $
 
     <!-- <h2>
       <a name="b23">
-        B.2.3 <xsl:value-of select="$arm_schema_lf"/> schema identification
+        <xsl:value-of select="$inf_obj_annex_letter"/>.2.<xsl:value-of select="$inf_obj_arm_lf_number"/> <xsl:value-of select="$arm_schema_lf"/> schema identification
       </a>
     </h2> -->
     <xsl:call-template name="insertHeaderADOC">
@@ -244,7 +260,7 @@ $Id: sect_b_obj_reg.xsl,v 1.12 2004/11/02 11:26:59 robbod Exp $
 		<xsl:call-template name="insertParagraph">
 			<xsl:with-param name="text">
       <xsl:value-of 
-        select="concat($object_reg,' schema(1) ', $arm_schema_lf_reg,'(3) }' )"/>
+        select="concat($object_reg,' schema(1) ', $arm_schema_lf_reg,'(',$inf_obj_arm_lf_number,') }' )"/>
       </xsl:with-param>
     </xsl:call-template>
     <!-- </p> -->
@@ -271,7 +287,7 @@ $Id: sect_b_obj_reg.xsl,v 1.12 2004/11/02 11:26:59 robbod Exp $
     
     <!-- <h2>
       <a name="b24">
-       B.2.4 <xsl:value-of select="$mim_schema_lf"/> schema identification
+       <xsl:value-of select="$inf_obj_annex_letter"/>.2.4 <xsl:value-of select="$mim_schema_lf"/> schema identification
      </a>
     </h2> -->
     <xsl:call-template name="insertHeaderADOC">

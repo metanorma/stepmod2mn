@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- <?xml-stylesheet type="text/xsl" href="./document_xsl.xsl" ?> -->
 <!--
-$Id: resource.xsl,v 1.115 2018/08/23 11:13:35 mike Exp $
+$Id: resource.xsl,v 1.120 2020/08/23 18:17:28 tom Exp $
 Author:  Rob Bodington, Eurostep Limited
 Owner:   Developed by Eurostep and supplied to NIST under contract.
 Purpose:
@@ -33,6 +34,8 @@ Purpose:
 			indent="yes"
 			/>
 
+
+	<xsl:variable name="footnote_tobepub">Under preparation. Stage at time of publication: ISO/FDIS 10303-2:2023.</xsl:variable>
 
 	<xsl:template match="resource">
 		<xsl:apply-templates select="." mode="coverpage"/>
@@ -327,7 +330,6 @@ Purpose:
 					CP 401&#160;<span style="font-family:Symbol">&#183;</span>&#160;Ch. de Blandonnet 8<br/>
 					CH-1214 Vernier, Geneva<br/>
 					Phone: + 41 22 749 01 11<br/>
-					Fax: + 41 22 734 10 79<br/>
 					Email: copyright@iso.ch<br/>
 					Website: https://www.iso.org[www.iso.org] <!-- <a href="https://www.iso.org">www.iso.org</a><br/> -->
 					
@@ -373,7 +375,6 @@ Purpose:
 					CP 401&#160;<span style="font-family:Symbol">&#183;</span>&#160;Ch. de Blandonnet 8<br/>
 					CH-1214 Vernier, Geneva<br/>
 					Phone: + 41 22 749 01 11<br/>
-					Fax: + 41 22 734 10 79<br/>
 					Email: copyright@iso.ch<br/>
 					Website: https://www.iso.org[www.iso.org]<!-- <a href="https://www.iso.org">www.iso.org</a><br/> -->
 					<xsl:text>&#xa;</xsl:text>
@@ -401,7 +402,6 @@ Purpose:
 							CP 401&#160;<span style="font-family:Symbol">&#183;</span>&#160;Ch. de Blandonnet 8<br/>
 							CH-1214 Vernier, Geneva<br/>
 							Phone: + 41 22 749 01 11<br/>
-							Fax: + 41 22 734 10 79<br/>
 							Email: copyright@iso.ch<br/>
 							Website: https://www.iso.org[www.iso.org]<!-- <a href="https://www.iso.org">www.iso.org</a><br/> -->
 							<xsl:text>&#xa;</xsl:text>
@@ -473,7 +473,6 @@ Purpose:
 					CP 401&#160;<span style="font-family:Symbol">&#183;</span>&#160;Ch. de Blandonnet 8<br/>
 					CH-1214 Vernier, Geneva<br/>
 					Phone: + 41 22 749 01 11<br/>
-					Fax: + 41 22 734 10 79<br/>
 					Email: copyright@iso.ch<br/>
 					Website: https://www.iso.org[www.iso.org]<!-- <a href="https://www.iso.org">www.iso.org</a><br/> -->
 					<xsl:text>&#xa;</xsl:text>
@@ -809,10 +808,26 @@ Purpose:
 		<!-- <p> -->
 		<xsl:call-template name="insertParagraph">
 			<xsl:with-param name="text">
-			Attention is drawn to the possibility that some of the elements of this document may be the subject of 
+			<!-- Attention is drawn to the possibility that some of the elements of this document may be the subject of 
 			patent rights. ISO shall not be held responsible for identifying any or all such patent rights. Details of 
 			any patent rights identified during the development of the document will be in the Introduction and/or 
-			on the ISO list of patent declarations received (see http://www.iso.org/patents[www.iso.org/patents]<!-- <a href="http://www.iso.org/patents" target="_blank">www.iso.org/patents</a> -->).
+			on the ISO list of patent declarations received (see http://www.iso.org/patents[www.iso.org/patents] --><!-- <a href="http://www.iso.org/patents" target="_blank">www.iso.org/patents</a> -->).
+			ISO draws attention to the possibility that the implementation of this document may involve the use of (a) patent(s). 
+			ISO takes no position concerning the evidence, validity or applicability of any claimed patent rights in respect thereof. 
+			As of the date of publication of this document, ISO
+			<xsl:choose>
+				<xsl:when test="/resource/@patent='YES'">
+					<xsl:value-of select="' had '"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="' had not '"/>
+				</xsl:otherwise>
+			</xsl:choose>
+			received notice of (a) patent(s) which may be required to
+			implement this document.
+			However, implementers are cautioned that this may not represent the latest information, which may be obtained from the patent database available at http://www.iso.org/patents[www.iso.org/patents]<!-- <a href="http://www.iso.org/patents" target="_blank">www.iso.org/patents</a> -->. 
+			ISO shall not be held responsible for identifying any or all such patent rights.
+			
 			</xsl:with-param>
 		</xsl:call-template>
 		
@@ -1018,287 +1033,6 @@ Purpose:
 		
 	</xsl:template>
 	
-	<!--<xsl:template match="resource" mode="foreword">
-		<xsl:variable name="status" select="string(@status)"/>
-		<xsl:variable name="part_no">
-			<xsl:call-template name="get_resdoc_iso_number_without_status">
-				<xsl:with-param name="resdoc" select="./@name"/>
-			</xsl:call-template>
-		</xsl:variable>
-		
-		<h2>
-			<a name="foreword">
-				Foreword
-			</a>
-		</h2>
-		<p>
-			ISO (the International Organization for Standardization) is a worldwide
-			federation of national standards bodies (ISO member bodies). The work of
-			preparing International Standards is normally carried out through ISO
-			technical committees. Each member body interested in a subject for
-			which a technical committee has been established has the right to be
-			represented on that committee. International organizations,
-			governmental and non-governmental, in liaison with ISO, also take
-			part in the work. ISO collaborates closely with the International
-			Electrotechnical Commission (IEC) on all matters of electrotechnical
-			standardization. 
-		</p>
-		
-		<p>
-			International Standards are drafted in accordance with the rules given in
-			the ISO/IEC Directives, Part 2.
-		</p>
-		
-		<p>
-			The main task of technical committees is to prepare International
-			Standards. Draft International Standards adopted by the technical
-			committees are circulated to the member bodies for voting. Publication as
-			an International Standard requires approval by at least 75% of the member
-			bodies casting a vote.
-		</p>
-		<xsl:choose>
-			
-			
-			<xsl:when test="contains($status,'TS') or contains($status,'PAS')">
-				<p>
-					In other circumstances, particularly when there is an urgent market
-					requirement for such documents, a technical committee may decide to
-					publish other types of normative document: 
-				</p>
-				
-				<ul>
-					<li>
-						an ISO Publicly Available Specification (ISO/PAS) represents an
-						agreement between technical experts in an ISO working group and  is
-						accepted for publication if it is approved by more than 50% 
-						of the members of the parent committee casting a vote;
-					</li>  
-					<li>
-						an ISO Technical Specification (ISO/TS) represents an agreement between
-						the members of a technical committee and is accepted for
-						publication if it is approved by 2/3 of the members of the committee
-						casting a vote. 
-					</li>
-				</ul>
-				
-				<!-\-<p>
-		An ISO/PAS or ISO/TS is reviewed after three years in order to decide whether it will be confirmed for a further three years, revised to become an International Standard, or withdrawn. If the ISO/PAS or ISO/TS is confirmed, it is reviewed again after a further three years, at which time it must either be transformed into an International Standard or be withdrawn.
-	</p>-\->
-				
-				<p>
-					An ISO/PAS or ISO/TS is reviewed after three years in order to decide whether
-					it will be confirmed for a further three years, revised to become an
-					International Standard, or withdrawn. If the ISO/PAS or ISO/TS is confirmed, it
-					is reviewed again after a further three years. At that time, an ISO/PAS must
-					either be transformed into an International Standard or be withdrawn; an ISO/TS
-					may be transformed into an International Standard or be continued as an
-					ISO/TS or be withdrawn.
-				</p> <!-\- MWD 2017-05-17 -\->
-				
-			</xsl:when>
-		</xsl:choose>
-		
-		<p>
-			Attention is drawn to the possibility that some of the elements of this
-			part of ISO 10303 may be the subject of patent rights. ISO shall not be
-			held responsible for identifying any or all such patent rights.
-		</p>    
-		
-		<p>  
-			<xsl:value-of select="$part_no"/>
-			was prepared by Technical Committee ISO/TC 184, 
-			<i>Automation systems and integration,</i>
-			Subcommittee SC4, <i>Industrial data.</i>
-		</p>
-		<xsl:choose>
-			<xsl:when test="not(./foreword)">
-				<xsl:if test="@version!='1'">
-					<xsl:variable name="this_edition">
-						<xsl:choose>
-							<xsl:when test="@version='2'">
-								second
-							</xsl:when>
-							<xsl:when test="@version='3'">
-								third
-							</xsl:when>
-							<xsl:when test="@version='4'">
-								fourth
-							</xsl:when>
-							<xsl:when test="@version='5'">
-								fifth
-							</xsl:when>
-							<xsl:when test="@version='6'">
-								sixth
-							</xsl:when>
-							<xsl:when test="@version='7'">
-								seventh
-							</xsl:when>
-							<xsl:when test="@version='8'">
-								eighth
-							</xsl:when>
-							<xsl:when test="@version='9'">
-								ninth
-							</xsl:when>
-						</xsl:choose>
-					</xsl:variable>
-					
-					<xsl:variable name="prev_edition">
-						<xsl:choose>
-							<xsl:when test="@version='2'">
-								first
-							</xsl:when>
-							<xsl:when test="@version='3'">
-								second
-							</xsl:when>
-							<xsl:when test="@version='4'">
-								third
-							</xsl:when>
-							<xsl:when test="@version='5'">
-								fourth
-							</xsl:when>
-							<xsl:when test="@version='6'">
-								fifth
-							</xsl:when>
-							<xsl:when test="@version='7'">
-								sixth
-							</xsl:when>
-							<xsl:when test="@version='8'">
-								seventh
-							</xsl:when>
-							<xsl:when test="@version='9'">
-								eighth
-							</xsl:when>
-						</xsl:choose>
-					</xsl:variable>
-					<xsl:choose>
-						<xsl:when test="@previous.revision.cancelled='NO'">
-							This <xsl:value-of select="$this_edition"/> edition of
-							<xsl:value-of select="$part_no"/>
-							cancels and replaces the
-							<xsl:value-of select="$prev_edition"/> edition  
-							(<xsl:value-of
-								select="concat($part_no,':',@previous.revision.year)"/>),
-							which has been technically revised. 
-							
-							<xsl:choose>
-								<!-\- only changed a section of the document -\->
-								<xsl:when test="@revision.complete='NO'">
-									<xsl:value-of select="@revision.scope"/>
-									of the <xsl:value-of select="$prev_edition"/> 
-									edition  
-									<xsl:choose>
-										<!-\- will be Clauses/Figures/ etc so if contains 'es' 
-				 then must be plural-\->
-										<xsl:when test="contains(@revision.scope,'es')">
-											have
-										</xsl:when>
-										<xsl:otherwise>
-											has
-										</xsl:otherwise>
-									</xsl:choose>
-									been technically revised.
-								</xsl:when>
-								<xsl:otherwise>
-									<!-\- complete revision so no extra text -\->
-								</xsl:otherwise>
-							</xsl:choose>
-							
-						</xsl:when>
-						
-						<xsl:otherwise>
-							<!-\- cancelled -\->
-							This <xsl:value-of select="$this_edition"/> edition 
-							cancels and replaces the
-							<xsl:value-of select="$prev_edition"/> edition
-							(<xsl:value-of
-								select="concat($part_no,':',@previous.revision.year)"/>), 
-							
-							<xsl:choose>
-								<!-\- only changed a section of the document -\->
-								<xsl:when test="@revision.complete='NO'">
-									of which 
-									<xsl:value-of select="@revision.scope"/>
-									<xsl:choose>
-										<!-\- will be Clauses/Figures/ etc so if contains 'es' 
-				 then must be plural-\->
-										<xsl:when test="contains(@revision.scope,'es')">
-											have
-										</xsl:when>
-										<xsl:otherwise>
-											has
-										</xsl:otherwise>
-									</xsl:choose>
-									been technically revised.
-								</xsl:when>
-								<xsl:otherwise>
-									which has been technically revised.
-								</xsl:otherwise>
-							</xsl:choose>
-						</xsl:otherwise>
-					</xsl:choose>
-				</xsl:if>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:value-of select="./foreword"/>
-			</xsl:otherwise>
-		</xsl:choose>
-		
-		<xsl:if test="./changes">
-			<xsl:variable name="annex_letter">
-				<xsl:choose>
-					<xsl:when test="./examples and ./tech_discussion">G</xsl:when>
-					<xsl:when test="./examples or ./tech_discussion">F</xsl:when>
-					<xsl:otherwise>E</xsl:otherwise>
-				</xsl:choose>
-			</xsl:variable> A detailed description of the changes is provided in Annex <a
-				href="g_change{$FILE_EXT}">
-				<xsl:value-of select="$annex_letter"/>
-			</a>. 
-		</xsl:if>
-		
-		<p>
-			ISO 10303 is organized as a series of parts, each
-			published separately.  The structure of ISO 10303 is
-			described in ISO 10303-1.
-			<sup><a href="#future">1</a>)</sup>
-		</p>
-		<p>
-			Each part of ISO 10303 is a
-			member of one of the following series: description methods, implementation
-			methods, conformance testing methodology and framework, integrated generic
-			resources, integrated application resources, application protocols,
-			abstract test suites, application interpreted constructs, and application
-			modules. This part of ISO 10303 is a member of the 
-			
-			<xsl:choose>
-				<xsl:when test="@part &gt; 500"> <!-\- AIC -\->
-					application interpreted construct
-				</xsl:when>
-				<xsl:when test="@part &gt; 100"> <!-\- 100 series -\->
-					integrated application resources
-				</xsl:when>
-				<xsl:otherwise>
-					integrated generic resources
-				</xsl:otherwise>
-			</xsl:choose>
-			series. The integrated generic resources, integrated application resources and the application interpreted constructs specify a single conceptual product data model. 
-		</p>
-		<p>
-			A complete list of parts of ISO 10303 is available from the following URL: 
-		</p>
-		<div align="center">
-			<blockquote>
-				<A HREF="http://standards.iso.org/iso/10303/tech/step_titles.htm"   target="_blank">
-					http://standards.iso.org/iso/10303/tech/step_titles.htm
-				</A>
-			</blockquote>
-		</div>
-		<p>
-			<a name="future">
-				<sup>1)</sup>A future edition of ISO 10303-1 will describe the application modules series. 
-			</a>      
-		</p>
-	</xsl:template>-->
 
 	<xsl:template match="schema_diag">
 		<xsl:apply-templates select="express-g" mode="svg"/>  
@@ -1312,7 +1046,7 @@ Purpose:
 			<xsl:text>&#xa;</xsl:text>
 			<xsl:call-template name="insertParagraph">
 			<xsl:with-param name="text">
-				The following are within the scope of this part of ISO 10303:</xsl:with-param>
+				The following are within the scope of this document:</xsl:with-param>
 		</xsl:call-template>
 		<!-- </p> -->
 		<!--  output any issues -->
@@ -1336,7 +1070,7 @@ Purpose:
 			<xsl:text>&#xa;</xsl:text>
 			<xsl:call-template name="insertParagraph">
 				<xsl:with-param name="text">
-					The following are outside the scope of this part of ISO 10303:</xsl:with-param>
+					The following are outside the scope of this document:</xsl:with-param>
 			</xsl:call-template>
 		<!-- </p> -->
 		<!-- output any issues -->
@@ -1374,9 +1108,8 @@ Purpose:
 		<xsl:call-template name="insertParagraph">
 			<xsl:with-param name="text">
 			This annex references a listing of the EXPRESS entity names and
-			corresponding short names as specified or referenced in this part of ISO
-			10303. It also provides a listing of each EXPRESS schema specified in this
-			part of ISO 10303 without comments or other explanatory text. These
+			corresponding short names as specified or referenced in this document. It also provides a listing of each EXPRESS schema specified in this
+      document without comments or other explanatory text. These
 			<!-- listings are available in computer-interpretable form in Table C.1 and can -->
 			listings are available in computer-interpretable form in &lt;&lt;tablec1&gt;&gt; and can
 			be found at the following URLs:
@@ -1562,6 +1295,7 @@ Purpose:
 			<!-- </table> -->
 		<!-- </div> -->
 		
+		<!-- .exp files generate by stepmod-utils tool, no need <xsl:template match="resource" mode="express_listings"> from sect_c_exp_schema.xsl -->
 		<!-- resource -->
 		<!-- <xsl:for-each select="schema">
 			<xsl:variable name="schema_pos" select="position()"/>
@@ -1569,8 +1303,6 @@ Purpose:
 					<xsl:with-param name="pos" select="$schema_pos"/>
 				</xsl:apply-templates>
 		</xsl:for-each> -->
-		
-		
 		
 		
 		<xsl:text>|===</xsl:text>
@@ -1586,7 +1318,7 @@ Purpose:
 				NOTE&#160;&#160;The information provided in computer-interpretable
 				form at the 
 				above URLs is informative. The information that is contained in the
-				body of this part of ISO 10303 is normative. 
+				body of this document is normative. 
 			</small>
 		</p> -->
 		
@@ -1595,7 +1327,7 @@ Purpose:
 				The information provided in computer-interpretable
 				form at the 
 				above URLs is informative. The information that is contained in the
-				body of this part of ISO 10303 is normative. 
+				body of this document is normative. 
 			</xsl:with-param>
 		</xsl:call-template>
 		
@@ -1652,7 +1384,7 @@ Purpose:
 		<!-- boilerplate text -->
 		<xsl:call-template name="insertParagraph">
 			<xsl:with-param name="text">
-			The diagrams in this annex correspond to the EXPRESS schemas specified in this part of ISO 10303.
+			The diagrams in this annex correspond to the EXPRESS schemas specified in this document.
 			The diagrams use the EXPRESS-G graphical notation for the EXPRESS language. EXPRESS-G is
 			defined in ISO 10303-11.
 			</xsl:with-param>
@@ -2024,7 +1756,7 @@ Purpose:
 			<xsl:choose>
 			<xsl:when  test="$doctype='aic'">
 					schema that uses elements from the integrated resources and contains
-the types, entity specializations, and functions that are specific to this part of ISO 10303.
+the types, entity specializations, and functions that are specific to this document.
 			</xsl:when>
 			<xsl:otherwise>
 					and identifies the necessary external references.
@@ -2050,7 +1782,17 @@ the types, entity specializations, and functions that are specific to this part 
 		<xsl:call-template name="insertParagraph">
 			<xsl:with-param name="text">
 			<!-- Short names of entities defined in this schema are described in Annex A. Unambiguous identification of this schema is defined in Annex B. -->
-			Short names of entities defined in this schema are described in &lt;&lt;short_entity_names&gt;&gt;. Unambiguous identification of this schema is defined in &lt;&lt;info_object_reg&gt;&gt;.
+			<!-- Short names of entities defined in this schema are described in &lt;&lt;short_entity_names&gt;&gt;. Unambiguous identification of this schema is defined in &lt;&lt;info_object_reg&gt;&gt;. -->
+			<!-- Each implementation of an AP that uses this schema and that encodes entity names shall use the encoding specified in Annex A.
+			Each reference to this schema in an open system shall use the identifier encoding specified in Annex B.
+			This schema is illustrated in Annex D using the EXPRESS-G notation.
+			Publicly available computer interpretable listings that are associated with this document 
+			are identified in Annex <a href="c_exp{$FILE_EXT}">C</a>.  -->
+			Each implementation of an AP that uses this schema and that encodes entity names shall use the encoding specified in &lt;&lt;short_entity_names&gt;&gt;.
+			Each reference to this schema in an open system shall use the identifier encoding specified in &lt;&lt;info_object_reg&gt;&gt;.
+			This schema is illustrated in &lt;&lt;expg&gt;&gt; using the EXPRESS-G notation.
+			Publicly available computer interpretable listings that are associated with this document 
+			are identified in &lt;&lt;AnnexC&gt;&gt;. 
 			</xsl:with-param>
 		</xsl:call-template>
 		<!-- </p> -->
@@ -3083,7 +2825,7 @@ the types, entity specializations, and functions that are specific to this part 
 		<xsl:if test="$footnote='y'">
 			<!-- <p>
 	<a name="tobepub">
-		<sup>1)</sup> To be published.
+		<sup>1)</sup> Under preparation. Stage at time of publication: ISO/FDIS 10303-2:2023.
 	</a>      
 			</p> -->
 		</xsl:if>
@@ -3389,7 +3131,7 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 						<xsl:text> footnote:[Reference applicable during ballot or review period.]</xsl:text>
 				<!-- &#160;<sup><a href="#derogation">2</a>)</sup> -->
 			</xsl:when>
-			<xsl:when test="@published='n'"><xsl:text> footnote:[To be published.]</xsl:text><!-- &#160;<sup><a href="#tobepub">1</a>)</sup> -->
+			<xsl:when test="@published='n'"><xsl:text> footnote:[</xsl:text><xsl:value-of select="$footnote_tobepub"/><xsl:text>]</xsl:text><!-- &#160;<sup><a href="#tobepub">1</a>)</sup> -->
 			</xsl:when>
 		</xsl:choose>, 
 		<!-- <i>
@@ -3445,7 +3187,7 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 		<!-- <xsl:value-of select="$stdnumber"/> -->
 		
 		<xsl:if test="stdref[@published='n']">
-			<xsl:text> footnote:[To be published.]</xsl:text><!-- <sup><a href="#tobepub">1</a>)</sup> -->
+			<xsl:text> footnote:[</xsl:text><xsl:value-of select="$footnote_tobepub"/><xsl:text>]</xsl:text><!-- <sup><a href="#tobepub">1</a>)</sup> -->
 		</xsl:if><xsl:text>, </xsl:text>
 		
 		<!-- <i> -->
@@ -3500,7 +3242,7 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 
 		<!-- <p> -->
 			<!-- RBN Changed due to request from ISO
-		 For the purposes of this part of ISO 10303, -->
+		 For the purposes of this document, -->
 		 <xsl:call-template name="insertParagraph">
 			<xsl:with-param name="text">
 				For the purposes of this document, 
@@ -3660,7 +3402,7 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 				<xsl:with-param name="section" select="concat('3.1.',$def_section+1)"/>
 			</xsl:call-template>
 			<!-- RBN Changed due to request from ISO
-		 For the purposes of this part of ISO 10303, -->              
+		 For the purposes of this document, -->              
 			<!-- <p> -->
 			<xsl:call-template name="insertParagraph">
 				<xsl:with-param name="text">
@@ -3745,7 +3487,7 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 							</xsl:call-template>
 							
 							<!-- RBN Changed due to request from ISO
-						 For the purposes of this part of ISO 10303, -->              
+						 For the purposes of this document, -->              
 						 <xsl:call-template name="insertParagraph">
 								<xsl:with-param name="text">
 									For the purposes of this document, 
@@ -3844,7 +3586,7 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 						</xsl:call-template>
 						
 						<!-- RBN Changed due to request from ISO
-								 For the purposes of this part of ISO 10303,-->              
+								 For the purposes of document,-->              
 						<xsl:call-template name="insertParagraph">
 							<xsl:with-param name="text">
 								For the purposes of this document, 
@@ -4524,7 +4266,7 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 
 	<xsl:template match="express-g" mode="svg">
 		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>.The schemas of this part of ISO 10303</xsl:text>
+		<xsl:text>.The schemas of this document</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
 		<xsl:apply-templates select="imgfile | img" mode="svg"/>
 		<xsl:text>&#xa;</xsl:text>
@@ -4873,7 +4615,7 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 <!-- moved to 
 	stepmod/xsl/common.xsl
 	<xsl:template match="ulink">
-		<xsl:text>Available from the World Wide Web: </xsl:text>
+		<xsl:text>Available at: </xsl:text>
 		<xsl:variable name="href" select="."/>
 		<br/><a href="{$href}"><xsl:value-of select="$href"/></a>
 	</xsl:template>-->

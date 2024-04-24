@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- <?xml-stylesheet type="text/xsl" href="./document_xsl.xsl" ?> -->
 
 <!--
-$Id: sect_e_examples.xsl,v 1.1 2002/10/16 00:43:38 thendrix Exp $
+$Id: sect_tech_discussion.xsl,v 1.1 2002/12/20 12:32:59 nigelshaw Exp $
 	Author:  Nigel Shaw, Eurostep Limited
 	Owner:   Developed by Eurostep.
 	Purpose: To display technical discussions annex of resource documents
@@ -22,7 +23,7 @@ $Id: sect_e_examples.xsl,v 1.1 2002/10/16 00:43:38 thendrix Exp $
 	<xsl:output method="html"/> -->
 
 	<!-- overwrites the template declared in module.xsl -->
-	<xsl:template match="resource" mode="tech_discussion">
+	<xsl:template match="resource" mode="tech_discussion"> <!-- called from stepmod2mn.resource.adoc.xsl  -->
 
 		 <!-- <xsl:variable name="annex_list">
 			 <xsl:apply-templates select="." mode="annex_list" />

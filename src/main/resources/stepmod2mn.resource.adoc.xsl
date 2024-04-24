@@ -172,8 +172,25 @@
 		<xsl:text>:docnumber: 10303</xsl:text><!-- <xsl:apply-templates select="resource" mode="docnumber"/> --><!-- res_doc/sect_1_scope.xsl -->
 		<xsl:text>&#xa;</xsl:text>
 		
-		<xsl:text>:tc-docnumber: </xsl:text><xsl:value-of select="resource/@wg.number"/>
+		<!-- <xsl:text>:tc-docnumber: </xsl:text><xsl:value-of select="resource/@wg.number"/> -->
+		<!-- https://github.com/metanorma/stepmod2mn/issues/145#issuecomment-2073067811 -->
+		<!-- ISO/TC 184/SC 4/WG 12 N10681 -->
+		<xsl:text>:tc-docnumber: </xsl:text><xsl:value-of select="concat('ISO/TC 184/SC 4/WG 12 N', resource/@wg.number)"/>
 		<xsl:text>&#xa;</xsl:text>
+		<xsl:variable name="test_wg_number">
+			<xsl:call-template name="test_wg_number">
+				<xsl:with-param name="wgnumber" select="resource/@wg.number"/>
+			</xsl:call-template>
+		</xsl:variable>
+		<xsl:if test="contains($test_wg_number,'Error')">
+			<xsl:call-template name="error_message">
+				<xsl:with-param name="message">
+					<xsl:value-of select="concat('Error in
+							resource.xml/resource/@wg.number - ',
+							$test_wg_number)"/>
+				</xsl:with-param>
+			</xsl:call-template>
+		</xsl:if>
 		
 		<xsl:text>:partnumber: </xsl:text><xsl:value-of select="resource/@part"/>
 		<xsl:text>&#xa;</xsl:text>
@@ -244,6 +261,45 @@
 		
 		<xsl:text>:library-ics: 25.040.40</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
+		
+		<xsl:if test="normalize-space(resource/@previous.revision.year) != ''">
+			<xsl:text>:revises: ISO 10303-</xsl:text><xsl:value-of select="concat(resource/@part, ':', resource/@previous.revision.year)"/>
+			<xsl:text>&#xa;</xsl:text>
+		</xsl:if>
+		
+		<!-- Example: :supersedes: ISO/TC 184/SC 4/WG 12 N10446 -->
+		<xsl:if test="resource/@wg.number.supersedes">      
+			<xsl:text>:supersedes: </xsl:text>
+			<xsl:choose>
+				<xsl:when test="contains(resource/@wg.number.supersedes, 'ISO')"><xsl:value-of select="resource/@wg.number.supersedes"/></xsl:when>
+				<xsl:otherwise><xsl:value-of select="concat('ISO/TC 184/SC 4/WG 12 N',resource/@wg.number.supersedes)"/></xsl:otherwise>
+			</xsl:choose>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:variable name="test_wg_number_supersedes">
+				<xsl:call-template name="test_wg_number">
+					<xsl:with-param name="wgnumber" select="resource/@wg.number.supersedes"/>
+				</xsl:call-template>
+			</xsl:variable>
+			<xsl:if test="contains($test_wg_number_supersedes,'Error')">
+				<xsl:call-template name="error_message">
+					<xsl:with-param name="message">
+						<xsl:value-of 
+					select="concat('Error in
+						resource.xml/resource/@wg.number.supersedes - ',
+						$test_wg_number_supersedes)"/>
+					</xsl:with-param>
+				</xsl:call-template>
+			</xsl:if>
+	    <xsl:if test="resource/@wg.number.supersedes = resource/@wg.number">
+	      <xsl:call-template name="error_message">
+					<xsl:with-param name="message">
+						Error in resource.xml/resource/@wg.number.supersedes - 
+						Error WG-16: New WG number is the same as superseded WG number.
+					</xsl:with-param>
+	      </xsl:call-template>            
+	    </xsl:if>
+		</xsl:if>
+		
 		
 		<!-- commented: https://github.com/metanorma/stepmod2mn/issues/49 -->
 		<!-- uncommented: https://github.com/metanorma/stepmod2mn/issues/138 -->
@@ -353,20 +409,23 @@
 			<!-- <xsl:if test="resource/schema"> -->
 				<!-- https://github.com/metanorma/stepmod2mn/issues/58#issuecomment-1826282430 -->
 				<!-- <file path="sections_common/04-schemas.adoc" link="sections_common" target="../../../sections_common"> --> <!-- /04-schemas.adoc -->
-				<!-- <file path="sections/04-schemas.adoc" resource="04-schemas.adoc"> --> <!-- /04-schemas.adoc -->
+				
+				<!-- note: path_ignore for skip file generation on the disk,
+					empty="true" for skip include:: in the document.adoc -->
+				<file path_ignore="sections/04-schemas.adoc" resource="04-schemas.adoc" empty="true"> <!-- /04-schemas.adoc -->
 					
 					<!-- Commented -->
 					<!-- See https://github.com/metanorma/stepmod2mn/issues/52 -->
-					<!-- <xsl:for-each select="resource/schema">
+					<xsl:for-each select="resource/schema">
 						<xsl:variable name="schema_pos" select="position()"/>
-						<xsl:message>[INFO] Processing Section <xsl:value-of select="$schema_pos + 3"/> ...</xsl:message>
-						<xsl:apply-templates select="../../resource" mode="schema_resource"> --> <!-- res_doc/sect_schema.xsl -->
-							<!--  <xsl:with-param name="pos" select="$schema_pos"/>
+						<xsl:message>[INFO] Processing Section <xsl:value-of select="$schema_pos + 3"/> (images only) ...</xsl:message>
+						<xsl:apply-templates select="../../resource" mode="schema_resource"> <!-- res_doc/sect_schema.xsl -->
+							 <xsl:with-param name="pos" select="$schema_pos"/>
 						 </xsl:apply-templates>		
-					</xsl:for-each> -->
+					</xsl:for-each>
 					<!-- output template as 04-schemas.adoc -->
 					<!-- <xsl:call-template name="insert_04-schemas_adoc"/> -->
-				<!-- </file> -->
+				</file>
 				
 				<!-- create symbolic link to the folder 'templates` in the root of repository -->
 				<file link="templates" target="../../templates" folder="true" relative="true"/>

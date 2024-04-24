@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-
+<!-- <?xml-stylesheet type="text/xsl" href="./document_xsl.xsl" ?> -->
 <!--
-$Id: sect_biblio.xsl,v 1.2 2002/12/19 21:02:58 nigelshaw Exp $
+$Id: sect_biblio.xsl,v 1.3 2003/03/16 01:26:38 thendrix Exp $
   Original Author:  Rob Bodington, Eurostep Limited
   Owner:   Developed by Eurostep and supplied to NIST under contract.
   Purpose: Display of bibliography
@@ -24,7 +24,7 @@ $Id: sect_biblio.xsl,v 1.2 2002/12/19 21:02:58 nigelshaw Exp $
 <!--  <xsl:output method="html"/> -->
 
 <!-- overwrites the template declared in resource.xsl -->
-<xsl:template match="resource" mode="bibliography">
+<xsl:template match="resource" mode="bibliography"> <!-- called from stepmod2mn.resource.adoc.xsl  -->
   <!-- <div align="left">
     <h2>
       <A NAME="bibliography">Bibliography</A>

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- <?xml-stylesheet type="text/xsl" href="./document_xsl.xsl" ?> -->
 
 <!--
-$Id: sect_g_add_scope.xsl,v 1.2 2002/12/20 12:35:58 nigelshaw Exp $
+$Id: sect_add_scope.xsl,v 1.1 2003/01/15 23:44:35 thendrix Exp $
 	Author:  Rob Bodington, Eurostep Limited
 	Owner:   Developed by Eurostep and supplied to NIST under contract.
 	Purpose:
@@ -22,7 +23,7 @@ $Id: sect_g_add_scope.xsl,v 1.2 2002/12/20 12:35:58 nigelshaw Exp $
 	<xsl:output method="html"/> -->
 
 <!-- overwrites the template declared in module.xsl -->
-<xsl:template match="resource" mode="additional_scope">
+<xsl:template match="resource" mode="additional_scope"> <!-- called from stepmod2mn.resource.adoc.xsl  -->
 
 	 <!-- <xsl:variable name="annex_list">
 		 <xsl:apply-templates select="." mode="annex_list" />

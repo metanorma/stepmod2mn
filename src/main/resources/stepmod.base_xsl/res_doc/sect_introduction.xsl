@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- <?xml-stylesheet type="text/xsl" href="./document_xsl.xsl" ?> -->
 
 <!--
-$Id: sect_introduction.xsl,v 1.13 2010/10/20 07:44:26 robbod Exp $
+$Id: sect_introduction.xsl,v 1.15 2020/03/02 14:39:21 tom Exp $
 	Author:  Rob Bodington, Eurostep Limited
 	Owner:   Developed by Eurostep and supplied to NIST under contract.
 	Purpose: Output introduction as a web page
@@ -28,7 +29,7 @@ $Id: sect_introduction.xsl,v 1.13 2010/10/20 07:44:26 robbod Exp $
 	<!-- <xsl:output method="html"/> -->
 
 	<!-- overwrites the template declared in module.xsl -->
-	<xsl:template match="resource" mode="introduction">
+	<xsl:template match="resource" mode="introduction"> <!-- called from stepmod2mn.resource.adoc.xsl  -->
 		<xsl:apply-templates select="purpose"/>
 	</xsl:template>
 
@@ -69,7 +70,7 @@ $Id: sect_introduction.xsl,v 1.13 2010/10/20 07:44:26 robbod Exp $
 			<xsl:when test="$doctype='igr' or $doctype='iar'">
 				<xsl:choose>
 					<xsl:when test="count(../schema)>1">
-					<!-- <p> Major subdivisions of this part of ISO 10303 are:</p>
+					<!-- <p> Major subdivisions of this document are:</p>
 					<ul>
 						<xsl:for-each select="../schema"> 
 							<li>
@@ -86,7 +87,7 @@ $Id: sect_introduction.xsl,v 1.13 2010/10/20 07:44:26 robbod Exp $
 						</ul> -->
 						
 						<xsl:call-template name="insertParagraph">
-							<xsl:with-param name="text">Major subdivisions of this part of ISO 10303 are:</xsl:with-param>
+							<xsl:with-param name="text">Major subdivisions of this document are:</xsl:with-param>
 						</xsl:call-template>
 						
 						
@@ -127,7 +128,7 @@ $Id: sect_introduction.xsl,v 1.13 2010/10/20 07:44:26 robbod Exp $
 					<xsl:otherwise>
 						<!-- <p> -->
 							<xsl:call-template name="insertParagraph">
-								<xsl:with-param name="text">This part of ISO 10303 specifies the 
+								<xsl:with-param name="text">This document specifies the 
 									<xsl:value-of select="../schema[1]/@name" />.</xsl:with-param>
 							</xsl:call-template>
 						<!-- </p> -->
@@ -146,7 +147,7 @@ $Id: sect_introduction.xsl,v 1.13 2010/10/20 07:44:26 robbod Exp $
 				<!-- <p> -->
 				<xsl:call-template name="insertParagraph">
 					<xsl:with-param name="text">
-						The relationships of the schemas in this part of ISO 10303 to other schemas 
+						The relationships of the schemas in this document to other schemas 
 						that define the integrated resources of ISO 10303 are illustrated in Figure 1 
 						using the EXPRESS-G notation. EXPRESS-G is defined in ISO 10303-11.</xsl:with-param>
 				</xsl:call-template>
@@ -242,7 +243,7 @@ $Id: sect_introduction.xsl,v 1.13 2010/10/20 07:44:26 robbod Exp $
 			<xsl:when test="$used-count > 1" >
 				<!-- <p> -->
 				<xsl:call-template name="insertParagraph">
-					<xsl:with-param name="text">The following schemas shown in Figure 1 are not found in this part of ISO 10303, but are found as specified:</xsl:with-param>
+					<xsl:with-param name="text">The following schemas shown in Figure 1 are not found in this document, but are found as specified:</xsl:with-param>
 				</xsl:call-template>
 				<!-- </p> -->
 				<!-- <ul>

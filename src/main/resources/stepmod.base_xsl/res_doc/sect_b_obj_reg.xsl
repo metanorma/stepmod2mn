@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- <?xml-stylesheet type="text/xsl" href="./document_xsl.xsl" ?> -->
 
 <!--
-$Id: sect_b_obj_reg.xsl,v 1.9 2012/11/14 23:16:12 lothartklein Exp $
+$Id: sect_b_obj_reg.xsl,v 1.11 2020/03/02 14:39:21 tom Exp $
 	Author:  Rob Bodington, Eurostep Limited
 	Owner:   Developed by Eurostep and supplied to NIST under contract.
 	Purpose:
@@ -22,7 +23,7 @@ $Id: sect_b_obj_reg.xsl,v 1.9 2012/11/14 23:16:12 lothartklein Exp $
 	<xsl:output method="html"/> -->
 
 	<!-- overwrites the template declared in module.xsl -->
-	<xsl:template match="resource" mode="annex_b">
+	<xsl:template match="resource" mode="annex_b"> <!-- called from stepmod2mn.resource.adoc.xsl  -->
 		<xsl:call-template name="annex_header">
 			<xsl:with-param name="annex_no" select="'B'"/>
 			<xsl:with-param name="annex_id" select="'info_object_reg'"/>
@@ -90,7 +91,7 @@ $Id: sect_b_obj_reg.xsl,v 1.9 2012/11/14 23:16:12 lothartklein Exp $
 			<!-- <p> -->
 			<xsl:call-template name="insertParagraph">
 				<xsl:with-param name="text">
-				is assigned to this part of ISO 10303. The meaning of this value is defined
+				is assigned to this document. The meaning of this value is defined
 		in ISO/IEC 8824-1, and is described in ISO 10303-1.  
 				</xsl:with-param>
 			</xsl:call-template>
