@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="./document_xsl.xsl" ?>
+<!-- <?xml-stylesheet type="text/xsl" href="./document_xsl.xsl" ?> -->
 
 <!--
-$Id: sect_5_mapping.xsl,v 1.89 2019/03/28 19:39:31 mike Exp $
+$Id: sect_5_mapping.xsl,v 1.90 2019/05/02 15:01:14 tom Exp $
   Author:  Rob Bodington, Eurostep Limited
   Owner:   Developed by Eurostep and supplied to NIST under contract.
   Purpose:
@@ -166,7 +166,7 @@ $Id: sect_5_mapping.xsl,v 1.89 2019/03/28 19:39:31 mike Exp $
       <!-- <p> -->
       <xsl:call-template name="insertParagraph">
         <xsl:with-param name="text">
-        The mapping specification for this part of ISO 10303 is defined in
+        The mapping specification for this document is defined in
         <xsl:apply-templates select="$arm_xml/express/schema/interface" mode="link_use_from">
           <xsl:with-param name="item" select="'.'"/>
         </xsl:apply-templates>
@@ -178,7 +178,7 @@ $Id: sect_5_mapping.xsl,v 1.89 2019/03/28 19:39:31 mike Exp $
       <!-- <p> -->
       <xsl:call-template name="insertParagraph">
         <xsl:with-param name="text">
-        The mapping specification for this part of ISO 10303 is defined in:    
+        The mapping specification for this document is defined in:    
         </xsl:with-param>
       </xsl:call-template>
       <!-- </p> -->
@@ -192,7 +192,7 @@ $Id: sect_5_mapping.xsl,v 1.89 2019/03/28 19:39:31 mike Exp $
     <xsl:otherwise>
       <xsl:call-template name="insertParagraph">
         <xsl:with-param name="text">
-      There is no mapping specification for this part of ISO 10303.
+      There is no mapping specification for this document.
         </xsl:with-param>
       </xsl:call-template>
     </xsl:otherwise>
@@ -278,7 +278,7 @@ $Id: sect_5_mapping.xsl,v 1.89 2019/03/28 19:39:31 mike Exp $
   <xsl:call-template name="insertParagraph">
     <xsl:with-param name="text">
     This clause contains the mapping specification that defines how each 
-    application element of this part of ISO 10303 (see <!-- Clause <a href="{$sect4}">4</a> -->&lt;&lt;<xsl:value-of select="$sect4"/>&gt;&gt;) maps to one
+    application element of this document (see <!-- Clause <a href="{$sect4}">4</a> -->&lt;&lt;<xsl:value-of select="$sect4"/>&gt;&gt;) maps to one
     or more MIM elements (see <!-- Clause <a href="{$sect52}">5.2</a> -->&lt;&lt;<xsl:value-of select="$sect52"/>&gt;&gt;).
     </xsl:with-param>
   </xsl:call-template>
@@ -353,7 +353,7 @@ When the mapping of an application element involves more than one MIM element, e
     MIM element is defined, for those MIM elements that are defined in a common
     resource document;<!-- </li> --><xsl:text>&#xa;&#xa;</xsl:text>
 <!-- <li> --><xsl:text>* </xsl:text>the ISO standard number and
-    part number of this part of ISO 10303, for those MIM elements that are defined in the MIM schema of this part.<!-- </li> --><xsl:text>&#xa;&#xa;</xsl:text>
+    part number of this document, for those MIM elements that are defined in the MIM schema of this part.<!-- </li> --><xsl:text>&#xa;&#xa;</xsl:text>
 <!-- </ul> --><xsl:text>&#xa;&#xa;</xsl:text>
 
   <!-- <p> -->
@@ -417,7 +417,7 @@ When the mapping of an application element involves more than one MIM element, e
   
 		<!-- <ul> --><xsl:text>&#xa;</xsl:text>
 <!-- <li> --><xsl:text>* </xsl:text>the reference path to its supertypes in the common resources, 
-for each MIM element created within this part of ISO 10303; 
+for each MIM element created within this document; 
 <!-- </li> --><xsl:text>&#xa;&#xa;</xsl:text>
 <!-- <li> --><xsl:text>* </xsl:text>the specification of the relationships between MIM elements, when the mapping of an application element requires to relate instances of several
  MIM entity data types. In such a case, each line in the reference path
