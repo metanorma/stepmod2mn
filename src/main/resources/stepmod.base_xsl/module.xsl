@@ -980,11 +980,11 @@ TT remove since locke is no longer available.
         <!-- we could add a test here MWD -->
       </xsl:when>
       <xsl:otherwise>
-        <xsl:if test="not(substring-after(.,'This part of ISO 10303 specifies'))">
+        <xsl:if test="not(substring-after(.,'This document specifies'))">
           <xsl:call-template name="error_message">
             <xsl:with-param name="inline" select="'yes'"/>
             <xsl:with-param name="warning_gif" select="'../../../../images/warning.gif'"/>
-            <xsl:with-param name="message" select="'Error P2: Introduction does not start with required text: This part of ISO 10303 specifies .'"/>
+            <xsl:with-param name="message" select="'Error P2: Introduction does not start with required text: This document specifies .'"/>
           </xsl:call-template>
         </xsl:if>
       </xsl:otherwise>
