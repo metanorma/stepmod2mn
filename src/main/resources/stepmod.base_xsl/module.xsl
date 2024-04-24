@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- <?xml-stylesheet type="text/xsl" href="./document_xsl.xsl" ?> -->
 <!--
-$Id: module.xsl,v 1.252 2018/08/23 11:13:36 mike Exp $
+$Id: module.xsl,v 1.254 2020/07/29 10:08:52 verodub Exp $
   Author:  Rob Bodington, Eurostep Limited
   Owner:   Developed by Eurostep and supplied to NIST under contract.
   Purpose:
@@ -607,6 +607,16 @@ TT remove since locke is no longer available.
         <xsl:when test="@version='9'">
             ninth
           </xsl:when>
+          <xsl:when test="@version='10'">
+            tenth
+          </xsl:when>
+          <xsl:when test="@version='11'">
+            eleventh
+          </xsl:when>
+           <xsl:when test="@version='12'">
+            twelfth
+          </xsl:when>
+
       </xsl:choose>
     </xsl:variable>
     <xsl:variable name="prev_edition">
@@ -635,6 +645,16 @@ TT remove since locke is no longer available.
         <xsl:when test="@version='9'">
             eighth
           </xsl:when>
+          <xsl:when test="@version='10'">
+            ninth
+          </xsl:when>
+           <xsl:when test="@version='11'">
+            tenth
+          </xsl:when>
+          <xsl:when test="@version='12'">
+            eleventh
+          </xsl:when>
+
       </xsl:choose>
     </xsl:variable>
     <xsl:if test="@version != 1">
@@ -781,10 +801,25 @@ TT remove since locke is no longer available.
     <!-- <p> -->
     <xsl:call-template name="insertParagraph">
       <xsl:with-param name="text">
-      Attention is drawn to the possibility that some of the elements of this document may be the subject of 
+      <!-- Attention is drawn to the possibility that some of the elements of this document may be the subject of 
       patent rights. ISO shall not be held responsible for identifying any or all such patent rights. Details of 
       any patent rights identified during the development of the document will be in the Introduction and/or 
-      on the ISO list of patent declarations received (see http://www.iso.org/patents[www.iso.org/patents]).<!-- <a href="http://www.iso.org/patents" target="_blank">www.iso.org/patents</a> -->
+      on the ISO list of patent declarations received (see http://www.iso.org/patents[www.iso.org/patents]). --><!-- <a href="http://www.iso.org/patents" target="_blank">www.iso.org/patents</a> -->
+      ISO draws attention to the possibility that the implementation of this document may involve the use of (a) patent(s). 
+      ISO takes no position concerning the evidence, validity or applicability of any claimed patent rights in respect thereof. 
+      As of the date of publication of this document, ISO
+      <xsl:choose>
+          <xsl:when test="/module/@patent='YES'">
+            <xsl:value-of select="' had '"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="' had not '"/>
+          </xsl:otherwise>
+      </xsl:choose>
+      received notice of (a) patent(s) which may be required to
+      implement this document.
+      However, implementers are cautioned that this may not represent the latest information, which may be obtained from the patent database available at http://www.iso.org/patents[www.iso.org/patents]. <!-- <a href="http://www.iso.org/patents" target="_blank">www.iso.org/patents</a>. -->
+      ISO shall not be held responsible for identifying any or all such patent rights.
       </xsl:with-param>
     </xsl:call-template>
     <!-- </p> -->
@@ -832,131 +867,23 @@ TT remove since locke is no longer available.
     </xsl:call-template>
     <!-- </p> -->
   </xsl:template>
-  <!--MWD 2018-07-06 #6538 the template below replaced with the one above -->
-  <!--<xsl:template match="module" mode="foreword">
-    <xsl:variable name="part_no">
-      <xsl:choose>
-        <xsl:when test="string-length(@part)>0">
-          <xsl:value-of select="concat('ISO/TS 10303-',@part)"/>
-        </xsl:when>
-        <xsl:otherwise>
-          ISO/TS 10303-XXXX
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
 
-  <h2>
-    <a name="foreword">
-      Foreword
-    </a>
-  </h2>
-  <p>
-    ISO (the International Organization for Standardization) is a worldwide
-    federation of national standards bodies (ISO member bodies). The work of
-    preparing International Standards is normally carried out through ISO
-    technical committees. Each member body interested in a subject for which a
-    technical committee has been established has the right to be represented on
-    that committee. International organizations, governmental and
-    non-governmental, in liaison with ISO, also take part in the work. ISO
-    collaborates closely with the International Electrotechnical Commission
-    (IEC) on all matters of electrotechnical standardization.
-  </p>
-  <p>
-    International Standards are drafted in accordance with the rules given
-    in the ISO/IEC Directives, Part 2.
-  </p>
-  <p>
-    The main task of technical committees is to prepare International
-    Standards. Draft International Standards adopted by the technical
-    committees are circulated to the member bodies for voting. Publication as
-    an International Standard requires approval by at least 75 % of the member
-    bodies casting a vote. 
-  </p>
-  <p>
-    In other circumstances, particularly when there is an urgent market
-    requirement for such documents, a technical committee may decide to publish
-    other types of normative document: 
-  </p>
-  
-  <ul>
-    <li>
-      an ISO Publicly Available Specification (ISO/PAS) represents an
-      agreement between technical experts in an ISO working group and is accepted
-      for publication if it is approved by more than 50 % of the members of the
-      parent committee casting a vote;
-    </li>
-    <li>
-      an ISO Technical Specification (ISO/TS) represents an agreement
-      between the members of a technical committee and is accepted for
-      publication if it is approved by 2/3 of the members of the committee
-      casting a vote.
-    </li>
-  </ul>
-  <!-\-<p>
-    An ISO/PAS or ISO/TS is reviewed after three years in order to decide 
-    whether it will be confirmed for a further three years, revised to become
-    an International Standard, or withdrawn. If the ISO/PAS or ISO/TS is
-    confirmed, it is reviewed again after a further three years, at which time
-    it must either be transformed into an International Standard or be
-    withdrawn.
-  </p>-\->
-  <p>
-    An ISO/PAS or ISO/TS is reviewed after three years in order to decide whether
-    it will be confirmed for a further three years, revised to become an
-    International Standard, or withdrawn. If the ISO/PAS or ISO/TS is confirmed, it
-    is reviewed again after a further three years. At that time, an ISO/PAS must
-    either be transformed into an International Standard or be withdrawn; an ISO/TS
-    can be transformed into an International Standard or be continued as an
-    ISO/TS or be withdrawn.
-  </p> <!-\- MWD 2017-05-17 -\->
-  <p>
-    Attention is drawn to the possibility that some of the elements of
-    this document may be the subject of patent rights. ISO shall not be held
-    responsible for identifying any or all such patent rights.
-  </p>
-  <p>
-    <xsl:value-of select="$part_no"/>
-    was prepared by Technical Committee ISO/TC 184, 
-    <i>Automation systems and integration,</i>
-    Subcommittee SC4, <i>Industrial data.</i>
-  </p>
-  
-  <xsl:if test="@version!='1'">
-    <xsl:apply-templates select="." mode="edition_sentence"/>  
-  </xsl:if>
-  
-  <p>
-    ISO 10303 is organized as a series of parts, each published
-    separately. The structure of ISO 10303 is described in ISO 10303-1.
-    <sup>
-      <a href="#10303-1">1</a>)
-    </sup>
-  </p>
-  <p>
-    Each part of ISO 10303 is a member of one of the following series:
-    description methods, implementation methods, conformance testing
-    methodology and framework, integrated generic resources, integrated
-    application resources, application protocols, abstract test suites,
-    application interpreted constructs and application modules. This part is a
-    member of the application modules series. 
-  </p>
-  <p>
-    A complete list of parts of ISO 10303 is available from the following URL: 
-  </p>
-<div align="center">
-  <blockquote>
-    <A HREF="http://standards.iso.org/iso/10303/tech/step_titles.htm" target="_blank">
-      http://standards.iso.org/iso/10303/tech/step_titles.htm</A>.
-  </blockquote>
-</div>
-  <p>
-    <a name="10303-1">
-      <sup>1)</sup>A future edition of ISO 10303-1 will describe the application
-      modules series.
-    </a>
-  </p>
-</xsl:template>-->
-  <xsl:template match="purpose">
+
+<xsl:template match="purpose">
+
+  <xsl:variable name="arm_expg_annex_letter">
+    <xsl:choose>
+      <xsl:when test="/module/mim">C</xsl:when>
+      <xsl:otherwise>B</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <xsl:variable name="listing_annex_letter">
+    <xsl:choose>
+      <xsl:when test="/module/mim">E</xsl:when>
+      <xsl:otherwise>C</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
     <!-- <h2>
     <a name="introduction">
       Introduction
@@ -1059,7 +986,7 @@ TT remove since locke is no longer available.
 
     <!-- Clause <a href="3_defs{$FILE_EXT}">3</a> lists the words defined in -->
     &lt;&lt;defns&gt;&gt; lists the words defined in
-    this part of ISO 10303 and gives pointers to words defined elsewhere. 
+    this document and gives pointers to words defined elsewhere. 
 
     The information requirements of the application are specified in Clause 
     <!-- <a href="4_info_reqs{$FILE_EXT}">4</a> using terminology appropriate to -->
@@ -1077,13 +1004,19 @@ TT remove since locke is no longer available.
     <!-- This interpretation, given in <a href="5_mapping{$FILE_EXT}#mapping">5.1</a>, -->
     This interpretation, given in &lt;&lt;mapping&gt;&gt;,
     shows the correspondence between the information requirements and the
-    MIM. The short listing of the MIM specifies the interface to the
+    MIM. 
+    <xsl:if test="/module/mim"> The short listing of the MIM specifies the interface to the
     <!-- resources and is given in <a href="5_mim{$FILE_EXT}#mim_express">5.2</a>.   -->
     resources and is given in &lt;&lt;mim_express&gt;&gt;.  
 
     A graphical representation of the short listing of the MIM is given
     <!-- in Annex <a href="d_mim_expg{$FILE_EXT}">D</a>. -->
-    in &lt;&lt;AnnexD&gt;&gt;.
+    in &lt;&lt;AnnexD&gt;&gt;. 
+    Publicly available computer interpretable listings that are associated with this document 
+    <!-- are identified in Annex <a href="e_exp{$FILE_EXT}">
+    <xsl:value-of select="$listing_annex_letter"/></a>. -->
+    are identified in &lt;&lt;annex_listings&gt;&gt;.
+    </xsl:if>
     </xsl:with-param>
     </xsl:call-template>
     <!-- </p> -->
@@ -1144,10 +1077,10 @@ TT remove since locke is no longer available.
     <xsl:text>&#xa;</xsl:text>
     <xsl:call-template name="insertParagraph">
       <xsl:with-param name="text">
-    This part of ISO 10303 specifies the application module
+    This document specifies the application module
     <xsl:value-of select="$module_name"/>.
     <!-- <a name="inscope"/> -->
-    The following are within the scope of this part of ISO 10303: 
+    The following are within the scope of this document: 
     </xsl:with-param>
     </xsl:call-template>
     <!-- </p> -->
@@ -1168,7 +1101,7 @@ TT remove since locke is no longer available.
     <xsl:text>&#xa;</xsl:text>
     <xsl:call-template name="insertParagraph">
       <xsl:with-param name="text">
-    The following are outside the scope of this part of ISO 10303: 
+    The following are outside the scope of this document: 
     </xsl:with-param>
     </xsl:call-template>
     <!-- </p> -->
@@ -1195,7 +1128,12 @@ TT remove since locke is no longer available.
     <!-- </p> -->
   </xsl:template>
   <xsl:template match="module" mode="annexe">
-    <xsl:param name="annex_no" select="'E'"/>
+   <xsl:variable name="annex_no">
+    <xsl:choose>
+      <xsl:when test="/module/mim">E</xsl:when>
+      <xsl:otherwise>C</xsl:otherwise>
+    </xsl:choose>
+   </xsl:variable>
     <!-- <xsl:call-template name="annex_header">
     <xsl:with-param name="annex_no" select="'E'"/>
     <xsl:with-param name="heading" select="'Computer interpretable listings'"/>
@@ -1251,9 +1189,9 @@ provided  that links throught SC4ONLINE to a new repository -->
     <xsl:call-template name="insertParagraph">
       <xsl:with-param name="text">
     This annex references a listing of the EXPRESS entity names and
-    corresponding short names as specified or referenced in this part of ISO
-    10303. It also provides a listing of each EXPRESS schema specified in this
-    part of ISO 10303 without comments nor other explanatory text. These
+    corresponding short names as specified or referenced in document.
+    It also provides a listing of each EXPRESS schema specified in this
+    document without comments nor other explanatory text. These
     <!-- listings are available in computer-interpretable form in Table E.1 and can -->
     listings are available in computer-interpretable form in &lt;&lt;table_e1&gt;&gt; and can
     be found at the following URLs:
@@ -1295,11 +1233,11 @@ provided  that links throught SC4ONLINE to a new repository -->
     <xsl:if test="@sc4.working_group='3' and string-length(@wg.number.mim_lf) > 0">
       <!-- <p>Additional information, such as 
 computer-interpretable rules derived from normative text or mappings in 
-this part of ISO 10303,  may be provided to support implementations.  If the information is  provided it can be found at the following URL:</p> -->
+this document,  may be provided to support implementations.  If the information is  provided it can be found at the following URL:</p> -->
       <xsl:call-template name="insertParagraph">
         <xsl:with-param name="text">Additional information, such as 
       computer-interpretable rules derived from normative text or mappings in 
-      this part of ISO 10303,  may be provided to support implementations.  If the information is  provided it can be found at the following URL:
+      this document, may be provided to support implementations. If the information is provided it can be found at the following URL:
       </xsl:with-param>
       </xsl:call-template>
       <!-- <table>
@@ -1326,12 +1264,15 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
     <a name="table_e1">
       <b>
         <xsl:choose>
-          <xsl:when test="./mim_lf or ./arm_lf">
+          <xsl:when test="./mim_lf and ./arm_lf">
             Table <xsl:value-of select="$annex_no"/>.1 &#8212; ARM and MIM EXPRESS short and long form listings
           </xsl:when>
-          <xsl:otherwise>
+	  <xsl:when test="./mim and ./arm">
             Table <xsl:value-of select="$annex_no"/>.1 &#8212; ARM and MIM EXPRESS listings
-          </xsl:otherwise>
+	  </xsl:when>
+	  <xsl:when test="./arm and ./arm_lf">
+            Table <xsl:value-of select="$annex_no"/>.1 &#8212; ARM EXPRESS short and long form listings
+	  </xsl:when>
         </xsl:choose>
       </b>
     </a>
@@ -1341,12 +1282,15 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
     <xsl:text>[cols="^,^,^,^",options="header"]</xsl:text>
     <xsl:text>&#xa;</xsl:text>
     <xsl:choose>
-      <xsl:when test="./mim_lf or ./arm_lf">
+      <xsl:when test="./mim_lf and ./arm_lf">
         <xsl:text>.ARM and MIM EXPRESS short and long form listings</xsl:text>
       </xsl:when>
-      <xsl:otherwise>
+      <xsl:when test="./mim and ./arm">
         <xsl:text>.ARM and MIM EXPRESS listings</xsl:text>
-      </xsl:otherwise>
+      </xsl:when>
+      <xsl:when test="./arm and ./arm_lf">
+        <xsl:text>.ARM EXPRESS short and long form listings</xsl:text>
+      </xsl:when>
     </xsl:choose>
     <xsl:text>&#xa;</xsl:text>
     <xsl:text>|===</xsl:text>
@@ -1429,6 +1373,8 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
     <!-- </tr> -->
     <xsl:apply-templates select="arm_lf" mode="annexe"/>
     <!-- MIM HTML row -->
+    
+    <xsl:if test="./mim">
     <!-- <tr>
         <xsl:choose>
           <xsl:when test="$FILE_EXT='.xml'">
@@ -1483,6 +1429,8 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
       <xsl:with-param name="file" select="'mim.exp'"/>
     </xsl:call-template>
     <!-- </tr> -->
+    </xsl:if>
+    
     <xsl:apply-templates select="mim_lf" mode="annexe"/>
     <xsl:text>&#xa;</xsl:text>
     <xsl:text>|===</xsl:text>
@@ -1499,7 +1447,7 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
       NOTE&#160;&#160;The information provided in computer-interpretable
       form at the 
       above URLs is informative. The information that is contained in the
-      body of this part of ISO 10303 is normative. 
+      body of this document is normative. 
     </small>
   </p> -->
     <xsl:call-template name="insertNote">
@@ -1507,7 +1455,7 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
       The information provided in computer-interpretable
       form at the 
       above URLs is informative. The information that is contained in the
-      body of this part of ISO 10303 is normative. 
+      body of this document is normative. 
     </xsl:with-param>
     </xsl:call-template>
   </xsl:template>
@@ -1680,6 +1628,21 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
     <!-- </tr> -->
   </xsl:template>
   <xsl:template match="arm">
+
+    <xsl:variable name="arm_expg_annex_letter">
+      <xsl:choose>
+        <xsl:when test="/module/mim">C</xsl:when>
+        <xsl:otherwise>B</xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
+    <xsl:variable name="listing_annex_letter">
+      <xsl:choose>
+        <xsl:when test="/module/mim">E</xsl:when>
+        <xsl:otherwise>C</xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
     <xsl:call-template name="clause_header">
       <!-- <xsl:with-param name="heading" select="'4 Information requirements'"/> -->
       <xsl:with-param name="heading" select="'Information requirements'"/>
@@ -1718,7 +1681,8 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
     <small>
       NOTE&#160;1&#160;&#160;A graphical representation of the information
       requirements is given in 
-      Annex <a href="{$c_expg}">C</a>.
+      Annex <a href="{$c_expg}">
+      <xsl:value-of select="$arm_expg_annex_letter"/></a>.
     </small>
   </p> -->
     <xsl:call-template name="insertNote">
@@ -1863,15 +1827,15 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
     <xsl:call-template name="insertParagraph">
       <xsl:with-param name="text">
       This subclause specifies the units of functionality (UoF) for this
-      part of ISO 10303 as well as any support elements needed for the
+      document as well as any support elements needed for the
       application module definition.       
       <xsl:choose>
           <xsl:when test="(./uof.ae)">
-          This part of ISO 10303 specifies the following units of
+          This document specifies the following units of
           functionality and application objects:
         </xsl:when>
           <xsl:otherwise>
-          This part of ISO 10303 specifies the following units of
+          This document specifies the following units of
           functionality:
         </xsl:otherwise>
         </xsl:choose>
@@ -1888,7 +1852,7 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
         <!-- <p> -->
         <xsl:call-template name="insertParagraph">
           <xsl:with-param name="text">
-            This part of ISO 10303 also includes the following units of
+            This document also includes the following units of
             functionality: 
             </xsl:with-param>
         </xsl:call-template>
@@ -1906,7 +1870,7 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
                  -->
         <xsl:call-template name="insertParagraph">
           <xsl:with-param name="text">
-            This part of ISO 10303 also includes the units of functionality
+            This document also includes the units of functionality
             defined in the application modules that are imported with the USE
             FROM statements specified in Clause 4.2  
             </xsl:with-param>
@@ -2250,7 +2214,7 @@ this part of ISO 10303,  may be provided to support implementations.  If the inf
     table. 
     It uses elements from the common resources or from other application
     modules and defines the EXPRESS constructs that are specific to this
-    part of ISO 10303.
+    document.
     </xsl:with-param>
     </xsl:call-template>
     <!-- </p>  -->
@@ -4225,6 +4189,18 @@ $module_ok,' Check the normatives references')"/>
     <xsl:text>&#xa;</xsl:text>
   </xsl:template>
   <xsl:template match="imgfile|img" mode="expressg">
+    <xsl:variable name="arm_expg_annex_letter">
+      <xsl:choose>
+        <xsl:when test="/module/mim">C</xsl:when>
+        <xsl:otherwise>B</xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="listing_annex_letter">
+      <xsl:choose>
+        <xsl:when test="/module/mim">E</xsl:when>
+        <xsl:otherwise>C</xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
     <xsl:param name="express_g_diagrams_yaml"/>
     <xsl:variable name="file">
       <!-- <xsl:call-template name="set_file_ext">
@@ -4336,13 +4312,13 @@ $module_ok,' Check the normatives references')"/>
           <xsl:choose>
             <xsl:when test="$number=1">
               <!--<xsl:value-of 
-              select="concat('Figure C.',$number, 
+              select="concat('Figure ',$arm_expg_annex_letter,'.',$number, 
                       ' &#8212; ARM schema level EXPRESS-G diagram ',$number,' of 1')"/> -->
               <xsl:value-of select="concat('ARM schema level EXPRESS-G diagram ',$number,' of 1')"/>
             </xsl:when>
             <xsl:otherwise>
               <!-- <xsl:value-of 
-              select="concat('Figure C.',$number, 
+              select="concat('Figure ',$arm_expg_annex_letter,'.',$number, 
                       ' &#8212; ARM entity level EXPRESS-G diagram ',($number - 1),' of ',$total)"/> -->
               <xsl:value-of select="concat('ARM entity level EXPRESS-G diagram ',($number - 1),' of ',$total)"/>
             </xsl:otherwise>
