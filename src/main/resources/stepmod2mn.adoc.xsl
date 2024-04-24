@@ -754,7 +754,18 @@
 	
 	
 	<xsl:template match="text()[not(ancestor::blockquote or ancestor::code or ancestor::screen or ancestor::li_label or ancestor::refpath)]" mode="text">
-		<xsl:value-of select="java:org.metanorma.RegExEscaping.escapeFormattingCommands(.)"/>
+		<xsl:variable name="text">
+			<xsl:choose>
+				<xsl:when test="parent::i or parent::i2 or parent::b or parent::b2 or parent::tt or parent::tt2">
+					<!-- remove spaces after line break -->
+					<xsl:value-of select="java:replaceAll(java:java.lang.String.new(.),'(\R)\s+','$1')"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="."/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:value-of select="java:org.metanorma.RegExEscaping.escapeFormattingCommands($text)"/>
 	</xsl:template>
 	
 	<xsl:template name="repeat">

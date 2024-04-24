@@ -30,7 +30,7 @@
 	</xsl:template>
 	
 	<!-- remove empty p -->
-	<xsl:template match="p[not(text()) or text() = '']" mode="step1"/>
+	<xsl:template match="p[not(.//text()) or text() = '']" mode="step1"/>
 	
 	
 	<xsl:template match="@*|node()">
