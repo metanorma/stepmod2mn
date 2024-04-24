@@ -4189,6 +4189,7 @@ $module_ok,' Check the normatives references')"/>
     <xsl:text>&#xa;</xsl:text>
   </xsl:template>
   <xsl:template match="imgfile|img" mode="expressg">
+    <xsl:param name="express_g_diagrams_yaml"/>
     <xsl:variable name="arm_expg_annex_letter">
       <xsl:choose>
         <xsl:when test="/module/mim">C</xsl:when>
@@ -4201,7 +4202,6 @@ $module_ok,' Check the normatives references')"/>
         <xsl:otherwise>C</xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-    <xsl:param name="express_g_diagrams_yaml"/>
     <xsl:variable name="file">
       <!-- <xsl:call-template name="set_file_ext">
       <xsl:with-param name="filename" select="@file"/>
