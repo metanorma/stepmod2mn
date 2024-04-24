@@ -423,9 +423,24 @@
       <!-- sys/f_guide.xml -->
       <!-- <xsl:if test="module/usage_guide"> --> <!-- always create Annex F , https://github.com/metanorma/stepmod2mn/issues/143 -->
         <xsl:message>[INFO] Processing Annex F Application module implementation and usage guide ...</xsl:message>		
-        <file path="sections/96-usage_guide.adoc">
-          <xsl:apply-templates select="module" mode="annex_f"/> <!-- sect_f_guide.xsl -->
+        
+      <!-- https://github.com/metanorma/iso-10303-srl/issues/85:
+        If there is no usage guide, use this in document.adoc:
+            include::templates/common_files/usage_guide_annex.adoc[]
+        If there is usage guide, generate it and use this in document.adoc:
+            include::sections/96-usage_guide.adoc[]
+      -->
+      <xsl:choose>
+        <xsl:when test="module/usage_guide">
+          <file path="sections/96-usage_guide.adoc">
+            <xsl:apply-templates select="module" mode="annex_f"/> <!-- sect_f_guide.xsl -->
+          </file>
+        </xsl:when>
+        <xsl:otherwise>
+          <file path="templates/common_files/usage_guide_annex.adoc" empty="true">
         </file>
+        </xsl:otherwise>
+      </xsl:choose>
       <!-- </xsl:if> -->
       
       <!-- Annex F/G Change history -->
