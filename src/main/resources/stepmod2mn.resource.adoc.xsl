@@ -245,6 +245,11 @@
 		<xsl:text>:library-ics: 25.040.40</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
 		
+		<xsl:if test="normalize-space(resource/@previous.revision.year) != ''">
+			<xsl:text>:revises: ISO 10303-</xsl:text><xsl:value-of select="concat(resource/@part, ':', resource/@previous.revision.year)"/>
+			<xsl:text>&#xa;</xsl:text>
+		</xsl:if>
+		
 		<!-- commented: https://github.com/metanorma/stepmod2mn/issues/49 -->
 		<!-- uncommented: https://github.com/metanorma/stepmod2mn/issues/138 -->
 		<xsl:text>:imagesdir: </xsl:text><xsl:value-of select="$imagesdir"/>
