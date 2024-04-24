@@ -176,8 +176,21 @@
 		<!-- https://github.com/metanorma/stepmod2mn/issues/145#issuecomment-2073067811 -->
 		<!-- ISO/TC 184/SC 4/WG 12 N10681 -->
 		<xsl:text>:tc-docnumber: </xsl:text><xsl:value-of select="concat('ISO/TC 184/SC 4/WG 12 N', resource/@wg.number)"/>
-
 		<xsl:text>&#xa;</xsl:text>
+		<xsl:variable name="test_wg_number">
+			<xsl:call-template name="test_wg_number">
+				<xsl:with-param name="wgnumber" select="resource/@wg.number"/>
+			</xsl:call-template>
+		</xsl:variable>
+		<xsl:if test="contains($test_wg_number,'Error')">
+			<xsl:call-template name="error_message">
+				<xsl:with-param name="message">
+					<xsl:value-of select="concat('Error in
+							resource.xml/resource/@wg.number - ',
+							$test_wg_number)"/>
+				</xsl:with-param>
+			</xsl:call-template>
+		</xsl:if>
 		
 		<xsl:text>:partnumber: </xsl:text><xsl:value-of select="resource/@part"/>
 		<xsl:text>&#xa;</xsl:text>
@@ -253,6 +266,40 @@
 			<xsl:text>:revises: ISO 10303-</xsl:text><xsl:value-of select="concat(resource/@part, ':', resource/@previous.revision.year)"/>
 			<xsl:text>&#xa;</xsl:text>
 		</xsl:if>
+		
+		<!-- Example: :supersedes: ISO/TC 184/SC 4/WG 12 N10446 -->
+		<xsl:if test="resource/@wg.number.supersedes">      
+			<xsl:text>:supersedes: </xsl:text>
+			<xsl:choose>
+				<xsl:when test="contains(resource/@wg.number.supersedes, 'ISO')"><xsl:value-of select="resource/@wg.number.supersedes"/></xsl:when>
+				<xsl:otherwise><xsl:value-of select="concat('ISO/TC 184/SC 4/WG 12 N',resource/@wg.number.supersedes)"/></xsl:otherwise>
+			</xsl:choose>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:variable name="test_wg_number_supersedes">
+				<xsl:call-template name="test_wg_number">
+					<xsl:with-param name="wgnumber" select="resource/@wg.number.supersedes"/>
+				</xsl:call-template>
+			</xsl:variable>
+			<xsl:if test="contains($test_wg_number_supersedes,'Error')">
+				<xsl:call-template name="error_message">
+					<xsl:with-param name="message">
+						<xsl:value-of 
+					select="concat('Error in
+						resource.xml/resource/@wg.number.supersedes - ',
+						$test_wg_number_supersedes)"/>
+					</xsl:with-param>
+				</xsl:call-template>
+			</xsl:if>
+	    <xsl:if test="resource/@wg.number.supersedes = resource/@wg.number">
+	      <xsl:call-template name="error_message">
+					<xsl:with-param name="message">
+						Error in resource.xml/resource/@wg.number.supersedes - 
+						Error WG-16: New WG number is the same as superseded WG number.
+					</xsl:with-param>
+	      </xsl:call-template>            
+	    </xsl:if>
+		</xsl:if>
+		
 		
 		<!-- commented: https://github.com/metanorma/stepmod2mn/issues/49 -->
 		<!-- uncommented: https://github.com/metanorma/stepmod2mn/issues/138 -->
