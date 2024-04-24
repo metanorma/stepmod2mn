@@ -25,7 +25,7 @@ This file is a copy of the file data/xsl/sect_g_changes.xsl for application modu
 	<xsl:output method="html"/> -->
 
 	<!-- overwrites the template declared in resource.xsl -->
-	<xsl:template match="resource" mode="change_history">
+	<xsl:template match="resource" mode="change_history"> <!-- called from stepmod2mn.resource.adoc.xsl  -->
 		<!-- <xsl:variable name="annex_letter">
 			<xsl:choose>
 					<xsl:when test="//examples and //tech_discussion">G</xsl:when>
@@ -116,7 +116,7 @@ This file is a copy of the file data/xsl/sect_g_changes.xsl for application modu
 				<xsl:call-template name="insertULitem">
 					<xsl:with-param name="text">
 						the mapping tables of ISO 10303 application protocols based on the previous edition of this 
-						part of ISO 10303 remain valid in a revision of that application protocol based on this edition of this document.
+						document remain valid in a revision of that application protocol based on this edition of this document.
 					</xsl:with-param>
 				</xsl:call-template>
 			<!-- </li>
