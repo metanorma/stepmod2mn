@@ -172,7 +172,11 @@
 		<xsl:text>:docnumber: 10303</xsl:text><!-- <xsl:apply-templates select="resource" mode="docnumber"/> --><!-- res_doc/sect_1_scope.xsl -->
 		<xsl:text>&#xa;</xsl:text>
 		
-		<xsl:text>:tc-docnumber: </xsl:text><xsl:value-of select="resource/@wg.number"/>
+		<!-- <xsl:text>:tc-docnumber: </xsl:text><xsl:value-of select="resource/@wg.number"/> -->
+		<!-- https://github.com/metanorma/stepmod2mn/issues/145#issuecomment-2073067811 -->
+		<!-- ISO/TC 184/SC 4/WG 12 N10681 -->
+		<xsl:text>:tc-docnumber: </xsl:text><xsl:value-of select="concat('ISO/TC 184/SC 4/WG 12 N', resource/@wg.number)"/>
+
 		<xsl:text>&#xa;</xsl:text>
 		
 		<xsl:text>:partnumber: </xsl:text><xsl:value-of select="resource/@part"/>
