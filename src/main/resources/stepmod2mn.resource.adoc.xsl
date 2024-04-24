@@ -353,20 +353,23 @@
 			<!-- <xsl:if test="resource/schema"> -->
 				<!-- https://github.com/metanorma/stepmod2mn/issues/58#issuecomment-1826282430 -->
 				<!-- <file path="sections_common/04-schemas.adoc" link="sections_common" target="../../../sections_common"> --> <!-- /04-schemas.adoc -->
-				<!-- <file path="sections/04-schemas.adoc" resource="04-schemas.adoc"> --> <!-- /04-schemas.adoc -->
+				
+				<!-- note: path_ignore for skip file generation on the disk,
+					empty="true" for skip include:: in the document.adoc -->
+				<file path_ignore="sections/04-schemas.adoc" resource="04-schemas.adoc" empty="true"> <!-- /04-schemas.adoc -->
 					
 					<!-- Commented -->
 					<!-- See https://github.com/metanorma/stepmod2mn/issues/52 -->
-					<!-- <xsl:for-each select="resource/schema">
+					<xsl:for-each select="resource/schema">
 						<xsl:variable name="schema_pos" select="position()"/>
-						<xsl:message>[INFO] Processing Section <xsl:value-of select="$schema_pos + 3"/> ...</xsl:message>
-						<xsl:apply-templates select="../../resource" mode="schema_resource"> --> <!-- res_doc/sect_schema.xsl -->
-							<!--  <xsl:with-param name="pos" select="$schema_pos"/>
+						<xsl:message>[INFO] Processing Section <xsl:value-of select="$schema_pos + 3"/> (images only) ...</xsl:message>
+						<xsl:apply-templates select="../../resource" mode="schema_resource"> <!-- res_doc/sect_schema.xsl -->
+							 <xsl:with-param name="pos" select="$schema_pos"/>
 						 </xsl:apply-templates>		
-					</xsl:for-each> -->
+					</xsl:for-each>
 					<!-- output template as 04-schemas.adoc -->
 					<!-- <xsl:call-template name="insert_04-schemas_adoc"/> -->
-				<!-- </file> -->
+				</file>
 				
 				<!-- create symbolic link to the folder 'templates` in the root of repository -->
 				<file link="templates" target="../../templates" folder="true" relative="true"/>
