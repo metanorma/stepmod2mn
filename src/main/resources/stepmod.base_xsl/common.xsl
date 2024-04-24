@@ -2471,7 +2471,15 @@ width="20" height="20"/> -->
 					<!-- <xsl:value-of
 						select="concat('../../../modules/',$module,'/sys/introduction',
 										$FILE_EXT,$construct)"/> -->
-					<xsl:value-of select="$construct"/>
+					<xsl:choose>
+						<xsl:when test="$construct != ''">
+							<xsl:value-of select="$construct"/>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:value-of select="'introduction'"/>
+						</xsl:otherwise>
+					</xsl:choose>
+					
 				</xsl:when>
 
 				<xsl:when test="$section='1_scope'">
@@ -2931,6 +2939,19 @@ width="20" height="20"/> -->
 		[construct:<xsl:value-of select="$construct"/>]
 		[id:<xsl:value-of select="$id"/>]
 				 -->
+				 
+		<xsl:variable name="module_curr" select="ancestor::module/@name"/>
+		<xsl:variable name="mod_dir">
+			<xsl:call-template name="module_directory">
+				<xsl:with-param name="module" select="$module"/>
+			</xsl:call-template>
+		</xsl:variable>
+		<xsl:variable name="module_xml_document" select="document(concat($mod_dir,'/module.xml'))"/>
+		<xsl:variable name="module_part" select="$module_xml_document/*/@part"/>
+		<!-- Example: <<doc_iso10303-54,anchor=scope>> -->
+		<xsl:variable name="href_module" select="concat('doc_iso10303-',$module_part)"/>
+		<xsl:variable name="anchor" select="concat('anchor=',$href)"/>
+		
 		<xsl:choose>
 			<xsl:when test="$href=''">
 				<xsl:call-template name="error_message">
@@ -2940,6 +2961,20 @@ width="20" height="20"/> -->
 										$nlinkend,
 										'# is incorrectly specified.')"/>
 				</xsl:call-template>
+				<!-- <xsl:message>DEBUG:</xsl:message>
+				<xsl:message>nlinkend=<xsl:value-of select="$nlinkend"/></xsl:message>
+				<xsl:message>module_sect=<xsl:value-of select="$module_sect"/></xsl:message>
+				<xsl:message>module_curr=<xsl:value-of select="ancestor::module/@name"/></xsl:message>
+				<xsl:message>module=<xsl:value-of select="$module"/></xsl:message>
+				<xsl:message>nlinkend1=<xsl:value-of select="$nlinkend1"/></xsl:message>
+				<xsl:message>section_tmp=<xsl:value-of select="$section_tmp"/></xsl:message>
+				<xsl:message>section=<xsl:value-of select="$section"/></xsl:message>
+				<xsl:message>nlinkend2=<xsl:value-of select="$nlinkend2"/></xsl:message>
+				<xsl:message>construct_tmp=<xsl:value-of select="$construct_tmp"/></xsl:message>
+				<xsl:message>nlinkend3=<xsl:value-of select="$nlinkend3"/></xsl:message>
+				<xsl:message>id=<xsl:value-of select="$id"/></xsl:message>
+				<xsl:message>construct=<xsl:value-of select="$construct"/></xsl:message>
+				<xsl:message>href=<xsl:value-of select="$href"/></xsl:message> -->
 				<xsl:apply-templates/>
 			</xsl:when>
 			<xsl:otherwise>
@@ -2960,20 +2995,11 @@ width="20" height="20"/> -->
 											</xsl:choose>
 										</xsl:when>
 										<xsl:otherwise>
-										
-											<xsl:variable name="module_curr" select="ancestor::module/@name"/>
 											
 											<xsl:choose>
 												<xsl:when test="$module_curr != $module"> <!-- link to the another module -->
-													<xsl:variable name="mod_dir">
-													<xsl:call-template name="module_directory">
-															<xsl:with-param name="module" select="$module"/>
-														</xsl:call-template>
-													</xsl:variable>
-													<xsl:variable name="module_xml_document" select="document(concat($mod_dir,'/module.xml'))"/>
-													<xsl:variable name="module_part" select="$module_xml_document/*/@part"/>
-													<xsl:attribute name="href"><xsl:value-of select="concat('doc_iso10303-',$module_part)"/></xsl:attribute>
-													<xsl:value-of select="concat('anchor=',$href)"/>
+													<xsl:attribute name="href"><xsl:value-of select="$href_module"/></xsl:attribute>
+													<xsl:value-of select="$anchor"/>
 													<!-- Example: <<doc_iso10303-54,anchor=scope>> -->
 												</xsl:when>
 												<xsl:otherwise>
@@ -2997,8 +3023,20 @@ width="20" height="20"/> -->
 						<!-- <a href="{$href}"><xsl:value-of select="$module_name"/></a> -->
 						<xsl:call-template name="insertHyperlink">
 							<xsl:with-param name="a">
-								<a href="{$href}"><xsl:value-of select="$module_name"/></a>
+								<a href="{$href}">
+									<xsl:choose>
+										<xsl:when test="$module_curr != $module"> <!-- link to the another module -->
+											<xsl:attribute name="href"><xsl:value-of select="$href_module"/></xsl:attribute>
+											<xsl:value-of select="$anchor"/>
+											<!-- Example: <<doc_iso10303-54,anchor=scope>> -->
+										</xsl:when>
+										<xsl:otherwise>
+											<xsl:value-of select="$module_name"/>
+										</xsl:otherwise>
+									</xsl:choose>
+								</a>
 							</xsl:with-param>
+							<xsl:with-param name="isInternalLink"><xsl:if test="$module_curr != $module">true</xsl:if></xsl:with-param>
 						</xsl:call-template>						
 					</xsl:otherwise>
 				</xsl:choose>
