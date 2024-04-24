@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="./document_xsl.xsl" ?>
+<!-- <?xml-stylesheet type="text/xsl" href="./document_xsl.xsl" ?> -->
 
 <!--
-$Id: sect_g_change.xsl,v 1.17 2017/09/29 06:01:47 mikeward Exp $
+$Id: sect_g_change.xsl,v 1.18 2019/01/25 22:45:46 mike Exp $
   Author:  Rob Bodington, Eurostep Limited
   Owner:   Developed by Eurostep and supplied to NIST under contract.
   Purpose:
@@ -81,7 +81,7 @@ $Id: sect_g_change.xsl,v 1.17 2017/09/29 06:01:47 mikeward Exp $
       <xsl:call-template name="insertParagraph">
         <xsl:with-param name="text">
         This annex documents the history of technical modifications made to 
-        <xsl:value-of select="concat('ISO/TS 10303-',@part)"/>.
+        this document.
         </xsl:with-param>
       </xsl:call-template>
       <!-- </p> -->
@@ -115,13 +115,21 @@ $Id: sect_g_change.xsl,v 1.17 2017/09/29 06:01:47 mikeward Exp $
       <!-- <h2>
         <a name="{$aname}">
           <xsl:value-of select="concat($annex_letter,'.',position()+1,' Changes made in edition ',@version)"/>
+          <xsl:if test="@version = /module/@version">
+          <xsl:value-of select="' (this edition)'"/>
+        </xsl:if>
         </a>
       </h2> -->
       <xsl:text>&#xa;&#xa;</xsl:text>
       <xsl:call-template name="insertHeaderADOC">
 				<xsl:with-param name="id" select="$aname"/>		
 				<xsl:with-param name="level" select="2"/>
-				<xsl:with-param name="header" select="concat('Changes made in edition ',@version)"/>					
+				<xsl:with-param name="header">
+          <xsl:value-of select="concat('Changes made in edition ',@version)"/>
+          <xsl:if test="@version = /module/@version">
+            <xsl:value-of select="' (this edition)'"/>
+          </xsl:if>
+        </xsl:with-param>
 			</xsl:call-template>
       <!-- <h2>
         <a name="summary{@version}">
@@ -143,7 +151,7 @@ $Id: sect_g_change.xsl,v 1.17 2017/09/29 06:01:47 mikeward Exp $
         <xsl:call-template name="number_to_word">
           <xsl:with-param name="number" select="@version"/>
         </xsl:call-template>
-        edition of this part of ISO 10303 
+        edition of this document 
         <xsl:choose>
           <xsl:when test="@version = /module/@version">incorporates</xsl:when>
           <xsl:otherwise>incorporated</xsl:otherwise>
