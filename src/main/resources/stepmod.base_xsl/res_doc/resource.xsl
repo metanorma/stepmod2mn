@@ -627,6 +627,126 @@ Purpose:
 
 	</xsl:template>
 
+	
+	<xsl:template match="resource" mode="comments_to_reader">
+		<xsl:variable name="status" select="string(@status)"/>
+		<xsl:if test="$status='CD-TS' or $status='CD'">
+			<!-- <p> -->
+			<xsl:call-template name="insertParagraph">
+				<xsl:with-param name="text">
+				Recipients of this draft are invited to submit, with their comments,
+				notification of any relevant patent rights of which they are aware and to
+				provide supporting documentation.
+				</xsl:with-param>
+			</xsl:call-template>
+			<!-- </p> -->
+		</xsl:if>
+
+
+		<xsl:variable name="ballot_cycle_or_pub">
+			<xsl:choose>
+				<xsl:when test="$status='CD-TS'">
+		this ballot cycle
+				</xsl:when>
+				<xsl:when test="$status='CD'">
+		this ballot cycle
+				</xsl:when>
+
+				<xsl:when test="$status='TS'">
+		publication
+				</xsl:when>
+				<xsl:when test="$status='FDIS'">
+		publication
+				</xsl:when>
+				<xsl:when test="$status='DIS'">
+		publication
+				</xsl:when>
+				<xsl:when test="$status='IS'">
+		publication
+				</xsl:when>
+			</xsl:choose>
+		</xsl:variable>
+
+
+		<xsl:variable name="test_cl_internal_review">
+			<xsl:call-template name="test_wg_number">
+				<xsl:with-param name="wgnumber" select="./@checklist.internal_review"/>
+			</xsl:call-template>
+		</xsl:variable>
+		
+		<xsl:call-template name="insertParagraph">
+				<xsl:with-param name="text">
+		This document has been reviewed using the internal review checklist 
+		(see <xsl:value-of select="concat('WG12&#160;N',@checklist.internal_review)"/>),
+		<!-- test the checklist WG number for checklist.internal_review -->
+		
+		
+		<xsl:if test="contains($test_cl_internal_review,'Error')">
+			<!-- <p> -->
+				<xsl:call-template name="error_message">
+		<xsl:with-param name="message">
+			<xsl:value-of 
+					select="concat('Error in
+						resource.xml/resource/@checklist.internal_review - ', 
+						$test_cl_internal_review)"/>
+		</xsl:with-param>
+				</xsl:call-template>
+			<!-- </p> -->
+		</xsl:if>
+
+
+		the project leader checklist 
+		(see <xsl:value-of
+		select="concat('WG12&#160;N',@checklist.project_leader)"/>),
+
+		<!-- test the checklist WG number for checklist.project_leader -->
+		<xsl:variable name="test_cl_project_leader">
+			<xsl:call-template name="test_wg_number">
+				<xsl:with-param name="wgnumber" select="./@checklist.project_leader"/>
+			</xsl:call-template>
+		</xsl:variable>
+		<xsl:if test="contains($test_cl_project_leader,'Error')">
+			<!-- <p> -->
+				<xsl:call-template name="error_message">
+		<xsl:with-param name="message">
+			<xsl:value-of 
+					select="concat('Error in
+						resource.xml/resource/@checklist.project_leader - ', 
+						$test_cl_project_leader)"/>
+		</xsl:with-param>
+				</xsl:call-template>
+			<!-- </p> -->
+		</xsl:if>
+
+		and the convener checklist
+		(see <xsl:value-of select="concat('WG12&#160;N',@checklist.convener)"/>),
+
+		<!-- test the checklist WG number for checklist.convener -->
+		<xsl:variable name="test_cl_convener">
+			<xsl:call-template name="test_wg_number">
+				<xsl:with-param name="wgnumber" select="./@checklist.convener"/>
+			</xsl:call-template>
+		</xsl:variable>
+		<xsl:if test="contains($test_cl_convener,'Error')">
+			<!-- <p> -->
+				<xsl:call-template name="error_message">
+		<xsl:with-param name="message">
+			<xsl:value-of 
+					select="concat('Error in
+						resource.xml/resource/@checklist.convener - ', 
+						$test_cl_convener)"/>
+		</xsl:with-param>
+				</xsl:call-template>
+			<!-- </p> -->
+		</xsl:if>
+		and has been determined to be ready for 
+		<xsl:value-of select="$ballot_cycle_or_pub"/>.
+	
+		</xsl:with-param>
+		</xsl:call-template>
+	
+	</xsl:template>
+
 	<xsl:template match="resource" mode="abstract">
 
 		<xsl:variable name="resdoc_name">
