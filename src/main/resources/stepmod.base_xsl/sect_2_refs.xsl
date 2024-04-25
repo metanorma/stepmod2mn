@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="./document_xsl.xsl" ?>
+<!-- <?xml-stylesheet type="text/xsl" href="./document_xsl.xsl" ?> -->
 
 <!--
-$Id: sect_2_refs.xsl,v 1.21 2018/08/22 23:06:22 mike Exp $
+$Id: sect_2_refs.xsl,v 1.22 2019/03/09 01:29:01 tom Exp $
   Author:  Rob Bodington, Eurostep Limited
   Owner:   Developed by Eurostep .
   Purpose: Output the refs section as a web page
@@ -36,7 +36,7 @@ $Id: sect_2_refs.xsl,v 1.21 2018/08/22 23:06:22 mike Exp $
 
 
   <!-- added by MWD 2016-05-03 -->
-  <xsl:template match="resource" mode="norm_refs_module">
+  <xsl:template match="resource" mode="norm_refs_module"> <!-- called from stepmod2mn.module.adoc.xsl -->
     
     <!-- <h2>2 Normative references</h2> -->
     
@@ -644,20 +644,24 @@ $Id: sect_2_refs.xsl,v 1.21 2018/08/22 23:06:22 mike Exp $
   </xsl:apply-templates>
   <xsl:apply-templates select="normref.resource" mode="check_resources"/>
   
-  <xsl:if test="normref/stdref[@published='n']">
-    <table width="200">
+  <!-- <xsl:if test="normref/stdref[@published='n']">
+    <table width="500">
       <tr>
         <td><hr/></td>
       </tr>
       <tr>
         <td>
           <a name="tobepub">
-            <sup>1)</sup> To be published.
+            <sup>1)</sup> Under preparation. Stage at time of publication:
+	    <xsl:value-of select="concat(normref/stdref/orgname,'/',
+				  normref/stdref/status,' ',
+				  normref/stdref/stdnumber,':',
+				  normref/stdref/pubdate,'.')"/>
           </a>
         </td>
       </tr>
     </table>
-  </xsl:if>
+  </xsl:if> -->
 </xsl:template>
 
   <xsl:template match="normref.resource" mode="check_resources">
@@ -689,8 +693,14 @@ $Id: sect_2_refs.xsl,v 1.21 2018/08/22 23:06:22 mike Exp $
 			<xsl:value-of select="$stdnumber"/>
       <xsl:text>]]]</xsl:text>
         
+        <xsl:variable name="footnote_text" select="concat('Under preparation. Stage at time of publication: ', 
+            stdref/orgname,'/',
+            stdref/status,' ',
+            stdref/stdnumber,':',
+            stdref/pubdate,'.')"/>
+        
         <xsl:if test="stdref[@published='n']">
-          <xsl:text> footnote:[To be published.]</xsl:text><!-- <sup><a href="#tobepub">1</a>)</sup> -->
+          <xsl:text> footnote:[</xsl:text><xsl:value-of select="$footnote_text"/><xsl:text>]</xsl:text><!-- <sup><a href="#tobepub">1</a>)</sup> -->
         </xsl:if><xsl:text>, </xsl:text>
         
         <!-- &#160; <i> -->
