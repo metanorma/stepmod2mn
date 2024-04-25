@@ -300,6 +300,23 @@
 	    </xsl:if>
 		</xsl:if>
 		
+		<!-- contacts -->
+		<!--
+		:semantic-metadata-project-leader-firstname:
+		:semantic-metadata-project-leader-lastname:
+		:semantic-metadata-project-leader-address-affiliation:
+		:semantic-metadata-project-leader-address-street:
+		:semantic-metadata-project-leader-address-city:
+		:semantic-metadata-project-leader-address-state:
+		:semantic-metadata-project-leader-address-postcode:
+		:semantic-metadata-project-leader-address-country:
+		:semantic-metadata-project-leader-phone:
+		:semantic-metadata-project-leader-fax:
+		:semantic-metadata-project-leader-email:
+		-->
+		<xsl:apply-templates select="resource/contacts/projlead"/>
+		<xsl:apply-templates select="resource/contacts/editor"/>
+		
 		
 		<!-- commented: https://github.com/metanorma/stepmod2mn/issues/49 -->
 		<!-- uncommented: https://github.com/metanorma/stepmod2mn/issues/138 -->
