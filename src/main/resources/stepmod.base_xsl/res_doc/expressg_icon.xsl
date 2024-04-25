@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- <?xml-stylesheet type="text/xsl" href="./document_xsl.xsl" ?> -->
 
 <!--
-$Id: expressg_icon.xsl,v 1.1 2003/08/26 05:32:50 thendrix Exp $
+$Id: expressg_icon.xsl,v 1.2 2005/02/18 19:32:02 thendrix Exp $
   Author:  Rob Bodington, Eurostep Limited
   Owner:   Developed by Eurostep
   Purpose: Read the are maps in an image and create a node list. This is
