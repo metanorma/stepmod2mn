@@ -2803,16 +2803,30 @@ this document,  may be provided to support implementations.  If the information 
     <xsl:apply-templates select="." mode="output_clause_issue">
       <xsl:with-param name="clause" select="'normrefs'"/>
     </xsl:apply-templates>
-    <!-- output the normative reference explicitly defined in the module -->
-    <xsl:apply-templates select="/module/normrefs/normref">
-      <xsl:with-param name="current_module" select="$current_module"/>
-    </xsl:apply-templates>
-    <!-- output the default normative reference and any implicit in the
-       module through the ARM and MIM -->
-    <xsl:call-template name="output_default_normrefs">
-      <xsl:with-param name="module_number" select="$module_number"/>
-      <xsl:with-param name="current_module" select="$current_module"/>
-    </xsl:call-template>
+    
+    <xsl:variable name="normative_references">
+      <!-- output the normative reference explicitly defined in the module -->
+      <xsl:apply-templates select="/module/normrefs/normref">
+        <xsl:with-param name="current_module" select="$current_module"/>
+      </xsl:apply-templates>
+      <!-- output the default normative reference and any implicit in the
+         module through the ARM and MIM -->
+      <xsl:call-template name="output_default_normrefs">
+        <xsl:with-param name="module_number" select="$module_number"/>
+        <xsl:with-param name="current_module" select="$current_module"/>
+      </xsl:call-template>
+    </xsl:variable>
+    
+    <xsl:copy-of select="$normative_references"/>
+		
+		<xsl:if test="not(contains($normative_references, '* [[[ref10303-2,'))">
+			<!-- * [[[ref10303-2,ISO 10303-2]]] _Industrial automation systems and integration — Product data representation and exchange— Part 2: Vocabulary_</xsl:text> -->
+			<xsl:variable name="normref_10303_2"><normref.inc ref="ref10303-2"/></xsl:variable>
+			<xsl:apply-templates select="xalan:nodeset($normref_10303_2)/*">
+				<xsl:with-param name="current_resource" select="."/>
+			</xsl:apply-templates>
+		</xsl:if>
+    
   </xsl:template>
   <!-- output the default normative reference and any implicit in the
      module through the ARM and MIM -->
@@ -3609,7 +3623,11 @@ test="document('../data/basic/normrefs.xml')/normref.list/normref[@id=$normref]/
             <!-- normref stdnumber are 10303-1107 whereas module numbers are
                1107, so remove the 10303- -->
             <xsl:variable name="part_no" select="substring-after($normref/stdref/stdnumber,'-')"/>
-            <xsl:if test="$module_number!=$part_no">
+            <!-- from https://github.com/metanorma/stepmod2mn/issues/145#issuecomment-2076664788 
+							it means all "ISO 10303-*" parts should be omitted, because ISO 10303-2 is a new publication that includes all terms.
+							This means once we include ISO 10303-2 in the source, 
+							we do not need to import any other term from any ISO 10303-* document. -->
+            <xsl:if test="$module_number!=$part_no and not(contains($stdnumber, 'ISO 10303-'))">
               <!-- <h2>
             <xsl:value-of select="concat('3.1.',$section_no,
                                   ' Terms defined in ',$stdnumber)"/>
@@ -3673,34 +3691,41 @@ test="document('../data/basic/normrefs.xml')/normref.list/normref[@id=$normref]/
                 <xsl:if test="not(contains($normref_ids,$normrefid))">
                   <xsl:variable name="module_node" select="$module_xml_document/module"/>
                   <xsl:variable name="stdnumber" select="concat('ISO/',$module_node/@status,'&#160;10303-',$module_node/@part)"/>
-                  <!-- output the section header for the normative reference
-                     that is defining terms -->
-                  <!-- <h2>
-                  <xsl:value-of select="concat('3.',$section_no,
-                                        ' Terms defined in ', $stdnumber)"/>
-                </h2> -->
-                  <xsl:call-template name="insertHeaderADOC">
-                    <xsl:with-param name="id" select="concat('sec_3.',$section_no)"/>
-                    <xsl:with-param name="level" select="3"/>
-                    <xsl:with-param name="header" select="concat('Terms defined in ', $stdnumber)"/>
-                  </xsl:call-template>
-                  <!-- <p> -->
-                  <!-- RBN Changed due to request from ISO
-                  For the purposes of this part of ISO 10303, -->
-                  <xsl:call-template name="insertParagraph">
-                    <xsl:with-param name="text">
-                  For the purposes of this document,
-                  the following terms defined in 
-                  <xsl:value-of select="$stdnumber"/>
-                  apply:
-                  </xsl:with-param>
-                  </xsl:call-template>
-                  <!-- </p> -->
-                  <!-- <ul> -->
-                  <!-- now output the terms -->
-                  <xsl:apply-templates select="/module/normrefs/normref.inc[@module.name=$module]/term.ref" mode="module"/>
-                  <xsl:text>&#xa;&#xa;</xsl:text>
-                  <!-- </ul> -->
+                  
+                  <!-- from https://github.com/metanorma/stepmod2mn/issues/145#issuecomment-2076664788 
+                    it means all "ISO 10303-*" parts should be omitted, because ISO 10303-2 is a new publication that includes all terms.
+                    This means once we include ISO 10303-2 in the source, 
+                    we do not need to import any other term from any ISO 10303-* document. -->
+                  <xsl:if test="not(contains($stdnumber, 'ISO 10303-'))">
+                    <!-- output the section header for the normative reference
+                       that is defining terms -->
+                    <!-- <h2>
+                    <xsl:value-of select="concat('3.',$section_no,
+                                          ' Terms defined in ', $stdnumber)"/>
+                  </h2> -->
+                    <xsl:call-template name="insertHeaderADOC">
+                      <xsl:with-param name="id" select="concat('sec_3.',$section_no)"/>
+                      <xsl:with-param name="level" select="3"/>
+                      <xsl:with-param name="header" select="concat('Terms defined in ', $stdnumber)"/>
+                    </xsl:call-template>
+                    <!-- <p> -->
+                    <!-- RBN Changed due to request from ISO
+                    For the purposes of this part of ISO 10303, -->
+                    <xsl:call-template name="insertParagraph">
+                      <xsl:with-param name="text">
+                    For the purposes of this document,
+                    the following terms defined in 
+                    <xsl:value-of select="$stdnumber"/>
+                    apply:
+                    </xsl:with-param>
+                    </xsl:call-template>
+                    <!-- </p> -->
+                    <!-- <ul> -->
+                    <!-- now output the terms -->
+                    <xsl:apply-templates select="/module/normrefs/normref.inc[@module.name=$module]/term.ref" mode="module"/>
+                    <xsl:text>&#xa;&#xa;</xsl:text>
+                    <!-- </ul> -->
+                  </xsl:if>
                 </xsl:if>
               </xsl:when>
               <xsl:otherwise>
@@ -3731,6 +3756,91 @@ $module_ok,' Check the normatives references')"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
+  
+  <xsl:template name="get_list_normrefs_terms_rec">
+    <xsl:param name="normrefs"/>
+    <xsl:param name="normref_ids"/>
+    <xsl:param name="section"/>
+    <xsl:param name="module_number"/>
+    <xsl:param name="current_module"/>
+    <xsl:choose>
+      <xsl:when test="$normrefs">
+        <xsl:variable name="first" select="substring-before(substring-after($normrefs,','),',')"/>
+        <xsl:variable name="section_no" select="$section+1"/>
+        <xsl:variable name="rest" select="substring-after(substring-after($normrefs,','),',')"/>
+        <xsl:choose>
+          <xsl:when test="contains($first,'normref:')">
+            <xsl:variable name="ref" select="substring-after($first,'normref:')"/>
+            <xsl:variable name="normrefs_xml_document" select="document(concat($path, '../../../data/basic/normrefs.xml'))"/>
+            <xsl:variable name="normref" select="$normrefs_xml_document/normref.list/normref[@id=$ref]"/>
+            <!-- get the number of the standard -->
+            <xsl:variable name="stdnumber" select="concat($normref/stdref/orgname, ' ',$normref/stdref/stdnumber)"/>
+            <!-- output the section header for the normative reference that is
+               defining terms 
+               IGNORE if the normative ref is referring to this module
+               -->
+            <!-- normref stdnumber are 10303-1107 whereas module numbers are
+               1107, so remove the 10303- -->
+            <xsl:variable name="part_no" select="substring-after($normref/stdref/stdnumber,'-')"/>
+            <xsl:if test="$module_number!=$part_no">
+              <item><xsl:value-of select="$stdnumber"/></item>
+            </xsl:if>
+          </xsl:when>
+          <!-- a term defined in another module -->
+          <xsl:when test="contains($first,'module:')">
+            <xsl:variable name="module" select="substring-after($first,'module:')"/>
+            <xsl:variable name="module_dir">
+              <xsl:call-template name="module_directory">
+                <xsl:with-param name="module" select="$module"/>
+              </xsl:call-template>
+            </xsl:variable>
+            <xsl:variable name="module_ok">
+              <xsl:call-template name="check_module_exists">
+                <xsl:with-param name="module" select="$module"/>
+              </xsl:call-template>
+            </xsl:variable>
+            <xsl:choose>
+              <xsl:when test="$module_ok='true'">
+                <xsl:variable name="module_xml" select="concat($module_dir,'/module.xml')"/>
+                <xsl:variable name="module_xml_document" select="document($module_xml)"/>
+                <xsl:variable name="normrefid" select="concat('10303-',$module_xml_document/module/@part)"/>
+                <!-- check to see if the terms for the module have been output
+                   as part of normative references -->
+                <xsl:if test="not(contains($normref_ids,$normrefid))">
+                  <xsl:variable name="module_node" select="$module_xml_document/module"/>
+                  <xsl:variable name="stdnumber" select="concat('ISO/',$module_node/@status,'&#160;10303-',$module_node/@part)"/>
+                  <item><xsl:value-of select="$stdnumber"/></item>
+                </xsl:if>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:call-template name="error_message">
+                  <xsl:with-param name="message">
+                    <xsl:value-of select="concat('Error ref 2: ',
+$module_ok,' Check the normatives references')"/>
+                  </xsl:with-param>
+                </xsl:call-template>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:when>
+          <xsl:when test="contains($first,'resource:')">
+            <xsl:variable name="resource" select="substring-after($first,'resource:')"/>
+            <!-- should never get here -->
+          </xsl:when>
+        </xsl:choose>
+        <xsl:call-template name="output_normrefs_terms_rec">
+          <xsl:with-param name="normrefs" select="$rest"/>
+          <xsl:with-param name="normref_ids" select="$normref_ids"/>
+          <xsl:with-param name="section" select="$section_no"/>
+          <xsl:with-param name="module_number" select="$module_number"/>
+          <xsl:with-param name="current_module" select="$current_module"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <!-- end of recursion -->
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  
   <!-- build a list of normrefs that are used by the module and have terms
      defined in them 
      The list comprises:
