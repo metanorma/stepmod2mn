@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- <?xml-stylesheet type="text/xsl" href="./document_xsl.xsl" ?> -->
 <!--
-$Id: common.xsl,v 1.33 2008/05/21 20:50:25 abf Exp $
+$Id: common.xsl,v 1.34 2014/05/29 20:31:13 nigelshaw Exp $
 	Author:  Rob Bodington, Eurostep Limited
 	Owner:   Developed by Eurostep and supplied to NIST under contract.
 	Purpose:
@@ -241,6 +242,8 @@ $Id: common.xsl,v 1.33 2008/05/21 20:50:25 abf Exp $
 			<id> if a construct is given, then id is the identifier for the
 					 construct.
 			-->
+			
+	<!-- no element resdoc_ref in XML and DTD -->
 	<xsl:template match="resdoc_ref">
 		<!-- remove all whitespace -->
 		<xsl:variable
