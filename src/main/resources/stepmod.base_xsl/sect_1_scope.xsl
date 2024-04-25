@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="./document_xsl.xsl" ?>
+<!-- <?xml-stylesheet type="text/xsl" href="./document_xsl.xsl" ?> -->
 
 <!--
-$Id: sect_1_scope.xsl,v 1.6 2003/07/15 14:02:51 robbod Exp $
+$Id: sect_1_scope.xsl,v 1.7 2005/07/11 19:51:53 thendrix Exp $
   Author:  Rob Bodington, Eurostep Limited
   Owner:   Developed by Eurostep and supplied to NIST under contract.
   Purpose: Output the Scope section as a web page
@@ -24,7 +24,7 @@ $Id: sect_1_scope.xsl,v 1.6 2003/07/15 14:02:51 robbod Exp $
 
 
 <!-- overwrites the template declared in module.xsl -->
-<xsl:template match="module" mode="scope_module">
+<xsl:template match="module" mode="scope_module"> <!-- called from stepmod2mn.module.adoc.xsl -->
   <!-- <xsl:apply-templates select="." mode="special_header"/>
   <h1>
     Industrial automation systems and integration &#8212; <br/>
