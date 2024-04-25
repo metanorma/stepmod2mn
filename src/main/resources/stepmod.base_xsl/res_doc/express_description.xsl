@@ -590,6 +590,10 @@ $Id: express_description.xsl,v 1.9 2016/09/09 13:05:25 mikeward Exp $
 
 	<!-- return false if the description does not exist in an external file -->
 	<xsl:template name="check_external_description">
+		<xsl:value-of select="'true'"/>
+	</xsl:template>
+	<!-- checking turned off, because replaced by template templates/resources/schemas.adoc -->
+	<xsl:template name="check_external_description_">
 		<!--
 				 The name of the express schema 
 				 Compulsory parameter -->
