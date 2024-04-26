@@ -365,14 +365,17 @@
       <file path="templates/modules/schemas.adoc" empty="true">
       </file>
       
-      <!-- 6 Module reference data -->
-      <!-- sys/6_refdata.xml -->
-      <xsl:message>[INFO] Processing Module reference data (images only) ...</xsl:message>		
-      <file path_ignore="sections/06-refdata.adoc" empty="true">
-        <xsl:apply-templates select="module" mode="refdata_module"/> <!-- sect_6_refdata.xsl -->
-      </file>
-      <file path="templates/modules/module_refdata.adoc" empty="true">
-      </file>
+      <xsl:variable name="sys_6_refdata_xml_exists" select="java:org.metanorma.Util.fileExists(concat($path, '/sys/6_refdata.xml'))"/>
+      <xsl:if test="normalize-space($sys_6_refdata_xml_exists) = 'true'">
+        <!-- 6 Module reference data -->
+        <!-- sys/6_refdata.xml -->
+        <xsl:message>[INFO] Processing Module reference data (images only) ...</xsl:message>		
+        <file path_ignore="sections/06-refdata.adoc" empty="true">
+          <xsl:apply-templates select="module" mode="refdata_module"/> <!-- sect_6_refdata.xsl -->
+        </file>
+        <file path="templates/modules/module_refdata.adoc" empty="true">
+        </file>
+      </xsl:if>
       
       <!-- Annex A Short names of entities -->
       <!-- sys/a_short_names.xml -->
