@@ -66,22 +66,16 @@ $Id: sect_3_defs.xsl,v 1.11 2010/02/03 12:10:33 robbod Exp $
     </xsl:call-template>
   </xsl:variable>
   <!-- list of the references -->
-	<xsl:variable name="list_ref">
-		<xsl:call-template name="get_list_normrefs_terms_rec">
-			<xsl:with-param name="normrefs" select="$normrefs"/>
-			<xsl:with-param name="normref_ids" select="$normrefs"/>
-			<xsl:with-param name="section" select="0"/>
-			<xsl:with-param name="resource_number" select="./@part"/>
-			<xsl:with-param name="current_resource" select="."/>
-		</xsl:call-template>
-	</xsl:variable>
-  
-	<xsl:call-template name="insertHeaderADOC">
-		<xsl:with-param name="id" select="'defns'"/>		
-		<xsl:with-param name="level" select="1"/>
-		<xsl:with-param name="header">Terms, definitions and abbreviated terms</xsl:with-param>
-	</xsl:call-template>
-  
+  <xsl:variable name="list_ref">
+    <xsl:call-template name="get_list_normrefs_terms_rec">
+      <xsl:with-param name="normrefs" select="$normrefs"/>
+      <xsl:with-param name="normref_ids" select="$normrefs"/>
+      <xsl:with-param name="section" select="0"/>
+      <xsl:with-param name="resource_number" select="./@part"/>
+      <xsl:with-param name="current_resource" select="."/>
+    </xsl:call-template>
+  </xsl:variable>
+    
     <!-- <h2>
       <a name="termsdefns">
         3.1 Terms and definitions
@@ -95,12 +89,12 @@ $Id: sect_3_defs.xsl,v 1.11 2010/02/03 12:10:33 robbod Exp $
   <xsl:variable name="attributes">
     <xsl:if test="xalan:nodeset($list_ref)//item[contains(., 'ISO 10303-')]">source=ref10303-2</xsl:if>
   </xsl:variable>
-  
+
   <xsl:call-template name="insertHeaderADOC">
-    <xsl:with-param name="id" select="'termsdefns'"/>		
+    <xsl:with-param name="id" select="'defns'"/>		
     <xsl:with-param name="attributes" select="normalize-space($attributes)"/>
-    <xsl:with-param name="level" select="2"/>
-    <xsl:with-param name="header" select="'Terms and definitions'"/>					
+    <xsl:with-param name="level" select="1"/>
+    <xsl:with-param name="header">Terms, definitions and abbreviated terms</xsl:with-param>
   </xsl:call-template>
   
   <xsl:if test="count(xalan:nodeset($list_ref)//item[contains(., 'ISO 10303-')]) = count(xalan:nodeset($list_ref)//item)">

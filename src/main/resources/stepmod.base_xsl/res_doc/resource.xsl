@@ -931,7 +931,7 @@ Purpose:
 			<!-- Attention is drawn to the possibility that some of the elements of this document may be the subject of 
 			patent rights. ISO shall not be held responsible for identifying any or all such patent rights. Details of 
 			any patent rights identified during the development of the document will be in the Introduction and/or 
-			on the ISO list of patent declarations received (see http://www.iso.org/patents[www.iso.org/patents] --><!-- <a href="http://www.iso.org/patents" target="_blank">www.iso.org/patents</a> -->).
+			on the ISO list of patent declarations received (see http://www.iso.org/patents[www.iso.org/patents]).--><!-- <a href="http://www.iso.org/patents" target="_blank">www.iso.org/patents</a> -->
 			ISO draws attention to the possibility that the implementation of this document may involve the use of (a) patent(s). 
 			ISO takes no position concerning the evidence, validity or applicability of any claimed patent rights in respect thereof. 
 			As of the date of publication of this document, ISO
@@ -3260,10 +3260,12 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 				test="( string(./@status)='TS' or 
 							string(./@status)='IS') and
 							( string(./@status)='CD' or string(./@status)='CD-TS')">
-						<xsl:text> footnote:[Reference applicable during ballot or review period.]</xsl:text>
+            <!-- https://github.com/metanorma/stepmod2mn/issues/173 -->
+						<!-- <xsl:text> footnote:[Reference applicable during ballot or review period.]</xsl:text> -->
 				<!-- &#160;<sup><a href="#derogation">2</a>)</sup> -->
 			</xsl:when>
-			<xsl:when test="@published='n'"><xsl:text> footnote:[</xsl:text><xsl:value-of select="$footnote_tobepub"/><xsl:text>]</xsl:text><!-- &#160;<sup><a href="#tobepub">1</a>)</sup> -->
+      <!-- https://github.com/metanorma/stepmod2mn/issues/173 -->
+			<xsl:when test="@published='n'"><!-- <xsl:text> footnote:[</xsl:text><xsl:value-of select="$footnote_tobepub"/><xsl:text>]</xsl:text>--><!-- &#160;<sup><a href="#tobepub">1</a>)</sup> -->
 			</xsl:when>
 		</xsl:choose>, 
 		<!-- <i>
@@ -3319,7 +3321,8 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 		<!-- <xsl:value-of select="$stdnumber"/> -->
 		
 		<xsl:if test="stdref[@published='n']">
-			<xsl:text> footnote:[</xsl:text><xsl:value-of select="$footnote_tobepub"/><xsl:text>]</xsl:text><!-- <sup><a href="#tobepub">1</a>)</sup> -->
+      <!-- https://github.com/metanorma/stepmod2mn/issues/173 -->
+			<!-- <xsl:text> footnote:[</xsl:text><xsl:value-of select="$footnote_tobepub"/><xsl:text>]</xsl:text> --><!-- <sup><a href="#tobepub">1</a>)</sup> -->
 		</xsl:if><xsl:text>, </xsl:text>
 		
 		<!-- <i> -->

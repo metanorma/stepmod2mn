@@ -3347,7 +3347,8 @@ test="document('../data/basic/normrefs.xml')/normref.list/normref[@id=$normref]/
       <xsl:value-of select="$stdnumber"/>
       <xsl:text>]]]</xsl:text>
       <xsl:if test="stdref[@published='n']">
-        <xsl:text> footnote:[To be published.]</xsl:text>
+        <!-- https://github.com/metanorma/stepmod2mn/issues/173 -->
+        <!-- <xsl:text> footnote:[To be published.]</xsl:text>-->
         <!-- <sup><a href="#tobepub">1</a>)</sup> -->
       </xsl:if>,&#160;
     

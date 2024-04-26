@@ -5260,7 +5260,9 @@ is case sensitive.')"/>
 			<xsl:when
 				test="( string(./@status)='TS' or 
 				string(./@status)='IS') and
-				( string(./@status)='CD' or string(./@status)='CD-TS')"><xsl:text> footnote:[Reference applicable during ballot or review period.]</xsl:text><!-- <sup><a href="#derogation">2</a>)</sup> -->
+				( string(./@status)='CD' or string(./@status)='CD-TS')">
+        <!-- https://github.com/metanorma/stepmod2mn/issues/173 -->
+        <!-- <xsl:text> footnote:[Reference applicable during ballot or review period.]</xsl:text>--><!-- <sup><a href="#derogation">2</a>)</sup> -->
 			</xsl:when>
 			<!-- 
 				See 
@@ -5310,7 +5312,9 @@ is case sensitive.')"/>
 				test="( string(./@status)='TS' or 
 				string(./@status)='IS') and
 				( string(./@status)='CD' or string(./@status)='CD-TS')"
-				><xsl:text> footnote:[Reference applicable during ballot or review period.]</xsl:text><!-- <sup><a href="#derogation">2</a>)</sup> -->
+				>
+        <!-- https://github.com/metanorma/stepmod2mn/issues/173 -->
+        <!-- <xsl:text> footnote:[Reference applicable during ballot or review period.]</xsl:text> --><!-- <sup><a href="#derogation">2</a>)</sup> -->
 			</xsl:when>
 			<!-- 
 				See 
@@ -5361,13 +5365,16 @@ is case sensitive.')"/>
 				test="( string(./@status)='TS' or 
 				string(./@status)='IS') and
 				( string(./@status)='CD' or string(./@status)='CD-TS')"
-				><xsl:text> footnote:[Reference applicable during ballot or review period.]</xsl:text><!--  &#160;<sup><a href="#derogation">2</a>)</sup> -->
+				>
+        <!-- https://github.com/metanorma/stepmod2mn/issues/173 -->
+        <!-- <xsl:text> footnote:[Reference applicable during ballot or review period.]</xsl:text> --><!--  &#160;<sup><a href="#derogation">2</a>)</sup> -->
 			</xsl:when>
 			<!-- 
 				See 
 				http://locke.dcnicn.com/bugzilla/iso10303/show_bug.cgi?id=3401#c5        
 				-->
-			<xsl:when test="@published='n'"><xsl:text> footnote:[To be published.]</xsl:text><!-- &#160;<sup><a href="#tobepub">1</a>)</sup> -->
+      <!-- https://github.com/metanorma/stepmod2mn/issues/173 -->
+			<xsl:when test="@published='n'"><!-- <xsl:text> footnote:[To be published.]</xsl:text> --><!-- &#160;<sup><a href="#tobepub">1</a>)</sup> -->
 			</xsl:when>
 		</xsl:choose>,&#160; <!-- <i>
 			<xsl:value-of select="$stdtitle"/>
