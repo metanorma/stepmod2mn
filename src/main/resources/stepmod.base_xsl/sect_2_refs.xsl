@@ -700,7 +700,8 @@ $Id: sect_2_refs.xsl,v 1.22 2019/03/09 01:29:01 tom Exp $
             stdref/pubdate,'.')"/>
         
         <xsl:if test="stdref[@published='n']">
-          <xsl:text> footnote:[</xsl:text><xsl:value-of select="$footnote_text"/><xsl:text>]</xsl:text><!-- <sup><a href="#tobepub">1</a>)</sup> -->
+          <!-- https://github.com/metanorma/stepmod2mn/issues/173 -->
+          <!-- <xsl:text> footnote:[</xsl:text><xsl:value-of select="$footnote_text"/><xsl:text>]</xsl:text>--><!-- <sup><a href="#tobepub">1</a>)</sup> -->
         </xsl:if><xsl:text>, </xsl:text>
         
         <!-- &#160; <i> -->

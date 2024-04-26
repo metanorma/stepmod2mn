@@ -3260,10 +3260,12 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 				test="( string(./@status)='TS' or 
 							string(./@status)='IS') and
 							( string(./@status)='CD' or string(./@status)='CD-TS')">
-						<xsl:text> footnote:[Reference applicable during ballot or review period.]</xsl:text>
+            <!-- https://github.com/metanorma/stepmod2mn/issues/173 -->
+						<!-- <xsl:text> footnote:[Reference applicable during ballot or review period.]</xsl:text> -->
 				<!-- &#160;<sup><a href="#derogation">2</a>)</sup> -->
 			</xsl:when>
-			<xsl:when test="@published='n'"><xsl:text> footnote:[</xsl:text><xsl:value-of select="$footnote_tobepub"/><xsl:text>]</xsl:text><!-- &#160;<sup><a href="#tobepub">1</a>)</sup> -->
+      <!-- https://github.com/metanorma/stepmod2mn/issues/173 -->
+			<xsl:when test="@published='n'"><!-- <xsl:text> footnote:[</xsl:text><xsl:value-of select="$footnote_tobepub"/><xsl:text>]</xsl:text>--><!-- &#160;<sup><a href="#tobepub">1</a>)</sup> -->
 			</xsl:when>
 		</xsl:choose>, 
 		<!-- <i>
@@ -3319,7 +3321,8 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 		<!-- <xsl:value-of select="$stdnumber"/> -->
 		
 		<xsl:if test="stdref[@published='n']">
-			<xsl:text> footnote:[</xsl:text><xsl:value-of select="$footnote_tobepub"/><xsl:text>]</xsl:text><!-- <sup><a href="#tobepub">1</a>)</sup> -->
+      <!-- https://github.com/metanorma/stepmod2mn/issues/173 -->
+			<!-- <xsl:text> footnote:[</xsl:text><xsl:value-of select="$footnote_tobepub"/><xsl:text>]</xsl:text> --><!-- <sup><a href="#tobepub">1</a>)</sup> -->
 		</xsl:if><xsl:text>, </xsl:text>
 		
 		<!-- <i> -->
