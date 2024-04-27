@@ -112,7 +112,12 @@ public class XMLUtils {
                 part = "unknown";
             }
 
-            String folderDocumentName = Constants.ISO_STANDARD_PREFIX +  part;
+            String folderDocumentName = "";
+            if (part.matches("^\\d+\\-\\d+$")) {
+                folderDocumentName = "iso-" + part;
+            } else {
+                folderDocumentName = Constants.ISO_STANDARD_PREFIX + part;
+            }
 
             Path outAdocPath = Paths.get(argOutputPath, folderDocumentName, Constants.DOCUMENT_ADOC);
             outAdocFile = outAdocPath.toString();

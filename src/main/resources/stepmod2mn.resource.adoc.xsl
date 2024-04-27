@@ -158,6 +158,18 @@
 	
 	<xsl:variable name="imagesdir">images</xsl:variable>
 	
+	<xsl:variable name="docnumber">
+		<xsl:for-each select="resource"><!-- change context node to 'resource' -->
+			<xsl:call-template name="extract_docnumber"/>
+		</xsl:for-each>
+	</xsl:variable>
+	
+	<xsl:variable name="part">
+		<xsl:for-each select="resource">
+			<xsl:call-template name="extract_part"/>
+		</xsl:for-each>
+	</xsl:variable>
+	
 	<!-- resource.xml -->
 	<xsl:template match="/">
 		<xsl:variable name="title-intro-en">Industrial automation systems and integration</xsl:variable>
@@ -169,7 +181,8 @@
 		
 		<xsl:text>= </xsl:text><xsl:value-of select="$title-intro-en"/>: <xsl:value-of select="$title-main-en"/>: <xsl:value-of select="$title-part-en"/>
 		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>:docnumber: 10303</xsl:text><!-- <xsl:apply-templates select="resource" mode="docnumber"/> --><!-- res_doc/sect_1_scope.xsl -->
+		<!-- 10303 -->
+		<xsl:text>:docnumber: </xsl:text><xsl:value-of select="$docnumber"/><!-- <xsl:apply-templates select="resource" mode="docnumber"/> --><!-- res_doc/sect_1_scope.xsl -->
 		<xsl:text>&#xa;</xsl:text>
 		
 		<!-- <xsl:text>:tc-docnumber: </xsl:text><xsl:value-of select="resource/@wg.number"/> -->
@@ -192,7 +205,7 @@
 			</xsl:call-template>
 		</xsl:if>
 		
-		<xsl:text>:partnumber: </xsl:text><xsl:value-of select="resource/@part"/>
+		<xsl:text>:partnumber: </xsl:text><xsl:value-of select="$part"/>
 		<xsl:text>&#xa;</xsl:text>
 		
 		<xsl:text>:copyright-year: </xsl:text><xsl:value-of select="substring(resource/@publication.year,1,4)"/>
@@ -263,7 +276,7 @@
 		<xsl:text>&#xa;</xsl:text>
 		
 		<xsl:if test="normalize-space(resource/@previous.revision.year) != ''">
-			<xsl:text>:revises: ISO 10303-</xsl:text><xsl:value-of select="concat(resource/@part, ':', resource/@previous.revision.year)"/>
+			<xsl:text>:revises: ISO </xsl:text><xsl:value-of select="$docnumber"/>-<xsl:value-of select="concat($part, ':', resource/@previous.revision.year)"/>
 			<xsl:text>&#xa;</xsl:text>
 		</xsl:if>
 		
@@ -359,10 +372,10 @@
 				<data>
 					<title lang="en"><xsl:value-of select="$title-intro-en"/> -- <xsl:value-of select="$title-main-en"/> -- <xsl:value-of select="$title-part-en"/></title>
 					<title lang="fr"><xsl:value-of select="$title-intro-fr"/> -- <xsl:value-of select="$title-main-fr"/> -- <xsl:value-of select="$title-part-fr"/></title>
-					<docid>10303-<xsl:value-of select="resource/@part"/></docid>
+					<docid><xsl:value-of select="$docnumber"/>-<xsl:value-of select="$part"/></docid>
 					<edition><xsl:value-of select="resource/@version"/></edition>
 					<year><xsl:value-of select="substring(resource/@publication.year,1,4)"/></year>
-					<part><xsl:value-of select="resource/@part"/></part>
+					<part><xsl:value-of select="$part"/></part>
 				</data>
 			</xsl:with-param>
 		</xsl:call-template>

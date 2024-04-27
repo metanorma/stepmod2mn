@@ -5068,13 +5068,16 @@ is case sensitive.')"/>
 
 
 	<xsl:template match="resource" mode="type">
+		<xsl:variable name="part">
+			<xsl:call-template name="extract_part"/>
+		</xsl:variable>
 		<xsl:choose>
-			<xsl:when test="@part >  500">Application interpreted construct</xsl:when>
-			<xsl:when test="@part >  99">Integrated application resource</xsl:when>
-			<xsl:when test="@part &lt;  99">Integrated generic resource</xsl:when>
+			<xsl:when test="$part >  500">Application interpreted construct</xsl:when>
+			<xsl:when test="$part >  99">Integrated application resource</xsl:when>
+			<xsl:when test="$part &lt;  99">Integrated generic resource</xsl:when>
 			<xsl:otherwise>
 				<xsl:call-template name="error_message">
-				<xsl:with-param name="message" select="concat('Error : unknown type,  part number:', @part)"/>
+				<xsl:with-param name="message" select="concat('Error : unknown type,  part number:', $part)"/>
 				</xsl:call-template>
 			</xsl:otherwise>
 		</xsl:choose>
@@ -5128,17 +5131,20 @@ is case sensitive.')"/>
 
 
 <xsl:template match="resource|module|application_protocol" mode="doctype">
+	<xsl:variable name="part">
+		<xsl:call-template name="extract_part"/>
+	</xsl:variable>
 	<xsl:choose>
 	<xsl:when test="name(.)='application_protocol'">ap</xsl:when>
 	<xsl:when test="name(.)='module'">am</xsl:when>
-	<xsl:when test="name(.)='resource' and @part > 499 and ./schema[starts-with(@name,'aic_')] ">aic</xsl:when>
-	<xsl:when test="name(.)='resource' and @part >  99">iar</xsl:when>
-	<xsl:when test="name(.)='resource' and @part &lt;  99">igr</xsl:when>
+	<xsl:when test="name(.)='resource' and $part > 499 and ./schema[starts-with(@name,'aic_')] ">aic</xsl:when>
+	<xsl:when test="name(.)='resource' and $part >  99">iar</xsl:when>
+	<xsl:when test="name(.)='resource' and $part &lt;  99">igr</xsl:when>
 	<xsl:otherwise>
 		<xsl:call-template name="error_message">
 		<xsl:with-param 
 			name="message" 
-			select="concat('Error : unknown type,  part number:', @part)"/>
+			select="concat('Error : unknown type,  part number:', $part)"/>
 		</xsl:call-template>
 	</xsl:otherwise>
 	</xsl:choose>

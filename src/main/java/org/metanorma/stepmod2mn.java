@@ -978,7 +978,12 @@ public class stepmod2mn {
                             outPath = Paths.get(outPathSchemas, kind).toString();
                         } else {
                             isSVGmap = true;
-                            String folderDocumentName = Constants.ISO_STANDARD_PREFIX + attPart;
+                            String folderDocumentName = "";
+                            if (attPart.matches("^\\d+\\-\\d+$")) {
+                                folderDocumentName = "iso-" + attPart;
+                            } else {
+                                folderDocumentName = Constants.ISO_STANDARD_PREFIX + attPart;
+                            }
                             outPath = Paths.get(outPath, folderDocumentName).toString();
                         }
                     } else {
