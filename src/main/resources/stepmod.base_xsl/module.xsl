@@ -871,7 +871,7 @@ TT remove since locke is no longer available.
 
 <xsl:template match="purpose">
 
-  <xsl:variable name="arm_expg_annex_letter">
+  <!--<xsl:variable name="arm_expg_annex_letter">
     <xsl:choose>
       <xsl:when test="/module/mim">C</xsl:when>
       <xsl:otherwise>B</xsl:otherwise>
@@ -882,7 +882,7 @@ TT remove since locke is no longer available.
       <xsl:when test="/module/mim">E</xsl:when>
       <xsl:otherwise>C</xsl:otherwise>
     </xsl:choose>
-  </xsl:variable>
+  </xsl:variable> -->
 
     <!-- <h2>
     <a name="introduction">
@@ -988,8 +988,8 @@ TT remove since locke is no longer available.
     &lt;&lt;defns&gt;&gt; lists the words defined in
     this document and gives pointers to words defined elsewhere. 
 
-    The information requirements of the application are specified in Clause 
-    <!-- <a href="4_info_reqs{$FILE_EXT}">4</a> using terminology appropriate to -->
+    <!--The information requirements of the application are specified in Clause 
+     <a href="4_info_reqs{$FILE_EXT}">4</a> using terminology appropriate to -->
     The information requirements of the application are specified in 
     &lt;&lt;arm&gt;&gt; using terminology appropriate to
     the application. 
@@ -1012,11 +1012,11 @@ TT remove since locke is no longer available.
     A graphical representation of the short listing of the MIM is given
     <!-- in Annex <a href="d_mim_expg{$FILE_EXT}">D</a>. -->
     in &lt;&lt;AnnexD&gt;&gt;. 
+    </xsl:if>
     Publicly available computer interpretable listings that are associated with this document 
     <!-- are identified in Annex <a href="e_exp{$FILE_EXT}">
     <xsl:value-of select="$listing_annex_letter"/></a>. -->
     are identified in &lt;&lt;annex_listings&gt;&gt;.
-    </xsl:if>
     </xsl:with-param>
     </xsl:call-template>
     <!-- </p> -->
@@ -1629,7 +1629,7 @@ this document,  may be provided to support implementations.  If the information 
   </xsl:template>
   <xsl:template match="arm">
 
-    <xsl:variable name="arm_expg_annex_letter">
+    <!-- <xsl:variable name="arm_expg_annex_letter">
       <xsl:choose>
         <xsl:when test="/module/mim">C</xsl:when>
         <xsl:otherwise>B</xsl:otherwise>
@@ -1641,7 +1641,7 @@ this document,  may be provided to support implementations.  If the information 
         <xsl:when test="/module/mim">E</xsl:when>
         <xsl:otherwise>C</xsl:otherwise>
       </xsl:choose>
-    </xsl:variable>
+    </xsl:variable>-->
 
     <xsl:call-template name="clause_header">
       <!-- <xsl:with-param name="heading" select="'4 Information requirements'"/> -->
@@ -4301,7 +4301,7 @@ $module_ok,' Check the normatives references')"/>
   </xsl:template>
   <xsl:template match="imgfile|img" mode="expressg">
     <xsl:param name="express_g_diagrams_yaml"/>
-    <xsl:variable name="arm_expg_annex_letter">
+    <!-- <xsl:variable name="arm_expg_annex_letter">
       <xsl:choose>
         <xsl:when test="/module/mim">C</xsl:when>
         <xsl:otherwise>B</xsl:otherwise>
@@ -4312,7 +4312,7 @@ $module_ok,' Check the normatives references')"/>
         <xsl:when test="/module/mim">E</xsl:when>
         <xsl:otherwise>C</xsl:otherwise>
       </xsl:choose>
-    </xsl:variable>
+    </xsl:variable> -->
     <xsl:variable name="file">
       <!-- <xsl:call-template name="set_file_ext">
       <xsl:with-param name="filename" select="@file"/>
