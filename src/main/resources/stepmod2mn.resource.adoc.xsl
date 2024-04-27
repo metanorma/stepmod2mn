@@ -469,27 +469,36 @@
 			<!-- </xsl:if> -->
 			
 			<!-- Annex A Short names of entities -->
-			<xsl:message>[INFO] Processing Annex A Short names of entities ...</xsl:message>		
-			<file path="sections/91-short-names.adoc">
+			<xsl:message>[INFO] Processing Annex A Short names of entities (images only) ...</xsl:message>		
+			<file path_ignore="sections/91-short-names.adoc" empty="true">
 				<xsl:apply-templates select="resource" mode="annex_a"/> <!-- res_doc/sect_a_short_names.xsl  -->
+			</file>
+			<file path="templates/resources/resource_annex_short_names.adoc" empty="true">
 			</file>
 			
 			<!-- Annex B Information object registration -->
-			<xsl:message>[INFO] Processing Annex B Information object registration ...</xsl:message>		
-			<file path="sections/92-identifier.adoc">
+			<xsl:message>[INFO] Processing Annex B Information object registration (images only) ...</xsl:message>		
+			<file path_ignore="sections/92-identifier.adoc" empty="true">
 				<xsl:apply-templates select="resource" mode="annex_b"/> <!-- res_doc/sect_b_obj_reg.xsl  -->
+			</file>
+			<file path="templates/resources/resource_annex_identifier.adoc" empty="true">
 			</file>
 
 			<!-- Annex C Computer interpretable listings -->
-			<xsl:message>[INFO] Processing Annex C Computer interpretable listings ...</xsl:message>		
-			<file path="sections/93-listings.adoc">
+			<xsl:message>[INFO] Processing Annex C Computer interpretable listings (images only) ...</xsl:message>		
+			<file path_ignore="sections/93-listings.adoc" empty="true">
 				<xsl:apply-templates select="resource" mode="annexc"/> <!-- res_doc/sect_c_exp.xsl  -->
 			</file>
+			<file path="templates/resources/resource_annex_listings.adoc" empty="true">
+			</file>
 			
-			<xsl:message>[INFO] Processing Annex D EXPRESS-G diagrams ...</xsl:message>		
+			
+			<xsl:message>[INFO] Processing Annex D EXPRESS-G diagrams (images only) ...</xsl:message>		
 			<!-- Annex D EXPRESS-G diagrams -->
-			<file path="sections/94-expressg-diagrams.adoc">
+			<file path_ignore="sections/94-expressg-diagrams.adoc" empty="true">
 				<xsl:apply-templates select="resource" mode="annexd"/> <!-- res_doc/sect_d_expg.xsl  -->
+			</file>
+			<file path="templates/resources/resource_annex_diagrams.adoc" empty="true">
 			</file>
 				
 			<!-- Annex E F G H -->		
@@ -520,10 +529,12 @@
 			
 			<!-- Annex x Change history -->
 			<xsl:if test="resource/changes">
-				<xsl:message>[INFO] Processing Annex Change history ...</xsl:message>		
-				<file path="sections/97-change-history.adoc">
+				<xsl:message>[INFO] Processing Annex Change history (images only) ...</xsl:message>		
+				<file path_ignore="sections/97-change-history.adoc" empty="true">
 					<xsl:apply-templates select="resource" mode="change_history"/> <!-- res_doc/sect_g_change.xsl -->
 				</file>
+				<file path="templates/resources/resource_annex_change_history.adoc" empty="true">
+			</file>
 			</xsl:if>
 	
 		</xsl:variable>
