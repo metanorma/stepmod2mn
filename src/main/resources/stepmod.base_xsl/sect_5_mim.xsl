@@ -2,7 +2,7 @@
 <?xml-stylesheet type="text/xsl" href="./document_xsl.xsl" ?>
 
 <!--
-$Id: sect_5_mim.xsl,v 1.5 2003/05/28 09:27:00 robbod Exp $
+$Id: sect_5_mim.xsl,v 1.6 2003/05/29 06:37:12 robbod Exp $
   Author:  Rob Bodington, Eurostep Limited
   Owner:   Developed by Eurostep and supplied to NIST under contract.
   Purpose:

@@ -2,7 +2,7 @@
 <?xml-stylesheet type="text/xsl" href="./document_xsl.xsl" ?>
 
 <!--
-$Id: sect_4_info_reqs.xsl,v 1.6 2012/11/06 09:43:39 mikeward Exp $
+$Id: sect_4_info_reqs.xsl,v 1.7 2014/06/13 12:58:59 nigelshaw Exp $
   Author:  Rob Bodington, Eurostep Limited
   Owner:   Developed by Eurostep and supplied to NIST under contract.
   Purpose: Output section 4 Information model as a web page
@@ -39,7 +39,7 @@ $Id: sect_4_info_reqs.xsl,v 1.6 2012/11/06 09:43:39 mikeward Exp $
   
 
   <!-- overwrites the template declared in module.xsl -->
-  <xsl:template match="module" mode="info_reqs_module">
+  <xsl:template match="module" mode="info_reqs_module"> <!-- called from stepmod2mn.module.adoc.xsl  -->
     <xsl:apply-templates select="arm"/>
   </xsl:template>
   
