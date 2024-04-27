@@ -41,6 +41,7 @@ $Id: module.xsl,v 1.254 2020/07/29 10:08:52 verodub Exp $
     <xsl:variable name="ERR" select="'**************************'"/>
     <xsl:variable name="wgnumber_check" select="translate(translate($wgnumber,$LOWER,$UPPER),$UPPER,$ERR)"/>
     <xsl:choose>
+			<xsl:when test="normalize-space(java:matches(java:java.lang.String.new(@part), '^\d+\-\d+$')) = 'true'">'OK'</xsl:when> <!-- Example: part="13584-20" -->
       <xsl:when test="not($wgnumber) or normalize-space($wgnumber) = ''">
       Error WG-1: No WG number provided.
     </xsl:when>
@@ -995,7 +996,7 @@ TT remove since locke is no longer available.
     the application. 
 
     A graphical representation of the information requirements, referred to
-    as the application reference model, is given in &lt;&lt;AnnexC&gt;&gt; . <!-- c_arm_expg -->
+    as the application reference model, is given in &lt;&lt;AnnexC&gt;&gt;. <!-- c_arm_expg -->
         <!-- <a href="c_arm_expg{$FILE_EXT}">C</a>.  -->
 
     Resource constructs are interpreted to meet the information

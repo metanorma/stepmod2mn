@@ -1053,6 +1053,24 @@
 		</xsl:choose>
 	</xsl:template>
 	
+	<xsl:template name="extract_part">
+		<xsl:choose>
+			<xsl:when test="normalize-space(java:matches(java:java.lang.String.new(@part), '^\d+\-\d+$')) = 'true'"> <!-- Example: part="13584-20" -->
+				<xsl:value-of select="substring-after(@part, '-')"/>
+			</xsl:when>
+			<xsl:otherwise><xsl:value-of select="@part"/></xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	
+	<xsl:template name="extract_docnumber">
+		<xsl:choose>
+			<xsl:when test="normalize-space(java:matches(java:java.lang.String.new(@part), '^\d+\-\d+$')) = 'true'"> <!-- Example: part="13584-20" -->
+				<xsl:value-of select="substring-before(@part, '-')"/>
+			</xsl:when>
+			<xsl:otherwise>10303</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
 	
 	<!-- Example:
 		directives:
@@ -1146,7 +1164,8 @@
 			<xsl:text>&#xa;</xsl:text>
 			<xsl:text>        - fileref: document.xml</xsl:text>
 			<xsl:text>&#xa;</xsl:text>
-			<xsl:text>          identifier: iso10303-</xsl:text><xsl:value-of select="$data//part"/>
+			<!-- <xsl:text>          identifier: iso10303-</xsl:text><xsl:value-of select="$data//part"/> -->
+			<xsl:text>          identifier: iso</xsl:text><xsl:value-of select="$data//docid"/>
 			<xsl:text>&#xa;</xsl:text>
 			<xsl:text>          sectionsplit: true</xsl:text>
 			<xsl:text>&#xa;</xsl:text>

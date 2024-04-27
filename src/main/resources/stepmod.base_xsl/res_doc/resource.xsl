@@ -58,6 +58,7 @@ Purpose:
 			select="translate(translate($wgnumber,$LOWER,$UPPER),$UPPER,$ERR)"/>
 
 		<xsl:choose>
+			<xsl:when test="normalize-space(java:matches(java:java.lang.String.new(@part), '^\d+\-\d+$')) = 'true'">'OK'</xsl:when> <!-- Example: part="13584-20" -->
 			<xsl:when test="not($wgnumber)">
 	Error WG-1: No WG number provided.
 			</xsl:when>

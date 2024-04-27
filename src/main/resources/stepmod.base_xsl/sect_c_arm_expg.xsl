@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="./document_xsl.xsl" ?>
+<!-- <?xml-stylesheet type="text/xsl" href="./document_xsl.xsl" ?> -->
 
 <!--
-$Id: sect_c_arm_expg.xsl,v 1.13 2006/10/13 21:18:00 darla Exp $
+$Id: sect_c_arm_expg.xsl,v 1.14 2008/11/14 13:45:03 darla Exp $
   Author:  Rob Bodington, Eurostep Limited
   Owner:   Developed by Eurostep and supplied to NIST under contract.
   Purpose:
@@ -23,9 +23,17 @@ $Id: sect_c_arm_expg.xsl,v 1.13 2006/10/13 21:18:00 darla Exp $
   <xsl:output method="html"/>
 
 <!-- overwrites the template declared in module.xsl -->
-<xsl:template match="module" mode="annex_c">
+<xsl:template match="module" mode="annex_c"> <!-- called from stepmod2mn.module.adoc.xsl  -->
+
+  <xsl:variable name="arm_expg_annex_letter">
+    <xsl:choose>
+      <xsl:when test="./mim">C</xsl:when>
+      <xsl:otherwise>B</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
   <xsl:call-template name="annex_header">
-    <xsl:with-param name="annex_no" select="'C'"/>
+    <xsl:with-param name="annex_no" select="$arm_expg_annex_letter"/>
     <xsl:with-param name="heading" 
       select="'ARM EXPRESS-G'"/>
     <xsl:with-param name="aname" select="'annexc'"/>

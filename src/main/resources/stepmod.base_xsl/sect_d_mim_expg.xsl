@@ -2,7 +2,7 @@
 <?xml-stylesheet type="text/xsl" href="./document_xsl.xsl" ?>
 
 <!--
-$Id: sect_d_mim_expg.xsl,v 1.14 2006/10/13 21:18:18 darla Exp $
+$Id: sect_d_mim_expg.xsl,v 1.15 2008/11/14 13:45:11 darla Exp $
   Author:  Rob Bodington, Eurostep Limited
   Owner:   Developed by Eurostep and supplied to NIST under contract.
   Purpose:
@@ -23,7 +23,7 @@ $Id: sect_d_mim_expg.xsl,v 1.14 2006/10/13 21:18:18 darla Exp $
   <xsl:output method="html"/>
 
 <!-- overwrites the template declared in module.xsl -->
-<xsl:template match="module" mode="annex_d">
+<xsl:template match="module" mode="annex_d"> <!-- called from stepmod2mn.module.adoc.xsl  -->
   <xsl:call-template name="annex_header">
     <xsl:with-param name="annex_no" select="'D'"/>
     <xsl:with-param name="heading" 

@@ -26,7 +26,7 @@ $Id: sect_g_change.xsl,v 1.18 2019/01/25 22:45:46 mike Exp $
   <xsl:output method="html"/>
 
 <!-- overwrites the template declared in module.xsl -->
-<xsl:template match="module" mode="change_history">
+<xsl:template match="module" mode="change_history"> <!-- called from stepmod2mn.module.adoc.xsl  -->
   <!-- <xsl:variable name="annex_letter">G</xsl:variable> -->
     <!-- <xsl:choose>
       <xsl:when test="//changes and //usage_guide">G</xsl:when>
