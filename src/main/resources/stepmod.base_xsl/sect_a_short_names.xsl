@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="./document_xsl.xsl" ?>
+<!-- <?xml-stylesheet type="text/xsl" href="./document_xsl.xsl" ?> -->
 
 <!--
-$Id: sect_a_short_names.xsl,v 1.27 2018/01/18 20:20:21 mike Exp $
+$Id: sect_a_short_names.xsl,v 1.28 2018/07/23 15:10:58 tom Exp $
   Author:  Rob Bodington, Eurostep Limited
   Owner:   Developed by Eurostep and supplied to NIST under contract.
   Purpose:
@@ -23,7 +23,7 @@ $Id: sect_a_short_names.xsl,v 1.27 2018/01/18 20:20:21 mike Exp $
   <xsl:output method="html"/>
 
 <!-- overwrites the template declared in module.xsl -->
-<xsl:template match="module" mode="annex_a">
+<xsl:template match="module" mode="annex_a"> <!-- called from stepmod2mn.module.adoc.xsl  -->
   <xsl:call-template name="annex_header">
     <xsl:with-param name="annex_no" select="'A'"/>
     <xsl:with-param name="heading" select="'MIM short names'"/>
