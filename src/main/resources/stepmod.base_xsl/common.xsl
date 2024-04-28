@@ -1608,6 +1608,7 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 	<xsl:template name="error_message">
 		<xsl:param name="message"/>
 		<xsl:param name="inline" select="'yes'"/>
+		<xsl:param name="insert_newline" select="'yes'"/>
 		<xsl:param name="comment" select="'no'"/>
 		<xsl:param name="linebreakchar" select="'#'"/>
 		<xsl:param name="warning_gif" select="'../../../../images/warning.gif'"/>
@@ -1626,7 +1627,9 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 		
 		<xsl:if test="contains($INLINE_ERRORS,'yes')">
 			<xsl:if test="contains($inline,'yes')">
-				<xsl:text>&#xa;</xsl:text>
+				<xsl:if test="$insert_newline = 'yes'">
+					<xsl:text>&#xa;</xsl:text>
+				</xsl:if>
 				<!-- <br/>
 				<IMG
 					SRC="{$warning_gif}" ALT="[warning:]"
@@ -5010,6 +5013,7 @@ is case sensitive.')"/>
 	<!-- Flag a warning if the defnition starts with a an the
 		A phrase should NOT end in a period -->
 	<xsl:template match="def" mode="check_phrase">
+		<xsl:param name="insert_newline">yes</xsl:param>
 		<xsl:variable name="UPPER">ABCDEFGHIJKLMNOPQRSTUVWXYZ</xsl:variable>
 		<xsl:variable name="LOWER">abcdefghijklmnopqrstuvwxyz</xsl:variable>
 		<xsl:variable name="defn" select="translate(normalize-space(text()), $LOWER, $UPPER)"/>   
@@ -5027,6 +5031,8 @@ is case sensitive.')"/>
 					<xsl:with-param 
 						name="message" 
 						select="concat('Error defn2, module: ',/*/@name,' - definition should not start with an article i.e A or a.')"/>
+					<xsl:with-param name="comment" select="'yes'"/>
+					<xsl:with-param name="insert_newline" select="$insert_newline"/>
 				</xsl:call-template>
 			</xsl:when>
 			<xsl:when test="starts-with($defn, 'AN ')">        
@@ -5034,6 +5040,8 @@ is case sensitive.')"/>
 					<xsl:with-param 
 						name="message" 
 						select="concat('Error defn2, module: ',/*/@name,' - definition should not start with an article i.e An or an.')"/>
+					<xsl:with-param name="comment" select="'yes'"/>
+					<xsl:with-param name="insert_newline" select="$insert_newline"/>
 				</xsl:call-template>
 			</xsl:when>
 			<xsl:when test="starts-with($defn, 'THE ')">        
@@ -5041,6 +5049,8 @@ is case sensitive.')"/>
 					<xsl:with-param 
 						name="message" 
 						select="concat('Error defn2, module: ',/*/@name,' - definition should not start with an article i.e The or the.')"/>
+					<xsl:with-param name="comment" select="'yes'"/>
+					<xsl:with-param name="insert_newline" select="$insert_newline"/>
 				</xsl:call-template>
 			</xsl:when>
 		</xsl:choose>

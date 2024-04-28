@@ -4169,14 +4169,22 @@ $module_ok,' Check the normatives references')"/>
       <xsl:with-param name="index_term2">term</xsl:with-param>
     </xsl:call-template>
     <!-- <xsl:apply-templates select="def"/> -->
+    <xsl:apply-templates select="def" mode="check_phrase">
+      <xsl:with-param name="insert_newline">no</xsl:with-param>
+    </xsl:apply-templates>
     <xsl:call-template name="insertParagraph">
       <xsl:with-param name="text">
-        <xsl:apply-templates select="def"/>
+        <xsl:apply-templates select="def">
+          <xsl:with-param name="check_phrase">no</xsl:with-param>
+        </xsl:apply-templates>
       </xsl:with-param>
     </xsl:call-template>
   </xsl:template>
   <xsl:template match="def">
-    <xsl:apply-templates select="." mode="check_phrase"/>
+    <xsl:param name="check_phrase">yes</xsl:param>
+    <xsl:if test="$check_phrase = 'yes'">
+      <xsl:apply-templates select="." mode="check_phrase"/>
+    </xsl:if>
     <xsl:apply-templates/>
   </xsl:template>
   <xsl:template match="refdata">
