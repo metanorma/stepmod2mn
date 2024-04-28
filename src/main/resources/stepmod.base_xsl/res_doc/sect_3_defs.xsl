@@ -11,7 +11,8 @@ $Id: sect_3_defs.xsl,v 1.6 2010/02/03 23:18:57 lothartklein Exp $
 <!-- Updated: Alexander Dyuzhev, for stepmod2mn tool-->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:xalan="http://xml.apache.org/xalan" 
-	exclude-result-prefixes="xalan"
+  xmlns:java="http://xml.apache.org/xalan/java"
+	exclude-result-prefixes="xalan java"
                 version="1.0">
 
 <!--   <xsl:import href="resource.xsl"/> -->
@@ -86,8 +87,16 @@ $Id: sect_3_defs.xsl,v 1.6 2010/02/03 23:18:57 lothartklein Exp $
 	 it means all "ISO 10303-*" parts should be omitted, because ISO 10303-2 is a new publication that includes all terms.
 		 This means once we include ISO 10303-2 in the source, 
 		 we do not need to import any other term from any ISO 10303-* document. -->
+	 <xsl:variable name="list_ref_iso_10303">
+		<xsl:for-each select="xalan:nodeset($list_ref)//item">
+			<xsl:if test="normalize-space(java:matches(java:java.lang.String.new(.), $ISO_10303_regex)) = 'true'">
+				<xsl:copy-of select="."/>
+			</xsl:if>
+		</xsl:for-each>
+	</xsl:variable>
 	<xsl:variable name="attributes">
-		<xsl:if test="xalan:nodeset($list_ref)//item[contains(., 'ISO 10303-')]">source=ref10303-2</xsl:if>
+		<!-- <xsl:if test="xalan:nodeset($list_ref)//item[contains(., 'ISO 10303-')]">source=ref10303-2</xsl:if> -->
+		<xsl:if test="xalan:nodeset($list_ref_iso_10303)//item">source=ref10303-2</xsl:if>
 	</xsl:variable>
 	
 	<xsl:call-template name="insertHeaderADOC">
@@ -103,9 +112,10 @@ $Id: sect_3_defs.xsl,v 1.6 2010/02/03 23:18:57 lothartklein Exp $
       </a>        
     </h2>   -->
 
-	<xsl:if test="count(xalan:nodeset($list_ref)//item[contains(., 'ISO 10303-')]) = count(xalan:nodeset($list_ref)//item)">
+	<!-- <xsl:if test="count(xalan:nodeset($list_ref)//item[contains(., 'ISO 10303-')]) = count(xalan:nodeset($list_ref)//item)"> -->
+	<xsl:if test="count(xalan:nodeset($list_ref_iso_10303)//item) = count(xalan:nodeset($list_ref)//item)">
 		<xsl:call-template name="insertHeaderADOC">
-			<xsl:with-param name="id" select="'termsdefns'"/>
+			<!-- <xsl:with-param name="id" select="'termsdefns'"/> -->
 			<xsl:with-param name="attributes" select="'heading=terms and definitions'"/>
 			<xsl:with-param name="level" select="2"/>
 			<xsl:with-param name="header" select="'Terms and definitions'"/>					

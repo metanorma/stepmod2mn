@@ -909,8 +909,10 @@ TT remove since locke is no longer available.
       </xsl:when>
       <xsl:otherwise>
         <xsl:if test="not(substring-after(.,'This document specifies'))">
+          <!-- Commented, see https://github.com/metanorma/iso-10303-srl/issues/201#issuecomment-2081298354 -->
           <xsl:call-template name="error_message">
             <xsl:with-param name="inline" select="'yes'"/>
+            <xsl:with-param name="comment" select="'yes'"/>
             <xsl:with-param name="warning_gif" select="'../../../../images/warning.gif'"/>
             <xsl:with-param name="message" select="'Error P2: Introduction does not start with required text: This document specifies .'"/>
           </xsl:call-template>
@@ -3629,7 +3631,9 @@ test="document('../data/basic/normrefs.xml')/normref.list/normref[@id=$normref]/
 							it means all "ISO 10303-*" parts should be omitted, because ISO 10303-2 is a new publication that includes all terms.
 							This means once we include ISO 10303-2 in the source, 
 							we do not need to import any other term from any ISO 10303-* document. -->
-            <xsl:if test="$module_number!=$part_no and not(contains($stdnumber, 'ISO 10303-'))">
+            <!-- <xsl:if test="$module_number!=$part_no and not(contains($stdnumber, 'ISO 10303-'))"> -->
+            <xsl:if test="$module_number!=$part_no and normalize-space(java:matches(java:java.lang.String.new($stdnumber), $ISO_10303_regex)) = 'false'">
+						
               <!-- <h2>
             <xsl:value-of select="concat('3.1.',$section_no,
                                   ' Terms defined in ',$stdnumber)"/>
@@ -3698,7 +3702,8 @@ test="document('../data/basic/normrefs.xml')/normref.list/normref[@id=$normref]/
                     it means all "ISO 10303-*" parts should be omitted, because ISO 10303-2 is a new publication that includes all terms.
                     This means once we include ISO 10303-2 in the source, 
                     we do not need to import any other term from any ISO 10303-* document. -->
-                  <xsl:if test="not(contains($stdnumber, 'ISO 10303-'))">
+                  <!-- <xsl:if test="not(contains($stdnumber, 'ISO 10303-'))"> -->
+                  <xsl:if test="normalize-space(java:matches(java:java.lang.String.new($stdnumber), $ISO_10303_regex)) = 'false'">
                     <!-- output the section header for the normative reference
                        that is defining terms -->
                     <!-- <h2>
@@ -4167,14 +4172,22 @@ $module_ok,' Check the normatives references')"/>
       <xsl:with-param name="index_term2">term</xsl:with-param>
     </xsl:call-template>
     <!-- <xsl:apply-templates select="def"/> -->
+    <xsl:apply-templates select="def" mode="check_phrase">
+      <xsl:with-param name="insert_newline">no</xsl:with-param>
+    </xsl:apply-templates>
     <xsl:call-template name="insertParagraph">
       <xsl:with-param name="text">
-        <xsl:apply-templates select="def"/>
+        <xsl:apply-templates select="def">
+          <xsl:with-param name="check_phrase">no</xsl:with-param>
+        </xsl:apply-templates>
       </xsl:with-param>
     </xsl:call-template>
   </xsl:template>
   <xsl:template match="def">
-    <xsl:apply-templates select="." mode="check_phrase"/>
+    <xsl:param name="check_phrase">yes</xsl:param>
+    <xsl:if test="$check_phrase = 'yes'">
+      <xsl:apply-templates select="." mode="check_phrase"/>
+    </xsl:if>
     <xsl:apply-templates/>
   </xsl:template>
   <xsl:template match="refdata">
