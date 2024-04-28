@@ -977,14 +977,19 @@ public class stepmod2mn {
                             }
                             outPath = Paths.get(outPathSchemas, kind).toString();
                         } else {
-                            isSVGmap = true;
-                            String folderDocumentName = "";
-                            if (attPart.matches("^\\d+\\-\\d+$")) {
-                                folderDocumentName = "iso-" + attPart;
+                            if (attPart.isEmpty()) {
+                                System.out.println("[ERROR] No part number. Skip '" + xmlFile +"' processing.");
+                                xmlFile = null;
                             } else {
-                                folderDocumentName = Constants.ISO_STANDARD_PREFIX + attPart;
+                                isSVGmap = true;
+                                String folderDocumentName = "";
+                                if (attPart.matches("^\\d+\\-\\d+$")) {
+                                    folderDocumentName = "iso-" + attPart;
+                                } else {
+                                    folderDocumentName = Constants.ISO_STANDARD_PREFIX + attPart;
+                                }
+                                outPath = Paths.get(outPath, folderDocumentName).toString();
                             }
-                            outPath = Paths.get(outPath, folderDocumentName).toString();
                         }
                     } else {
                         xmlFile = null;
