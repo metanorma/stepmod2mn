@@ -910,11 +910,12 @@ TT remove since locke is no longer available.
       <xsl:otherwise>
         <xsl:if test="not(substring-after(.,'This document specifies'))">
           <!-- Commented, see https://github.com/metanorma/iso-10303-srl/issues/201#issuecomment-2081298354 -->
-          <!-- <xsl:call-template name="error_message">
+          <xsl:call-template name="error_message">
             <xsl:with-param name="inline" select="'yes'"/>
+            <xsl:with-param name="comment" select="'yes'"/>
             <xsl:with-param name="warning_gif" select="'../../../../images/warning.gif'"/>
             <xsl:with-param name="message" select="'Error P2: Introduction does not start with required text: This document specifies .'"/>
-          </xsl:call-template> -->
+          </xsl:call-template>
         </xsl:if>
       </xsl:otherwise>
     </xsl:choose>

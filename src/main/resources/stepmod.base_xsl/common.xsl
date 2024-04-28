@@ -1608,6 +1608,7 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 	<xsl:template name="error_message">
 		<xsl:param name="message"/>
 		<xsl:param name="inline" select="'yes'"/>
+		<xsl:param name="comment" select="'no'"/>
 		<xsl:param name="linebreakchar" select="'#'"/>
 		<xsl:param name="warning_gif" select="'../../../../images/warning.gif'"/>
 		
@@ -1642,6 +1643,7 @@ width="20" height="20"/> -->
 						</xsl:call-template>
 					</i>
 					</font>					-->
+					<xsl:if test="$comment = 'yes'">// </xsl:if>
 					<xsl:text>_</xsl:text>					
 						<xsl:call-template name="output_line_breaks">
 							<xsl:with-param name="str" select="$message_"/>
