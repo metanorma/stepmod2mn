@@ -2561,7 +2561,7 @@ width="20" height="20"/> -->
 							<!-- <xsl:value-of
 								select="concat('../../../modules/',$module,
 												'/sys/3_defs',$FILE_EXT)"/> -->
-							<xsl:value-of select="'termsdefns'"/>
+							<xsl:value-of select="'defns'"/>
 						</xsl:when>
 						<xsl:otherwise>
 							<!-- <xsl:value-of

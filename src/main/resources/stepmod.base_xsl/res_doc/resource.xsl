@@ -3614,7 +3614,8 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 							it means all "ISO 10303-*" parts should be omitted, because ISO 10303-2 is a new publication that includes all terms.
 							This means once we include ISO 10303-2 in the source, 
 							we do not need to import any other term from any ISO 10303-* document. -->
-						<xsl:if test="$resource_number!=$part_no and not(contains($stdnumber, 'ISO 10303-'))">
+						<!-- <xsl:if test="$resource_number!=$part_no and not(contains($stdnumber, 'ISO 10303-'))"> -->
+						<xsl:if test="$resource_number!=$part_no and normalize-space(java:matches(java:java.lang.String.new($stdnumber), $ISO_10303_regex)) = 'false'">
 							<!-- <xsl:value-of select="concat('3.1.',$section_no, ' Terms defined in ',$stdnumber)"/> -->
 							<!-- <h2 level="3" id="{concat('3.1.',$section_no)}">					
 								<xsl:value-of select="concat('Terms defined in ',$stdnumber)"/>
@@ -3716,7 +3717,8 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 									<xsl:variable name="resource_node" select="$resource_xml_document/resource"/>
 									<xsl:variable name="stdnumber" select="concat('ISO/',$resource_node/@status,' 10303-',$resource_node/@part)"/>
 									
-									<xsl:if test="not(contains($stdnumber, 'ISO 10303-'))">
+									<!-- <xsl:if test="not(contains($stdnumber, 'ISO 10303-'))"> -->
+									<xsl:if test="normalize-space(java:matches(java:java.lang.String.new($stdnumber), $ISO_10303_regex)) = 'false'">
 						
 										<!-- output the section header for the normative reference
 												 that is defining terms -->              
