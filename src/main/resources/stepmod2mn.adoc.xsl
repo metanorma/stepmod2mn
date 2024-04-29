@@ -771,7 +771,14 @@
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
-		<xsl:value-of select="java:org.metanorma.RegExEscaping.escapeFormattingCommands($text)"/>
+		<xsl:variable name="text1">
+			<xsl:choose>
+				<!-- for [SOURCE:...], see https://github.com/metanorma/stepmod2mn/issues/179#issuecomment-2083273335-->
+				<xsl:when test="starts-with($text,'[SOURCE:')">+++[+++<xsl:value-of select="substring($text,2)"/></xsl:when>
+				<xsl:otherwise><xsl:value-of select="$text"/></xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:value-of select="java:org.metanorma.RegExEscaping.escapeFormattingCommands($text1)"/>
 	</xsl:template>
 	
 	<xsl:template name="repeat">
