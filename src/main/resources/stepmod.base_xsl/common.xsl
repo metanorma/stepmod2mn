@@ -4877,7 +4877,7 @@ is case sensitive.')"/>
 
 <xsl:template match="firstname | lastname">
 	<xsl:param name="document_attribute_prefix"/>
-	<xsl:value-of select="concat($document_attribute_prefix, local-name(), ': ', .)"/>
+	<xsl:value-of select="concat($document_attribute_prefix, local-name(), ': ', normalize-space())"/>
 	<xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
@@ -4912,43 +4912,43 @@ is case sensitive.')"/>
 
 <xsl:template match="affiliation">
 	<xsl:param name="document_attribute_prefix"/>
-	<xsl:value-of select="concat($document_attribute_prefix, local-name(), ': ', .)"/><!--  <br/> -->
+	<xsl:value-of select="concat($document_attribute_prefix, local-name(), ': ', normalize-space())"/><!--  <br/> -->
 	<xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="street">
 	<xsl:param name="document_attribute_prefix"/>
-	<xsl:value-of select="concat($document_attribute_prefix, local-name(), ': ', .)"/><!--  <br/> -->
+	<xsl:value-of select="concat($document_attribute_prefix, local-name(), ': ', normalize-space())"/><!--  <br/> -->
 	<xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="pobox">
 	<xsl:param name="document_attribute_prefix"/>
-	<xsl:value-of select="concat($document_attribute_prefix, local-name(), ': ', .)"/><!--  <br/> -->
+	<xsl:value-of select="concat($document_attribute_prefix, local-name(), ': ', normalize-space())"/><!--  <br/> -->
 	<xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="city">
 	<xsl:param name="document_attribute_prefix"/>
-	<xsl:value-of select="concat($document_attribute_prefix, local-name(), ': ', .)"/><!--  <br/> -->
+	<xsl:value-of select="concat($document_attribute_prefix, local-name(), ': ', normalize-space())"/><!--  <br/> -->
 	<xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="state">
 	<xsl:param name="document_attribute_prefix"/>
-	<xsl:value-of select="concat($document_attribute_prefix, local-name(), ': ', .)"/><!--  <br/> -->
+	<xsl:value-of select="concat($document_attribute_prefix, local-name(), ': ', normalize-space())"/><!--  <br/> -->
 	<xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="postcode">
 	<xsl:param name="document_attribute_prefix"/>
-	<xsl:value-of select="concat($document_attribute_prefix, local-name(), ': ', .)"/><!--  <br/> -->
+	<xsl:value-of select="concat($document_attribute_prefix, local-name(), ': ', normalize-space())"/><!--  <br/> -->
 	<xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="country">
 	<xsl:param name="document_attribute_prefix"/>
-	<xsl:value-of select="concat($document_attribute_prefix, local-name(), ': ', .)"/><!--  <br/> -->
+	<xsl:value-of select="concat($document_attribute_prefix, local-name(), ': ', normalize-space())"/><!--  <br/> -->
 	<xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
@@ -4956,7 +4956,7 @@ is case sensitive.')"/>
 	<xsl:param name="document_attribute_prefix"/>
 	<!-- <b>Telephone: </b> -->
 	<!-- <xsl:text> *Telephone:* </xsl:text> -->
-	<xsl:value-of select="concat($document_attribute_prefix, local-name(), ': ', .)"/>
+	<xsl:value-of select="concat($document_attribute_prefix, local-name(), ': ', normalize-space())"/>
 	<!-- <br/> -->
 	<xsl:text>&#xa;</xsl:text>
 </xsl:template>
@@ -4965,7 +4965,7 @@ is case sensitive.')"/>
 	<xsl:param name="document_attribute_prefix"/>
 	<!-- <b>Telefacsimile: </b> -->
 	<!-- <xsl:text> *Telefacsimile:* </xsl:text> -->
-	<xsl:value-of select="concat($document_attribute_prefix, local-name(), ': ', .)"/>
+	<xsl:value-of select="concat($document_attribute_prefix, local-name(), ': ', normalize-space())"/>
 	<!-- <br/> -->
 	<xsl:text>&#xa;</xsl:text>
 </xsl:template>
@@ -4981,7 +4981,7 @@ is case sensitive.')"/>
 	
 	<!-- <xsl:text> *Electronic mail:* </xsl:text> -->
 	<!--<xsl:value-of select="$mailto"/> <xsl:text>[]</xsl:text> -->
-	<xsl:value-of select="concat($document_attribute_prefix, local-name(), ': ', .)"/>
+	<xsl:value-of select="concat($document_attribute_prefix, local-name(), ': ', normalize-space())"/>
 	<xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
