@@ -762,6 +762,10 @@
 					<!-- remove spaces after line break -->
 					<xsl:value-of select="java:replaceAll(java:java.lang.String.new(.),'(\R)\s+','$1')"/>
 				</xsl:when>
+				<xsl:when test="preceding-sibling::*[1][self::br]">
+					<!-- remove space at start of line -->
+					<xsl:value-of select="java:replaceAll(java:java.lang.String.new(.),'^ (\w)','$1')"/>
+				</xsl:when>
 				<xsl:otherwise>
 					<xsl:value-of select="."/>
 				</xsl:otherwise>

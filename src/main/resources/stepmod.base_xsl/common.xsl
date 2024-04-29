@@ -918,24 +918,42 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 		<xsl:text>&#xa;&#xa;</xsl:text>
 	</xsl:if>
 	
-  <xsl:choose>
-		<xsl:when test="following-sibling::*[1][local-name() = 'example' or local-name() = 'note']">
-			<xsl:call-template name="insertParagraph">
-				<xsl:with-param name="text">
-					<xsl:apply-templates/>
-				</xsl:with-param>
-				<xsl:with-param name="keep-with-next">true</xsl:with-param>
-			</xsl:call-template>
+	<!-- Example:
+		<def>
+			 <p>batch</p>
+					collection of distinct products that are treated as a single unit
+					<example>...
+	-->
+	
+	<xsl:choose>
+		<xsl:when test="parent::def and not(preceding-sibling::node()[normalize-space() != '']) and following-sibling::node()[1][self::text()][normalize-space() != '']">
+			<xsl:text>admitted:[</xsl:text>
+				<xsl:apply-templates/>
+			<xsl:text>]</xsl:text>
+			<br/><br/>
 		</xsl:when>
 		<xsl:otherwise>
-			<xsl:call-template name="insertParagraph">
-				<xsl:with-param name="text">
-					<xsl:apply-templates/>
-				</xsl:with-param>
-			</xsl:call-template>
+			<xsl:choose>
+				<xsl:when test="following-sibling::*[1][local-name() = 'example' or local-name() = 'note']">
+					<xsl:call-template name="insertParagraph">
+						<xsl:with-param name="text">
+							<xsl:apply-templates/>
+						</xsl:with-param>
+						<xsl:with-param name="keep-with-next">true</xsl:with-param>
+					</xsl:call-template>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:call-template name="insertParagraph">
+						<xsl:with-param name="text">
+							<xsl:apply-templates/>
+						</xsl:with-param>
+					</xsl:call-template>
+				</xsl:otherwise>
+			</xsl:choose>
 		</xsl:otherwise>
 	</xsl:choose>
 	
+	<xsl:if test="parent::def and following-sibling::*[1][self::p]"><br/><br/></xsl:if>
 	
 </xsl:template>
 
