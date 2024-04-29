@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="./document_xsl.xsl" ?>
 <!--
-$Id: sect_biblio.xsl,v 1.12 2010/11/09 11:22:54 radack Exp $
+$Id: sect_biblio.xsl,v 1.13 2014/06/05 22:04:04 mikeward Exp $
   Author:  Rob Bodington, Eurostep Limited
   Owner:   Developed by Eurostep and supplied to NIST under contract.
   Purpose:
@@ -21,7 +21,7 @@ $Id: sect_biblio.xsl,v 1.12 2010/11/09 11:22:54 radack Exp $
 	<xsl:include href="common/biblio.xsl"/> -->
 	<xsl:output method="html"/>
 	<!-- overwrites the template declared in module.xsl -->
-	<xsl:template match="module" mode="bibliography">
+	<xsl:template match="module" mode="bibliography"> <!-- called from stepmod2mn.module.adoc.xsl -->
 		<!-- <div align="left">
 			<h2>
 				<A NAME="bibliography">Bibliography</A>

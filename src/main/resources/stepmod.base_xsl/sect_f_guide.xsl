@@ -2,7 +2,7 @@
 <?xml-stylesheet type="text/xsl" href="./document_xsl.xsl" ?>
 
 <!--
-$Id: sect_f_guide.xsl,v 1.4 2002/09/02 09:09:57 robbod Exp $
+$Id: sect_f_guide.xsl,v 1.5 2004/05/01 09:05:56 robbod Exp $
   Author:  Rob Bodington, Eurostep Limited
   Owner:   Developed by Eurostep and supplied to NIST under contract.
   Purpose:
@@ -23,10 +23,16 @@ $Id: sect_f_guide.xsl,v 1.4 2002/09/02 09:09:57 robbod Exp $
   <xsl:output method="html"/>
 
 <!-- overwrites the template declared in module.xsl -->
-<xsl:template match="module" mode="annex_f">
+<xsl:template match="module" mode="annex_f"> <!-- called from stepmod2mn.module.adoc.xsl -->
+  <!-- <xsl:variable name="guide_annex_letter">
+    <xsl:choose>
+      <xsl:when test="./mim">F</xsl:when>
+      <xsl:otherwise>D</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable> -->
   <xsl:call-template name="annex_header">
     <xsl:with-param name="annex_id" select="$annex_id_usage_info"/>
-    <!-- <xsl:with-param name="annex_no" select="'F'"/> -->
+    <!-- <xsl:with-param name="annex_no" select="$guide_annex_letter"/> -->
     <xsl:with-param name="heading" 
       select="'Application module implementation and usage guide'"/>
     <!-- <xsl:with-param name="aname" select="'annexf'"/> -->

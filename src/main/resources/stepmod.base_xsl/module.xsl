@@ -376,11 +376,15 @@ o=isocs; s=central<br/>
       </xsl:choose>
     </xsl:variable>
     <xsl:if test="$status='CD-TS'">
-      <p>
+      <!-- <p> -->
+      <xsl:call-template name="insertParagraph">
+				<xsl:with-param name="text">
       Recipients of this draft are invited to submit, with their comments,
       notification of any relevant patent rights of which they are aware and to
       provide supporting documentation.
-    </p>
+        </xsl:with-param>
+      </xsl:call-template>
+    <!-- </p> -->
     </xsl:if>
     <xsl:apply-templates select="comments_to_reader"/>
     <!--	<p>
@@ -399,7 +403,9 @@ TT remove since locke is no longer available.
       <xsl:variable name="issues_xml_document" select="document(concat($module_dir,'/dvlp/issues.xml'))"/>
       <xsl:variable name="seds" select="$issues_xml_document/issues/issue[@seds='yes' and @status='closed']"/>
       <xsl:if test="count($seds)>0">
-        <p>
+        <!-- <p> -->
+        <xsl:call-template name="insertParagraph">
+          <xsl:with-param name="text">
           <xsl:variable name="seds_list">
             <xsl:apply-templates select="$seds" mode="seds_cover"/>
           </xsl:variable>
@@ -422,7 +428,9 @@ TT remove since locke is no longer available.
               </xsl:otherwise>
           </xsl:choose>
           <xsl:value-of select="normalize-space($seds_comma_list)"/>.
-          </p>
+          </xsl:with-param>
+        </xsl:call-template>
+          <!-- </p> -->
       </xsl:if>
     </xsl:if>
   </xsl:template>
@@ -3537,11 +3545,17 @@ test="document('../data/basic/normrefs.xml')/normref.list/normref[@id=$normref]/
       <xsl:text>]]</xsl:text>
     </xsl:if>
     <xsl:value-of select="$nterm"/>
-    <xsl:apply-templates select="../synonym"/>
+    <!-- <xsl:apply-templates select="../synonym"/> -->
   </xsl:template>
   <xsl:template match="synonym">
-    <xsl:text>;&#160;</xsl:text>
-    <xsl:value-of select="normalize-space(.)"/>
+    <!-- <xsl:text>;&#160;</xsl:text> -->
+    <xsl:text>admitted:[</xsl:text>
+		<xsl:value-of select="normalize-space(.)"/>
+		<xsl:text>]</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:if test="following-sibling::*[1][not(self::synonym)]">
+			<xsl:text>&#xa;</xsl:text>
+		</xsl:if>
   </xsl:template>
   <!-- output the normative references, terms, definitions and abbreviated terms -->
   <xsl:template name="output_terms">
@@ -4175,6 +4189,9 @@ $module_ok,' Check the normatives references')"/>
     <xsl:apply-templates select="def" mode="check_phrase">
       <xsl:with-param name="insert_newline">no</xsl:with-param>
     </xsl:apply-templates>
+    
+    <xsl:apply-templates select="synonym"/>
+    
     <xsl:call-template name="insertParagraph">
       <xsl:with-param name="text">
         <xsl:apply-templates select="def">

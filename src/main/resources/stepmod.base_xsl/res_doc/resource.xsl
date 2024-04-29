@@ -3486,13 +3486,18 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 		<xsl:text>]]</xsl:text>
 		</xsl:if>
 		<xsl:value-of select="$nterm"/>
-		<xsl:apply-templates select="../synonym"/>
+		<!-- <xsl:apply-templates select="../synonym"/> -->
 	</xsl:template>
 
 	<xsl:template match="synonym">
 		<!-- <br/> -->
-		<xsl:text> +&#xa;</xsl:text>
+		<xsl:text>admitted:[</xsl:text>
 		<xsl:value-of select="normalize-space(.)"/>
+		<xsl:text>]</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:if test="following-sibling::*[1][not(self::synonym)]">
+			<xsl:text>&#xa;</xsl:text>
+		</xsl:if>
 	</xsl:template>
 
 
@@ -4263,6 +4268,10 @@ test="document('../../data/basic/normrefs.xml')/normref.list/normref[@id=$normre
 			<xsl:with-param name="level" select="3"/> <!-- 4 -->
 			<xsl:with-param name="header" select="normalize-space($header)"/>					
 		</xsl:call-template>
+		
+		<xsl:apply-templates select="synonym"/>
+		
+		<!-- <xsl:apply-templates select="." mode="print_as_xml"/> -->
 		
 		<!-- <p> -->		
 		<xsl:call-template name="insertParagraph">
