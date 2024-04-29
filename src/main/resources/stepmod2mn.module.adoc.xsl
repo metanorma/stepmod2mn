@@ -163,6 +163,19 @@
 	
 	<xsl:variable name="imagesdir">images</xsl:variable>
 	
+	<xsl:variable name="docnumber">
+		<xsl:for-each select="module"><!-- change context node to 'module' -->
+			<xsl:call-template name="extract_docnumber"/>
+		</xsl:for-each>
+	</xsl:variable>
+	
+	<xsl:variable name="part">
+		<xsl:for-each select="module">
+			<xsl:call-template name="extract_part"/>
+		</xsl:for-each>
+	</xsl:variable>
+
+  
 	<!-- module.xml -->
 	<xsl:template match="/">
 		<xsl:variable name="title-intro-en">Industrial automation systems and integration</xsl:variable>
@@ -174,30 +187,30 @@
 		
 		<xsl:text>= </xsl:text><xsl:value-of select="$title-main-en"/>: <xsl:value-of select="$title-intro-en"/>: <xsl:value-of select="$title-part-en"/>
 		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>:docnumber: 10303</xsl:text><!-- <xsl:apply-templates select="module" mode="docnumber"/> --><!-- res_doc/sect_1_scope.xsl -->
+		<xsl:text>:docnumber: </xsl:text><xsl:value-of select="$docnumber"/><!-- <xsl:apply-templates select="module" mode="docnumber"/> --><!-- res_doc/sect_1_scope.xsl -->
 		<xsl:text>&#xa;</xsl:text>
 		
 		<!-- <xsl:text>:tc-docnumber: </xsl:text><xsl:value-of select="module/@wg.number"/> -->
 		<!-- https://github.com/metanorma/stepmod2mn/issues/145#issuecomment-2073067811 -->
-		<!--  ISO/TC 184/SC 4/WG 12 N6931 -->
-		<xsl:text>:tc-docnumber: </xsl:text><xsl:value-of select="concat('ISO/TC 184/SC 4/WG 12 N', resource/@wg.number)"/>
+		<!-- ISO/TC 184/SC 4/WG 12 N6931 -->
+		<xsl:text>:tc-docnumber: </xsl:text><xsl:value-of select="concat('ISO/TC 184/SC 4/WG 12 N', module/@wg.number)"/>
 		<xsl:text>&#xa;</xsl:text>
 		<xsl:variable name="test_wg_number">
 			<xsl:call-template name="test_wg_number">
-				<xsl:with-param name="wgnumber" select="resource/@wg.number"/>
+				<xsl:with-param name="wgnumber" select="module/@wg.number"/>
 			</xsl:call-template>
 		</xsl:variable>
 		<xsl:if test="contains($test_wg_number,'Error')">
 			<xsl:call-template name="error_message">
 				<xsl:with-param name="message">
 					<xsl:value-of select="concat('Error in
-							resource.xml/resource/@wg.number - ',
+							module.xml/module/@wg.number - ',
 							$test_wg_number)"/>
 				</xsl:with-param>
 			</xsl:call-template>
 		</xsl:if>
 		
-		<xsl:text>:partnumber: </xsl:text><xsl:value-of select="module/@part"/>
+		<xsl:text>:partnumber: </xsl:text><xsl:value-of select="$part"/>
 		<xsl:text>&#xa;</xsl:text>
 		
 		<xsl:text>:copyright-year: </xsl:text><xsl:value-of select="substring(module/@publication.year,1,4)"/>
@@ -263,9 +276,76 @@
 			<xsl:text>:keywords: </xsl:text><xsl:value-of select="normalize-space($keywords)"/>
 			<xsl:text>&#xa;</xsl:text>
 		</xsl:if>
+		<xsl:if test="$keywords = 'module' or string-length($keywords)=0">
+			<xsl:call-template name="error_message">
+				<xsl:with-param name="message">
+			Error K-1: Error in module.xml/keywords - no keywords specified.
+		</xsl:with-param>
+			</xsl:call-template>
+		</xsl:if>
 		
 		<xsl:text>:library-ics: 25.040.40</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
+		
+		<xsl:if test="normalize-space(module/@previous.revision.year) != ''">
+			<xsl:text>:revises: ISO </xsl:text><xsl:value-of select="$docnumber"/>-<xsl:value-of select="concat($part, ':', module/@previous.revision.year)"/>
+			<xsl:text>&#xa;</xsl:text>
+		</xsl:if>
+		
+		<!-- Example: :supersedes: ISO/TC 184/SC 4/WG 12 N10446 -->
+		<xsl:if test="module/@wg.number.supersedes">      
+			<xsl:text>:supersedes: </xsl:text>
+			<xsl:variable name="wg_group">
+				<xsl:call-template name="get_module_wg_group"/>
+			</xsl:variable>
+			<xsl:choose>
+				<xsl:when test="contains(module/@wg.number.supersedes, 'ISO')"><xsl:value-of select="module/@wg.number.supersedes"/></xsl:when>
+				<xsl:otherwise><xsl:value-of select="concat('ISO/TC 184/SC 4/WG ', $wg_group, ' N',module/@wg.number.supersedes)"/></xsl:otherwise>
+			</xsl:choose>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:variable name="test_wg_number_supersedes">
+				<xsl:if test="not(contains(module/@wg.number.supersedes,'ISO'))">
+					<xsl:call-template name="test_wg_number">
+						<xsl:with-param name="wgnumber" select="module/@wg.number.supersedes"/>
+					</xsl:call-template>
+				</xsl:if>
+			</xsl:variable>
+			<xsl:if test="contains($test_wg_number_supersedes,'Error')">
+				<xsl:call-template name="error_message">
+					<xsl:with-param name="message">
+						<xsl:value-of 
+					select="concat('Error in
+						module.xml/module/@wg.number.supersedes - ',
+						$test_wg_number_supersedes)"/>
+					</xsl:with-param>
+				</xsl:call-template>
+			</xsl:if>
+	    <xsl:if test="module/@wg.number.supersedes = module/@wg.number">
+	      <xsl:call-template name="error_message">
+					<xsl:with-param name="message">
+						Error in module.xml/module/@wg.number.supersedes - 
+						Error WG-16: New WG number is the same as superseded WG number.
+					</xsl:with-param>
+	      </xsl:call-template>            
+	    </xsl:if>
+		</xsl:if>
+		
+		<!-- contacts -->
+		<!--
+		:semantic-metadata-project-leader-firstname:
+		:semantic-metadata-project-leader-lastname:
+		:semantic-metadata-project-leader-address-affiliation:
+		:semantic-metadata-project-leader-address-street:
+		:semantic-metadata-project-leader-address-city:
+		:semantic-metadata-project-leader-address-state:
+		:semantic-metadata-project-leader-address-postcode:
+		:semantic-metadata-project-leader-address-country:
+		:semantic-metadata-project-leader-phone:
+		:semantic-metadata-project-leader-fax:
+		:semantic-metadata-project-leader-email:
+		-->
+		<xsl:apply-templates select="module/contacts/projlead"/>
+		<xsl:apply-templates select="module/contacts/editor"/>
 		
 		<!-- commented: https://github.com/metanorma/stepmod2mn/issues/49 -->
 		<!-- uncommented: https://github.com/metanorma/stepmod2mn/issues/138 -->
