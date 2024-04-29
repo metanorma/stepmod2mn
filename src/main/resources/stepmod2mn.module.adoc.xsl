@@ -283,6 +283,19 @@
 		<xsl:text>&#xa;</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
 		
+		<!-- Comments to reader -->
+		<xsl:variable name="comments_to_reader">
+			<xsl:apply-templates select="module" mode="comments_to_reader"/>
+		</xsl:variable>
+		<xsl:if test="normalize-space($comments_to_reader) != ''">
+			<xsl:text>////</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:value-of select="$comments_to_reader"/>
+			<xsl:text>////</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+		</xsl:if>
+		
 		<!-- Generation schemas.yaml -->
 		<xsl:call-template name="generateSchemasYaml"/>
 		
