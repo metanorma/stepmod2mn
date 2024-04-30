@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="./document_xsl.xsl" ?>
+<!-- <?xml-stylesheet type="text/xsl" href="./document_xsl.xsl" ?> -->
 
 <!--
-$Id: expressg_icon.xsl,v 1.13 2014/06/13 12:58:59 nigelshaw Exp $
+$Id: expressg_icon.xsl,v 1.14 2014/06/16 12:15:54 mikeward Exp $
   Author:  Rob Bodington, Eurostep Limited
   Owner:   Developed by Eurostep
   Purpose: Read the are maps in an image and create a node list. This is
