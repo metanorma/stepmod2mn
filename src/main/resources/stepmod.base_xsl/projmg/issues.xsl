@@ -2,7 +2,7 @@
 <?xml-stylesheet type="text/xsl" href="../document_xsl.xsl" ?>
 
 <!--
-     $Id: issues.xsl,v 1.17 2005/01/14 19:29:54 thendrix Exp $
+     $Id: issues.xsl,v 1.18 2014/05/30 12:30:49 nigelshaw Exp $
 -->
 <!-- Updated: Alexander Dyuzhev, for stepmod2mn tool-->
 
