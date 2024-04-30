@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-$Id: common.xsl,v 1.204 2018/10/07 10:51:54 mike Exp $
+$Id: common.xsl,v 1.209 2020/02/22 00:08:47 tom Exp $
 	Author:  Rob Bodington, Eurostep Limited
 	Owner:   Developed by Eurostep and supplied to NIST under contract.
 	Purpose: Templates that are common to most other stylesheets
@@ -3444,6 +3444,14 @@ width="20" height="20"/> -->
 					<xsl:value-of 
 						select="concat($orgname,' 10303-',$part)"/>
 				</xsl:when>
+				<xsl:when test="$status='DIS'">
+					<xsl:value-of 
+						select="concat($orgname,'/',$status,' 10303-',$part)"/>
+				</xsl:when>
+				<xsl:when test="$status='CD'">
+						<xsl:value-of 
+							select="concat($orgname,'/',$status,' 10303-',$part)"/>
+					</xsl:when>
 				<xsl:otherwise>
 					<xsl:value-of 
 						select="concat($orgname,'/',$status,' 10303-',$part)"/>          
@@ -3649,7 +3657,7 @@ width="20" height="20"/> -->
 			<xsl:value-of select="normalize-space(/module/@sc4.working_group)"/>
 		</xsl:when>
 		<xsl:when test="/application_protocol">
-			<xsl:value-of select="string('3')"/>
+			<xsl:value-of select="string('12')"/>
 		</xsl:when>
 		<xsl:otherwise>
 			<xsl:value-of select="string('12')"/>
@@ -5430,7 +5438,7 @@ is case sensitive.')"/>
 			
 	-->
 	<xsl:template match="ulink">
-		<xsl:text>Available from the World Wide Web: </xsl:text>
+		<xsl:text>Available at: </xsl:text>
 		<xsl:variable name="href" select="normalize-space(.)"/>
 		
 		<!-- &lt;<a href="{$href}"><xsl:value-of select="$href"/></a>&gt;<xsl:text/> -->
