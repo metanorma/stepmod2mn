@@ -135,7 +135,7 @@
 			<xsl:text>, </xsl:text>
 		</xsl:if>
 		<xsl:apply-templates select="pubdate"/>
-		<xsl:text>.</xsl:text>
+		<!--<xsl:text>.</xsl:text> MWD 2020-01-07 -->
 	</xsl:template>
 	<!-- item is a technical report -->
 	<xsl:template match="bibitem.techreport" mode="bibitem_content">
@@ -292,7 +292,7 @@
 		</xsl:if>
 	</xsl:template>
 	<xsl:template match="ulink">
-		<xsl:text> Available from the World Wide Web: </xsl:text>
+		<xsl:text> Available at: </xsl:text>
 		<xsl:variable name="href" select="normalize-space(.)"/>
 		<xsl:text>&lt;</xsl:text>
 		<a href="{$href}">
@@ -360,7 +360,7 @@
 		</xsl:choose> -->
     
     <xsl:variable name="bibitem_nodes" select="xalan:nodeset($bibitems)"/>
-    <xsl:if test="$bibitem_nodes//bibitem[@published='n']">
+    <!-- <xsl:if test="$bibitem_nodes//bibitem[@published='n']">
       <table width="200">
         <tr>
           <td>
@@ -375,7 +375,7 @@
           </td>
         </tr>
       </table>
-    </xsl:if>
+    </xsl:if> -->
     
 	</xsl:template>
 	<!-- collect up all bibitems in order to check for unpublished bib items -->

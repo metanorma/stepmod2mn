@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="./document_xsl.xsl" ?>
+<!-- <?xml-stylesheet type="text/xsl" href="./document_xsl.xsl" ?> -->
 <!--
-    $Id: sect_biblio.xsl,v 1.25 2010/02/23 14:18:30 radack Exp $
+    $Id: elt_list.xsl,v 1.2 2020/01/09 16:35:27 mike Exp $
   -->
 <!-- Updated: Alexander Dyuzhev, for stepmod2mn tool-->
 
@@ -110,7 +110,7 @@
       <xsl:otherwise>
 	<xsl:copy-of select="$preceding_content_processed"/>
 	<xsl:if test="(string-length($terminator) > 0) and (substring($preceding_content_str,string-length($preceding_content_str)) != $terminator)">
-	  <xsl:value-of select="$terminator"/>
+	  <!--<xsl:value-of select="$terminator"/> MWD 2020-01-08 -->
 	</xsl:if>
       </xsl:otherwise>
     </xsl:choose>
