@@ -2,7 +2,7 @@
 <?xml-stylesheet type="text/xsl" href="./document_xsl.xsl" ?>
 
 <!--
-     $Id: express_code.xsl,v 1.70 2009/08/17 14:43:22 robbod Exp $
+     $Id: express_code.xsl,v 1.72 2019/10/09 19:44:34 tom Exp $
 
   Author: Rob Bodington, Eurostep Limited
   Owner:  Developed by Eurostep and supplied to NIST under contract.
@@ -223,6 +223,9 @@
           <xsl:choose>
             <xsl:when test="string-length($reference)>0">
               <xsl:if test="not(starts-with($reference,'ISO 10303-')) and
+                            not(starts-with($reference,'ISO/CD 10303-')) and
+                            not(starts-with($reference,'ISO/DIS 10303-')) and
+                            not(starts-with($reference,'ISO/FDIS 10303-')) and
                             not(starts-with($reference,'ISO 13584-')) and
                             not(starts-with($reference,'ISO 15926-'))">
               <xsl:call-template name="error_message">
