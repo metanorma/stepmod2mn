@@ -216,6 +216,7 @@ public class stepmod2mn {
     List<String> includeOnlyList = new ArrayList<>();
 
     boolean isPublicationIndexMode = false;
+    boolean isDocumentsGenerationMode = false;
 
     /**
      * Main method.
@@ -440,6 +441,7 @@ public class stepmod2mn {
         boolean isStandaloneXML = false;
         RepositoryIndex repositoryIndex = null;
         boolean isPublicationIndexMode = false;
+        boolean isDocumentsGenerationMode = false;
         String namePublicationIndex = "";
         // if remote file (http or https)
         if (Util.isUrl(argXMLin)) {
@@ -492,6 +494,8 @@ public class stepmod2mn {
 
             // if input path in the directory
             if (fXMLin.isDirectory()) {
+                isDocumentsGenerationMode = true;
+
                 inputFolder = fXMLin.getAbsolutePath();
 
                 repositoryIndex = new RepositoryIndex(inputFolder);
@@ -585,6 +589,7 @@ public class stepmod2mn {
                 app.setResourcePath(resourcePath);
                 app.setRepositoryIndex(repositoryIndex);
                 app.setPublicationIndexMode(isPublicationIndexMode);
+                app.setDocumentsGenerationMode(isDocumentsGenerationMode);
                 app.setOutputPathSchemas(outputPathSchemas);
                 app.setExcludeList(excludeList);
                 app.setIncludeOnlyList(includeOnlyList);
@@ -677,6 +682,11 @@ public class stepmod2mn {
                 //System.err.println("[WARNING] Ignore document processing due the wrong attribute 'part' value: '" + part + "'");
                 System.out.println("[WARNING] The document '" + documentName + "' skipped in the metanorma collection due the wrong attribute 'part' value: '" + part + "'");
                 result = false;
+            }
+
+            if (isDocumentsGenerationMode && !(repositoryIndex.contains(documentName, rootElement))) {
+                System.out.println("[WARNING] The document '" + documentName + "' skipped from the processing - it's missing in the repository index.");
+                return false;
             }
 
             if (isPublicationIndexMode && !(repositoryIndex.contains(documentName, rootElement))) {
@@ -828,6 +838,10 @@ public class stepmod2mn {
 
     public void setPublicationIndexMode(boolean isPublicationIndexMode) {
         this.isPublicationIndexMode = isPublicationIndexMode;
+    }
+
+    public void setDocumentsGenerationMode(boolean isDocumentsGenerationMode) {
+        this.isDocumentsGenerationMode = isDocumentsGenerationMode;
     }
 
     public String generateSVG(String xmlFilesPath, String image, String outPath, boolean isSVGmap) throws IOException, TransformerException, SAXParseException {
