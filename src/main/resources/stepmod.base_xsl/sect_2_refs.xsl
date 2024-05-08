@@ -638,10 +638,28 @@ $Id: sect_2_refs.xsl,v 1.22 2019/03/09 01:29:01 tom Exp $
      node set. The normrefs are sorted on output  -->
 <xsl:template match="normref_nodes" mode="output_normrefs">
   
-  <xsl:apply-templates select="normref" mode="output_html">    
-    <xsl:sort select="@group" data-type="text"/>
-    <xsl:sort select="@id" data-type="text"/>
-  </xsl:apply-templates>
+  <xsl:variable name="normative_references">
+    <xsl:apply-templates select="normref" mode="output_html">    
+      <xsl:sort select="@group" data-type="text"/>
+      <xsl:sort select="@id" data-type="text"/>
+    </xsl:apply-templates>
+  </xsl:variable>
+  
+  <xsl:copy-of select="$normative_references"/>
+  
+  <xsl:variable name="normative_references_tmp" select="translate($normative_references, '&#xa0;', ' ')"/>
+  <xsl:if test="not(contains($normative_references_tmp, ',ISO 10303-2]]]'))">
+    <!-- * [[[bibitem_010303000002,ISO 10303-2]]] _Industrial automation systems and integration — Product data representation and exchange— Part 2: Vocabulary_</xsl:text> -->
+    <xsl:variable name="normref_10303_2"><normref.inc normref="ref10303-2"/></xsl:variable>
+    <xsl:variable name="normref_list">
+      <xsl:element name="normref_nodes">
+        <xsl:apply-templates select="xalan:nodeset($normref_10303_2)/*" mode="generate_node"/>
+      </xsl:element>
+    </xsl:variable>  
+    <xsl:variable name="normref_nodes" select="xalan:nodeset($normref_list)"/>
+    <xsl:apply-templates select="$normref_nodes//normref" mode="output_html"/> 
+  </xsl:if>
+  
   <xsl:apply-templates select="normref.resource" mode="check_resources"/>
   
   <!-- <xsl:if test="normref/stdref[@published='n']">

@@ -343,7 +343,7 @@
 		<xsl:text>&#xa;</xsl:text>
 		<xsl:text>:data-uri-image:</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>:lutaml-express-index: schemas; schemas.yaml;</xsl:text>
+		<xsl:text>:lutaml-express-index: schemas; ../../schemas_all.yaml;</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
 		
@@ -679,4 +679,66 @@
 		</redirect:write>
 	</xsl:template>
   
+	<xsl:template name="generateCollectionYaml">
+		<xsl:param name="data_element"/>
+		<xsl:message>[INFO] Generation collection.yaml ...</xsl:message>
+		<redirect:write file="{$outpath}/collection.yml">
+			<xsl:call-template name="generateCollectionYaml_common_part">
+				<xsl:with-param name="data_element" select="$data_element"/>
+			</xsl:call-template>
+
+			<xsl:variable name="current_resource_name" select="resource/@name"/>
+			
+			<xsl:for-each select="resource/schema">
+				<xsl:text>        - fileref: </xsl:text>
+				<!-- <xsl:value-of select="concat('../../resources/',@name,'/',@name,'.exp')"/> --> <!-- updated for https://github.com/metanorma/stepmod2mn/issues/49, was ../../../resources/ -->
+				
+				<xsl:variable name="schema_exp_relative_path" select="concat('../../resources/',@name,'/',@name,'.exp')"/>
+				
+				<xsl:variable name="schema_exp_exists" select="java:org.metanorma.Util.fileExists(concat($path, '/', $schema_exp_relative_path))"/>
+				<xsl:if test="normalize-space($schema_exp_exists) = 'false'">
+					<xsl:variable name="msg">[ERROR] File '<xsl:value-of select="$schema_exp_relative_path"/>' does not exist.</xsl:variable>
+					<xsl:message><xsl:value-of select="$msg"/></xsl:message>
+					<xsl:message>[INFO] Repository index path: <xsl:value-of select="$repositoryIndex_path"/></xsl:message>
+					<xsl:if test="$repositoryIndex_path != ''">
+						<xsl:variable name="repositoryIndex_path_document" select="document($repositoryIndex_path)"/>
+						<xsl:if test="count($repositoryIndex_path_document//resource_doc[@name = $current_resource_name]) = 0">
+							<redirect:write file="{$errors_fatal_log_filename}">
+								<xsl:value-of select="$msg"/><xsl:text>&#xa;</xsl:text>
+							</redirect:write>
+						</xsl:if>
+					</xsl:if>
+				</xsl:if>
+        
+				<xsl:variable name="schema_exp_path">
+					<xsl:choose>
+						<xsl:when test="$outpath_schemas != ''">
+							<xsl:value-of select="concat($outpath_schemas,'/',@name,'/',@name,'.exp')"/>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:value-of select="concat($path, '/', $schema_exp_relative_path)"/>
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:variable>
+				<!-- <xsl:variable name="schema_exp_path" select="concat($path, '/', $schema_exp_relative_path)"/> -->
+				<xsl:variable name="schema_exp_relative_path_new" select="java:org.metanorma.Util.getRelativePath($schema_exp_path, $outpath)"/>
+				<xsl:value-of select="$schema_exp_relative_path_new"/>
+				
+				<xsl:text>&#xa;</xsl:text>
+				<xsl:text>          identifier: </xsl:text><xsl:value-of select="@name"/><xsl:text>.exp</xsl:text>
+				<xsl:text>&#xa;</xsl:text>
+				<xsl:text>          attachment: true</xsl:text>
+				<xsl:text>&#xa;</xsl:text>
+			</xsl:for-each>
+			<xsl:for-each select="resource/schema">
+				<xsl:text>        - fileref: </xsl:text><xsl:value-of select="concat('sections/schemadocs/',@name,'.html')"/>
+				<xsl:text>&#xa;</xsl:text>
+				<xsl:text>          identifier: </xsl:text><xsl:value-of select="@name"/><xsl:text>.html</xsl:text>
+				<xsl:text>&#xa;</xsl:text>
+				<xsl:text>          attachment: true</xsl:text>
+				<xsl:text>&#xa;</xsl:text>
+			</xsl:for-each>
+		</redirect:write>
+	</xsl:template>
+	
 </xsl:stylesheet>

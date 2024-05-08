@@ -94,9 +94,20 @@ $Id: sect_3_defs.xsl,v 1.11 2010/02/03 12:10:33 robbod Exp $
       </xsl:if>
     </xsl:for-each>
   </xsl:variable>
+  
   <xsl:variable name="attributes">
+    <!-- Example: source=bibitem_010303000002 -->
     <!-- <xsl:if test="xalan:nodeset($list_ref)//item[contains(., 'ISO 10303-')]">source=ref10303-2</xsl:if> -->
-    <xsl:if test="xalan:nodeset($list_ref_iso_10303)//item">source=ref10303-2</xsl:if>
+    <xsl:if test="xalan:nodeset($list_ref_iso_10303)//item">
+      <xsl:variable name="normref_10303_2"><normref.inc normref="ref10303-2"/></xsl:variable>
+      <xsl:variable name="normref_list">
+        <xsl:element name="normref_nodes">
+          <xsl:apply-templates select="xalan:nodeset($normref_10303_2)/*" mode="generate_node"/>
+        </xsl:element>
+      </xsl:variable>  
+      <xsl:variable name="normref_nodes" select="xalan:nodeset($normref_list)"/>
+      <xsl:value-of select="concat('source=bibitem_', $normref_nodes//normref/@id)"/>
+    </xsl:if>
   </xsl:variable>
 
   <xsl:call-template name="insertHeaderADOC">

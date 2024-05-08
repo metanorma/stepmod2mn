@@ -110,9 +110,9 @@ $Id: sect_introduction.xsl,v 1.15 2020/03/02 14:39:21 tom Exp $
 						<xsl:text>&#xa;&#xa;</xsl:text> -->
             
 						<!-- replaced by macros -->
-						<xsl:text>[lutaml_express, schemas, context, leveloffset=+1]</xsl:text>
+						<!-- <xsl:text>[lutaml_express, schemas, context, leveloffset=+1]</xsl:text>
 						<xsl:text>&#xa;</xsl:text>
-						<xsl:text>---</xsl:text>
+						<xsl:text>- - -</xsl:text>
 						<xsl:text>&#xa;</xsl:text>
 						<xsl:text>{% for schema in context.schemas %}</xsl:text>
 						<xsl:text>&#xa;</xsl:text>
@@ -120,7 +120,13 @@ $Id: sect_introduction.xsl,v 1.15 2020/03/02 14:39:21 tom Exp $
 						<xsl:text>&#xa;</xsl:text>
 						<xsl:text>{% endfor %}</xsl:text>
 						<xsl:text>&#xa;</xsl:text>
-						<xsl:text>---</xsl:text>
+						<xsl:text>- - -</xsl:text>
+						<xsl:text>&#xa;</xsl:text>
+						<xsl:text>&#xa;</xsl:text> -->
+						
+						<!-- https://github.com/metanorma/stepmod2mn/issues/189 -->
+						<!-- replaced by template -->
+						<xsl:text>include::../templates/resources/resource_introduction_subdivisions.adoc[]</xsl:text>
 						<xsl:text>&#xa;</xsl:text>
 						<xsl:text>&#xa;</xsl:text>
 						
