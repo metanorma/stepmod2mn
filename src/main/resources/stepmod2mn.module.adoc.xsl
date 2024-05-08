@@ -359,7 +359,7 @@
 		<xsl:text>&#xa;</xsl:text>
 		<xsl:text>:data-uri-image:</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>:lutaml-express-index: schemas; schemas.yaml;</xsl:text>
+		<xsl:text>:lutaml-express-index: schemas; ../../schemas_all.yaml;</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
 		
