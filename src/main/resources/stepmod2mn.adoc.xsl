@@ -1110,10 +1110,9 @@
 			manifest:
 				- level: document
 					title: Document
+					sectionsplit: true
 					docref:
-						- fileref: document.xml
-							identifier: iso10303-41
-							sectionsplit: true
+						- fileref: document.adoc
 				- level: attachments
 					title: Attachments
 					docref:
@@ -1173,15 +1172,18 @@
 			<xsl:text>&#xa;</xsl:text>
 			<xsl:text>      title: Document</xsl:text>
 			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>      sectionsplit: true</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
 			<xsl:text>      docref:</xsl:text>
 			<xsl:text>&#xa;</xsl:text>
-			<xsl:text>        - fileref: document.xml</xsl:text>
+			<!-- <xsl:text>        - fileref: document.xml</xsl:text> -->
+			<xsl:text>        - fileref: document.adoc</xsl:text>
 			<xsl:text>&#xa;</xsl:text>
 			<!-- <xsl:text>          identifier: iso10303-</xsl:text><xsl:value-of select="$data//part"/> -->
-			<xsl:text>          identifier: iso</xsl:text><xsl:value-of select="$data//docid"/>
+			<!-- <xsl:text>          identifier: iso</xsl:text><xsl:value-of select="$data//docid"/>
 			<xsl:text>&#xa;</xsl:text>
 			<xsl:text>          sectionsplit: true</xsl:text>
-			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>&#xa;</xsl:text> -->
 			<xsl:text>    - level: attachments</xsl:text>
 			<xsl:text>&#xa;</xsl:text>
 			<xsl:text>      title: Attachments</xsl:text>
