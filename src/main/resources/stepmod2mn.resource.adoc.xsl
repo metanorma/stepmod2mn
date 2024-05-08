@@ -689,13 +689,11 @@
 
 			<xsl:variable name="current_resource_name" select="resource/@name"/>
 			
-			<xsl:variable name="root_element_name" select="local-name(*)"/>
-			
 			<xsl:for-each select="resource/schema">
 				<xsl:text>        - fileref: </xsl:text>
 				<!-- <xsl:value-of select="concat('../../resources/',@name,'/',@name,'.exp')"/> --> <!-- updated for https://github.com/metanorma/stepmod2mn/issues/49, was ../../../resources/ -->
 				
-				<xsl:variable name="schema_exp_relative_path" select="concat('../../', $root_element_name, 's/',@name,'/',@name,'.exp')"/>
+				<xsl:variable name="schema_exp_relative_path" select="concat('../../resources/',@name,'/',@name,'.exp')"/>
 				
 				<xsl:variable name="schema_exp_exists" select="java:org.metanorma.Util.fileExists(concat($path, '/', $schema_exp_relative_path))"/>
 				<xsl:if test="normalize-space($schema_exp_exists) = 'false'">

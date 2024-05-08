@@ -382,19 +382,23 @@
 		<!-- Generation changes_paths.yaml -->
 		<xsl:call-template name="generateChangesPathsYaml"/>
 		
+		<redirect:open file="{$errors_fatal_log_filename}"/>
+		
 		<!-- Generation collection.yml -->
-		<!-- <xsl:call-template name="generateCollectionYaml">
+		<xsl:call-template name="generateCollectionYaml">
 			<xsl:with-param name="data_element">
 				<data>
-					<title lang="en"><xsl:value-of select="$title-intro-en"/> - - <xsl:value-of select="$title-main-en"/> - - <xsl:value-of select="$title-part-en"/></title>
-					<title lang="fr"><xsl:value-of select="$title-intro-fr"/> - - <xsl:value-of select="$title-main-fr"/> - - <xsl:value-of select="$title-part-fr"/></title>
-					<docid>10303-<xsl:value-of select="module/@part"/></docid>
+					<title lang="en"><xsl:value-of select="$title-intro-en"/> -- <xsl:value-of select="$title-main-en"/> -- <xsl:value-of select="$title-part-en"/></title>
+					<title lang="fr"><xsl:value-of select="$title-intro-fr"/> -- <xsl:value-of select="$title-main-fr"/> -- <xsl:value-of select="$title-part-fr"/></title>
+					<docid><xsl:value-of select="$docnumber"/>-<xsl:value-of select="$part"/></docid>
 					<edition><xsl:value-of select="module/@version"/></edition>
 					<year><xsl:value-of select="substring(module/@publication.year,1,4)"/></year>
-					<part><xsl:value-of select="module/@part"/></part>
+					<part><xsl:value-of select="$part"/></part>
 				</data>
 			</xsl:with-param>
-		</xsl:call-template> -->
+		</xsl:call-template>
+		
+		<redirect:close file="{$errors_fatal_log_filename}"/>
 		
 		<xsl:variable name="adoc">
 	
@@ -637,6 +641,13 @@
     </redirect:write>
   </xsl:template>
 	
+  <xsl:variable name="arm_mim_files">
+    <file><xsl:value-of select="concat($path, 'arm.xml')"/></file>
+    <file><xsl:value-of select="concat($path, 'mim.xml')"/></file>
+    <file><xsl:value-of select="concat($path, 'arm_lf.xml')"/></file>
+    <file><xsl:value-of select="concat($path, 'mim_lf.xml')"/></file>
+  </xsl:variable>
+  
   <!-- Example: 
   - - -
   schemas:
@@ -653,16 +664,9 @@
       <xsl:text>schemas:</xsl:text>
       <xsl:text>&#xa;</xsl:text>
       
-      <xsl:variable name="arm_mim_files">
-        <file><xsl:value-of select="concat($path, 'arm.xml')"/></file>
-        <file><xsl:value-of select="concat($path, 'mim.xml')"/></file>
-        <file><xsl:value-of select="concat($path, 'arm_lf.xml')"/></file>
-        <file><xsl:value-of select="concat($path, 'mim_lf.xml')"/></file>
-      </xsl:variable>
-      
       <xsl:for-each select="xalan:nodeset($arm_mim_files)/*">
       
-       <xsl:variable name="arm_mim_exp_exists" select="java:org.metanorma.Util.fileExists(.)"/>
+      <xsl:variable name="arm_mim_exp_exists" select="java:org.metanorma.Util.fileExists(.)"/>
        <xsl:if test="normalize-space($arm_mim_exp_exists) = 'true'">
         <xsl:variable name="arm_mim_document" select="document(.)"/>
         <xsl:for-each select="$arm_mim_document/express/schema">
@@ -723,4 +727,97 @@
     </redirect:write>
   </xsl:template>
   
+  <xsl:template name="generateCollectionYaml">
+    <xsl:param name="data_element"/>
+    <xsl:message>[INFO] Generation collection.yaml ...</xsl:message>
+    <redirect:write file="{$outpath}/collection.yml">
+      <xsl:call-template name="generateCollectionYaml_common_part">
+        <xsl:with-param name="data_element" select="$data_element"/>
+      </xsl:call-template>
+      
+      <xsl:variable name="current_module_name" select="module/@name"/>
+      
+      <xsl:for-each select="xalan:nodeset($arm_mim_files)/*">
+        <xsl:variable name="arm_mim_exp_exists" select="java:org.metanorma.Util.fileExists(.)"/>
+         <xsl:if test="normalize-space($arm_mim_exp_exists) = 'true'">
+          <xsl:variable name="arm_mim_document" select="document(.)"/>
+          <xsl:for-each select="$arm_mim_document/express/schema">
+            
+            
+            <xsl:variable name="UPPER">ABCDEFGHIJKLMNOPQRSTUVWXYZ</xsl:variable>
+            <xsl:variable name="LOWER">abcdefghijklmnopqrstuvwxyz</xsl:variable>
+            <xsl:variable name="name_lcase" select="translate(@name,$UPPER, $LOWER)"/>
+            
+            <xsl:variable name="name">
+              <xsl:choose>
+                <xsl:when test="contains($name_lcase,'_arm')">
+                  <xsl:value-of select="substring-before($name_lcase,'_arm')"/>
+                </xsl:when>
+                <xsl:when test="contains($name_lcase,'_mim')">
+                  <xsl:value-of select="substring-before($name_lcase,'_mim')"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="$name_lcase"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:variable>
+            
+            <xsl:variable name="arm_or_mim">
+              <xsl:choose>
+                <xsl:when test="contains($name_lcase,'_arm_lf')">arm_lf</xsl:when>
+                <xsl:when test="contains($name_lcase,'_arm')">arm</xsl:when>
+                <xsl:when test="contains($name_lcase,'_mim_lf')">mim_lf</xsl:when>
+                <xsl:when test="contains($name_lcase,'_mim')">mim</xsl:when>
+                <xsl:otherwise><xsl:value-of select="$name_lcase"/></xsl:otherwise>
+              </xsl:choose>
+            </xsl:variable>
+            
+            <xsl:variable name="schema_exp_relative_path" select="concat('../../modules/',$name,'/',$arm_or_mim,'.exp')"/>
+            
+            <xsl:variable name="schema_exp_exists" select="java:org.metanorma.Util.fileExists(concat($path, '/', $schema_exp_relative_path))"/>
+            
+            <xsl:if test="normalize-space($schema_exp_exists) = 'false'">
+              <xsl:variable name="msg">[ERROR] File '<xsl:value-of select="$schema_exp_relative_path"/>' does not exist.</xsl:variable>
+              <xsl:message><xsl:value-of select="$msg"/></xsl:message>
+              <xsl:message>[INFO] Repository index path: <xsl:value-of select="$repositoryIndex_path"/></xsl:message>
+              <xsl:if test="$repositoryIndex_path != ''">
+                <xsl:variable name="repositoryIndex_path_document" select="document($repositoryIndex_path)"/>
+                <xsl:if test="count($repositoryIndex_path_document//module[@name = $current_module_name]) = 0">
+                  <redirect:write file="{$errors_fatal_log_filename}">
+                    <xsl:value-of select="$msg"/><xsl:text>&#xa;</xsl:text>
+                  </redirect:write>
+                </xsl:if>
+              </xsl:if>
+            </xsl:if>
+            
+            <xsl:variable name="schema_exp_path">
+              <xsl:choose>
+                <xsl:when test="$outpath_schemas != ''">
+                  <xsl:value-of select="concat($outpath_schemas,'/',$name,'/',$arm_or_mim,'.exp')"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="concat($path, '/', $schema_exp_relative_path)"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:variable>
+            <xsl:variable name="schema_exp_relative_path_new" select="java:org.metanorma.Util.getRelativePath($schema_exp_path, $outpath)"/>
+            
+            <xsl:text>        - fileref: </xsl:text><xsl:value-of select="$schema_exp_relative_path_new"/>
+            <xsl:text>&#xa;</xsl:text>
+            <xsl:text>          identifier: </xsl:text><xsl:value-of select="$arm_or_mim"/><xsl:text>.exp</xsl:text>
+            <xsl:text>&#xa;</xsl:text>
+            <xsl:text>          attachment: true</xsl:text>
+            <xsl:text>&#xa;</xsl:text>
+            <xsl:text>        - fileref: </xsl:text><xsl:value-of select="concat('sections/schemadocs/',@name,'.html')"/>
+            <xsl:text>&#xa;</xsl:text>
+            <xsl:text>          identifier: </xsl:text><xsl:value-of select="@name"/><xsl:text>.html</xsl:text>
+            <xsl:text>&#xa;</xsl:text>
+            <xsl:text>          attachment: true</xsl:text>
+            <xsl:text>&#xa;</xsl:text>
+          </xsl:for-each>
+        </xsl:if>
+      </xsl:for-each>
+    </redirect:write>
+  </xsl:template>
+	
 </xsl:stylesheet>
