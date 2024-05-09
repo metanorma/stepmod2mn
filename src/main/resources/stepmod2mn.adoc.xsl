@@ -84,7 +84,7 @@
 		<xsl:text>:language: </xsl:text><xsl:call-template name="getLanguage"/>
 		<xsl:text>&#xa;</xsl:text>
 		
-		<xsl:text>:publish-date: </xsl:text><xsl:value-of select="resource/@publication.date"/><xsl:value-of select="module/@publication.date"/>
+		<xsl:text>:published-date: </xsl:text><xsl:value-of select="resource/@publication.date"/><xsl:value-of select="module/@publication.date"/>
 		<xsl:text>&#xa;</xsl:text>
 		
 		<xsl:text>:edition: </xsl:text><xsl:value-of select="resource/@version"/><xsl:value-of select="module/@version"/>
