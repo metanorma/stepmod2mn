@@ -70,7 +70,8 @@
 							$element_name, '.xml/', $element_name, '/@wg.number - ',
 							$test_wg_number)"/>
 				</xsl:with-param>
-				<!-- <xsl:with-param name="comment">yes</xsl:with-param> -->
+				<xsl:with-param name="comment">yes</xsl:with-param>
+				<xsl:with-param name="document_attributes">yes</xsl:with-param>
 			</xsl:call-template>
 		</xsl:if>
 		
@@ -143,8 +144,10 @@
 		<xsl:if test="$element_name = 'module' and ($keywords = 'module' or string-length($keywords)=0)">
 			<xsl:call-template name="error_message">
 				<xsl:with-param name="message">
-			Error K-1: Error in module.xml/keywords - no keywords specified.
-		</xsl:with-param>
+					Error K-1: Error in module.xml/keywords - no keywords specified.
+				</xsl:with-param>
+				<xsl:with-param name="comment">yes</xsl:with-param>
+				<xsl:with-param name="document_attributes">yes</xsl:with-param>
 			</xsl:call-template>
 		</xsl:if>
 		
@@ -181,11 +184,12 @@
 			<xsl:if test="contains($test_wg_number_supersedes,'Error')">
 				<xsl:call-template name="error_message">
 					<xsl:with-param name="message">
-						<xsl:value-of 
-					select="concat('Error in ',
+						<xsl:value-of select="concat('Error in ',
 						$element_name, '.xml/', $element_name, '/@wg.number.supersedes - ',
 						$test_wg_number_supersedes)"/>
 					</xsl:with-param>
+					<xsl:with-param name="comment">yes</xsl:with-param>
+					<xsl:with-param name="document_attributes">yes</xsl:with-param>
 				</xsl:call-template>
 			</xsl:if>
 	    <xsl:if test="($element_name = 'resource' and resource/@wg.number.supersedes = resource/@wg.number) or
@@ -195,6 +199,8 @@
 						Error in <xsl:value-of select="$element_name"/>.xml/<xsl:value-of select="$element_name"/>/@wg.number.supersedes - 
 						Error WG-16: New WG number is the same as superseded WG number.
 					</xsl:with-param>
+					<xsl:with-param name="comment">yes</xsl:with-param>
+					<xsl:with-param name="document_attributes">yes</xsl:with-param>
 	      </xsl:call-template>            
 	    </xsl:if>
 		</xsl:if>
