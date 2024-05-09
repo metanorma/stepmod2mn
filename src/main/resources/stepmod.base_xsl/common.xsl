@@ -108,6 +108,8 @@ $Id: common.xsl,v 1.209 2020/02/22 00:08:47 tom Exp $
 						<xsl:with-param 
 							name="message" 
 							select="concat('Error FT: No French title (module/@name.french) provided for ',@name)"/>
+						<xsl:with-param name="comment">yes</xsl:with-param>
+						<xsl:with-param name="document_attributes">yes</xsl:with-param>
 					</xsl:call-template>
 				</xsl:when>
 				<xsl:otherwise>
@@ -1628,6 +1630,7 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 		<xsl:param name="inline" select="'yes'"/>
 		<xsl:param name="insert_newline" select="'yes'"/>
 		<xsl:param name="comment" select="'no'"/>
+		<xsl:param name="document_attributes" select="'no'"/>
 		<xsl:param name="linebreakchar" select="'#'"/>
 		<xsl:param name="warning_gif" select="'../../../../images/warning.gif'"/>
 		
@@ -1645,7 +1648,7 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 		
 		<xsl:if test="contains($INLINE_ERRORS,'yes')">
 			<xsl:if test="contains($inline,'yes')">
-				<xsl:if test="$insert_newline = 'yes'">
+				<xsl:if test="$insert_newline = 'yes' and $document_attributes = 'no'">
 					<xsl:text>&#xa;</xsl:text>
 				</xsl:if>
 				<!-- <br/>
@@ -1673,7 +1676,10 @@ width="20" height="20"/> -->
 						</xsl:call-template>
 					<xsl:text>_</xsl:text>
 				
-				<xsl:text>&#xa;&#xa;</xsl:text>
+				<xsl:text>&#xa;</xsl:text>
+				<xsl:if test="$document_attributes = 'no'">
+					<xsl:text>&#xa;</xsl:text>
+				</xsl:if>
 			</xsl:if>
 		</xsl:if>
 	</xsl:template>
@@ -4713,6 +4719,8 @@ is case sensitive.')"/>
 				<xsl:with-param name="message">
 					Error 1: No contact provided for project leader.
 				</xsl:with-param>
+				<xsl:with-param name="comment">yes</xsl:with-param>
+				<xsl:with-param name="document_attributes">yes</xsl:with-param>
 			</xsl:call-template>
 		</xsl:otherwise>
 	</xsl:choose>
@@ -4732,6 +4740,8 @@ is case sensitive.')"/>
 				<xsl:with-param name="message">
 					Error 1: No contact provided for project leader.
 				</xsl:with-param>
+				<xsl:with-param name="comment">yes</xsl:with-param>
+				<xsl:with-param name="document_attributes">yes</xsl:with-param>
 			</xsl:call-template>
 		</xsl:otherwise>
 	</xsl:choose>
@@ -4751,6 +4761,8 @@ is case sensitive.')"/>
 				<xsl:with-param name="message">
 					Error 1: No contact provided for project leader.
 				</xsl:with-param>
+				<xsl:with-param name="comment">yes</xsl:with-param>
+				<xsl:with-param name="document_attributes">yes</xsl:with-param>
 			</xsl:call-template>
 		</xsl:otherwise>
 	</xsl:choose>
@@ -4776,6 +4788,8 @@ is case sensitive.')"/>
 				<xsl:with-param name="message">
 					Error 2: No contact provided for project editor.
 				</xsl:with-param>
+				<xsl:with-param name="comment">yes</xsl:with-param>
+				<xsl:with-param name="document_attributes">yes</xsl:with-param>
 			</xsl:call-template>
 		</xsl:otherwise>
 	</xsl:choose>
@@ -4796,6 +4810,8 @@ is case sensitive.')"/>
 				<xsl:with-param name="message">
 					Error 2: No contact provided for project editor.
 				</xsl:with-param>
+				<xsl:with-param name="comment">yes</xsl:with-param>
+				<xsl:with-param name="document_attributes">yes</xsl:with-param>
 			</xsl:call-template>
 		</xsl:otherwise>
 	</xsl:choose>
@@ -4815,6 +4831,8 @@ is case sensitive.')"/>
 				<xsl:with-param name="message">
 					Error 2: No contact provided for project editor.
 				</xsl:with-param>
+				<xsl:with-param name="comment">yes</xsl:with-param>
+				<xsl:with-param name="document_attributes">yes</xsl:with-param>
 			</xsl:call-template>
 		</xsl:otherwise>
 	</xsl:choose>
@@ -4835,6 +4853,8 @@ is case sensitive.')"/>
 				<xsl:with-param name="message">
 					Error 1: No contact provided for developer.
 				</xsl:with-param>
+				<xsl:with-param name="comment">yes</xsl:with-param>
+				<xsl:with-param name="document_attributes">yes</xsl:with-param>
 			</xsl:call-template>
 		</xsl:otherwise>
 	</xsl:choose>
@@ -5115,7 +5135,9 @@ is case sensitive.')"/>
 			<xsl:when test="$part &lt;  99">Integrated generic resource</xsl:when>
 			<xsl:otherwise>
 				<xsl:call-template name="error_message">
-				<xsl:with-param name="message" select="concat('Error : unknown type,  part number:', $part)"/>
+					<xsl:with-param name="message" select="concat('Error : unknown type,  part number:', $part)"/>
+					<xsl:with-param name="comment">yes</xsl:with-param>
+					<xsl:with-param name="document_attributes">yes</xsl:with-param>
 				</xsl:call-template>
 			</xsl:otherwise>
 		</xsl:choose>
@@ -5141,6 +5163,8 @@ is case sensitive.')"/>
 	<xsl:otherwise>
 		<xsl:call-template name="error_message">
 			<xsl:with-param name="message" select="concat('Error : unknown type: ', $doctype)"/>
+			<xsl:with-param name="comment">yes</xsl:with-param>
+			<xsl:with-param name="document_attributes">yes</xsl:with-param>
 		</xsl:call-template>
 	</xsl:otherwise>
 	</xsl:choose>
@@ -5159,9 +5183,11 @@ is case sensitive.')"/>
 		Integrated generic resource</xsl:when>
 	<xsl:otherwise>
 		<xsl:call-template name="error_message">
-		<xsl:with-param 
-			name="message" 
-			select="concat('Error : unknown type: ', $doctype)"/>
+			<xsl:with-param 
+				name="message" 
+				select="concat('Error : unknown type: ', $doctype)"/>
+			<xsl:with-param name="comment">yes</xsl:with-param>
+			<xsl:with-param name="document_attributes">yes</xsl:with-param>
 		</xsl:call-template>
 	</xsl:otherwise>
 	</xsl:choose>
@@ -5180,9 +5206,11 @@ is case sensitive.')"/>
 	<xsl:when test="name(.)='resource' and $part &lt;  99">igr</xsl:when>
 	<xsl:otherwise>
 		<xsl:call-template name="error_message">
-		<xsl:with-param 
-			name="message" 
-			select="concat('Error : unknown type,  part number:', $part)"/>
+			<xsl:with-param 
+				name="message" 
+				select="concat('Error : unknown type,  part number:', $part)"/>
+			<xsl:with-param name="comment">yes</xsl:with-param>
+			<xsl:with-param name="document_attributes">yes</xsl:with-param>
 		</xsl:call-template>
 	</xsl:otherwise>
 	</xsl:choose>
