@@ -49,8 +49,11 @@
 		<xsl:text>= </xsl:text><xsl:value-of select="$title-intro-en"/>: <xsl:value-of select="$title-main-en"/>: <xsl:value-of select="$title-part-en"/>
 		<xsl:text>&#xa;</xsl:text>
 		<!-- Example: 10303 -->
-		<xsl:text>:docnumber: </xsl:text><xsl:value-of select="$docnumber"/><!-- <xsl:apply-templates select="resource" mode="docnumber"/> --><!-- res_doc/sect_1_scope.xsl -->
-		<xsl:text>&#xa;</xsl:text>
+		<!-- <xsl:apply-templates select="resource" mode="docnumber"/> --><!-- res_doc/sect_1_scope.xsl -->
+		<xsl:call-template name="addDocumentAttribute">
+			<xsl:with-param name="key">docnumber</xsl:with-param>
+			<xsl:with-param name="value" select="$docnumber"/>
+		</xsl:call-template>
 		
 		<!-- <xsl:text>:tc-docnumber: </xsl:text><xsl:value-of select="resource/@wg.number"/> -->
 		<!-- https://github.com/metanorma/stepmod2mn/issues/145#issuecomment-2073067811 -->
@@ -75,36 +78,60 @@
 			</xsl:call-template>
 		</xsl:if>
 		
-		<xsl:text>:partnumber: </xsl:text><xsl:value-of select="$part"/>
-		<xsl:text>&#xa;</xsl:text>
+		<xsl:call-template name="addDocumentAttribute">
+			<xsl:with-param name="key">partnumber</xsl:with-param>
+			<xsl:with-param name="value" select="$part"/>
+		</xsl:call-template>
 		
-		<xsl:text>:copyright-year: </xsl:text><xsl:value-of select="substring(resource/@publication.year,1,4)"/><xsl:value-of select="substring(module/@publication.year,1,4)"/>
-		<xsl:text>&#xa;</xsl:text>
+		<xsl:call-template name="addDocumentAttribute">
+			<xsl:with-param name="key">copyright-year</xsl:with-param>
+			<xsl:with-param name="value"><xsl:value-of select="substring(resource/@publication.year,1,4)"/><xsl:value-of select="substring(module/@publication.year,1,4)"/></xsl:with-param>
+		</xsl:call-template>
 		
-		<xsl:text>:language: </xsl:text><xsl:call-template name="getLanguage"/>
-		<xsl:text>&#xa;</xsl:text>
+		<xsl:call-template name="addDocumentAttribute">
+			<xsl:with-param name="key">language</xsl:with-param>
+			<xsl:with-param name="value"><xsl:call-template name="getLanguage"/></xsl:with-param>
+		</xsl:call-template>
 		
-		<xsl:text>:published-date: </xsl:text><xsl:value-of select="resource/@publication.date"/><xsl:value-of select="module/@publication.date"/>
-		<xsl:text>&#xa;</xsl:text>
+		<xsl:call-template name="addDocumentAttribute">
+			<xsl:with-param name="key">published-date</xsl:with-param>
+			<xsl:with-param name="value"><xsl:value-of select="resource/@publication.date"/><xsl:value-of select="module/@publication.date"/></xsl:with-param>
+		</xsl:call-template>
 		
-		<xsl:text>:edition: </xsl:text><xsl:value-of select="resource/@version"/><xsl:value-of select="module/@version"/>
-		<xsl:text>&#xa;</xsl:text>
+		<xsl:call-template name="addDocumentAttribute">
+			<xsl:with-param name="key">edition</xsl:with-param>
+			<xsl:with-param name="value"><xsl:value-of select="resource/@version"/><xsl:value-of select="module/@version"/></xsl:with-param>
+		</xsl:call-template>
 		
-		<xsl:text>:title-intro-en: </xsl:text><xsl:value-of select="$title-intro-en"/>
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>:title-intro-fr: </xsl:text><xsl:value-of select="$title-intro-fr"/>
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>:title-main-en: </xsl:text><xsl:value-of select="$title-main-en"/>
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>:title-main-fr: </xsl:text><xsl:value-of select="$title-main-fr"/>
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>:title-part-en: </xsl:text><xsl:value-of select="$title-part-en"/>
-		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>:title-part-fr: </xsl:text><xsl:value-of select="$title-part-fr"/>
-		<xsl:text>&#xa;</xsl:text>
+		<xsl:call-template name="addDocumentAttribute">
+			<xsl:with-param name="key">title-intro-en</xsl:with-param>
+			<xsl:with-param name="value" select="$title-intro-en"/>
+		</xsl:call-template>
+		<xsl:call-template name="addDocumentAttribute">
+			<xsl:with-param name="key">title-intro-fr</xsl:with-param>
+			<xsl:with-param name="value" select="$title-intro-fr"/>
+		</xsl:call-template>
+		<xsl:call-template name="addDocumentAttribute">
+			<xsl:with-param name="key">title-main-en</xsl:with-param>
+			<xsl:with-param name="value" select="$title-main-en"/>
+		</xsl:call-template>
+		<xsl:call-template name="addDocumentAttribute">
+			<xsl:with-param name="key">title-main-fr</xsl:with-param>
+			<xsl:with-param name="value" select="$title-main-fr"/>
+		</xsl:call-template>
+		<xsl:call-template name="addDocumentAttribute">
+			<xsl:with-param name="key">title-part-en</xsl:with-param>
+			<xsl:with-param name="value" select="$title-part-en"/>
+		</xsl:call-template>
+		<xsl:call-template name="addDocumentAttribute">
+			<xsl:with-param name="key">title-part-fr</xsl:with-param>
+			<xsl:with-param name="value" select="$title-part-fr"/>
+		</xsl:call-template>
 		
-		<xsl:text>:doctype: </xsl:text><xsl:apply-templates select="resource | module" mode="getDocType"/>
-		<xsl:text>&#xa;</xsl:text>
+		<xsl:call-template name="addDocumentAttribute">
+			<xsl:with-param name="key">doctype</xsl:with-param>
+			<xsl:with-param name="value"><xsl:apply-templates select="resource | module" mode="getDocType"/></xsl:with-param>
+		</xsl:call-template>
 		
 		<xsl:variable name="docstage">
 			<xsl:apply-templates select="resource | module" mode="getDocStage"/>
@@ -128,8 +155,10 @@
 		<xsl:text>&#xa;</xsl:text>
 		<xsl:text>:workgroup-type: WG</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>:workgroup-number: </xsl:text><xsl:call-template name="get_module_wg_group"/>
-		<xsl:text>&#xa;</xsl:text>
+		<xsl:call-template name="addDocumentAttribute">
+			<xsl:with-param name="key">workgroup-number</xsl:with-param>
+			<xsl:with-param name="value"><xsl:call-template name="get_module_wg_group"/></xsl:with-param>
+		</xsl:call-template>
 		
 		<xsl:text>:secretariat: ANSI</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
@@ -251,7 +280,17 @@
 			<xsl:text>&#xa;</xsl:text>
 			<xsl:text>&#xa;</xsl:text>
 		</xsl:if>
-	
+	</xsl:template>
+
+	<xsl:template name="addDocumentAttribute">
+		<xsl:param name="key"/>
+		<xsl:param name="value"/>
+		<xsl:value-of select="concat(':', $key, ':')"/>
+		<xsl:variable name="value_normalized" select="normalize-space($value)"/>
+		<xsl:if test="$value_normalized != ''">
+			<xsl:value-of select="concat(' ', $value_normalized)"/>
+		</xsl:if>
+		<xsl:text>&#xa;</xsl:text>
 	</xsl:template>
 
 	<!-- from  dtd/module.dtd: status (CD | FDIS | DIS | IS | CD-TS | TS | WD) "CD-TS" -->
