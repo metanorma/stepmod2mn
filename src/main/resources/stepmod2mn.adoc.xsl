@@ -27,26 +27,225 @@
 	<xsl:variable name="ISO_10303_regex">^ISO.*10303\-.+$</xsl:variable>
 	
 	<xsl:template name="getLanguage">
+		<xsl:variable name="lang" select="concat(java:toLowerCase(java:java.lang.String.new(resource/@language)), java:toLowerCase(java:java.lang.String.new(module/@language)))"/>
 		<xsl:choose>
-			<xsl:when test="resource">
-				<xsl:variable name="lang" select="java:toLowerCase(java:java.lang.String.new(resource/@language))"/>
-				<xsl:choose>
-					<xsl:when test="$lang = 'e'">en</xsl:when> 
-					<xsl:when test="$lang = 'd'">de</xsl:when> 
-					<xsl:when test="$lang = 'z'">zh</xsl:when> 
-					<xsl:otherwise><xsl:value-of select="resource/@language"/></xsl:otherwise>
-				</xsl:choose>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:variable name="lang" select="java:toLowerCase(java:java.lang.String.new(module/@language))"/>
-				<xsl:choose>
-					<xsl:when test="$lang = 'e'">en</xsl:when> 
-					<xsl:when test="$lang = 'd'">de</xsl:when> 
-					<xsl:when test="$lang = 'z'">zh</xsl:when> 
-					<xsl:otherwise><xsl:value-of select="module/@language"/></xsl:otherwise>
-				</xsl:choose>
-			</xsl:otherwise>
+			<xsl:when test="$lang = 'e'">en</xsl:when> 
+			<xsl:when test="$lang = 'd'">de</xsl:when> 
+			<xsl:when test="$lang = 'z'">zh</xsl:when> 
+			<xsl:otherwise><xsl:value-of select="resource/@language | module/@language"/></xsl:otherwise>
 		</xsl:choose>
+	</xsl:template>
+
+	<xsl:variable name="title-intro-en">Industrial automation systems and integration</xsl:variable>
+	<xsl:variable name="title-intro-fr">Systèmes d'automatisation industrielle et intégration</xsl:variable>
+	<xsl:variable name="title-main-en">Product data representation and exchange</xsl:variable>
+	<xsl:variable name="title-main-fr">Représentation et échange de données de produits</xsl:variable>
+	<xsl:variable name="title-part-en"><xsl:apply-templates select="resource | module" mode="display_name"/></xsl:variable>
+	<xsl:variable name="title-part-fr"><xsl:apply-templates select="resource | module" mode="display_name_french"/></xsl:variable>
+	
+	<!-- Note: resource | module and concat(resource/@..., module/@...) for processing both resource_docs and module documents -->
+	<xsl:template name="insertCommonDocumentAttributes">
+		
+		<xsl:text>= </xsl:text><xsl:value-of select="$title-intro-en"/>: <xsl:value-of select="$title-main-en"/>: <xsl:value-of select="$title-part-en"/>
+		<xsl:text>&#xa;</xsl:text>
+		<!-- Example: 10303 -->
+		<xsl:text>:docnumber: </xsl:text><xsl:value-of select="$docnumber"/><!-- <xsl:apply-templates select="resource" mode="docnumber"/> --><!-- res_doc/sect_1_scope.xsl -->
+		<xsl:text>&#xa;</xsl:text>
+		
+		<!-- <xsl:text>:tc-docnumber: </xsl:text><xsl:value-of select="resource/@wg.number"/> -->
+		<!-- https://github.com/metanorma/stepmod2mn/issues/145#issuecomment-2073067811 -->
+		<!-- ISO/TC 184/SC 4/WG 12 N10681 -->
+		<xsl:text>:tc-docnumber: </xsl:text><xsl:value-of select="concat('ISO/TC 184/SC 4/WG 12 N', resource/@wg.number, module/@wg.number)"/>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:variable name="test_wg_number">
+			<xsl:call-template name="test_wg_number">
+				<xsl:with-param name="wgnumber" select="resource/@wg.number | module/@wg.number"/>
+			</xsl:call-template>
+		</xsl:variable>
+		<xsl:variable name="element_name" select="local-name(*)"/>
+		<xsl:if test="contains($test_wg_number,'Error')">
+			<xsl:call-template name="error_message">
+				<xsl:with-param name="message">
+					<xsl:value-of select="concat('Error in ',
+							$element_name, '.xml/', $element_name, '/@wg.number - ',
+							$test_wg_number)"/>
+				</xsl:with-param>
+				<!-- <xsl:with-param name="comment">yes</xsl:with-param> -->
+			</xsl:call-template>
+		</xsl:if>
+		
+		<xsl:text>:partnumber: </xsl:text><xsl:value-of select="$part"/>
+		<xsl:text>&#xa;</xsl:text>
+		
+		<xsl:text>:copyright-year: </xsl:text><xsl:value-of select="substring(resource/@publication.year,1,4)"/><xsl:value-of select="substring(module/@publication.year,1,4)"/>
+		<xsl:text>&#xa;</xsl:text>
+		
+		<xsl:text>:language: </xsl:text><xsl:call-template name="getLanguage"/>
+		<xsl:text>&#xa;</xsl:text>
+		
+		<xsl:text>:publish-date: </xsl:text><xsl:value-of select="resource/@publication.date"/><xsl:value-of select="module/@publication.date"/>
+		<xsl:text>&#xa;</xsl:text>
+		
+		<xsl:text>:edition: </xsl:text><xsl:value-of select="resource/@version"/><xsl:value-of select="module/@version"/>
+		<xsl:text>&#xa;</xsl:text>
+		
+		<xsl:text>:title-intro-en: </xsl:text><xsl:value-of select="$title-intro-en"/>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>:title-intro-fr: </xsl:text><xsl:value-of select="$title-intro-fr"/>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>:title-main-en: </xsl:text><xsl:value-of select="$title-main-en"/>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>:title-main-fr: </xsl:text><xsl:value-of select="$title-main-fr"/>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>:title-part-en: </xsl:text><xsl:value-of select="$title-part-en"/>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>:title-part-fr: </xsl:text><xsl:value-of select="$title-part-fr"/>
+		<xsl:text>&#xa;</xsl:text>
+		
+		<xsl:text>:doctype: </xsl:text><xsl:apply-templates select="resource | module" mode="getDocType"/>
+		<xsl:text>&#xa;</xsl:text>
+		
+		<xsl:variable name="docstage">
+			<xsl:apply-templates select="resource | module" mode="getDocStage"/>
+		</xsl:variable>
+		<xsl:if test="normalize-space($docstage) != ''">
+			<xsl:value-of select="$docstage"/>
+			<xsl:text>&#xa;</xsl:text>
+		</xsl:if>
+		
+		<!-- fixed text from resource.xml, module.xml  <xsl:template match="resource" mode="coverpage"> <xsl:template match="module" mode="coverpage"> -->
+		
+		<xsl:text>:technical-committee-number: 184</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>:technical-committee: Industrial automation systems and integration</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>:subcommittee-type: SC</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>:subcommittee-number: 4</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>:subcommittee: Industrial data</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>:workgroup-type: WG</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>:workgroup-number: </xsl:text><xsl:call-template name="get_module_wg_group"/>
+		<xsl:text>&#xa;</xsl:text>
+		
+		<xsl:text>:secretariat: ANSI</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		
+		<xsl:variable name="keywords">			
+			<xsl:apply-templates select="resource/keywords | module/keywords"/>
+		</xsl:variable>
+		<xsl:if test="normalize-space($keywords) != ''">
+			<xsl:text>:keywords: </xsl:text><xsl:value-of select="normalize-space($keywords)"/>
+			<xsl:text>&#xa;</xsl:text>
+		</xsl:if>
+		<xsl:if test="$element_name = 'module' and ($keywords = 'module' or string-length($keywords)=0)">
+			<xsl:call-template name="error_message">
+				<xsl:with-param name="message">
+			Error K-1: Error in module.xml/keywords - no keywords specified.
+		</xsl:with-param>
+			</xsl:call-template>
+		</xsl:if>
+		
+		<xsl:text>:library-ics: 25.040.40</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		
+		<xsl:if test="normalize-space(resource/@previous.revision.year) != '' or normalize-space(module/@previous.revision.year) != ''">
+			<xsl:text>:revises: ISO </xsl:text><xsl:value-of select="$docnumber"/>-<xsl:value-of select="concat($part, ':', resource/@previous.revision.year, module/@previous.revision.year)"/>
+			<xsl:text>&#xa;</xsl:text>
+		</xsl:if>
+		
+		<!-- Example: :supersedes: ISO/TC 184/SC 4/WG 12 N10446 -->
+		<xsl:if test="resource/@wg.number.supersedes | module/@wg.number.supersedes">      
+			<xsl:text>:supersedes: </xsl:text>
+			<xsl:variable name="wg_group">
+				<xsl:choose>
+					<xsl:when test="$element_name = 'module'"><xsl:call-template name="get_module_wg_group"/></xsl:when>
+					<xsl:otherwise>12</xsl:otherwise>
+				</xsl:choose>
+			</xsl:variable>
+			<xsl:choose>
+				<xsl:when test="contains(resource/@wg.number.supersedes, 'ISO')"><xsl:value-of select="resource/@wg.number.supersedes"/></xsl:when>
+				<xsl:when test="contains(module/@wg.number.supersedes, 'ISO')"><xsl:value-of select="module/@wg.number.supersedes"/></xsl:when>
+				<xsl:otherwise><xsl:value-of select="concat('ISO/TC 184/SC 4/WG ', $wg_group, ' N',resource/@wg.number.supersedes, module/@wg.number.supersedes)"/></xsl:otherwise>
+			</xsl:choose>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:variable name="test_wg_number_supersedes">
+				<xsl:if test="($element_name = 'module' and not(contains(module/@wg.number.supersedes,'ISO'))) or $element_name = 'resource'">
+					<xsl:call-template name="test_wg_number">
+						<xsl:with-param name="wgnumber" select="resource/@wg.number.supersedes | module/@wg.number.supersedes"/>
+					</xsl:call-template>
+				</xsl:if>
+			</xsl:variable>
+			<xsl:if test="contains($test_wg_number_supersedes,'Error')">
+				<xsl:call-template name="error_message">
+					<xsl:with-param name="message">
+						<xsl:value-of 
+					select="concat('Error in ',
+						$element_name, '.xml/', $element_name, '/@wg.number.supersedes - ',
+						$test_wg_number_supersedes)"/>
+					</xsl:with-param>
+				</xsl:call-template>
+			</xsl:if>
+	    <xsl:if test="($element_name = 'resource' and resource/@wg.number.supersedes = resource/@wg.number) or
+						($element_name = 'module' and module/@wg.number.supersedes = module/@wg.number)">
+	      <xsl:call-template name="error_message">
+					<xsl:with-param name="message">
+						Error in <xsl:value-of select="$element_name"/>.xml/<xsl:value-of select="$element_name"/>/@wg.number.supersedes - 
+						Error WG-16: New WG number is the same as superseded WG number.
+					</xsl:with-param>
+	      </xsl:call-template>            
+	    </xsl:if>
+		</xsl:if>
+		
+		<!-- contacts -->
+		<!--
+		:semantic-metadata-project-leader-firstname:
+		:semantic-metadata-project-leader-lastname:
+		:semantic-metadata-project-leader-address-affiliation:
+		:semantic-metadata-project-leader-address-street:
+		:semantic-metadata-project-leader-address-city:
+		:semantic-metadata-project-leader-address-state:
+		:semantic-metadata-project-leader-address-postcode:
+		:semantic-metadata-project-leader-address-country:
+		:semantic-metadata-project-leader-phone:
+		:semantic-metadata-project-leader-fax:
+		:semantic-metadata-project-leader-email:
+		-->
+		<xsl:apply-templates select="resource/contacts/projlead | module/contacts/projlead"/>
+		<xsl:apply-templates select="resource/contacts/editor | module/contacts/editor"/>
+		
+		
+		<!-- commented: https://github.com/metanorma/stepmod2mn/issues/49 -->
+		<!-- uncommented: https://github.com/metanorma/stepmod2mn/issues/138 -->
+		<xsl:text>:imagesdir: </xsl:text><xsl:value-of select="$imagesdir"/>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>:mn-document-class: iso</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>:mn-output-extensions: xml,html,pdf,rxl</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>:local-cache-only:</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>:data-uri-image:</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>:lutaml-express-index: schemas; ../../schemas_all.yaml;</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		<xsl:text>&#xa;</xsl:text>
+		
+		<!-- Comments to reader -->
+		<xsl:variable name="comments_to_reader">
+			<xsl:apply-templates select="resource | module" mode="comments_to_reader"/>
+		</xsl:variable>
+		<xsl:if test="normalize-space($comments_to_reader) != ''">
+			<xsl:text>////</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:value-of select="$comments_to_reader"/>
+			<xsl:text>////</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>&#xa;</xsl:text>
+		</xsl:if>
+	
 	</xsl:template>
 
 	<!-- from  dtd/module.dtd: status (CD | FDIS | DIS | IS | CD-TS | TS | WD) "CD-TS" -->
