@@ -508,7 +508,7 @@ public class stepmod2mn {
                                     f.endsWith("\\" + XML_MODULE)).collect(Collectors.toList());
 
                     for (String inputXmlFile: inputXMLfiles) {
-                        String outAdocFile = XMLUtils.getOutputAdocPath(argOutputPath, inputXmlFile);
+                        String outAdocFile = XMLUtils.getOutputAdocPath(argOutputPath, inputXmlFile, inputOutputFiles);
                         inputOutputFiles.add(new AbstractMap.SimpleEntry<>(inputXmlFile, outAdocFile));
                     }
                 } catch (IOException e) {
@@ -545,7 +545,7 @@ public class stepmod2mn {
                             adocFolder = inputDocumentsFolder;
                         }
 
-                        String outAdocFile = XMLUtils.getOutputAdocPath(adocFolder, inputXmlFilePath.toString());
+                        String outAdocFile = XMLUtils.getOutputAdocPath(adocFolder, inputXmlFilePath.toString(), inputOutputFiles);
                         inputOutputFiles.add(new AbstractMap.SimpleEntry<>(inputXmlFilePath.toString(), outAdocFile));
                     }
 
@@ -684,10 +684,10 @@ public class stepmod2mn {
                 result = false;
             }
 
-            if (isDocumentsGenerationMode && !(repositoryIndex.contains(documentName, rootElement))) {
+            /* if (isDocumentsGenerationMode && !(repositoryIndex.contains(documentName, rootElement))) {
                 System.out.println("[WARNING] The document '" + documentName + "' skipped from the processing - it's missing in the repository index.");
                 return false;
-            }
+            } */
 
             if (isPublicationIndexMode && !(repositoryIndex.contains(documentName, rootElement))) {
                 System.out.println("[WARNING] The document '" + documentName + "' skipped in the metanorma collection - it's missing in the repository index.");
