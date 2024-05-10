@@ -593,13 +593,14 @@ public class stepmod2mn {
                 app.setOutputPathSchemas(outputPathSchemas);
                 app.setExcludeList(excludeList);
                 app.setIncludeOnlyList(includeOnlyList);
-                boolean res = app.convertstepmod2mn(filenameIn, fileOut);
-                if (!res) {
+                //boolean res = app.convertstepmod2mn(filenameIn, fileOut);
+                DocumentStatus documentStatus = app.convertstepmod2mn(filenameIn, fileOut);
+                if (!(documentStatus == DocumentStatus.OK)) {
                     badInputOutputFiles.add(entry);
                 }
             }
 
-            if (!inputOutputFiles.isEmpty() && isPublicationIndexMode) {
+            if (!inputOutputFiles.isEmpty()) { // && isPublicationIndexMode
 
                 inputOutputFiles.removeAll(badInputOutputFiles);
 
@@ -608,7 +609,12 @@ public class stepmod2mn {
                 // new ScriptCollection(argOutputPath, inputOutputFiles).generate();
 
                 // Generate collection manifest collection.yml
-                new MetanormaCollectionManifest(argOutputPath, inputOutputFiles).generate(namePublicationIndex);
+                String collectionOutputPath = argOutputPath;
+                if (isDocumentsGenerationMode) {
+                    // get parent folder
+                    collectionOutputPath = new File(argOutputPath).getParent().toString();
+                }
+                new MetanormaCollectionManifest(collectionOutputPath, inputOutputFiles).generate(namePublicationIndex);
 
                 // Generate cover.html
                 // commented, see https://github.com/metanorma/stepmod2mn/issues/124#issuecomment-1859657292
@@ -620,6 +626,10 @@ public class stepmod2mn {
                 String metanormaCollectionPath = argOutputPath;
                 if (isStandaloneXML) {
                     metanormaCollectionPath = new File(metanormaCollectionPath).getParent();
+                }
+                if (isDocumentsGenerationMode) {
+                    // get parent folder
+                    metanormaCollectionPath = new File(argOutputPath).getParent().toString();
                 }
                 if (metanormaCollectionPath == null || metanormaCollectionPath.isEmpty()) {
                     metanormaCollectionPath = inputFolder;
@@ -637,8 +647,9 @@ public class stepmod2mn {
     }
 
     //private void convertstepmod2mn(File fXMLin, File fileOut) throws IOException, TransformerException, SAXParseException {
-    private boolean convertstepmod2mn(String xmlFilePath, File fileOut) throws IOException, TransformerException, SAXParseException {
-        boolean result = true;
+    private DocumentStatus convertstepmod2mn(String xmlFilePath, File fileOut) throws IOException, TransformerException, SAXParseException {
+        //boolean result = true;
+        DocumentStatus result = DocumentStatus.OK;
         try {
 
             System.out.println(String.format(INPUT_LOG, XML_INPUT, xmlFilePath));
@@ -665,38 +676,52 @@ public class stepmod2mn {
 
             if (excludeList.contains(documentName)) {
                 System.out.println("[WARNING] The document '" + documentName + "' excluded from the processing.");
-                return false;
+                //return false;
+                return DocumentStatus.EXCLUDED;
             }
 
             if (excludeList.contains(part)) {
                 System.out.println("[WARNING] The document '" + documentName + "' (part '" + part + "') excluded from the processing.");
-                return false;
+                //return false;
+                return DocumentStatus.EXCLUDED;
             }
 
             if (!includeOnlyList.isEmpty() && !includeOnlyList.contains(documentName)) {
                 System.out.println("[WARNING] The document '" + documentName + "' skipped from the processing.");
-                return false;
+                //return false;
+                return DocumentStatus.SKIPPED;
             }
 
-            if (isPublicationIndexMode && (part.isEmpty() || !Util.isNumeric(part))) {
-                //System.err.println("[WARNING] Ignore document processing due the wrong attribute 'part' value: '" + part + "'");
-                System.out.println("[WARNING] The document '" + documentName + "' skipped in the metanorma collection due the wrong attribute 'part' value: '" + part + "'");
-                result = false;
+            if (isPublicationIndexMode) {
+                if (part.isEmpty() || !Util.isNumeric(part)) {
+                    //System.err.println("[WARNING] Ignore document processing due the wrong attribute 'part' value: '" + part + "'");
+                    System.out.println("[WARNING] The document '" + documentName + "' skipped in the metanorma collection due the wrong attribute 'part' value: '" + part + "'");
+                    //result = false;
+                    return DocumentStatus.WRONGPART;
+                }
+                if (!(repositoryIndex.contains(documentName, rootElement))) {
+                    System.out.println("[WARNING] The document '" + documentName + "' skipped in the metanorma collection - it's missing in the repository index.");
+                    //result = false;
+                    return DocumentStatus.MISSING;
+                }
+                if (repositoryIndex.isWithdrawn(documentName, rootElement)) {
+                    System.out.println("[WARNING] The document '" + documentName + "' skipped in the metanorma collection - it has status 'withdrawn' in the repository index.");
+                    //result = false;
+                    return DocumentStatus.WITHDRAWN;
+                }
             }
 
-            /* if (isDocumentsGenerationMode && !(repositoryIndex.contains(documentName, rootElement))) {
-                System.out.println("[WARNING] The document '" + documentName + "' skipped from the processing - it's missing in the repository index.");
-                return false;
-            } */
-
-            if (isPublicationIndexMode && !(repositoryIndex.contains(documentName, rootElement))) {
-                System.out.println("[WARNING] The document '" + documentName + "' skipped in the metanorma collection - it's missing in the repository index.");
-                result = false;
-            }
-
-            if (isPublicationIndexMode && repositoryIndex.isWithdrawn(documentName, rootElement)) {
-                System.out.println("[WARNING] The document '" + documentName + "' skipped in the metanorma collection - it has status 'withdrawn' in the repository index.");
-                result = false;
+            if (isDocumentsGenerationMode) {
+                if (!(repositoryIndex.contains(documentName, rootElement))) {
+                    System.out.println("[WARNING] The document '" + documentName + "' is missing in the repository index.");
+                    //return false;
+                    result = DocumentStatus.MISSING;
+                }
+                if (repositoryIndex.isWithdrawn(documentName, rootElement)) {
+                    System.out.println("[WARNING] The document '" + documentName + "' has status 'withdrawn' in the repository index.");
+                    //result = false;
+                    result = DocumentStatus.WITHDRAWN;
+                }
             }
 
             if (!isPublicationIndexMode) {
@@ -769,9 +794,9 @@ public class stepmod2mn {
                 if (fileErrorsFatalLog.length() != 0) {
                     // if current document doesn't exist in the repository index, then
                     // delete it from list
-                    if(isPublicationIndexMode) {
+                    /*if(isPublicationIndexMode) {
                         result = false;
-                    }
+                    }*/
                 } else {
                     // delete empty
                     if (Files.exists(fileErrorsFatalLog.toPath())) {
