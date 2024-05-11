@@ -620,7 +620,7 @@ public class stepmod2mn {
 
                 // output folder for collection.yml
                 String collectionOutputPath = argOutputPath;
-                if (isDocumentsGenerationMode) {
+                if (isStandaloneXML || isDocumentsGenerationMode) {
                     // get parent folder
                     collectionOutputPath = new File(argOutputPath).getParent().toString();
                 }

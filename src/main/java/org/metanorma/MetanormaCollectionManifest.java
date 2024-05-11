@@ -71,15 +71,11 @@ public class MetanormaCollectionManifest {
                 if (!namePublicationIndex.isEmpty()) {
                     namePublicationIndex = namePublicationIndex + ".";
                 }
-
-                System.out.println("repositoryRootFolder=" + repositoryRootFolder);
+                
                 Files.createDirectories(Paths.get(repositoryRootFolder));
                 Path pathMetanormaCollectionYml = Paths.get(repositoryRootFolder, namePublicationIndex + "collection" + documentStatus.toString() + ".yml");
-                System.out.println("pathMetanormaCollectionYml=" + pathMetanormaCollectionYml);
                 PrintWriter writer = new PrintWriter(pathMetanormaCollectionYml.toFile());
-                System.out.println("debug1");
                 yaml.dump(yamlObj, writer);
-                System.out.println("debug2");
                 System.out.println("[INFO] Saved " + pathMetanormaCollectionYml.toString() + ".");
             }
         }
