@@ -27,6 +27,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class XMLUtils {
 
@@ -97,7 +98,7 @@ public class XMLUtils {
         return "";
     }
 
-    public static String getOutputAdocPath(String argOutputPath, String inputXmlFile) {
+    public static String getOutputAdocPath(String argOutputPath, String inputXmlFile, List<Map.Entry<String,String>> inputOutputFiles) {
         String outAdocFile = "";
         if (argOutputPath.isEmpty()) {
             // if the parameter '--output' is missing,
@@ -121,8 +122,26 @@ public class XMLUtils {
 
             Path outAdocPath = Paths.get(argOutputPath, folderDocumentName, Constants.DOCUMENT_ADOC);
             outAdocFile = outAdocPath.toString();
+
+            int counter = 1;
+            boolean found = true;
+            while (found) {
+                final String outAdocFileTmp = outAdocFile;
+                if (inputOutputFiles.stream().filter(s -> s.getValue().equals(outAdocFileTmp)).count() > 0) {
+                    counter++;
+                    outAdocPath = Paths.get(argOutputPath, folderDocumentName + "_" + counter, Constants.DOCUMENT_ADOC);
+                    outAdocFile = outAdocPath.toString();
+                } else {
+                    found = false;
+                    outAdocFile = outAdocFileTmp;
+                }
+            }
         }
         return outAdocFile;
+    }
+
+    public static String getOutputAdocPath(String argOutputPath, String inputXmlFile) {
+        return getOutputAdocPath(argOutputPath, inputXmlFile, new ArrayList<>());
     }
 
     public static String getOutputAdocPath2(String argOutputPath, String inputXmlFile) {
