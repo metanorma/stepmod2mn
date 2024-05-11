@@ -15,12 +15,9 @@ public class MetanormaCollectionManifest {
 
     List<Map.Entry<String,String>> inputOutputFiles;
 
-    String outputPath;
-
     Map<String, Object> yamlObj = new LinkedHashMap<>();
 
-    public MetanormaCollectionManifest(String outputPath, List<Map.Entry<String,String>> inputOutputFiles) {
-        this.outputPath = outputPath;
+    public MetanormaCollectionManifest(List<Map.Entry<String,String>> inputOutputFiles) {
         this.inputOutputFiles = inputOutputFiles;
         try {
             Yaml yaml = new Yaml();
@@ -32,53 +29,55 @@ public class MetanormaCollectionManifest {
         }
     }
 
-    public void generate(String namePublicationIndex) throws IOException {
-        // get repository root folder from 1st file
-        String repositoryRootFolder = Util.getRepositoryRootFolder(inputOutputFiles.get(0).getValue());
-        if (repositoryRootFolder.isEmpty() && outputPath != null && !outputPath.isEmpty()) {
-            //String parentOutputPath = new File(outputPath).getParent();
-            //repositoryRootFolder = parentOutputPath;
-            repositoryRootFolder = outputPath;
-        }
-        if (!repositoryRootFolder.isEmpty()) {
-            int counter = 0;
-            for (Map.Entry<String, String> entry : inputOutputFiles) {
-                String resultAdoc = entry.getValue();
-                String documentFolder = new File(resultAdoc).getParent();
-                File fileResultCollectionYml = Paths.get(documentFolder, "collection.yml").toFile();
-                if (fileResultCollectionYml.exists()) {
-                    InputStream is = new FileInputStream(fileResultCollectionYml);
-                    Yaml yaml = new Yaml();
-                    Map<String, Object> yamlDocumentObj = yaml.load(is);
-                    //System.out.println(yamlDocumentObj);
+    public void generate(String outputFolder, String namePublicationIndex, DocumentStatus documentStatus) throws IOException {
+        if (!inputOutputFiles.isEmpty()) {
+            // get repository root folder from 1st file
+            String repositoryRootFolder = Util.getRepositoryRootFolder(inputOutputFiles.get(0).getValue());
+            if (repositoryRootFolder.isEmpty() && outputFolder != null && !outputFolder.isEmpty()) {
+                //String parentOutputPath = new File(outputPath).getParent();
+                //repositoryRootFolder = parentOutputPath;
+                repositoryRootFolder = outputFolder;
+            }
+            if (!repositoryRootFolder.isEmpty()) {
+                int counter = 0;
+                for (Map.Entry<String, String> entry : inputOutputFiles) {
+                    String resultAdoc = entry.getValue();
+                    String documentFolder = new File(resultAdoc).getParent();
+                    File fileResultCollectionYml = Paths.get(documentFolder, "collection.yml").toFile();
+                    if (fileResultCollectionYml.exists()) {
+                        InputStream is = new FileInputStream(fileResultCollectionYml);
+                        Yaml yaml = new Yaml();
+                        Map<String, Object> yamlDocumentObj = yaml.load(is);
+                        //System.out.println(yamlDocumentObj);
 
-                    // manifest:
-                    //  - level: document
-                    update_docref(yamlDocumentObj, 0, documentFolder, repositoryRootFolder);
+                        // manifest:
+                        //  - level: document
+                        update_docref(yamlDocumentObj, 0, documentFolder, repositoryRootFolder);
 
-                    // manifest:
-                    //  - level: attachments
-                    update_docref(yamlDocumentObj, 1, documentFolder, repositoryRootFolder);
+                        // manifest:
+                        //  - level: attachments
+                        update_docref(yamlDocumentObj, 1, documentFolder, repositoryRootFolder);
+                    }
+                    counter++;
                 }
-                counter++;
-            }
 
-            DumperOptions options = new DumperOptions();
-            options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
-            Yaml yaml = new Yaml(options);
+                DumperOptions options = new DumperOptions();
+                options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+                Yaml yaml = new Yaml(options);
 
-            if (namePublicationIndex == null) {
-                namePublicationIndex = "";
-            }
-            if (!namePublicationIndex.isEmpty()) {
-                namePublicationIndex = namePublicationIndex + ".";
-            }
+                if (namePublicationIndex == null) {
+                    namePublicationIndex = "";
+                }
+                if (!namePublicationIndex.isEmpty()) {
+                    namePublicationIndex = namePublicationIndex + ".";
+                }
 
-            Files.createDirectories(Paths.get(repositoryRootFolder));
-            Path pathMetanormaCollectionYml = Paths.get(repositoryRootFolder, namePublicationIndex + "collection.yml");
-            PrintWriter writer = new PrintWriter(pathMetanormaCollectionYml.toFile());
-            yaml.dump(yamlObj, writer);
-            System.out.println("[INFO] Saved " + pathMetanormaCollectionYml.toString() + ".");
+                Files.createDirectories(Paths.get(repositoryRootFolder));
+                Path pathMetanormaCollectionYml = Paths.get(repositoryRootFolder, namePublicationIndex + "collection" + documentStatus.toString() + ".yml");
+                PrintWriter writer = new PrintWriter(pathMetanormaCollectionYml.toFile());
+                yaml.dump(yamlObj, writer);
+                System.out.println("[INFO] Saved " + pathMetanormaCollectionYml.toString() + ".");
+            }
         }
     }
 

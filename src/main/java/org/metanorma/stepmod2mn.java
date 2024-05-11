@@ -571,6 +571,9 @@ public class stepmod2mn {
         try {
 
             List<Map.Entry<String,String>> badInputOutputFiles = new ArrayList<>();
+            List<Map.Entry<String,String>> withdrawnInputOutputFiles = new ArrayList<>();
+            List<Map.Entry<String,String>> missingInputOutputFiles = new ArrayList<>();
+            List<Map.Entry<String,String>> wrongPartInputOutputFiles = new ArrayList<>();
 
             for (Map.Entry<String,String> entry: inputOutputFiles) {
                 String filenameIn = entry.getKey();
@@ -597,6 +600,17 @@ public class stepmod2mn {
                 DocumentStatus documentStatus = app.convertstepmod2mn(filenameIn, fileOut);
                 if (!(documentStatus == DocumentStatus.OK)) {
                     badInputOutputFiles.add(entry);
+                    switch (documentStatus) {
+                        case WITHDRAWN:
+                            withdrawnInputOutputFiles.add(entry);
+                            break;
+                        case MISSING:
+                            missingInputOutputFiles.add(entry);
+                            break;
+                        case WRONGPART:
+                            wrongPartInputOutputFiles.add(entry);
+                            break;
+                    }
                 }
             }
 
@@ -604,38 +618,55 @@ public class stepmod2mn {
 
                 inputOutputFiles.removeAll(badInputOutputFiles);
 
-                // Generate collection.sh
-                // commented, see https://github.com/metanorma/stepmod2mn/issues/124#issuecomment-1859657292
-                // new ScriptCollection(argOutputPath, inputOutputFiles).generate();
-
-                // Generate collection manifest collection.yml
+                // output folder for collection.yml
                 String collectionOutputPath = argOutputPath;
                 if (isDocumentsGenerationMode) {
                     // get parent folder
                     collectionOutputPath = new File(argOutputPath).getParent().toString();
                 }
-                new MetanormaCollectionManifest(collectionOutputPath, inputOutputFiles).generate(namePublicationIndex);
+                if (collectionOutputPath == null || collectionOutputPath.isEmpty()) {
+                    collectionOutputPath = inputFolder;
+                }
+
+                // output folder for metanorma.yml
+                String metanormaCollectionPath = argOutputPath;
+                if (isStandaloneXML || isDocumentsGenerationMode) {
+                    // get parent folder
+                    metanormaCollectionPath = new File(metanormaCollectionPath).getParent();
+                }
+                if (metanormaCollectionPath == null || metanormaCollectionPath.isEmpty()) {
+                    metanormaCollectionPath = inputFolder;
+                }
+
+                // Generate collection.sh
+                // commented, see https://github.com/metanorma/stepmod2mn/issues/124#issuecomment-1859657292
+                // new ScriptCollection(argOutputPath, inputOutputFiles).generate();
+
+                // Generate collection manifest collection.yml
+                new MetanormaCollectionManifest(inputOutputFiles).generate(collectionOutputPath, namePublicationIndex, DocumentStatus.OK);
 
                 // Generate cover.html
                 // commented, see https://github.com/metanorma/stepmod2mn/issues/124#issuecomment-1859657292
                 // new MetanormaCover(argOutputPath, inputOutputFiles).generate();
 
-                //if (isInputFolder) {
-                // Generate metanorma.yml in the root of path
-                //new MetanormaCollection(inputOutputFiles).generate(inputFolder);
-                String metanormaCollectionPath = argOutputPath;
-                if (isStandaloneXML) {
-                    metanormaCollectionPath = new File(metanormaCollectionPath).getParent();
-                }
-                if (isDocumentsGenerationMode) {
-                    // get parent folder
-                    metanormaCollectionPath = new File(argOutputPath).getParent().toString();
-                }
-                if (metanormaCollectionPath == null || metanormaCollectionPath.isEmpty()) {
-                    metanormaCollectionPath = inputFolder;
-                }
-                new MetanormaCollection(inputOutputFiles).generate(metanormaCollectionPath, namePublicationIndex);
-                //}
+                // Generate metanorma.yml
+                new MetanormaCollection(inputOutputFiles).generate(metanormaCollectionPath, namePublicationIndex, DocumentStatus.OK);
+
+                // Generate collection.withdrawn.yml
+                new MetanormaCollectionManifest(withdrawnInputOutputFiles).generate(collectionOutputPath, namePublicationIndex, DocumentStatus.WITHDRAWN);
+                // Generate metanorma.withdrawn.yml
+                new MetanormaCollection(withdrawnInputOutputFiles).generate(metanormaCollectionPath, namePublicationIndex, DocumentStatus.WITHDRAWN);
+
+                // Generate collection.missing.yml
+                new MetanormaCollectionManifest(missingInputOutputFiles).generate(collectionOutputPath, namePublicationIndex, DocumentStatus.MISSING);
+                // Generate metanorma.missing.yml
+                new MetanormaCollection(missingInputOutputFiles).generate(metanormaCollectionPath, namePublicationIndex, DocumentStatus.MISSING);
+
+                // Generate collection.wrongpart.yml
+                new MetanormaCollectionManifest(wrongPartInputOutputFiles).generate(collectionOutputPath, namePublicationIndex, DocumentStatus.WRONGPART);
+                // Generate metanorma.wrongpart.yml
+                new MetanormaCollection(wrongPartInputOutputFiles).generate(metanormaCollectionPath, namePublicationIndex, DocumentStatus.WRONGPART);
+
             }
 
             System.out.println("End!");

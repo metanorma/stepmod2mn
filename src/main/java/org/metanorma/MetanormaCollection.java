@@ -22,79 +22,81 @@ public class MetanormaCollection {
     public MetanormaCollection(List<Map.Entry<String,String>> inputOutputFiles) {
         this.inputOutputFiles = inputOutputFiles;
     }
-    public void generate(String outputFolder, String namePublicationIndex) throws IOException {
-        if (outputFolder != null && !outputFolder.isEmpty()) {
-            // Generate metanorma.yml in the root of path
-            StringBuilder metanormaYml = new StringBuilder();
-            metanormaYml.append("---").append("\n")
-                    .append("metanorma:").append("\n")
-                    .append("  source:").append("\n")
-                    .append("    files:").append("\n");
+    public void generate(String outputFolder, String namePublicationIndex, DocumentStatus documentStatus) throws IOException {
+        if (!inputOutputFiles.isEmpty()) {
+            if (outputFolder != null && !outputFolder.isEmpty()) {
+                // Generate metanorma.yml in the root of path
+                StringBuilder metanormaYml = new StringBuilder();
+                metanormaYml.append("---").append("\n")
+                        .append("metanorma:").append("\n")
+                        .append("  source:").append("\n")
+                        .append("    files:").append("\n");
 
-            Path pathOutputFolder = Paths.get(outputFolder);
-            URI pathRootFolderURI = pathOutputFolder.toUri();
+                Path pathOutputFolder = Paths.get(outputFolder);
+                URI pathRootFolderURI = pathOutputFolder.toUri();
 
-            List<Map.Entry<String,String>> docFolders = new ArrayList<>();
-            for (Map.Entry<String, String> entry : inputOutputFiles) {
-                String resultAdoc = entry.getValue();
-                String parentFolder = new File(resultAdoc).getParentFile().getName();
-                if (parentFolder.contains(Constants.ISO_STANDARD_PREFIX)) {
-                    parentFolder = parentFolder.substring(parentFolder.indexOf(Constants.ISO_STANDARD_PREFIX) + Constants.ISO_STANDARD_PREFIX.length());
+                List<Map.Entry<String,String>> docFolders = new ArrayList<>();
+                for (Map.Entry<String, String> entry : inputOutputFiles) {
+                    String resultAdoc = entry.getValue();
+                    String parentFolder = new File(resultAdoc).getParentFile().getName();
+                    if (parentFolder.contains(Constants.ISO_STANDARD_PREFIX)) {
+                        parentFolder = parentFolder.substring(parentFolder.indexOf(Constants.ISO_STANDARD_PREFIX) + Constants.ISO_STANDARD_PREFIX.length());
+                    }
+                    docFolders.add(new AbstractMap.SimpleEntry<>(parentFolder, resultAdoc));
                 }
-                docFolders.add(new AbstractMap.SimpleEntry<>(parentFolder, resultAdoc));
-            }
 
-            Collections.sort(docFolders, new Comparator<Map.Entry<String, String>>() {
-                public int compare(Map.Entry<String, String> a, Map.Entry<String, String> b){
-                    Integer aInt = toNumeric(a.getKey());
-                    Integer bInt = toNumeric(b.getKey());
-                    if (aInt != -1 && bInt != -1) {
-                        return aInt.compareTo(bInt);
-                    } else {
-                        return a.getKey().compareTo(b.getKey());
+                Collections.sort(docFolders, new Comparator<Map.Entry<String, String>>() {
+                    public int compare(Map.Entry<String, String> a, Map.Entry<String, String> b){
+                        Integer aInt = toNumeric(a.getKey());
+                        Integer bInt = toNumeric(b.getKey());
+                        if (aInt != -1 && bInt != -1) {
+                            return aInt.compareTo(bInt);
+                        } else {
+                            return a.getKey().compareTo(b.getKey());
+                        }
+                    }
+                    public int toNumeric(String strNum) {
+                        if (strNum == null) {
+                            return -1;
+                        }
+                        try {
+                            int i = Integer.parseInt(strNum);
+                            return i;
+                        } catch (NumberFormatException nfe) {
+                            return -1;
+                        }
                     }
                 }
-                public int toNumeric(String strNum) {
-                    if (strNum == null) {
-                        return -1;
-                    }
-                    try {
-                        int i = Integer.parseInt(strNum);
-                        return i;
-                    } catch (NumberFormatException nfe) {
-                        return -1;
-                    }
+                );
+
+                for (Map.Entry<String, String> entry : docFolders) {
+                    String resultAdoc = entry.getValue();
+                    URI resultAdocURI = Paths.get(resultAdoc).toUri();
+                    URI relativeURI = pathRootFolderURI.relativize(resultAdocURI);
+                    metanormaYml.append("      - " + relativeURI).append("\n");
                 }
-            }
-            );
+                metanormaYml.append("\n")
+                        .append("  collection:").append("\n")
+                        .append("    organization: " + ORGANIZATION).append("\n")
+                        .append("    name: \"" + namePublicationIndex).append("\"\n");
+                        //.append("    name: " + NAME).append("\n");
 
-            for (Map.Entry<String, String> entry : docFolders) {
-                String resultAdoc = entry.getValue();
-                URI resultAdocURI = Paths.get(resultAdoc).toUri();
-                URI relativeURI = pathRootFolderURI.relativize(resultAdocURI);
-                metanormaYml.append("      - " + relativeURI).append("\n");
-            }
-            metanormaYml.append("\n")
-                    .append("  collection:").append("\n")
-                    .append("    organization: " + ORGANIZATION).append("\n")
-                    .append("    name: \"" + namePublicationIndex).append("\"\n");
-                    //.append("    name: " + NAME).append("\n");
+                Files.createDirectories(pathOutputFolder);
 
-            Files.createDirectories(pathOutputFolder);
+                if (namePublicationIndex == null) {
+                    namePublicationIndex = "";
+                }
+                if (!namePublicationIndex.isEmpty()) {
+                    namePublicationIndex = namePublicationIndex + ".";
+                }
 
-            if (namePublicationIndex == null) {
-                namePublicationIndex = "";
+                //append string buffer/builder to buffered writer
+                Path pathMetanormaYml = Paths.get(outputFolder, namePublicationIndex + "metanorma" + documentStatus.toString() + ".yml");
+                BufferedWriter writer = new BufferedWriter(new FileWriter(pathMetanormaYml.toFile()));
+                writer.write(metanormaYml.toString());
+                writer.close();
+                System.out.println("[INFO] Saved " + pathMetanormaYml.toString() + ".");
             }
-            if (!namePublicationIndex.isEmpty()) {
-                namePublicationIndex = namePublicationIndex + ".";
-            }
-
-            //append string buffer/builder to buffered writer
-            Path pathMetanormaYml = Paths.get(outputFolder, namePublicationIndex + "metanorma.yml");
-            BufferedWriter writer = new BufferedWriter(new FileWriter(pathMetanormaYml.toFile()));
-            writer.write(metanormaYml.toString());
-            writer.close();
-            System.out.println("[INFO] Saved " + pathMetanormaYml.toString() + ".");
         }
     }
 }
