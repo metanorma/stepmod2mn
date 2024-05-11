@@ -622,7 +622,7 @@ public class stepmod2mn {
                 String collectionOutputPath = argOutputPath;
                 if (isStandaloneXML || isDocumentsGenerationMode) {
                     // get parent folder
-                    collectionOutputPath = new File(argOutputPath).getParent().toString();
+                    collectionOutputPath = new File(argOutputPath).getParent();
                 }
                 if (collectionOutputPath == null || collectionOutputPath.isEmpty()) {
                     collectionOutputPath = inputFolder;
