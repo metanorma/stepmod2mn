@@ -409,8 +409,20 @@
 	<xsl:template name="insertParagraph">
 		<xsl:param name="text"/>
 		<xsl:param name="keep-with-next" select="'false'"/>
-		<!-- <xsl:value-of select="normalize-space($text)"/> -->
-		<xsl:apply-templates select="xalan:nodeset($text)" mode="linearize"/>
+		<xsl:variable name="paragraph">
+			<xsl:apply-templates select="xalan:nodeset($text)" mode="linearize"/>
+		</xsl:variable>
+		<xsl:choose>
+			<!-- for [SOURCE:...], see https://github.com/metanorma/stepmod2mn/issues/179#issuecomment-2083273335-->
+			<!-- <xsl:when test="starts-with($text,'[SOURCE:')">+++[+++<xsl:value-of select="substring($text,2)"/></xsl:when> -->
+			<xsl:when test="starts-with($paragraph,'[SOURCE:') and java:endsWith(java:java.lang.String.new($paragraph),']')">
+				<xsl:call-template name="parseSource">
+					<xsl:with-param name="text" select="$paragraph"/>
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:when test="starts-with($paragraph,'[SOURCE:')">+++[+++<xsl:value-of select="substring($paragraph,2)"/></xsl:when>
+			<xsl:otherwise><xsl:copy-of select="$paragraph"/></xsl:otherwise>
+		</xsl:choose>
 		<xsl:if test="$keep-with-next = 'false'">
 			<xsl:text>&#xa;&#xa;</xsl:text>
 		</xsl:if>
@@ -1015,14 +1027,58 @@
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
-		<xsl:variable name="text1">
-			<xsl:choose>
-				<!-- for [SOURCE:...], see https://github.com/metanorma/stepmod2mn/issues/179#issuecomment-2083273335-->
-				<xsl:when test="starts-with($text,'[SOURCE:')">+++[+++<xsl:value-of select="substring($text,2)"/></xsl:when>
-				<xsl:otherwise><xsl:value-of select="$text"/></xsl:otherwise>
-			</xsl:choose>
-		</xsl:variable>
-		<xsl:value-of select="java:org.metanorma.RegExEscaping.escapeFormattingCommands($text1)"/>
+		<xsl:value-of select="java:org.metanorma.RegExEscaping.escapeFormattingCommands($text)"/>
+	</xsl:template>
+	
+	<xsl:template name="parseSource">
+		<xsl:param name="text"/>
+		<!-- Example:
+		 [SOURCE: ISO/TS 10303-4000:2023, 3.1.1, Modified – Notes to entry removed]
+	 -->
+	 <xsl:variable name="text1" select="substring-after(substring($text,1,string-length($text) - 1), '[SOURCE:')"/>
+	 <xsl:variable name="standard_number">
+		<xsl:choose>
+			<xsl:when test="contains($text1,',')"><xsl:value-of select="normalize-space(substring-before($text1,','))"/></xsl:when>
+			<xsl:otherwise><xsl:value-of select="normalize-space($text1)"/></xsl:otherwise>
+		</xsl:choose>
+	 </xsl:variable>
+	 <xsl:variable name="standard_number_without_year">
+		<xsl:choose>
+			<xsl:when test="contains($standard_number, ':')"><xsl:value-of select="substring-before($standard_number, ':')"/></xsl:when>
+			<xsl:otherwise><xsl:value-of select="$standard_number"/></xsl:otherwise>
+		</xsl:choose>
+	 </xsl:variable>
+	 <!-- standard_number='<xsl:value-of select="$standard_number"/>'- -->
+	 <xsl:variable name="standard_number_after" select="substring-after($text1,',')"/> <!-- Example: 3.1.1, Modified – Notes to entry removed -->
+	 <xsl:variable name="section">
+		<xsl:choose>
+			<xsl:when test="contains($standard_number_after, ',')"><xsl:value-of select="normalize-space(substring-before($standard_number_after, ','))"/></xsl:when>
+			<xsl:otherwise><xsl:value-of select="$standard_number_after"/></xsl:otherwise>
+		</xsl:choose>
+	 </xsl:variable>
+	 <!-- section='<xsl:value-of select="$section"/>' -->
+	 <xsl:variable name="modified_" select="translate(normalize-space(substring-after($standard_number_after, ',')),'&#x2013;','-')"/>
+	 <xsl:variable name="modified__">
+		<xsl:choose>
+			<xsl:when test="contains($modified_, 'Modified -')"><xsl:value-of select="substring-after($modified_, 'Modified -')"/></xsl:when>
+			<xsl:when test="contains($modified_, 'modified -')"><xsl:value-of select="substring-after($modified_, 'modified -')"/></xsl:when>
+			<xsl:otherwise><xsl:value-of select="$modified_"/></xsl:otherwise>
+		</xsl:choose>
+	 </xsl:variable>
+	 <xsl:variable name="modified" select="normalize-space($modified__)"/>
+	 <!-- modified='<xsl:value-of select="$modified"/>' -->
+	 <xsl:if test="$standard_number != ''">
+		<xsl:text>[.source]</xsl:text>
+		<br/>
+		<xsl:text>&lt;&lt;</xsl:text>
+		<!-- determine bibitem id -->
+		<xsl:variable name="bibliography_xml_document" select="document(concat($path, '../../../data/basic/bibliography.xml'))"/>
+		<xsl:variable name="bibitem_id" select="$bibliography_xml_document/bibitem.list/bibitem[stdnumber = $standard_number or stdnumber = $standard_number_without_year][1]/@id"/>
+		<xsl:value-of select="concat('bibitem_',$bibitem_id)"/>
+		<xsl:if test="$section != ''">, section <xsl:value-of select="$section"/></xsl:if>
+		<xsl:text>&gt;&gt;</xsl:text>
+		<xsl:if test="$modified != ''">, <xsl:value-of select="$modified"/></xsl:if>
+	 </xsl:if>
 	</xsl:template>
 	
 	<xsl:template name="repeat">
