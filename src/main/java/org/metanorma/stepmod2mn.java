@@ -396,7 +396,7 @@ public class stepmod2mn {
             argOutputPath = fXMLout.getAbsoluteFile().toString();
             //new File(fXMLout.getParent()).mkdirs();
 
-            Path schemasPath = Paths.get(new File(argOutputPath).getParent(), "schemas");
+            Path schemasPath = Paths.get(new File(argOutputPath).getParent(), "plain_schemas"); // default schemas path, was "schemas" (see https://github.com/metanorma/iso-10303-srl/issues/229)
             // create 'schemas' folder at the same level as output folder (for instance 'documents')
             outputPathSchemas = schemasPath.toString();
         }

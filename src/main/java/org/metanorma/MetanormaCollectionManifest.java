@@ -88,7 +88,7 @@ public class MetanormaCollectionManifest {
                                 ((ArrayList<Object>)
                                         ((LinkedHashMap <String, Object>)
                                                 yamlDocumentObj.get("manifest"))
-                                                .get("manifest"))
+                                                .get("docref"))
                                         .get(num))
                                 .get("docref"));
         for (int i = 0; i < docref.size(); i++) {
@@ -112,7 +112,7 @@ public class MetanormaCollectionManifest {
                                     ((ArrayList<Object>)
                                             ((LinkedHashMap <String, Object>)
                                                     yamlObj.get("manifest"))
-                                                    .get("manifest"))
+                                                    .get("docref"))
                                             .get(num))
                                     .get("docref"));
             if (template_docref == null) {
@@ -123,7 +123,7 @@ public class MetanormaCollectionManifest {
                     ((ArrayList<Object>)
                             ((LinkedHashMap <String, Object>)
                                     yamlObj.get("manifest"))
-                                    .get("manifest"))
+                                    .get("docref"))
                             .get(num))
                     .put("docref",template_docref);
         }

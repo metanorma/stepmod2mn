@@ -545,7 +545,9 @@
 				<xsl:text>&#xa;</xsl:text>
 			</xsl:for-each>
 			<xsl:for-each select="resource/schema">
-				<xsl:text>        - fileref: </xsl:text><xsl:value-of select="concat('sections/schemadocs/',@name,'.html')"/>
+				<!-- <xsl:text>        - fileref: </xsl:text><xsl:value-of select="concat('sections/schemadocs/',@name,'.html')"/> -->
+				<!-- https://github.com/metanorma/iso-10303-srl/issues/229 -->
+				<xsl:text>        - fileref: </xsl:text><xsl:value-of select="concat('../../schema_docs/',@name,'/doc_',@name,'.html')"/>
 				<xsl:text>&#xa;</xsl:text>
 				<xsl:text>          identifier: </xsl:text><xsl:value-of select="@name"/><xsl:text>.html</xsl:text>
 				<xsl:text>&#xa;</xsl:text>
