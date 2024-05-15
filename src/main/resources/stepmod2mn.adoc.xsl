@@ -264,7 +264,7 @@
 		<xsl:text>&#xa;</xsl:text>
 		<xsl:text>:data-uri-image:</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>:lutaml-express-index: schemas; ../../schemas_all.yaml;</xsl:text>
+		<xsl:text>:lutaml-express-index: schemas; ../../schemas-srl.yml;</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
 		
@@ -1407,7 +1407,7 @@
 		manifest:
 			level: collection
 			title: ISO Collection
-			manifest:
+			docref:
 				- level: document
 					title: Document
 					sectionsplit: true
@@ -1465,7 +1465,7 @@
 		<xsl:text>&#xa;</xsl:text>
 		<xsl:text>  title: ISO Collection</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
-		<xsl:text>  manifest:</xsl:text>
+		<xsl:text>  docref:</xsl:text>
 		<xsl:text>&#xa;</xsl:text>
 		<xsl:text>    - level: document</xsl:text>
 		<xsl:text>&#xa;</xsl:text>

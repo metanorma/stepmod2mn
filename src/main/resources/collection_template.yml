@@ -18,7 +18,7 @@ bibdata:
 manifest:
   level: collection
   title: ISO collection
-  manifest:
+  docref:
   - level: document
     title: Document
     docref:
