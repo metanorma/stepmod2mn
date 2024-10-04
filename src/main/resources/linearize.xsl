@@ -83,6 +83,7 @@
 			<xsl:choose>
 				<xsl:when test="following-sibling::node()[1][self::p or self::table or self::ul or self::ol or self::dl]">
 					<xsl:value-of select="java:replaceAll(java:java.lang.String.new($text_lefttrim),'\s+$','')"/>
+					<xsl:if test="following-sibling::node()[1][self::table]"><xsl:text>&#xa;&#xa;</xsl:text></xsl:if>
 				</xsl:when>
 				<xsl:when test="(not(following-sibling::*) and not(following-sibling::comment())) or following-sibling::*[1][self::note or self::example]">
 					<xsl:value-of select="java:replaceAll(java:java.lang.String.new($text_lefttrim),'\s+$','')"/>
