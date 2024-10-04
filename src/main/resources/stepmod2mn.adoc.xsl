@@ -609,7 +609,8 @@
 	
 	<xsl:template name="insertListItemLabel">
 		<xsl:param name="list-label"/>
-		<xsl:variable name="level_" select="count(ancestor-or-self::ul) + count(ancestor-or-self::ol)"/>		
+		<!-- <xsl:variable name="level_" select="count(ancestor-or-self::ul) + count(ancestor-or-self::ol)"/>		 -->
+		<xsl:variable name="level_" select="count(ancestor-or-self::li) - count(ancestor::note) - count(ancestor::example)"/>
 		<xsl:variable name="level">
 			<xsl:choose>
 				<xsl:when test="$level_ = 0">1</xsl:when>
