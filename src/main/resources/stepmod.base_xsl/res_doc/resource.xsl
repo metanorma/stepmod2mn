@@ -1640,11 +1640,15 @@ Purpose:
 
 		<xsl:variable name="express_g_diagrams_yaml" select="concat($outpath, '/express-g-diagrams.yaml')"/>
 
+		<!-- commented -->
+		<!-- https://github.com/metanorma/stepmod2mn/issues/201 -->
+		<xsl:if test="1 = 2">
 		<redirect:open file="{$express_g_diagrams_yaml}"/>
 		<redirect:write file="{$express_g_diagrams_yaml}">
 			<xsl:text>---</xsl:text>
 			<xsl:text>&#xa;</xsl:text>
 		</redirect:write>
+		</xsl:if>
 		
 		<!-- generate SVG images -->
 		<xsl:for-each select="./schema/express-g/imgfile | ./schema/express-g/img">
@@ -1655,6 +1659,9 @@ Purpose:
 			<!-- Note: the variable generateSVG is using just for call the function 'generateSVG' -->
 			<xsl:variable name="generateSVG" select="java:generateSVG(java:org.metanorma.stepmod2mn.new(),concat($path,'/','../../resources/', $schema,'/',@file),'',$outpath_schemas,false())"/>
 			
+			<!-- commented -->
+			<!-- https://github.com/metanorma/stepmod2mn/issues/201 -->
+			<xsl:if test="1 = 2">
 			<xsl:if test="normalize-space($generateSVG) != ''">
 				<redirect:write file="{$express_g_diagrams_yaml}">
 					<xsl:text>- path: ../</xsl:text> <!-- added '../' because `:imagesdir: images` added, see https://github.com/metanorma/stepmod2mn/issues/138 -->
@@ -1663,9 +1670,12 @@ Purpose:
 					<xsl:text>&#xa;</xsl:text>
 				</redirect:write>
 			</xsl:if>
+			</xsl:if>
 			
 		</xsl:for-each>
+		<xsl:if test="1 = 2">
 		<redirect:close file="{$express_g_diagrams_yaml}"/>
+		</xsl:if>
 
 		<!-- commented -->
 		<!-- https://github.com/metanorma/stepmod2mn/issues/115 -->
