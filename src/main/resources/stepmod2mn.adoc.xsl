@@ -19,7 +19,7 @@
 	<xsl:strip-space elements="*"/>
 	
 	<xsl:variable name="annex_id_usage_info">usage_info</xsl:variable>
-	<xsl:variable name="annex_id_change_history">change_history</xsl:variable>
+	<xsl:variable name="annex_id_change_history">annex_change_history</xsl:variable>
 	<xsl:variable name="annex_id_add_scope">add_scope</xsl:variable>
 	<xsl:variable name="annex_id_tech_discussion">tech_discussion</xsl:variable>
 	<xsl:variable name="annex_id_examples">annex_examples</xsl:variable>
@@ -381,9 +381,10 @@
 			<xsl:with-param name="count" select="$level + 1"/>
 		</xsl:call-template>
 		<xsl:text> </xsl:text>		
-		<xsl:value-of select="$header"/>
+		<xsl:value-of select="normalize-space($header)"/>
 		<xsl:if test="$indexed = 'true'">
-      <xsl:text> (((</xsl:text>
+			<xsl:if test="normalize-space($header) != ''"><xsl:text> </xsl:text></xsl:if>
+      <xsl:text>(((</xsl:text>
       <xsl:choose>
         <xsl:when test="$index_term2 != '' or $index_term3 != ''">
           <xsl:value-of select="$index_term"/>
@@ -608,7 +609,8 @@
 	
 	<xsl:template name="insertListItemLabel">
 		<xsl:param name="list-label"/>
-		<xsl:variable name="level_" select="count(ancestor-or-self::ul) + count(ancestor-or-self::ol)"/>		
+		<!-- <xsl:variable name="level_" select="count(ancestor-or-self::ul) + count(ancestor-or-self::ol)"/>		 -->
+		<xsl:variable name="level_" select="count(ancestor-or-self::li) - count(ancestor::note) - count(ancestor::example)"/>
 		<xsl:variable name="level">
 			<xsl:choose>
 				<xsl:when test="$level_ = 0">1</xsl:when>

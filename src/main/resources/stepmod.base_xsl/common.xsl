@@ -866,6 +866,7 @@ or name()='screen' or name()='ul' or name()='example' or name()='note' or name()
 		 A definition list
 		 -->
 <xsl:template match="dl">
+	<br/><br/>
 	<!-- <dl> -->
 	<xsl:apply-templates mode="dl"/>
 	<!-- </dl> -->
