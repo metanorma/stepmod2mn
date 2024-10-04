@@ -19,7 +19,7 @@
 	<xsl:strip-space elements="*"/>
 	
 	<xsl:variable name="annex_id_usage_info">usage_info</xsl:variable>
-	<xsl:variable name="annex_id_change_history">change_history</xsl:variable>
+	<xsl:variable name="annex_id_change_history">annex_change_history</xsl:variable>
 	<xsl:variable name="annex_id_add_scope">add_scope</xsl:variable>
 	<xsl:variable name="annex_id_tech_discussion">tech_discussion</xsl:variable>
 	<xsl:variable name="annex_id_examples">annex_examples</xsl:variable>
