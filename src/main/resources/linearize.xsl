@@ -64,15 +64,26 @@
 				<xsl:when test="not(preceding-sibling::*) and not(preceding-sibling::comment())">
 					<xsl:value-of select="java:replaceAll(java:java.lang.String.new($text),'^\s+','')"/>
 				</xsl:when>
+				<xsl:when test="count(preceding-sibling::node()) = 1 and preceding-sibling::comment()">
+					<xsl:value-of select="java:replaceAll(java:java.lang.String.new($text),'^\s+','')"/>
+				</xsl:when>
+				<xsl:when test="count(preceding-sibling::node()) = 2 and preceding-sibling::comment() and preceding-sibling::text()[normalize-space() = '']">
+					<xsl:value-of select="java:replaceAll(java:java.lang.String.new($text),'^\s+','')"/>
+				</xsl:when>
+				<xsl:when test="preceding-sibling::node()[1][self::p or self::table or self::ul or self::ol or self::dl]">
+					<xsl:value-of select="java:replaceAll(java:java.lang.String.new($text),'^\s+','')"/>
+				</xsl:when>
 				<xsl:otherwise>
 					<xsl:value-of select="$text"/>
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
 		
-		
 		<xsl:variable name="text_righttrim">
 			<xsl:choose>
+				<xsl:when test="following-sibling::node()[1][self::p or self::table or self::ul or self::ol or self::dl]">
+					<xsl:value-of select="java:replaceAll(java:java.lang.String.new($text_lefttrim),'\s+$','')"/>
+				</xsl:when>
 				<xsl:when test="(not(following-sibling::*) and not(following-sibling::comment())) or following-sibling::*[1][self::note or self::example]">
 					<xsl:value-of select="java:replaceAll(java:java.lang.String.new($text_lefttrim),'\s+$','')"/>
 				</xsl:when>
